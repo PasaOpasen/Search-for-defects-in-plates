@@ -38,9 +38,8 @@ using System.Numerics;
 using System.Threading.Tasks;
 using Библиотека_графики;
 using System.Linq;
-
 using System.IO.Ports;
-using System.IO;
+
 namespace PS5000A
 {
     public partial class PS5000ABlockForm : Form
@@ -83,7 +82,7 @@ namespace PS5000A
         int n_ignore = 28200;
         int usred = 1;
         public CSwitchInterface Switch_;
-        public int countports = 4;
+        public readonly int countPorts = 4;
         /// <summary>
         /// Конструктор
         /// </summary>
@@ -112,9 +111,9 @@ namespace PS5000A
             SetFiles();
 
             listBox2.Items.Clear();
-            for (int i = 0; i < countports; i++)
+            for (int i = 0; i < countPorts; i++)
                 listBox2.Items.Add(i);
-            listBox2.SelectedIndex = countports / 2;
+            listBox2.SelectedIndex = countPorts / 2;
             checkBox1.Hide();
         }
 
@@ -140,15 +139,14 @@ namespace PS5000A
 
         private void Timer1_Tick(object Sender, EventArgs e)
         {
-            //Debug.WriteLine(save);
-            if (Label1 != null)
-                toolStripStatusLabel1.Text = Label1;
-            if (Label2 != null)
-                toolStripStatusLabel2.Text = Label2;
+            if (label1String != null)
+                toolStripStatusLabel1.Text = label1String;
+            if (label2String != null)
+                toolStripStatusLabel2.Text = label2String;
             toolStripProgressBar1.Value = (int)(((double)save) / all * toolStripProgressBar1.Maximum);
             this.Refresh();
         }
-        private string symbols = "ABCDEFGHIKLMNOPQRSTVXYZ";
+        private string Symbols = "ABCDEFGHIKLMNOPQRSTVXYZ";
         private void SetFiles()
         {
             filenames = new string[sourcesCount];
@@ -164,7 +162,7 @@ namespace PS5000A
             filenames[7] = $"f(w) from ({textBox17.Text} , {textBox15.Text}).txt";
 
             for (int i = 0; i < sourcesCount; i++)
-                ArraysNames[i] = $"Array{symbols[i]}.txt";
+                ArraysNames[i] = $"Array{Symbols[i]}.txt";
         }
         private void SetForlders()
         {
@@ -177,7 +175,7 @@ namespace PS5000A
             using (StreamWriter fs = new StreamWriter("WhereData.txt"))
                 for (int i = 0; i < n.Length; i++)
                 {
-                    n[i] = $"Замер {symbols[i]}";
+                    n[i] = $"Замер {Symbols[i]}";
                     folderbase[i] = Path.Combine(globalbase, n[i]);
 
                     fwith[i] = Path.Combine(folderbase[i], "C дефектом");
@@ -189,20 +187,21 @@ namespace PS5000A
 
                     fs.WriteLine(folderbase[i]);
                 }
-
-
         }
 
-        private void MakeTime()
+        private async Task MakeTime()
         {
-            Parallel.For(0, sourcesCount, (int k) => {
-            //for (int k = 0; k < sourcesCount; k++)
+            await Task.Run(() =>
+            Parallel.For(0, sourcesCount, (int k) =>
+            {
+                //for (int k = 0; k < sourcesCount; k++)
                 using (StreamWriter res = new StreamWriter(Path.Combine(fdiff[k], "time.txt")))
                 {
-                    for (int i = -countdo; i < countz; i++)                  
-                        res.WriteLine(dt_ * i);                  
-               }
-            });
+                    for (int i = -countBefore; i < countAfter; i++)
+                        res.WriteLine(dt * i);
+                }
+            })
+            );
         }
         private async Task MakeDiffAsync(bool Normalize)
         {
@@ -217,39 +216,41 @@ namespace PS5000A
                     var args = ar.Where(n => n != i).ToArray();
                     for (int j = 0; j < sourcesCount - 1; j++)
                     {
-
                         double max = 0;
+
+                        using (StreamReader f0 = new StreamReader(Path.Combine(fwithout[i], ArraysNames[args[j]])))
+                        using (StreamReader f1 = new StreamReader(Path.Combine(fwith[i], ArraysNames[args[j]])))
+                        {
+                            string s = f0.ReadLine();
+                            while (s != null && s.Length > 0)
+                            {
+                                double t = Convert.ToDouble(f1.ReadLine().Replace('.', ',')) - Convert.ToDouble(s.Replace('.', ','));
+                                if (max < t * t) max = t * t;
+                                s = f0.ReadLine();
+                            }
+                        }
+                        max = Math.Sqrt(max);
+
                         using (StreamWriter res = new StreamWriter(Path.Combine(fdiff[i], ArraysNames[args[j]])))
                         {
                             using (StreamReader f0 = new StreamReader(Path.Combine(fwithout[i], ArraysNames[args[j]])))
                             using (StreamReader f1 = new StreamReader(Path.Combine(fwith[i], ArraysNames[args[j]])))
                             {
-
                                 string s = f0.ReadLine();
-                                while (s != null && s.Length > 0)
-                                {
-                                    double t = Convert.ToDouble(f1.ReadLine().Replace('.', ',')) - Convert.ToDouble(s.Replace('.', ','));
-                                    if (max < t * t) max = t * t;
-                                    //res.WriteLine(t);
-                                    s = f0.ReadLine();
-                                }
-                            }
-                            max = Math.Sqrt(max);
-                            using (StreamReader f0 = new StreamReader(Path.Combine(fwithout[i], ArraysNames[args[j]])))
-                            using (StreamReader f1 = new StreamReader(Path.Combine(fwith[i], ArraysNames[args[j]])))
-                            {
-
-                                string s = f0.ReadLine();
-                                while (s != null && s.Length > 0)
-                                {
-                                    double t = Convert.ToDouble(f1.ReadLine().Replace('.', ',')) - Convert.ToDouble(s.Replace('.', ','));
-                                    if (Normalize)
+                                if (Normalize)
+                                    while (s != null && s.Length > 0)
+                                    {
+                                        double t = Convert.ToDouble(f1.ReadLine().Replace('.', ',')) - Convert.ToDouble(s.Replace('.', ','));
                                         res.WriteLine(t / max);
-                                    else
+                                        s = f0.ReadLine();
+                                    }
+                                else
+                                    while (s != null && s.Length > 0)
+                                    {
+                                        double t = Convert.ToDouble(f1.ReadLine().Replace('.', ',')) - Convert.ToDouble(s.Replace('.', ','));
                                         res.WriteLine(t);
-                                    //res.WriteLine(t);
-                                    s = f0.ReadLine();
-                                }
+                                        s = f0.ReadLine();
+                                    }
                             }
                         }
                     }
@@ -257,8 +258,6 @@ namespace PS5000A
                 });
             });
         }
-
-
 
 
         private void button2_Click(object sender, EventArgs e)
@@ -277,27 +276,38 @@ namespace PS5000A
             this.Close();
         }
 
+        private bool SetGlobalBase()
+        {
+            if (Directory.Exists(textBox12.Text))
+                globalbase = textBox12.Text;
+            else
+            {
+                MessageBox.Show("Указанной директории не существует!", "Ошибка в пути", MessageBoxButtons.OK, MessageBoxIcon.Exclamation);
+                return false;
+            }
+            return true;
+        }
+
         private async void button4_Click(object sender, EventArgs e)
         {
-            globalbase = textBox12.Text;
+            if (!SetGlobalBase())
+                return;
 
-            MakeTime();
+            await MakeTime();
 
-            await MakeDiffAsync(true);
+            await MakeDiffAsync(Normalize: true);
 
 
             for (int i = 0; i < sourcesCount; i++)
                 if (checkBox2.Checked && !checkBox3.Checked)
                     Furier(fdiff[i], folderbase[i], i);
-                else
-            if (checkBox3.Checked)
+                else if (checkBox3.Checked)
                     ShowData(fdiff[i], folderbase[i], i);
-
         }
         #endregion
 
         /// <summary>
-        /// Обратная связб от осциллографа
+        /// Обратная связь от осциллографа
         /// </summary>
         /// <param name="handle"></param>
         /// <param name="status"></param>
@@ -365,14 +375,13 @@ namespace PS5000A
         }
 
         private void InitParams()
-
         {
             n_ignore = Convert.ToInt32(textBox14.Text);
             _timebase = Convert.ToUInt32(textBox9.Text);
-            countz = Convert.ToInt32(textBox10.Text);
-            countdo = Convert.ToInt32(textBox13.Text);
+            countAfter = Convert.ToInt32(textBox10.Text);
+            countBefore = Convert.ToInt32(textBox13.Text);
             usred = Convert.ToInt32(textBox11.Text);
-            dt_ = (double)(_timebase - 3) / 62500000.0; // 16 bit
+            dt = (_timebase - 3) / 62500000.0; // 16 bit
         }
         private void buttonOpen_Click(object sender, EventArgs e)
         {
@@ -535,23 +544,26 @@ namespace PS5000A
                 }
             }
         }
-        int countz = 100;
-        int countdo = 100;
+        int countAfter = 100;
+        int countBefore = 100;
 
-        double dt_ = 104 * 1.0E-9;
+        double dt = 104 * 1.0E-9;
         long[] masA;
         string[] ArraysNames;
 
-        double Voltage_Range = 200; //max po amplitude
-                                    /*
-                                     * 
-                                     * частоты от 0 Гц 10Mhz
-                                     * dt =10^-7
-                                     * df = 100;
-                                     *
-                                     */
+        /// <summary>
+        /// Maxinum of an amplitude
+        /// </summary>
+        double Voltage_Range = 200;
+        /*
+         * 
+         * частоты от 0 Гц 10Mhz
+         * dt =10^-7
+         * df = 100;
+         *
+         */
 
-        private string Label2;
+        private string label2String;
         async void CalcTransform(double f0, double f1, int sc, string from, string to, int[] args, int sourcenumber)
         {
             double fl = f1 - f0;
@@ -561,16 +573,13 @@ namespace PS5000A
             CFurieTransformer FTT = new CFurieTransformer();
             // FTT.LoadCfg("cfg.txt");
             FTT.t_0 = 0;
-            FTT.t_n = dt_ * (countz + countdo);
+            FTT.t_n = dt * (countAfter + countBefore);
 
-            FTT.count_t = (int)(countz + countdo);
-            FTT.dt = dt_;
+            FTT.count_t = (countAfter + countBefore);
+            FTT.dt = dt;
             //параметры преобразования по частоте
-
             FTT.f_0 = f0;
-
             FTT.f_m = f1;
-
             FTT.count_f = count_approx;
             FTT.df = (FTT.f_m - FTT.f_0) / ((double)FTT.count_f - 1);
 
@@ -581,7 +590,7 @@ namespace PS5000A
 
             //параметры вычитания постоянной составляющей
 
-            FTT.n_avg = (int)(countz + countdo) - 2;
+            FTT.n_avg = (int)(countAfter + countBefore) - 2;
             //параметры вычитания постоянной составляющей
 
             FTT.n_ignore = 300;
@@ -592,7 +601,7 @@ namespace PS5000A
             string[] tos = new string[sourcesCount];
 
             IProgress<int> progress = new Progress<int>((p) => { save = p; });
-            all = sc /** (sourcesCount - 1)*sourcesCount*/;
+            all = sc;
             toolStripStatusLabel2.Text = "";
             timer1.Start();
 
@@ -610,13 +619,13 @@ namespace PS5000A
                     FTT.GetSplainFT_old(progress);
                     FTT.SaveOut(tos[i]);
                     FTT.SaveOutAbs(tosABS[i]);
-                    Label2 = $"Выполнено {i} из {sourcesCount - 1} для источника {symbols[sourcenumber]}";
+                    label2String = $"Выполнено {i} из {sourcesCount - 1} для источника {Symbols[sourcenumber]}";
                 }
             });
-            Label2 = null;
+            label2String = null;
             timer1.Stop();
             toolStripProgressBar1.Value = 0;
-            toolStripStatusLabel1.Text = $"Преобразование для источника {symbols[sourcenumber]} завершено. Данные записаны";
+            toolStripStatusLabel1.Text = $"Преобразование для источника {Symbols[sourcenumber]} завершено. Данные записаны";
             toolStripStatusLabel2.Text = "";
 
         }
@@ -639,7 +648,7 @@ namespace PS5000A
         private void button6_Click(object sender, EventArgs e)
         {
             Switch_ = new CSwitchInterface();
-            int dsd = listBox1.SelectedIndex/*textBox14.Text*/;
+            int dsd = listBox1.SelectedIndex;
             Switch_.OpenPort(dsd);
 
             System.Threading.Thread.Sleep(500);
@@ -652,11 +661,7 @@ namespace PS5000A
             names_ = SerialPort.GetPortNames();
             listBox1.Items.Clear();
             for (int i = 0; i < names_.Length; i++)
-            {
                 listBox1.Items.Add(names_[i]);
-                //textBoxUnitInfo.AppendText(names_[i]);
-                //textBoxUnitInfo.AppendText("\n");
-            }
 
             if (listBox1.Items.Count > 0)
                 listBox1.SelectedIndex = listBox1.Items.Count - 1;
@@ -706,7 +711,7 @@ namespace PS5000A
 
         private void RunAvg(ref double[] Array_, int l, int kernel_len = 20)
         {
-            double kl = (double)kernel_len;
+            double kl = kernel_len;
             double[] Array_buf = new double[l];
             for (int i = kernel_len / 2 + 1; i < l - (kernel_len / 2 + 1); i++)
             {
@@ -715,21 +720,21 @@ namespace PS5000A
                 {
                     summ += Array_[i + j];
                 }
-                summ /= kl;
-                Array_buf[i] = summ;
+                Array_buf[i] = summ / kl;
             }
             for (int i = kernel_len / 2 + 1; i < l - (kernel_len / 2 + 1); i++)
             {
                 Array_[i] = Array_buf[i];
             }
         }
-        private string Label1;
+        private string label1String;
         public async void DataSborCh(int id, string filename_)
         {
-            double[] Array = new double[countz + countdo];
+            int countSum = countAfter + countBefore;
+            double[] Array = new double[countSum];
             double middleA = 0;
             double mid_ignore = 0;
-            double[] arrA = new double[countz + countdo];
+            double[] arrA = new double[countSum];
             textBoxUnitInfo.AppendText(Switch_.GetAccepted() + "\n");
             Switch_.SendCmd(1, id);
             textBoxUnitInfo.AppendText(Switch_.GetAccepted() + "\n");
@@ -739,21 +744,17 @@ namespace PS5000A
             all = usred;
             save = 0;
             timer1.Start();
-            Stopwatch wr = new Stopwatch();
-            wr.Start();
             //          await Task.Run(() => { 
             for (int i = 0; i < usred; i++)//тут надо асинхронно
             {
-                Label1 = $"Замер {i + 1} выполняется";
-
-                start((uint)countz, (uint)countdo, 250);
+                label1String = $"Замер {i + 1} выполняется";
+                start((uint)countAfter, (uint)countBefore, 250);
                 save = i + 1;
                 Timer1_Tick(new object(), new EventArgs());
             }
             //});
-            Debug.WriteLine(wr.ElapsedMilliseconds);
 
-            Label1 = null;
+            label1String = null;
             toolStripStatusLabel1.Text = "Замеры выполнены";
 
 
@@ -762,29 +763,29 @@ namespace PS5000A
 
             middleA = 0;
             mid_ignore = 0;
-            for (int i = 0; i < (countz + countdo); i++)
+            for (int i = 0; i < countSum; i++)
             {
-                arrA[i] = ((double)masA[i]) / ((double)usred) / ((double)32767) * Voltage_Range / 2.0;
+                arrA[i] = masA[i] / ((double)usred) / 32767 * Voltage_Range / 2.0;
                 middleA += arrA[i];
             }
-            middleA /= (double)(countz + countdo);
+            middleA /= countSum;
             for (int i = 0; i < n_ignore; i++)
             {
                 Array[i] = 0;
                 masA[i] = 0;
             }
-            for (int i = n_ignore; i < (countz + countdo); i++)
+            for (int i = n_ignore; i < countSum; i++)
             {
                 Array[i] = arrA[i] - middleA;
                 masA[i] = 0;
             }
 
-            RunAvg(ref Array, countz + countdo, 20);
+            RunAvg(ref Array, countAfter + countBefore, 20);
 
 
             using (StreamWriter fs = new StreamWriter(filename_))
             {
-                for (int i = 0; i < (countz + countdo); i++)
+                for (int i = 0; i < countSum; i++)
                 {
                     fs.WriteLine(Array[i].ToString().Replace(',', '.'));
                 }
@@ -794,7 +795,7 @@ namespace PS5000A
 
         public void DataSbor()
         {
-            masA = new long[countz + countdo];
+            masA = new long[countAfter + countBefore];
             int it = 0;
             int mx = sourcesCount * (sourcesCount - 1);
 
@@ -816,13 +817,14 @@ namespace PS5000A
 
         }
 
-
-
         private async void buttonStart_Click(object sender, EventArgs e)
         {
             if (!opened)
                 buttonOpen_Click(sender, e);
-            globalbase = textBox12.Text;
+
+            if (!SetGlobalBase())
+                return;
+
             SetFiles();
 
             DataSbor();
@@ -843,8 +845,7 @@ namespace PS5000A
         /// <param name="to"></param>
         private void Furier(string from, string to = null, int number = 0)
         {
-            if (to == null)
-                to = from;
+            to = to ?? from;
             InitParams();
             toolStripStatusLabel1.Text = "Запущено преобразование Фурье";
 
@@ -857,8 +858,7 @@ namespace PS5000A
 
         private void ShowData(string from, string to = null, int number = 0)
         {
-            if (to == null)
-                to = from;
+            to = to ?? from;
 
             int counttt = sourcesCount * (sourcesCount - 1);
             string[] st = new string[counttt];
@@ -868,7 +868,7 @@ namespace PS5000A
                 for (int j = 0; j < sourcesCount; j++)
                     if (i != j)
                     {
-                        st[index] = "from " + symbols[i] + " to " + symbols[j];
+                        st[index] = "from " + Symbols[i] + " to " + Symbols[j];
                         names[index] = Path.Combine(from, ArraysNames[j]);
                         index++;
                     }
@@ -884,7 +884,7 @@ namespace PS5000A
             }
 
 
-            var form = new JustGrafic(sst, nnames,$"График от {symbols[number]}");
+            var form = new JustGrafic(sst, nnames, $"График от {Symbols[number]}", dt, countBefore);
 
             void cmet(object sender, FormClosedEventArgs e)
             {
