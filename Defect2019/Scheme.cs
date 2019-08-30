@@ -38,16 +38,15 @@ namespace Работа2019
             DrawFigures();
         }
 
-        public Scheme(Source[] mass, Point beg, double lenx, double leny, string filename) : this()
+        public Scheme(Source[] mass, Point beg, double lenx, double leny, string filename) : this(mass)
         {
-            mas = mass;
-            CreateEmptyImageAndSetParams();
-
-            var p = MyPointToPointF(beg);
+            DrawImage(beg, lenx, leny, filename);
+        }
+        private void DrawImage(Point beg, double lenx, double leny, string filename)
+        {
+          var p = MyPointToPointF(beg);
             float cc = 15.0f / 11;
             g.DrawImage(Image.FromFile(filename), p.X, p.Y, (float)(lenx / X * pictureBox1.BackgroundImage.Size.Width/*+ pictureBox1.BackgroundImage.Size.Width/14*0.5*/) * cc, (float)(leny / Y * pictureBox1.BackgroundImage.Size.Height/*- pictureBox1.BackgroundImage.Size.Height/14*0.5)*cc*/));
-
-            DrawFigures();
         }
 
         /// <summary>

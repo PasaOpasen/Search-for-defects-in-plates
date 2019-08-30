@@ -18,35 +18,51 @@ namespace Библиотека_графики
     {
         private int ind = 1;
         public int step;
+        public enum Mode { Time,Tick};
+        internal Mode MeMode = Mode.Tick;
+
         public JustGrafic(string title="График")
         {
             InitializeComponent();
+            groupBox3.Hide();
+
             this.Text = title;
             step = numericUpDown1.Value.ToInt32();
 
             this.FormClosing += new FormClosingEventHandler((object o, FormClosingEventArgs f) =>
             {
-                mas = null;
                 arr = null;
-                GC.Collect(1);
+                xticks = null;
+                xtime = null;
+                arr2 = null;
+                GC.Collect();
             });
         }
 
-        public JustGrafic(string[] names, string[] filenames,string title= "График") : this(title)
+        public JustGrafic(string[] names, string[] filenames,string title= "График",double dt=0,int beforecount=0) : this(title)
         {
             fnames = filenames;
             
-
             this.chart1.Series.Clear();
 
             for (int i = 0; i < names.Length; i++)
                 this.chart1.Series.Add(names[i]);
 
             arr = new double[names.Length][];
-            arr2 = new double[names.Length][];
+            arr2 = new double[names.Length][];           
 
            // ReadDataOld();
             ReadData();
+            xticks = new double[arr[0].Length];
+            xtime = new double[arr[0].Length];
+            for(int i = 0; i < xtime.Length; i++)
+            {
+                xticks[i] = i + 1;
+                xtime[i] = -(beforecount - i) * dt;
+            }
+            xmas = xticks;
+            if (dt != 0 || beforecount != 0)
+                groupBox3.Show();
 
             for (int i = 0; i < names.Length; i++)
             {
@@ -56,8 +72,8 @@ namespace Библиотека_графики
                 this.chart1.Series[i].BorderDashStyle = System.Windows.Forms.DataVisualization.Charting.ChartDashStyle.Solid;
                 this.chart1.Series[i].Font = new Font("Arial", 16);
 
-                for (int k = 1; k <= arr[i].Length; k += step)
-                    this.chart1.Series[i].Points.AddXY(k, arr[i][k - 1]);
+                for (int k = 0; k < arr[i].Length; k += step)
+                    this.chart1.Series[i].Points.AddXY(xmas[k], arr[i][k]);
 
             }
 
@@ -83,7 +99,7 @@ namespace Библиотека_графики
                     {
                         if (x != xold || y != yold)
                         {
-                            s = $"n = {(int)x}  val = {y.ToString(3)}";//s.Show();
+                            s = $"{(MeMode== Mode.Tick?"n":"t")} = {x.ToString(3)}  val = {y.ToString(3)}";//s.Show();
                             toolTip1.SetToolTip(chart1, s);
                             xold = x;
                             yold = y;
@@ -142,11 +158,11 @@ namespace Библиотека_графики
         /// Создаёт форму по массиву названий. Предполагается, что данные хранятся в файлах вида $"{s[i]}.txt"
         /// </summary>
         /// <param name="names"></param>
-        public JustGrafic(string[] names, string title = "График") : this(names, Expendator.Map(names, (string s) => s + ".txt"),title)
+        public JustGrafic(string[] names, string title = "График", double dt = 0, int beforecount = 0) : this(names, Expendator.Map(names, (string s) => s + ".txt"),title,dt,beforecount)
         {
 
         }
-        Color[] colors = new Color[] { Color.Blue, Color.Green, Color.Red, Color.Black, Color.Yellow, Color.Violet, Color.SkyBlue };
+        Color[] colors = new Color[] { Color.Blue, Color.Green, Color.Red, Color.Black, Color.Yellow, Color.Violet, Color.SkyBlue,Color.HotPink };
 
 
         private void button1_Click(object sender, EventArgs e)
@@ -198,7 +214,8 @@ namespace Библиотека_графики
             SetLimsY();
         }
 
-        public System.Windows.Forms.DataVisualization.Charting.DataPoint[][] mas;
+
+      internal  double[] xtime, xticks,xmas;
         public double[][] arr, arr2;
         private double xmin, xmax, ymin, ymax;
         private bool first = true;
@@ -267,7 +284,7 @@ namespace Библиотека_графики
                             if ((_control as CheckBox).Checked)
                             {
                                 for (int i = 0; i < arr[k].Length; i += step)
-                                    chart1.Series[k].Points.AddXY(i + 1, arr2[k][i]);
+                                    chart1.Series[k].Points.AddXY(xmas[i], arr2[k][i]);
                                 chart1.Series[k].IsVisibleInLegend = true;
                                 if (step <= 30) this.Refresh();
                             }
@@ -363,6 +380,24 @@ namespace Библиотека_графики
             ReDraw();
         }
 
+        private void radioButton1_CheckedChanged(object sender, EventArgs e)
+        {
+            MeMode = Mode.Time;
+            xmas = xtime;
+            xmin = xmas[0];
+            xmax = xmas.Last();
+            ReDraw();
+        }
+
+        private void radioButton2_CheckedChanged(object sender, EventArgs e)
+        {
+            MeMode = Mode.Tick;
+            xmas = xticks;
+            xmin = 1;
+            xmax = xmas.Length;
+            ReDraw();
+        }
+
         private void вернутьИсходныеМассивыToolStripMenuItem_Click(object sender, EventArgs e)
         {
             Cancel();
@@ -393,12 +428,7 @@ namespace Библиотека_графики
         private void button3_Click(object sender, EventArgs e)
         {
             сохранитьНовыеМассивыВИсходныеФайлыToolStripMenuItem_Click(sender, e);
-
-            arr = null;
-            arr2 = null;
             
-            //this.Dispose();
-            GC.Collect();
             this.Close();
         }
 
@@ -411,7 +441,7 @@ namespace Библиотека_графики
                 if (!trap.IsDisposed)
                     trap.Close();
             });
-            trap.Show();
+            trap.ShowDialog();
         }
 
     }

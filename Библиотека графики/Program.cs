@@ -21,7 +21,7 @@ namespace Библиотека_графики
             Application.SetCompatibleTextRenderingDefault(false);
             Application.Run(
                 //new PdfOpen("e33", "formula")
-                new JustGrafic(new string[] { "ArrayA","ArrayB","ArrayC"},"Жопа")
+                new JustGrafic(new string[] { "ArrayA","ArrayB","ArrayC"},"Жопа",0.02,4050)
                 );
         }
     }
