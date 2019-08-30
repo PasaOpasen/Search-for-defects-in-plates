@@ -208,4 +208,14 @@ public class Source : Idup<Source>
 
         return t.ToArray();
     }
+
+
+    public static double GetMaxRadius(Source[] s)
+    {
+        double res = 0;
+        for (int i = 0; i < s.Length; i++)
+            if (s[i].radius > res)
+                res = s[i].radius;
+        return res;
+    }
 }
