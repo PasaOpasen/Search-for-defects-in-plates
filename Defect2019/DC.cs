@@ -164,13 +164,13 @@ namespace Defect2019
                 Forms.UG.dCircle = new DCircle(c);
             else
             {
-                double[] w = Seqw(wbeg, wend, wcount);
+                double[] w = SeqWMemoized(wbeg, wend, wcount);
                 var fw = w.Map((double d) => Functions.F1(d) + new Number.Complex(RandomNumbers.NextDouble2(0, 0.01), RandomNumbers.NextDouble2(0, 0.01)));
 
                 Uxt.sources.Add(new Source(c.Center,
                     c.GetNormalsOnDCircle(),
                     (Point p) => c.ContainPoint(p),
-                    new Tuple<double[], Number.Complex[]>(w, fw),
+                      fw,
                     Source.Type.DCircle,
                     c.BigCircle.radius));
 

@@ -847,7 +847,7 @@
             this.button9.Name = "button9";
             this.button9.Size = new System.Drawing.Size(262, 35);
             this.button9.TabIndex = 76;
-            this.button9.Text = "Посмотреть графики PRMSN";
+            this.button9.Text = "Посмотреть графики PRMSN_Memoized";
             this.button9.UseVisualStyleBackColor = true;
             this.button9.Click += new System.EventHandler(this.button9_Click);
             // 
@@ -970,7 +970,7 @@
             // 
             this.графикиPRMSNToolStripMenuItem.Name = "графикиPRMSNToolStripMenuItem";
             this.графикиPRMSNToolStripMenuItem.Size = new System.Drawing.Size(297, 22);
-            this.графикиPRMSNToolStripMenuItem.Text = "Графики PRMSN";
+            this.графикиPRMSNToolStripMenuItem.Text = "Графики PRMSN_Memoized";
             this.графикиPRMSNToolStripMenuItem.Click += new System.EventHandler(this.графикиPRMSNToolStripMenuItem_Click);
             // 
             // распространениеВолныВПространствеToolStripMenuItem

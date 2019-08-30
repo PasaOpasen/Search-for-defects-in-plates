@@ -23,4 +23,4 @@ for (i in 1:(length(stt))) {
     names(l) = c("ur", "uz")
 #fwrite(l, "zlims(real).txt", sep = " ", dec = ",", col.names = TRUE)
 write.table(l, file = "zlims(real).txt", row.names = FALSE)
-print("zlims are calculated")
+cat("zlab lims are calculated")

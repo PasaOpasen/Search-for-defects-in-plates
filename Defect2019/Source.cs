@@ -1,55 +1,106 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.IO;
 using МатКлассы;
 using static МатКлассы.Number;
 using static МатКлассы.Waves;
 using Point = МатКлассы.Point;
-using System.IO;
-using static Functions;
-using static РабКонсоль;
 
 /// <summary>
 /// Источник с дополнительными свойствами
 /// </summary>
-public class Source
+public class Source : Idup<Source>
 {
+    /// <summary>
+    /// Центр источника
+    /// </summary>
     public Point Center { get; private set; }
-    public Normal2D[] Norms;
-    public Func<Point, bool> Filter;
-    public Tuple<double[], Complex[]> Fmas;
 
-    public enum Type { Circle,DCircle};
+    /// <summary>
+    /// Копия источника
+    /// </summary>
+    public Source dup => new Source(this);
+
+    /// <summary>
+    /// Массив нормалей
+    /// </summary>
+    public Normal2D[] Norms;
+
+    /// <summary>
+    /// Фильтр принадлежности к источнику
+    /// </summary>
+    public Func<Point, bool> Filter;
+
+    /// <summary>
+    /// Массив f(w)
+    /// </summary>
+    public Complex[] Fmas;
+
+    public enum Type { Circle, DCircle };
+
+    /// <summary>
+    /// Тип источника
+    /// </summary>
     public Type MeType;
+
+    /// <summary>
+    /// Радиус
+    /// </summary>
     public double radius;
 
-    public Source(Point center,Normal2D[] normals, Func<Point, bool> filter, Tuple<double[], Complex[]> fmas, Type type,double radius)
+    /// <summary>
+    /// Создать источник по основным характеристикам
+    /// </summary>
+    /// <param name="center"></param>
+    /// <param name="normals"></param>
+    /// <param name="filter"></param>
+    /// <param name="fmas"></param>
+    /// <param name="type"></param>
+    /// <param name="radius"></param>
+    public Source(Point center, Normal2D[] normals, Func<Point, bool> filter, Complex[] fmas, Type type, double radius)
     {
         Center = center.dup;
         Norms = normals; //new Normal2D[normals.Length];
         //for (int i = 0; i < normals.Length; i++)
         //    Norms[i] = new Normal2D(normals[i]);
         Filter = new Func<Point, bool>(filter);
-        Fmas = new Tuple<double[], Complex[]>(fmas.Item1.Dup(), fmas.Item2.Dup());
+        Fmas = fmas.Dup();
 
         this.radius = radius;
         MeType = type;
-
     }
-    public Source(Source s) : this(s.Center,s.Norms,s.Filter,s.Fmas,s.MeType,s.radius) { }
 
-    public Point[] MasForDraw()
+    private Source(Source s) : this(s.Center, s.Norms, s.Filter, s.Fmas, s.MeType, s.radius)
     {
-        Point[] mas = new Point[Norms.Length];
-        for (int i = 0; i < mas.Length; i++)
-            mas[i] = Norms[i].Position;
-        return mas;
+    }
+
+    /// <summary>
+    /// Массив приложений нормалей источника
+    /// </summary>
+    public Point[] NormsPositionArray
+    {
+        get
+        {
+            Point[] mas = new Point[Norms.Length];
+            for (int i = 0; i < mas.Length; i++)
+            {
+                mas[i] = Norms[i].Position;
+            }
+
+            return mas;
+        }
     }
 
     public override string ToString()
     {
-        return $"type = {((MeType==Type.Circle)?"circle":"Dcircle")} \tcenter = ({Center.x}; {Center.y}) R = {radius} N.Count = {Norms.Length}";
+        return $"type = {((MeType == Type.Circle) ? "circle" : "Dcircle")} \tcenter = ({Center.x}; {Center.y}) R = {radius} N.Count = {Norms.Length}";
     }
 
+    /// <summary>
+    /// Эквивалентность по центрам
+    /// </summary>
+    /// <param name="obj"></param>
+    /// <returns></returns>
     public override bool Equals(object obj)
     {
         Point p = (obj as Source).Center;
@@ -61,27 +112,46 @@ public class Source
         return 659946564 + EqualityComparer<Point>.Default.GetHashCode(Center);
     }
 
-    public static  string ToString( Source[] mas)
+    /// <summary>
+    /// Характеристика массива в одной строке
+    /// </summary>
+    /// <param name="mas"></param>
+    /// <returns></returns>
+    public static string ToString(Source[] mas)
     {
         string s = "(x,y,r) = {";
-        for (int i = 0; i < mas.Length-1; i++)
+        for (int i = 0; i < mas.Length - 1; i++)
+        {
             s += $"{mas[i].Center.x},{mas[i].Center.y},{mas[i].radius}" + "} {";
-        s += $"{mas[mas.Length - 1].Center.x},{mas[mas.Length - 1].Center.y},{mas[mas.Length - 1].radius}"+"}";
+        }
+
+        s += $"{mas[mas.Length - 1].Center.x},{mas[mas.Length - 1].Center.y},{mas[mas.Length - 1].radius}" + "}";
         return s;
+    }
+
+    /// <summary>
+    /// Краткая запись источника
+    /// </summary>
+    /// <returns></returns>
+    public string ToShortString()
+    {
+        return $"{((MeType == Type.Circle) ? "circle" : "Dcircle")} ({Center.x} , {Center.y}) R = {radius} N.Count = {Norms.Length}";
     }
 
     /// <summary>
     /// Записать массив f(w) в файл
     /// </summary>
     /// <param name="filename"></param>
-    public void FmasToFile()
+    public void FmasToFile(string path = "")
     {
         string filename = $"f(w) from {this.Center.ToString()}.txt";
-        using(StreamWriter fs=new StreamWriter(filename))
+        using (StreamWriter fs = new StreamWriter(Path.Combine(path, filename)))
         {
             fs.WriteLine("w Re(f(w)) Im(f(w))");
-            for (int i = 0; i < Fmas.Item1.Length; i++)
-                fs.WriteLine($"{Fmas.Item1[i]} {Fmas.Item2[i].Re} {Fmas.Item2[i].Im}");
+            for (int i = 0; i < Fmas.Length; i++)
+            {
+                fs.WriteLine($"{РабКонсоль.wmas[i]} {Fmas[i].Re} {Fmas[i].Im}");
+            }
         }
     }
 
@@ -89,30 +159,53 @@ public class Source
     /// Считать массив f(w) из файла
     /// </summary>
     /// <param name="filename"></param>
-    public void FmasFromFile()
+    public void FmasFromFile(string path = "")
     {
         string filename = $"f(w) from {this.Center.ToString()}.txt";
         string s = "";
-        using (StreamReader fs = new StreamReader(filename))
+        using (StreamReader fs = new StreamReader(Path.Combine(path, filename)))
         {
             s = fs.ReadLine();
             string[] st;
 
-            List<double> d = new List<double>();
+            // List<double> d = new List<double>();
             List<Complex> c = new List<Complex>();
 
             s = fs.ReadLine();
             while (s != null)
             {
                 //s.Show();
-                st = s.Split(new char[] { ' '}, StringSplitOptions.RemoveEmptyEntries);
-                d.Add(st[0].ToDouble());
+                st = s.Split(new char[] { ' ' }, StringSplitOptions.RemoveEmptyEntries);
+                // d.Add(st[0].ToDouble());
                 c.Add(new Complex(st[1].ToDouble(), st[2].ToDouble()));
                 //Console.WriteLine(new Complex(st[1].ToDouble(), st[2].ToDouble()).Conjugate);
+
                 s = fs.ReadLine();
             }
 
-            Fmas = new Tuple<double[], Complex[]>(Functions.Seqw(wbeg,wend,wcount), c.ToArray());
+            Fmas = c.ToArray();
+            //Fmas = new Tuple<double[], Complex[]>(Functions.SeqWMemoized(wbeg, wend, wcount), c.ToArray().ToCVector().Normalize.ComplexMas);
         }
+        System.Diagnostics.Debug.WriteLine($"Считано f(w) для источника {this.ToString()}" + Environment.NewLine + Fmas[0] + Environment.NewLine + Fmas[1] + Environment.NewLine + Fmas[2]);
+    }
+
+    /// <summary>
+    /// Возвращает те источники, для которых существуют файлы f(w) в папке directory
+    /// </summary>
+    /// <param name="s"></param>
+    /// <param name="directory"></param>
+    /// <returns></returns>
+    public static Source[] GetSourcesWithFw(Source[] s, string directory)
+    {
+        List<Source> t = new List<Source>();
+        for (int i = 0; i < s.Length; i++)
+        {
+            if (File.Exists(Path.Combine(directory, $"f(w) from {s[i].Center}.txt")))
+            {
+                t.Add(s[i]);
+            }
+        }
+
+        return t.ToArray();
     }
 }

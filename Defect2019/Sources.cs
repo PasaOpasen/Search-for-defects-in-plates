@@ -31,12 +31,12 @@ namespace Defect2019
             Waves.Circle c = new Waves.Circle(new МатКлассы.Point(x, y), r);
             Waves.Normal2D[] norm = c.GetNormalsOnCircle(n);
 
-            double[] w = Seqw(wbeg, wend, wcount);
+            double[] w = SeqWMemoized(wbeg, wend, wcount);
             var fw = w.Map((double d) => Functions.F1(d) + new Number.Complex(RandomNumbers.NextDouble2(0, 0.01), RandomNumbers.NextDouble2(0, 0.01)));
 
             Source s = new Source(c.center, norm,
                 (МатКлассы.Point p)=>c.ContainPoint(p),
-                new Tuple<double[], Number.Complex[]>(w, fw),
+                 fw,
                 Source.Type.Circle,
                 r);
 

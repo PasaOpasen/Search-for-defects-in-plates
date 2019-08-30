@@ -11,14 +11,14 @@ using System.IO;
 /// матриц, методов интегрирования, графов (особое внимание), СЛАУ, методы расширения
 /// Недостатки: мало где заботился об исключениях, содержимое методов почти не комментрируется,
 /// в классе СЛАУ из-за диплома, вышедшего с С++, есть слишком сложные низкоуровневые методы
-/// и путаница из-за тесной связи с классом кривых, 
+/// и путаница из-за тесной связи с классом кривых,
 /// класс вероятностей начал из эксперимента и почти ничего не написал,
 /// очень много открытых полей и методов,
 /// почти не проводил тестирование,
 /// но большинство методов использовались в визуальных приложениях
 /// и так были отлажены
 /// Всё написал сам, кроме 3-5% кода, взятого из открытых источников
-/// 
+///
 /// ------------Контакты:
 /// Telegram: 8 961 519 36 46 (на звонки не отвечаю)
 /// Mail:     qtckpuhdsa@gmail.com
@@ -32,34 +32,48 @@ namespace МатКлассы
     /// <summary>
     /// Точки на плоскости
     /// </summary>
-    public class Point : IComparable, ICloneable,Idup<Point>
+    public class Point : IComparable, ICloneable, Idup<Point>
     {
+        /// <summary>
+        /// Начало координат в нуле
+        /// </summary>
+        public static readonly Point Zero;
+
         //координаты
         /// <summary>
         /// Первая координата точки
         /// </summary>
         public double x = 0;
+
         /// <summary>
         /// Вторая координата точки
         /// </summary>
         public double y = 0;
+
+        static Point()
+        {
+            Zero = new Point(0, 0);
+        }
 
         //конструкторы
         /// <summary>
         /// Точка с нулевыми координатами
         /// </summary>
         public Point() { x = 0; y = 0; }
+
         /// <summary>
         /// Точка с одинаковыми координатами
         /// </summary>
         /// <param name="a"></param>
         public Point(double a) { x = a; y = a; }
+
         /// <summary>
         /// Точка по своим координатам
         /// </summary>
         /// <param name="a"></param>
         /// <param name="b"></param>
         public Point(double a, double b) { x = a; y = b; }
+
         /// <summary>
         /// Конструктор копирования
         /// </summary>
@@ -67,24 +81,149 @@ namespace МатКлассы
         public Point(Point p) : this(p.x, p.y) { }
 
         /// <summary>
-        /// Дубликат точки
-        /// </summary>
-        public Point dup => new Point(this);
-        public Point Swap => new Point(this.y, this.x);
-        /// <summary>
         /// Расстояние от точки до (0,0)
         /// </summary>
         public double Abs => new Number.Complex(x, y).Abs;
 
         /// <summary>
-        /// Начало координат в нуле
+        /// Дубликат точки
         /// </summary>
-        public static readonly Point Zero;
+        public Point dup => new Point(this);
 
-        static Point()
+        public Point Swap => new Point(this.y, this.x);
+        public static Point Add(Point p, double d) => new Point(p.x + d, p.y + d);
+
+        public static Point Add(Point p, Point d) => new Point(p.x + d.x, p.y + d.y);
+
+        /// <summary>
+        /// Центр множества точек как их взвешенная сумма
+        /// </summary>
+        /// <param name="mas"></param>
+        /// <returns></returns>
+        public static Point Center(Point[] mas)
         {
-            Zero = new Point(0, 0);
+            double x = mas[0].x, y = mas[0].y;
+            for (int i = 1; i < mas.Length; i++)
+            {
+                x += mas[i].x;
+                y += mas[i].y;
             }
+            return new Point(x / mas.Length, y / mas.Length);
+        }
+
+        /// <summary>
+        /// Евклидово расстояние между точками
+        /// </summary>
+        /// <param name="z"></param>
+        /// <param name="w"></param>
+        /// <returns></returns>
+        public static double Eudistance(Point z, Point w)
+        {
+            return Math.Sqrt((z.x - w.x) * (z.x - w.x) + (z.y - w.y) * (z.y - w.y));
+        }
+
+        /// <summary>
+        /// Возвращает координаты нижнего левого и верхнего правого угла прямоугольника, сожержащего все точки массива
+        /// </summary>
+        /// <param name="mas"></param>
+        /// <returns></returns>
+        public static Tuple<Point, Point> GetBigRect(Point[] mas)
+        {
+            Point min = mas[0].dup;
+            Point max = min.dup;
+            for (int i = 1; i < mas.Length; i++)
+            {
+                if (min.x > mas[i].x)
+                {
+                    min.x = mas[i].x;
+                }
+
+                if (min.y > mas[i].y)
+                {
+                    min.y = mas[i].y;
+                }
+
+                if (max.x < mas[i].x)
+                {
+                    max.x = mas[i].x;
+                }
+
+                if (max.y < mas[i].y)
+                {
+                    max.y = mas[i].y;
+                }
+            }
+
+            return new Tuple<Point, Point>(min, max);
+        }
+
+        /// <summary>
+        /// Перевести массив чисел в последовательность точек на плоскости
+        /// </summary>
+        /// <param name="c"></param>
+        /// <returns></returns>
+        public static Point[] GetSequence(double[] c)
+        {
+            Point[] p = new Point[c.Length];
+            for (int i = 0; i < c.Length; i++)
+            {
+                p[i] = new Point(i, c[i]);
+            }
+
+            return p;
+        }
+
+        public static implicit operator Point(Number.Complex e)=>new Point(e.Re, e.Im);
+
+        public static Point operator -(Point p) => new Point(-p.x, -p.y);
+
+        public static bool operator !=(Point a, Point b)
+        {
+            /*if (Convert.IsDBNull((object)b) || Convert.IsDBNull((object)a)) return false;*/
+            return !(a == b);
+        }
+
+        /// <summary>
+        /// Скалярное произведение точек как векторов
+        /// </summary>
+        /// <param name="a"></param>
+        /// <param name="b"></param>
+        /// <returns></returns>
+        public static double operator *(Point a, Point b) => a.x * b.x + a.y * b.y;
+
+        public static Point operator *(double s, Point p) => new Point(s * p.x, s * p.y);
+
+        public static Point operator +(Point a, Point b) => new Point(a.x + b.x, a.y + b.y);
+
+        public static bool operator <(Point a, Point b) //функция компоратора
+        {
+            if (a.y < b.y)
+            {
+                return true; //cравнение по второй координате
+            }
+            else if (a.y > b.y)
+            {
+                return false;
+            }
+            else
+            {
+                return a.x < b.x; //если вторые координаты равны, сравнение по первой координате
+            }
+        }
+
+        //public static bool operator ==(Point a, Point b) => (new Complex(a) - new Complex(b)).Abs == 0;
+        public static bool operator ==(Point a, Point b) { /*if (a == null || b == null) return false;bool tmp = false; try { tmp=(a.x == b.x) && (a.y == b.y); } catch(NullReferenceException e){ }return tmp;*/  return (a.x == b.x) && (a.y == b.y); }
+
+        /// <summary>
+        /// Сравнение точек по установленной по умолчанию упорядоченности
+        /// </summary>
+        /// <param name="a"></param>
+        /// <param name="b"></param>
+        /// <returns></returns>
+        public static bool operator >(Point a, Point b)
+        {
+            return (b < a);
+        }
 
         //методы
         /// <summary>
@@ -99,29 +238,14 @@ namespace МатКлассы
         {
             double h = (b - a) / n;
             Point[] points = new Point[n + 1];
-            for (int i = 0; i <= n; i++) points[i] = new Point(a + h * i, f(a + h * i));
+            for (int i = 0; i <= n; i++)
+            {
+                points[i] = new Point(a + h * i, f(a + h * i));
+            }
 
             return points;
         }
-        //то же самое, только отдельными массивами выводятся первые и вторые координаты точек (сделано для рисования в Chart)
-        public static double[] PointsX(RealFunc f, int n, double a, double b)
-        {
-            Point[] p = new Point[Point.Points(f, n, a, b).Length];
-            for (int i = 0; i < p.Length; i++) p[i] = new Point(Point.Points(f, n, a, b)[i]);
 
-            double[] x = new double[p.Length];
-            for (int i = 0; i < p.Length; i++) x[i] = p[i].x;
-            return x;
-        }
-        public static double[] PointsY(RealFunc f, int n, double a, double b)
-        {
-            Point[] p = new Point[Point.Points(f, n, a, b).Length];
-            for (int i = 0; i < p.Length; i++) p[i] = new Point(Point.Points(f, n, a, b)[i]);
-
-            double[] y = new double[p.Length];
-            for (int i = 0; i < p.Length; i++) y[i] = p[i].y;
-            return y;
-        }
         /// <summary>
         /// Вывести массив точек, через которые проходит функция
         /// </summary>
@@ -134,28 +258,14 @@ namespace МатКлассы
         {
             int n = (int)((b - a) / h);
             Point[] points = new Point[n];
-            for (int i = 0; i < n; i++) points[i] = new Point(a + h * i, f(a + h * i));
+            for (int i = 0; i < n; i++)
+            {
+                points[i] = new Point(a + h * i, f(a + h * i));
+            }
 
             return points;
         }
-        public static double[] PointsX(RealFunc f, double h, double a, double b)
-        {
-            Point[] p = new Point[Point.Points(f, h, a, b).Length];
-            for (int i = 0; i < p.Length; i++) p[i] = new Point(Point.Points(f, h, a, b)[i]);
 
-            double[] x = new double[p.Length];
-            for (int i = 0; i < p.Length; i++) x[i] = p[i].x;
-            return x;
-        }
-        public static double[] PointsY(RealFunc f, double h, double a, double b)
-        {
-            Point[] p = new Point[Point.Points(f, h, a, b).Length];
-            for (int i = 0; i < p.Length; i++) p[i] = new Point(Point.Points(f, h, a, b)[i]);
-
-            double[] y = new double[p.Length];
-            for (int i = 0; i < p.Length; i++) y[i] = p[i].y;
-            return y;
-        }
         /// <summary>
         /// Считать массив точек из файла
         /// </summary>
@@ -179,7 +289,6 @@ namespace МатКлассы
             return p;
         }
 
-
         /// <summary>
         /// Массив точек, через которые проходит функция, по массиву абцисс эти точек
         /// </summary>
@@ -189,20 +298,14 @@ namespace МатКлассы
         public static Point[] Points(RealFunc f, double[] c)
         {
             Point[] p = new Point[c.Length];
-            for (int i = 0; i < c.Length; i++) p[i] = new Point(c[i], f(c[i]));
+            for (int i = 0; i < c.Length; i++)
+            {
+                p[i] = new Point(c[i], f(c[i]));
+            }
+
             return p;
         }
-        /// <summary>
-        /// Перевести массив чисел в последовательность точек на плоскости
-        /// </summary>
-        /// <param name="c"></param>
-        /// <returns></returns>
-        public static Point[] GetSequence(double[] c)
-        {
-            Point[] p = new Point[c.Length];
-            for (int i = 0; i < c.Length; i++) p[i] = new Point(i, c[i]);
-            return p;
-        }
+
         /// <summary>
         /// Генерация массива точек по списку точек
         /// </summary>
@@ -212,22 +315,80 @@ namespace МатКлассы
         {
             Point[] P = new Point[L.Count];
             for (int i = 0; i < P.Length; i++)
+            {
                 P[i] = new Point(L[i]);
+            }
+
             return P;
         }
 
-        /// <summary>
-        /// Строковое изображение точки
-        /// </summary>
-        /// <returns></returns>
-        public override string ToString()
+        //то же самое, только отдельными массивами выводятся первые и вторые координаты точек (сделано для рисования в Chart)
+        public static double[] PointsX(RealFunc f, int n, double a, double b)
         {
-            return String.Format("({0} , {1})", this.x, this.y);
+            Point[] p = new Point[Point.Points(f, n, a, b).Length];
+            for (int i = 0; i < p.Length; i++)
+            {
+                p[i] = new Point(Point.Points(f, n, a, b)[i]);
+            }
+
+            double[] x = new double[p.Length];
+            for (int i = 0; i < p.Length; i++)
+            {
+                x[i] = p[i].x;
+            }
+
+            return x;
         }
-        /// <summary>
-        /// Показать координаты точки на консоли
-        /// </summary>
-        public void Show() { Console.WriteLine(this.ToString()); }
+
+        public static double[] PointsX(RealFunc f, double h, double a, double b)
+        {
+            Point[] p = new Point[Point.Points(f, h, a, b).Length];
+            for (int i = 0; i < p.Length; i++)
+            {
+                p[i] = new Point(Point.Points(f, h, a, b)[i]);
+            }
+
+            double[] x = new double[p.Length];
+            for (int i = 0; i < p.Length; i++)
+            {
+                x[i] = p[i].x;
+            }
+
+            return x;
+        }
+
+        public static double[] PointsY(RealFunc f, int n, double a, double b)
+        {
+            Point[] p = new Point[Point.Points(f, n, a, b).Length];
+            for (int i = 0; i < p.Length; i++)
+            {
+                p[i] = new Point(Point.Points(f, n, a, b)[i]);
+            }
+
+            double[] y = new double[p.Length];
+            for (int i = 0; i < p.Length; i++)
+            {
+                y[i] = p[i].y;
+            }
+
+            return y;
+        }
+        public static double[] PointsY(RealFunc f, double h, double a, double b)
+        {
+            Point[] p = new Point[Point.Points(f, h, a, b).Length];
+            for (int i = 0; i < p.Length; i++)
+            {
+                p[i] = new Point(Point.Points(f, h, a, b)[i]);
+            }
+
+            double[] y = new double[p.Length];
+            for (int i = 0; i < p.Length; i++)
+            {
+                y[i] = p[i].y;
+            }
+
+            return y;
+        }
         /// <summary>
         /// Показать массив точек на консоли
         /// </summary>
@@ -236,70 +397,37 @@ namespace МатКлассы
         {
             //for (int i = 0; i < f.Length; i++) Console.Write("{0} \t", f[i].x); Console.WriteLine();
             //for (int i = 0; i < f.Length; i++) Console.Write("{0} \t", f[i].y); Console.WriteLine();
-            for (int i = 0; i < f.Length; i++) Console.WriteLine(f[i].ToString());
-        }
-
-        /// <summary>
-        /// Сравнение точек по установленной по умолчанию упорядоченности
-        /// </summary>
-        /// <param name="a"></param>
-        /// <param name="b"></param>
-        /// <returns></returns>
-        public static bool operator >(Point a, Point b)
-        {
-            return (b < a);
-        }
-        public static bool operator <(Point a, Point b) //функция компоратора
-        {
-            if (a.y < b.y)
+            for (int i = 0; i < f.Length; i++)
             {
-                return true; //cравнение по второй координате
-            }
-            else if (a.y > b.y)
-            {
-                return false;
-            }
-            else
-            {
-                return a.x < b.x; //если вторые координаты равны, сравнение по первой координате
+                Console.WriteLine(f[i].ToString());
             }
         }
-        //public static bool operator ==(Point a, Point b) => (new Complex(a) - new Complex(b)).Abs == 0;
-        public static bool operator ==(Point a, Point b) { /*if (a == null || b == null) return false;bool tmp = false; try { tmp=(a.x == b.x) && (a.y == b.y); } catch(NullReferenceException e){ }return tmp;*/  return (a.x == b.x) && (a.y == b.y); }
-        public static bool operator !=(Point a, Point b) { /*if (Convert.IsDBNull((object)b) || Convert.IsDBNull((object)a)) return false;*/ return !(a == b); }
-        /// <summary>
-        /// Скалярное произведение точек как векторов
-        /// </summary>
-        /// <param name="a"></param>
-        /// <param name="b"></param>
-        /// <returns></returns>
-        public static double operator *(Point a, Point b) => a.x * b.x + a.y * b.y;
 
-        public static Point operator -(Point p) => new Point(-p.x, -p.y);
-
-        public static Point operator +(Point a, Point b) => new Point(a.x + b.x, a.y + b.y);
-        public static Point operator *(double s, Point p) => new Point(s * p.x, s * p.y);
-
-
-        /// <summary>
-        /// Евклидово расстояние между точками
-        /// </summary>
-        /// <param name="z"></param>
-        /// <param name="w"></param>
-        /// <returns></returns>
-        public static double Eudistance(Point z, Point w)
+        public object Clone()
         {
-            return Math.Sqrt((z.x - w.x) * (z.x - w.x) + (z.y - w.y) * (z.y - w.y));
+            //throw new NotImplementedException();
+            return (object)new Point(this);
         }
 
         public int CompareTo(object obj)
         {
             Point p = (Point)obj;
-            if (this.x < p.x) return -1;
+            if (this.x < p.x)
+            {
+                return -1;
+            }
+
             if (this.x == p.x)
             {
-                if (this.y < p.y) return -1;
-                if (this.y == p.y) return 0;
+                if (this.y < p.y)
+                {
+                    return -1;
+                }
+
+                if (this.y == p.y)
+                {
+                    return 0;
+                }
             }
             return 1;
             //return x.CompareTo(obj);
@@ -319,54 +447,18 @@ namespace МатКлассы
             return hashCode;
         }
 
-        public object Clone()
-        {
-            //throw new NotImplementedException();
-            return (object)new Point(this);
-        }
-
-        public static implicit operator Point(Number.Complex e) { return new Point(e.Re, e.Im); }
+        /// <summary>
+        /// Показать координаты точки на консоли
+        /// </summary>
+        public void Show() { Console.WriteLine(this.ToString()); }
 
         /// <summary>
-        /// Возвращает координаты нижнего левого и верхнего правого угла прямоугольника, сожержащего все точки массива
+        /// Строковое изображение точки
         /// </summary>
-        /// <param name="mas"></param>
         /// <returns></returns>
-        public static Tuple<Point,Point> GetBigRect(Point[] mas)
+        public override string ToString()
         {
-            Point min = mas[0].dup;
-            Point max = min.dup;
-            for(int i=1;i<mas.Length;i++)
-            {
-                if (min.x > mas[i].x) min.x = mas[i].x;
-                if (min.y > mas[i].y) min.y = mas[i].y;
-
-                if (max.x < mas[i].x) max.x = mas[i].x;
-                if (max.y < mas[i].y) max.y = mas[i].y;
-            }
-
-            return new Tuple<Point, Point>(min, max);
-
+            return String.Format("({0} , {1})", this.x, this.y);
         }
-
-        /// <summary>
-        /// Центр множества точек как их взвешенная сумма
-        /// </summary>
-        /// <param name="mas"></param>
-        /// <returns></returns>
-        public static Point Center(Point[] mas)
-        {
-            double x = mas[0].x, y = mas[0].y;
-            for (int i = 1; i < mas.Length; i++)
-            {
-                x += mas[i].x;
-                y += mas[i].y;
-            }
-            return new Point(x / mas.Length, y / mas.Length);
-        }
-
-        public static Point Add(Point p, double d) => new Point(p.x + d, p.y + d);
-        public static Point Add(Point p, Point d) => new Point(p.x + d.x, p.y + d.y);
     }
 }
-

@@ -260,5 +260,26 @@ namespace UnitTestProject
             Expendator.GetPeriod(m3).Show();
             Expendator.GetPeriod(m4).Show();
         }
+
+
+        [TestMethod]
+        public void DF()
+        {
+            double x = 0.0012345678909876543;
+            x.ToString().Show();
+            x.ToString("g17").Show();
+            x.ToString("g").Show();
+            x.ToString("r").Show();
+        }
+
+        [TestMethod]
+        public void st()
+        {
+            string s = "e3\\\\yt";
+            s.Show();
+            s.Replace("\\", @"\").Show();
+            s.Replace("\\\\", @"\").Show();
+            Environment.CurrentDirectory.Show();
+        }
     }
 }

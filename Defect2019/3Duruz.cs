@@ -120,7 +120,7 @@ namespace Defect2019
             else
             await Task.Run(() =>
             {
-                МатКлассы.Waves.Circle.FieldToFile(savedialog.FileName,
+                МатКлассы.Waves.Circle.FieldToFileOLD(savedialog.FileName,"",
                     (double x, double y/*, МатКлассы.Point normal*/) =>
                     {
                         var t = Forms.UG.u(x, y, w, norms);
@@ -129,7 +129,7 @@ namespace Defect2019
                     },
                     x0, X, xc, y0, Y, yc,
                     //fiCirc,
-                    progress,//ref Forms.UG.prbar,
+                    progress,
                     token,
                     filter,
                     tit,

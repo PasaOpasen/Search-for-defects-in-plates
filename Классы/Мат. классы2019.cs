@@ -214,6 +214,13 @@ namespace МатКлассы
                 res[i] = mas[i] * coef;
             return res;
         }
+        /// <summary>
+        /// Умножение пары комплексных чисел на комплексное числл
+        /// </summary>
+        /// <param name="mas"></param>
+        /// <param name="coef"></param>
+        /// <returns></returns>
+        public static Tuple<Complex, Complex> Mult(Tuple<Complex, Complex> mas, Complex coef) => new Tuple<Complex, Complex>(mas.Item1 * coef, mas.Item2 * coef);
 
         /// <summary>
         /// Записать массив векторов в файл
@@ -294,15 +301,26 @@ namespace МатКлассы
 
         public static Complex[] ToComplex(this double[] m) => new CVectors(m).ComplexMas;
 
+        /// <summary>
+        /// Преобразовать строку в массив действительных чисел
+        /// </summary>
+        /// <param name="s"></param>
+        /// <returns></returns>
         public static double[] ToDoubleMas(this string s)
         {
             string[] st = s.Split(new char[] { ' ' }, StringSplitOptions.RemoveEmptyEntries);
             double[] res = new double[st.Length];
             for (int i = 0; i < res.Length; i++)
-                res[i] = st[i].ToDouble();
-
+                res[i] =Convert.ToDouble( st[i]);
+            st = null;
             return res;
         }
+        /// <summary>
+        /// Преобразовать число в строку, из которой его можно воспроизвести
+        /// </summary>
+        /// <param name="s"></param>
+        /// <returns></returns>
+        public static string ToRString(this double s) => s.ToString("r");
 
         /// <summary>
         /// Создать и заполнить массив алгебраической прогрессией
@@ -393,6 +411,59 @@ namespace МатКлассы
                 if (f) return k;
             }
             return 0;
+        }
+
+        public static CVectors ToCVector(this Complex[] m) => new CVectors(m);
+
+        /// <summary>
+        /// Записать одно слово в файл
+        /// </summary>
+        /// <param name="filename"></param>
+        /// <param name="word"></param>
+        public static void WriteStringInFile(string filename,string word)
+        {
+            using (StreamWriter f = new StreamWriter(filename))
+                f.WriteLine(word);
+        }
+        /// <summary>
+        /// Записать массив слов в файл
+        /// </summary>
+        /// <param name="filename"></param>
+        /// <param name="word"></param>
+        public static void WriteInFile(string filename, string[] word)
+        {
+            using (StreamWriter f = new StreamWriter(filename))
+                for (int i = 0; i < word.Length; i++)
+                    f.WriteLine(word[i]);
+        }
+
+        /// <summary>
+        /// Прочесть все строки файла
+        /// </summary>
+        /// <param name="filename"></param>
+        /// <returns></returns>
+        public static string[] GetStringArrayFromFile(string filename,bool withoutEmpty=false)
+        {
+            string[] st;
+            using (StreamReader f = new StreamReader(filename))
+                st = f.ReadToEnd().Split(new string[] { "\r\n" }, StringSplitOptions.RemoveEmptyEntries);
+            if (withoutEmpty)
+                st = st.Where(n => n.Length > 0).ToArray();
+            return st;
+        }
+
+        public static string GetWordFromFile(string filename) => GetStringArrayFromFile(filename, true)[0];
+
+        /// <summary>
+        /// Скопировать набор файлов из одной директории в другую, сохраняя имена
+        /// </summary>
+        /// <param name="from"></param>
+        /// <param name="to"></param>
+        /// <param name="filenames"></param>
+        public static void CopyFiles(string from,string to,params string[] filenames)
+        { 
+            for (int i = 0; i < filenames.Length; i++)
+                File.Copy(Path.Combine(from, filenames[i]), Path.Combine(to, filenames[i]), true);
         }
     }
 

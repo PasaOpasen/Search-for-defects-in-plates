@@ -322,6 +322,9 @@ namespace МатКлассы
                 }
                 catch
                 {
+                    if (s=="NA" ||s == "nan" || s == "NaN" || s == "Nan")
+                        return Double.NaN;
+                    else
                     throw e;
                 }
             }
@@ -375,6 +378,20 @@ namespace МатКлассы
             double[] res = new double[c.Length];
             for (int i = 0; i < c.Length; i++)
                 res[i] = Convert.ToDouble(c[i]);
+            return res;
+        }
+
+        /// <summary>
+        /// Переводит произвольный массив в массив целых чисел через конвертер
+        /// </summary>
+        /// <typeparam name="T"></typeparam>
+        /// <param name="c"></param>
+        /// <returns></returns>
+        public static double[] ToIntMas<T>(this T[] c)
+        {
+            double[] res = new double[c.Length];
+            for (int i = 0; i < c.Length; i++)
+                res[i] = Convert.ToInt32(c[i]);
             return res;
         }
 
@@ -490,12 +507,8 @@ namespace МатКлассы
         /// <returns></returns>
         public static double ToPeriod(this double d,double period)
         {
-            //int k = (d < 0) ? 1 : 0;
-            //int f = (int)Math.Floor(d.Abs() / period);
-            //return d - Math.Sign(d) * period * (f + k);
             int f = (int)Math.Floor(d / period);
             return d - f * period;
-            return d;
         }
 
         /// <summary>
@@ -739,7 +752,7 @@ namespace МатКлассы
             for (int i = 0; i < S.n; i++)
             {
                 Vectors c = S.GetLine(i);
-                int tmp1, tmp2;
+                int tmp2;
                 for (int j = 0; j < S.m; j++) l[i] += S[i, j] * q[j];
                 MIN(c, out tmp2);
                 r[i] = S[i, tmp2];

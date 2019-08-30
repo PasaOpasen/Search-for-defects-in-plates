@@ -1,6 +1,6 @@
 ﻿namespace Defect2019
 {
-    partial class PRMSN
+    partial class PRMSN_Memoized
     {
         /// <summary>
         /// Required designer variable.
@@ -497,7 +497,7 @@
             this.button4.UseVisualStyleBackColor = true;
             this.button4.Click += new System.EventHandler(this.button4_Click);
             // 
-            // PRMSN
+            // PRMSN_Memoized
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(9F, 19F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
@@ -524,8 +524,8 @@
             this.Controls.Add(this.chart1);
             this.Font = new System.Drawing.Font("Consolas", 12F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(204)));
             this.Margin = new System.Windows.Forms.Padding(4);
-            this.Name = "PRMSN";
-            this.Text = "PRMSN графики";
+            this.Name = "PRMSN_Memoized";
+            this.Text = "PRMSN_Memoized графики";
             ((System.ComponentModel.ISupportInitialize)(this.chart1)).EndInit();
             ((System.ComponentModel.ISupportInitialize)(this.numericUpDown1)).EndInit();
             this.groupBox1.ResumeLayout(false);

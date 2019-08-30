@@ -33,6 +33,9 @@
             this.параметрыToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.построитьПоследнююСохранённуюАнимациюToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.посмотретьПолучающуюсяСхемуToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
+            this.дополнительноToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
+            this.быстрыйТестToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
+            this.вычислитьUxtВОднойТочкеToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.checkedListBox1 = new System.Windows.Forms.CheckedListBox();
             this.contextMenuStrip1 = new System.Windows.Forms.ContextMenuStrip(this.components);
             this.добавитьToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
@@ -47,9 +50,6 @@
             this.button1 = new System.Windows.Forms.Button();
             this.button2 = new System.Windows.Forms.Button();
             this.timer1 = new System.Windows.Forms.Timer(this.components);
-            this.дополнительноToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
-            this.быстрыйТестToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
-            this.вычислитьUxtВОднойТочкеToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.menuStrip1.SuspendLayout();
             this.contextMenuStrip1.SuspendLayout();
             this.groupBox1.SuspendLayout();
@@ -89,6 +89,29 @@
             this.посмотретьПолучающуюсяСхемуToolStripMenuItem.Size = new System.Drawing.Size(213, 20);
             this.посмотретьПолучающуюсяСхемуToolStripMenuItem.Text = "Посмотреть получающуюся схему";
             this.посмотретьПолучающуюсяСхемуToolStripMenuItem.Click += new System.EventHandler(this.посмотретьПолучающуюсяСхемуToolStripMenuItem_Click);
+            // 
+            // дополнительноToolStripMenuItem
+            // 
+            this.дополнительноToolStripMenuItem.DropDownItems.AddRange(new System.Windows.Forms.ToolStripItem[] {
+            this.быстрыйТестToolStripMenuItem,
+            this.вычислитьUxtВОднойТочкеToolStripMenuItem});
+            this.дополнительноToolStripMenuItem.Name = "дополнительноToolStripMenuItem";
+            this.дополнительноToolStripMenuItem.Size = new System.Drawing.Size(107, 20);
+            this.дополнительноToolStripMenuItem.Text = "Дополнительно";
+            // 
+            // быстрыйТестToolStripMenuItem
+            // 
+            this.быстрыйТестToolStripMenuItem.Name = "быстрыйТестToolStripMenuItem";
+            this.быстрыйТестToolStripMenuItem.Size = new System.Drawing.Size(267, 22);
+            this.быстрыйТестToolStripMenuItem.Text = "Быстрый тест";
+            this.быстрыйТестToolStripMenuItem.Click += new System.EventHandler(this.быстрыйТестToolStripMenuItem_Click_1);
+            // 
+            // вычислитьUxtВОднойТочкеToolStripMenuItem
+            // 
+            this.вычислитьUxtВОднойТочкеToolStripMenuItem.Name = "вычислитьUxtВОднойТочкеToolStripMenuItem";
+            this.вычислитьUxtВОднойТочкеToolStripMenuItem.Size = new System.Drawing.Size(267, 22);
+            this.вычислитьUxtВОднойТочкеToolStripMenuItem.Text = "Вычислить характеристики в точке";
+            this.вычислитьUxtВОднойТочкеToolStripMenuItem.Click += new System.EventHandler(this.вычислитьUxtВОднойТочкеToolStripMenuItem_Click);
             // 
             // checkedListBox1
             // 
@@ -182,53 +205,32 @@
             this.groupBox1.Size = new System.Drawing.Size(661, 223);
             this.groupBox1.TabIndex = 2;
             this.groupBox1.TabStop = false;
-            this.groupBox1.Text = "Выбрать источники";
+            this.groupBox1.Text = "Используемые источники";
             // 
             // button1
             // 
             this.button1.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Bottom | System.Windows.Forms.AnchorStyles.Right)));
+            this.button1.BackColor = System.Drawing.Color.White;
             this.button1.FlatStyle = System.Windows.Forms.FlatStyle.Flat;
             this.button1.Location = new System.Drawing.Point(548, 282);
             this.button1.Name = "button1";
             this.button1.Size = new System.Drawing.Size(132, 61);
             this.button1.TabIndex = 3;
             this.button1.Text = "Закрыть";
-            this.button1.UseVisualStyleBackColor = true;
+            this.button1.UseVisualStyleBackColor = false;
             this.button1.Click += new System.EventHandler(this.button1_Click);
             // 
             // button2
             // 
+            this.button2.BackColor = System.Drawing.Color.OrangeRed;
             this.button2.FlatStyle = System.Windows.Forms.FlatStyle.Popup;
             this.button2.Location = new System.Drawing.Point(25, 282);
             this.button2.Name = "button2";
             this.button2.Size = new System.Drawing.Size(307, 61);
             this.button2.TabIndex = 4;
             this.button2.Text = "Перейти к созданию волны";
-            this.button2.UseVisualStyleBackColor = true;
+            this.button2.UseVisualStyleBackColor = false;
             this.button2.Click += new System.EventHandler(this.button2_Click);
-            // 
-            // дополнительноToolStripMenuItem
-            // 
-            this.дополнительноToolStripMenuItem.DropDownItems.AddRange(new System.Windows.Forms.ToolStripItem[] {
-            this.быстрыйТестToolStripMenuItem,
-            this.вычислитьUxtВОднойТочкеToolStripMenuItem});
-            this.дополнительноToolStripMenuItem.Name = "дополнительноToolStripMenuItem";
-            this.дополнительноToolStripMenuItem.Size = new System.Drawing.Size(107, 20);
-            this.дополнительноToolStripMenuItem.Text = "Дополнительно";
-            // 
-            // быстрыйТестToolStripMenuItem
-            // 
-            this.быстрыйТестToolStripMenuItem.Name = "быстрыйТестToolStripMenuItem";
-            this.быстрыйТестToolStripMenuItem.Size = new System.Drawing.Size(245, 22);
-            this.быстрыйТестToolStripMenuItem.Text = "Быстрый тест";
-            this.быстрыйТестToolStripMenuItem.Click += new System.EventHandler(this.быстрыйТестToolStripMenuItem_Click_1);
-            // 
-            // вычислитьUxtВОднойТочкеToolStripMenuItem
-            // 
-            this.вычислитьUxtВОднойТочкеToolStripMenuItem.Name = "вычислитьUxtВОднойТочкеToolStripMenuItem";
-            this.вычислитьUxtВОднойТочкеToolStripMenuItem.Size = new System.Drawing.Size(245, 22);
-            this.вычислитьUxtВОднойТочкеToolStripMenuItem.Text = "Вычислить u(x,t) в одной точке";
-            this.вычислитьUxtВОднойТочкеToolStripMenuItem.Click += new System.EventHandler(this.вычислитьUxtВОднойТочкеToolStripMenuItem_Click);
             // 
             // Uxt
             // 

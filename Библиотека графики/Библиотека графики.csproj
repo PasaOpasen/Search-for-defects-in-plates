@@ -54,10 +54,40 @@
     <Compile Include="Form1.Designer.cs">
       <DependentUpon>Form1.cs</DependentUpon>
     </Compile>
+    <Compile Include="PdfOpen.cs">
+      <SubType>Form</SubType>
+    </Compile>
+    <Compile Include="PdfOpen.designer.cs">
+      <DependentUpon>PdfOpen.cs</DependentUpon>
+    </Compile>
+    <Compile Include="JustGrafic.cs">
+      <SubType>Form</SubType>
+    </Compile>
+    <Compile Include="JustGrafic.designer.cs">
+      <DependentUpon>JustGrafic.cs</DependentUpon>
+    </Compile>
     <Compile Include="Program.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
+    <Compile Include="TextBoxForm.cs">
+      <SubType>Form</SubType>
+    </Compile>
+    <Compile Include="TextBoxForm.Designer.cs">
+      <DependentUpon>TextBoxForm.cs</DependentUpon>
+    </Compile>
+    <Compile Include="Trapezi.cs">
+      <SubType>Form</SubType>
+    </Compile>
+    <Compile Include="Trapezi.Designer.cs">
+      <DependentUpon>Trapezi.cs</DependentUpon>
+    </Compile>
     <EmbeddedResource Include="Form1.resx">
       <DependentUpon>Form1.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="PdfOpen.resx">
+      <DependentUpon>PdfOpen.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="JustGrafic.resx">
+      <DependentUpon>JustGrafic.cs</DependentUpon>
     </EmbeddedResource>
     <EmbeddedResource Include="Properties\Resources.resx">
       <Generator>ResXFileCodeGenerator</Generator>
@@ -68,6 +98,12 @@
       <AutoGen>True</AutoGen>
       <DependentUpon>Resources.resx</DependentUpon>
     </Compile>
+    <EmbeddedResource Include="TextBoxForm.resx">
+      <DependentUpon>TextBoxForm.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Trapezi.resx">
+      <DependentUpon>Trapezi.cs</DependentUpon>
+    </EmbeddedResource>
     <None Include="Properties\Settings.settings">
       <Generator>SettingsSingleFileGenerator</Generator>
       <LastGenOutput>Settings.Designer.cs</LastGenOutput>
@@ -80,6 +116,12 @@
   </ItemGroup>
   <ItemGroup>
     <None Include="App.config" />
+  </ItemGroup>
+  <ItemGroup>
+    <ProjectReference Include="..\Классы\Классы %28библиотека%29.csproj">
+      <Project>{cd3eefde-74ed-48da-8e82-1e6abab1a140}</Project>
+      <Name>Классы %28библиотека%29</Name>
+    </ProjectReference>
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
 </Project>

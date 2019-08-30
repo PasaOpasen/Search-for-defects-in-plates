@@ -496,8 +496,7 @@ namespace МатКлассы
             //Перегруженные операторы вычитания
             public static Complex operator -(Complex c1, Complex c2)
             {
-                try { return new Complex(c1.Re - c2.Re, c1.Im - c2.Im); }
-                catch (Exception e) { throw new Exception(e.Message); }
+                return new Complex(c1.Re - c2.Re, c1.Im - c2.Im); 
             }
             public static Complex operator -(Complex z) { return new Complex(-z.Re, -z.Im); }
 
@@ -644,6 +643,14 @@ namespace МатКлассы
                     c[i] = x[i];
                 return c;
             }
+
+
+            /// <summary>
+            /// expi(x) = cos(x) + i sin(x)
+            /// </summary>
+            /// <param name="d"></param>
+            /// <returns></returns>
+            public static Complex Expi(double d) => new Complex(Math.Cos(d), Math.Sin(d));
 
             /// <summary>
             /// Комплексная экспонента

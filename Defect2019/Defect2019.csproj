@@ -111,6 +111,12 @@
     <Compile Include="Anima.Designer.cs">
       <DependentUpon>Anima.cs</DependentUpon>
     </Compile>
+    <Compile Include="Helper.cs">
+      <SubType>Form</SubType>
+    </Compile>
+    <Compile Include="Helper.Designer.cs">
+      <DependentUpon>Helper.cs</DependentUpon>
+    </Compile>
     <Compile Include="JustGrafic.cs">
       <SubType>Form</SubType>
     </Compile>
@@ -166,6 +172,12 @@
     <Compile Include="Uxt.Designer.cs">
       <DependentUpon>Uxt.cs</DependentUpon>
     </Compile>
+    <Compile Include="UxtInfo.cs">
+      <SubType>Form</SubType>
+    </Compile>
+    <Compile Include="UxtInfo.Designer.cs">
+      <DependentUpon>UxtInfo.cs</DependentUpon>
+    </Compile>
     <Compile Include="WaveContinious.cs">
       <SubType>Form</SubType>
     </Compile>
@@ -212,6 +224,9 @@
     <EmbeddedResource Include="DINN5.resx">
       <DependentUpon>DINN5.cs</DependentUpon>
     </EmbeddedResource>
+    <EmbeddedResource Include="Helper.resx">
+      <DependentUpon>Helper.cs</DependentUpon>
+    </EmbeddedResource>
     <EmbeddedResource Include="JustGrafic.resx">
       <DependentUpon>JustGrafic.cs</DependentUpon>
     </EmbeddedResource>
@@ -243,6 +258,9 @@
     <EmbeddedResource Include="Uxt.resx">
       <DependentUpon>Uxt.cs</DependentUpon>
     </EmbeddedResource>
+    <EmbeddedResource Include="UxtInfo.resx">
+      <DependentUpon>UxtInfo.cs</DependentUpon>
+    </EmbeddedResource>
     <EmbeddedResource Include="WaveContinious.resx">
       <DependentUpon>WaveContinious.cs</DependentUpon>
     </EmbeddedResource>
@@ -267,6 +285,10 @@
     <ProjectReference Include="..\Библиотека графики\Библиотека графики.csproj">
       <Project>{ce3c0ed7-208c-4043-89a9-19e93f1e2e46}</Project>
       <Name>Библиотека графики</Name>
+    </ProjectReference>
+    <ProjectReference Include="..\ДОПОЛНЕНИЯ\Demo_For_FlexibleMessageBox-noexe\Demo_For_FlexibleMessageBox\Demo_For_FlexibleMessageBox.csproj">
+      <Project>{f1fd937b-c84e-4f6c-b533-4982bd43914f}</Project>
+      <Name>Demo_For_FlexibleMessageBox</Name>
     </ProjectReference>
     <ProjectReference Include="..\Классы\Классы %28библиотека%29.csproj">
       <Project>{cd3eefde-74ed-48da-8e82-1e6abab1a140}</Project>

@@ -1,35 +1,27 @@
-﻿using System;
-using System.Collections.Generic;
-using System.ComponentModel;
-using System.Data;
-using System.Drawing;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
+﻿using System.Drawing;
 using System.Windows.Forms;
-using МатКлассы;
 using Point = МатКлассы.Point;
 
 namespace Работа2019
 {
     public partial class Scheme : Form
     {
-        Graphics g;
-        Pen pen;
-        Font font;
-        double wind=1.3,X,Y;
-        double dwx,dwy;
-        Point center;
-        int pcount = 100;
-        Source[] mas;
-        float rad;
+        private Graphics g;
+        private Pen pen;
+        private Font font;
+        private double wind = 1.3, X, Y;
+        private double dwx, dwy;
+        private Point center;
+        private int pcount = 100;
+        private Source[] mas;
+        private float rad;
 
         public Scheme()
         {
             InitializeComponent();
         }
 
-        public Scheme(Source[] mass):this()
+        public Scheme(Source[] mass) : this()
         {
             mas = mass;
             CreateEmptyImageAndSetParams();
@@ -37,28 +29,26 @@ namespace Работа2019
             DrawFigures();
         }
 
-        public Scheme(Source[] mass,Point beg,double lenx,double leny,string filename) : this()
+        public Scheme(Source[] mass, Point beg, double lenx, double leny, string filename) : this()
         {
             mas = mass;
             CreateEmptyImageAndSetParams();
 
             var p = DoublePToIntP(beg);
             float cc = 15.0f / 11;
-            g.DrawImage(Image.FromFile(filename), p.X, p.Y, (float)(lenx/X* pictureBox1.BackgroundImage.Size.Width/*+ pictureBox1.BackgroundImage.Size.Width/14*0.5*/)*cc, (float)(leny/Y*pictureBox1.BackgroundImage.Size.Height/*- pictureBox1.BackgroundImage.Size.Height/14*0.5)*cc*/));
+            g.DrawImage(Image.FromFile(filename), p.X, p.Y, (float)(lenx / X * pictureBox1.BackgroundImage.Size.Width/*+ pictureBox1.BackgroundImage.Size.Width/14*0.5*/) * cc, (float)(leny / Y * pictureBox1.BackgroundImage.Size.Height/*- pictureBox1.BackgroundImage.Size.Height/14*0.5)*cc*/));
 
             DrawFigures();
         }
 
-        void CreateEmptyImageAndSetParams()
+        private void CreateEmptyImageAndSetParams()
         {
-            
             var pmas = new Point[mas.Length];
             for (int i = 0; i < mas.Length; i++)
             {
                 pmas[i] = mas[i].Center;
                 //pmas[i].Show();
             }
-
 
             var tp = МатКлассы.Point.GetBigRect(pmas);
             //center = Point.Center(pmas);
@@ -88,7 +78,7 @@ namespace Работа2019
             font = new Font("Arial", 14);
         }
 
-        void DrawFigures()
+        private void DrawFigures()
         {
             for (int i = 0; i < mas.Length; i++)
             {
@@ -96,17 +86,16 @@ namespace Работа2019
                 var pp = DoublePToIntP(mas[i].Center);
                 g.DrawString(mas[i].Center.ToString(), font, Brushes.Blue, pp);
                 var del = 4;
-                g.DrawLine(new Pen(Brushes.Black, 4), new PointF(pp.X-rad/del,pp.Y-rad/del), new PointF(pp.X + rad / del, pp.Y + rad / del));
+                g.DrawLine(new Pen(Brushes.Black, 4), new PointF(pp.X - rad / del, pp.Y - rad / del), new PointF(pp.X + rad / del, pp.Y + rad / del));
                 g.DrawLine(new Pen(Brushes.Black, 4), new PointF(pp.X - rad / del, pp.Y + rad / del), new PointF(pp.X + rad / del, pp.Y - rad / del));
             }
-                
+
             pictureBox1.Invalidate();
         }
 
-
-        void DrawS(Source s)
+        private void DrawS(Source s)
         {
-            //var mas = s.MasForDraw();
+            //var mas = s.NormsPositionArray();
             //for(int i = 0; i < mas.Length-1; i++)
             //{
             //g.DrawLine(pen, DoublePToIntP(mas[i]), DoublePToIntP(mas[i+1]));
@@ -116,21 +105,26 @@ namespace Работа2019
             g.DrawCurve(pen, SourceToFpoint(s));
         }
 
-        PointF DoublePToIntP(Point p)
+        private PointF DoublePToIntP(Point p)
         {
             //return new PointF((float)p.x, (float)p.y);
-            return new PointF((float)((p.x - center.x) / X * pictureBox1.BackgroundImage.Size.Width+ pictureBox1.BackgroundImage.Size.Width*0.5f), (float)((p.y - center.y) / Y * pictureBox1.BackgroundImage.Size.Height+ pictureBox1.BackgroundImage.Size.Height*0.5));
+            PointF ps = new PointF((float)((p.x - center.x) / X * pictureBox1.BackgroundImage.Size.Width + pictureBox1.BackgroundImage.Size.Width * 0.5f), (float)((p.y - center.y) / Y * pictureBox1.BackgroundImage.Size.Height + pictureBox1.BackgroundImage.Size.Height * 0.5));
+
+            //ps = new PointF(ps.X, ((float)Y - ps.Y)+pictureBox1.BackgroundImage.Size.Height*0.75f);
+            return ps;
         }
 
-        PointF[] SourceToFpoint(Source ss)
+        private PointF[] SourceToFpoint(Source ss)
         {
-            var s = ss.MasForDraw();
-            PointF[] mas = new PointF[s.Length+1];
+            var s = ss.NormsPositionArray;
+            PointF[] mas = new PointF[s.Length + 1];
             for (int i = 0; i < s.Length; i++)
+            {
                 mas[i] = DoublePToIntP(s[i]);
+            }
+
             mas[s.Length] = mas[0];
             return mas;
         }
-
     }
 }

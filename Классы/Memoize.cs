@@ -15,7 +15,7 @@ namespace МатКлассы
         /// <summary>
         /// Текущий словарь
         /// </summary>
-        internal ConcurrentDictionary<TVal, TResult> dic => pr._cache;
+        public ConcurrentDictionary<TVal, TResult> dic; 
         /// <summary>
         /// Число элементов в словаре
         /// </summary>
@@ -43,8 +43,6 @@ namespace МатКлассы
             //throw new NotImplementedException();
         }
 
-        private CustomProvider<TVal, TResult> pr;
-
         /// <summary>
         /// Конструктор по обычной функции
         /// </summary>
@@ -52,29 +50,14 @@ namespace МатКлассы
         /// <param name="First">Точка, в которой можно посчитать первое значение функции (чтобы не было пустого словаря)</param>
         public Memoize(Func<TVal, TResult> Memoize)
         {
+            dic=new ConcurrentDictionary<TVal, TResult>();
             M = new Func<TVal, TResult>(Memoize);
-            pr = new CustomProvider<TVal, TResult>();
-            pr.RunLongRunningOperation = new Func<TVal, TResult>(Memoize);
-            //if(First!=null)dic.TryAdd(First, M(First));
         }
 
         /// <summary>
         /// Делегат, возвращающий оптимизированную за счёт мемоизации функцию
         /// </summary>
-        public Func<TVal, TResult> Value => (TVal val) => pr.RunOperationOrGetFromCache(val);
-
-        private class CustomProvider<S, OperationResult> //where S : class, struct//, ICloneable
-        {
-            public readonly ConcurrentDictionary<S, OperationResult> _cache = new ConcurrentDictionary<S, OperationResult>();
-
-            public OperationResult RunOperationOrGetFromCache(S operationId)
-            {
-                return _cache.GetOrAdd(operationId,//(S)operationId.Clone(),
-                    id => RunLongRunningOperation(id));
-            }
-
-            internal Func<S, OperationResult> RunLongRunningOperation;
-        }
+        public Func<TVal, TResult> Value => (TVal val) => dic.GetOrAdd(val,M  /* id => M(id)*/);
 
     }
 }

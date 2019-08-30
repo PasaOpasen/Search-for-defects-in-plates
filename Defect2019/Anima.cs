@@ -34,6 +34,7 @@ namespace Defect2019
         int count;
         string[] files;
         int k = 1;
+        int cycles;
         private void Timer1_Tick(object Sender, EventArgs e)
         {
             //if(pictureBox1.BackgroundImage != null)
@@ -46,6 +47,8 @@ namespace Defect2019
                 k = 0;
                 GC.Collect();
                 GC.WaitForPendingFinalizers();
+                if (cycles++ == РабКонсоль.animacycles)
+                    this.Close();
             }
         }
     }

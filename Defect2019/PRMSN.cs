@@ -15,9 +15,9 @@ using static МатКлассы.Number;
 
 namespace Defect2019
 {
-    public partial class PRMSN : Form
+    public partial class PRMSN_Memoized : Form
     {
-        public PRMSN()
+        public PRMSN_Memoized()
         {
             InitializeComponent();
             AfterChaigeData();
@@ -49,7 +49,7 @@ namespace Defect2019
 
         private void button3_Click(object sender, EventArgs e)
         {
-            Библиотека_графики.ForChart.SaveImageFromChart(chart1, "PRMSN");
+            Библиотека_графики.ForChart.SaveImageFromChart(chart1, "PRMSN_Memoized");
         }
 
         private void button5_Click(object sender, EventArgs e)
@@ -123,7 +123,7 @@ namespace Defect2019
             {
                 double end = textBox6.Text.ToDouble();
                 double h = (end + 2 * РабКонсоль.tm) / (c - 1);
-                Vectors v = PolesPoles(w);
+                Vectors v = PolesMasMemoized(w);
                 double min = v.Min * 0.5, max = v.Max * 1.5;
                 if (end < max) end = max + 0.1;
                 tit = $"[{0}; {min}] --- проход по R до спуска" + Environment.NewLine + $"[{min}; {min + РабКонсоль.tm}] --- спуск" + Environment.NewLine + $"[{min + РабКонсоль.tm}; {max + РабКонсоль.tm}] --- проход под R" + Environment.NewLine + $"[{max + РабКонсоль.tm}; {max + 2 * РабКонсоль.tm}] --- подъём" + Environment.NewLine + $"[{max + 2 * РабКонсоль.tm}; {end + 2 * РабКонсоль.tm}] --- остаток по R";
@@ -180,7 +180,7 @@ namespace Defect2019
         }
         private void WritePRMSN(int i, Complex c, double w)
         {
-            var v = Functions.PRMSN(c, w);
+            var v = Functions.PRMSN_Memoized(c, w);
             P[i] = v[0];//$"P[{i}] = {P[i]} ".Show();
             R[i] = v[1];
             M[i] = v[2];

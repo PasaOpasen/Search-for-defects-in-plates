@@ -5,6 +5,7 @@ using System.Linq;
 using System.Threading.Tasks;
 using System.Windows.Forms;
 using System.Windows.Forms.DataVisualization.Charting;
+using System.Reflection;
 
 namespace Библиотека_графики
 {
@@ -18,7 +19,10 @@ namespace Библиотека_графики
         {
             Application.EnableVisualStyles();
             Application.SetCompatibleTextRenderingDefault(false);
-            Application.Run(new Form1());
+            Application.Run(
+                //new PdfOpen("e33", "formula")
+                new JustGrafic(new string[] { "ArrayA","ArrayB","ArrayC"},"Жопа")
+                );
         }
     }
 
@@ -83,7 +87,7 @@ namespace Библиотека_графики
         {
             SaveFileDialog savedialog = new SaveFileDialog();
             savedialog.Title = "Сохранить рисунок как...";
-            savedialog.FileName =Environment.CurrentDirectory+"\\"+ name;
+            savedialog.FileName =System.IO.Path.Combine( Environment.CurrentDirectory, name+".png");
             savedialog.Filter = "Image files (*.png)|*.png|All files (*.*)|*.*";
 
             savedialog.OverwritePrompt = true;
@@ -182,5 +186,29 @@ namespace Библиотека_графики
             im.Save(f3, System.Drawing.Imaging.ImageFormat.Bmp);
             im.Save(f3.Substring(0,f3.IndexOf(".bmp"))+".emf", System.Drawing.Imaging.ImageFormat.Emf);
         }
+    }
+
+    public static class Other
+    {
+        private static void CopyControl(Control sourceControl, ref Control targetControl)
+        {
+            // make sure these are the same
+            if (sourceControl.GetType() != targetControl.GetType())
+            {
+                throw new Exception("Incorrect control types");
+            }
+
+            foreach (PropertyInfo sourceProperty in sourceControl.GetType().GetProperties())
+            {
+                object newValue = sourceProperty.GetValue(sourceControl, null);
+
+                MethodInfo mi = sourceProperty.GetSetMethod(true);
+                if (mi != null)
+                {
+                    sourceProperty.SetValue(targetControl, newValue, null);
+                }
+            }
+        }
+        public static Color[] colors = new Color[] { Color.Blue, Color.Green, Color.Red, Color.Black };
     }
 }

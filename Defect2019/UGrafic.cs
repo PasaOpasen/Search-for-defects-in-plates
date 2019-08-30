@@ -19,6 +19,7 @@ using Point = МатКлассы.Point;
 using static МатКлассы.Waves;
 using System.IO;
 using static РабКонсоль;
+using JR.Utils.GUI.Forms;
 
 namespace Практика_с_фортрана
 {
@@ -66,7 +67,7 @@ namespace Практика_с_фортрана
             var uf = new Memoize<Tuple<double, double, double,  Normal2D[], Func<double, Complex>>, Complex[]>((Tuple<double,  double, double, Normal2D[], Func<double, Complex>> t)=>_ufw(t.Item1,t.Item2,t.Item3,t.Item4,t.Item5));
             ufw = (double x, double y,  double w, Normal2D[] n, Func<double, Complex> f) => uf.Value(new Tuple<double, double,  double, Normal2D[], Func<double, Complex>>(x, y, w, n, f));
 
-            var ur = new Memoize<Tuple<double, double,  double, Normal2D[]>, Complex[]>((Tuple<double, double,  double, Normal2D[]> t) => _ujRes(t.Item1, t.Item2, t.Item3, t.Item4));
+            var ur = new Memoize<Tuple<double, double,  double, Normal2D[]>,Complex[]>((Tuple<double, double,  double, Normal2D[]> t) => _ujRes(t.Item1, t.Item2, t.Item3, t.Item4));
             ujRes = (double x, double y, double w, Normal2D[] n) => ur.Value(new Tuple<double, double,  double, Normal2D[]>(x, y, w, n));
             //ujRes = (double x, double y, double z, double w, Normal2D[] n) =>
             //{
@@ -178,7 +179,7 @@ namespace Практика_с_фортрана
 
         #endregion
 
-        #region базовые поля и функции u(w), uRes(w)
+        #region базовые поля и функции u(w), uxwMemoized(w)
 
         /// <summary>
         /// Полумесяц
@@ -190,9 +191,9 @@ namespace Практика_с_фортрана
 
         int width = 3; Color color = Color.Blue;
         double fix, beg, end;
-        public Func<double, double, double,  Normal2D[], Complex[]> uj = (double x, double y,  double w, Normal2D[] normal) =>
+        public Func<double, double, double, Normal2D[], Complex[]> uj = (double x, double y,  double w, Normal2D[] normal) =>
        {
-           Vectors poles = PolesPoles(w);
+           Vectors poles = PolesMasMemoized(w);
            double min = poles.Min * 0.5, max = poles.Max * 1.5;//min.Show();
 
             //подынтегральная функция
@@ -210,9 +211,9 @@ namespace Практика_с_фортрана
             return FuncMethods.DefInteg.GaussKronrod.DINN5_GK(tmp, min, min, min, max, РабКонсоль.tm, РабКонсоль.tp, РабКонсоль.eps, РабКонсоль.pr, РабКонсоль.gr, 3, РабКонсоль.NodesCount).Div(2 * Math.PI);
        };
 
-        //public Func<double, double, double, double, Normal2D[], Complex[]> uj = (double x, double y, double z, double w, Normal2D[] normal) =>
+        //public Func<double, double, double, double, Source,Tuple<Complex,Complex>> uj = (double x, double y, double z, double w, Normal2D[] normal) =>
         //{
-        //    Vectors poles = PolesPoles(w);
+        //    Vectors poles = PolesMasMemoized(w);
         //    double min = poles.Min * 0.5, max = poles.Max * 1.5;//min.Show();
         //    FuncMethods.DefInteg.GaussKronrod.ComplexVectorFunc tmp;
         //    CVectors res =new CVectors(3);
@@ -234,21 +235,21 @@ namespace Практика_с_фортрана
         //    return res.ComplexMas;
         //};
 
-        public Func<double, double, double,  Normal2D[], Complex[]> _ujRes = (double x, double y,  double w, Normal2D[] normal) =>
+        public Func<double, double, double, Normal2D[], Complex[]> _ujRes = (double x, double y,  double w, Normal2D[] s) =>
       {
-            return KsumRes(x, y,  w, normal, (Point t) => { return new Vectors( t.x, t.y, 0 ); }).ComplexMas;
+            return KsumRes(x, y,  w, s, (Point t) => { return new Vectors( t.x, t.y, 0 ); }).ComplexMas;
       };
         /// <summary>
         /// Мемоизированная u(x,w) по вычетам. Её мемоизация не помогает на 3D-графиках, так как там уже нет повторных вычислений при меняющемся времени
         /// </summary>
-        public Func<double, double,  double, Normal2D[], Complex[]> ujRes;
+        public Func<double, double,  double, Normal2D[],Complex[]> ujRes;
         public Func<double, double,  double, Normal2D[], Complex> vz = (double x, double y, double w, Normal2D[] nor) => w * Forms.UG.ujRes(x, y, w, nor)[2];
         //public Func<double, double, double, double, Normal2D[], Complex> vz = (double x, double y, double z, double w, Normal2D[] nor) => w * Forms.UG.ujRes(x, y, z, w, nor)[2];
         #endregion
 
         #region u(x,t)
 
-       // public static double[] wmas = Seqw(wbeg, wend, wcount);
+       // public static double[] wmas = SeqWMemoized(wbeg, wend, wcount);
         public static bool wchange = false;
 
         public Func<double, double, double,  Normal2D[],Func<double,Complex>, Complex[]> _ufw = (double x, double y, double w, Normal2D[] normal,Func<double, Complex> f) => Expendator.Mult(Forms.UG.ujRes(x, y, w, normal), f(w));
@@ -262,10 +263,9 @@ namespace Практика_с_фортрана
           {
             //  if (wchange)
             //  {
-              double[] wmas= Seqw(wbeg, wend, wcount);
+              double[] wmas= SeqWMemoized(wbeg, wend, wcount);
                 //  wchange = false;
              // }
-
 
               CVectors[] c = new CVectors[wcount];
               Parallel.For(0,wcount,(int i)=>
@@ -480,7 +480,7 @@ namespace Практика_с_фортрана
 
         private void button9_Click(object sender, EventArgs e)
         {
-            new PRMSN().Show();
+            new PRMSN_Memoized().Show();
         }
 
         private void radioButton3_CheckedChanged(object sender, EventArgs e)
@@ -519,15 +519,44 @@ namespace Практика_с_фортрана
             new DC().ShowDialog();
         }
 
-        public void анимацияПоПоследнимСохранённымДаннымToolStripMenuItem_Click(object sender, EventArgs e)
+        public async void анимацияПоПоследнимСохранённымДаннымToolStripMenuItem_Click(object sender, EventArgs e)
         {
-            string[] st;
-            using(StreamReader r=new StreamReader("3D ur, uz(info).txt"))
+            if (!File.Exists("3D ur, uz(info).txt"))
             {
-                st = r.ReadToEnd().Split('\n');
+                   MessageBox.Show("Не найдено файла со списком изображений", $"Нет списка \"3D ur, uz(info).txt\"", MessageBoxButtons.OK, MessageBoxIcon.Error);
+                return;
             }
+               
+
+            string[] st = Expendator.GetStringArrayFromFile("3D ur, uz(info).txt", true);
+            for (int i = 0; i < st.Length; i++)
+                if (!File.Exists(st[i]))
+                {
+                  FlexibleMessageBox.Show($"Не найдено файла \"{st[i]}\" из списка изображений. Анимация не готова", "Ошибка", MessageBoxButtons.OK, MessageBoxIcon.Error);
+                    
+                      if (FilesUrUzExist(st) && MessageBox.Show($"Поскольку все нужные текстовые файлы в наличии, изображения можно восстановить. Создать анимацию? (может занять около 15 минут)", "Перерисовка", MessageBoxButtons.YesNo, MessageBoxIcon.Question) == System.Windows.Forms.DialogResult.Yes)
+                      {
+                        await Task.Run(() => OtherMethods.StartProcessOnly("ReDraw3Duxt2.r", true));
+                        break;
+                       }
+                    else
+                        return;
+                }
+                    
 
             new Anima(st).Show();
+        }
+
+        private bool FilesUrUzExist(string[] pngnames)
+        {
+            string s;
+            for (int i = 0; i < pngnames.Length; i++)
+            {
+                s = pngnames[i].Replace(".png", "").Replace("3D ","");
+                if (!File.Exists(s + "(ur).txt") || !File.Exists(s + "(ur).txt"))
+                    return false;
+            }
+            return true;
         }
 
         private void button8_Click(object sender, EventArgs e)
@@ -755,7 +784,7 @@ namespace Практика_с_фортрана
         {
             toolStripStatusLabel1.Text = "Генерация дополнительных графиков";
 
-            var form = new JustGrafic();
+            var form = new Defect2019.JustGrafic();
 
             form.chart1.Series.Clear();
 
@@ -777,12 +806,12 @@ namespace Практика_с_фортрана
                 form.chart1.Series[i].Font=new Font("Arial", 16);
             }
 
-            double[] w = Seqw(wbeg, wend, wcount);
+            double[] w = SeqWMemoized(wbeg, wend, wcount);
             for (int i=0;i<wcount;i++)
             {
                 //  Debug.WriteLine($"u(x = ({x}; {y}), w = {w[i]}) = {Forms.UG.ujRes(x, y, z, w[i], norm)[2].Abs}");
                 var c = Forms.UG.ujRes(x, y, w[i], norm);
-                form.chart1.Series[0].Points.AddXY(w[i], (c[0]* Math.Cos(corner) + c[1]* Math.Sin(corner)).Abs);
+                form.chart1.Series[0].Points.AddXY(w[i], (c[0]*Math.Cos(corner)+c[1]*Math.Sin(corner)).Abs);
                 form.chart1.Series[1].Points.AddXY(w[i], c[2].Abs);
                 form.chart1.Series[2].Points.AddXY(w[i], basefunc(w[i]).Abs);
                 form.chart1.Series[3].Points.AddXY(w[i], form.chart1.Series[2].Points[i].YValues[0] * form.chart1.Series[0].Points[i].YValues[0]);

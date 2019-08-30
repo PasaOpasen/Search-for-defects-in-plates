@@ -21,11 +21,12 @@ using Defect2019;
 using Point = МатКлассы.Point;
 using static РабКонсоль;
 using System.Diagnostics;
+using System.Runtime.Serialization.Formatters.Binary;
 
 
 public static class Forms
 {
-    public static UGrafic UG=new UGrafic();
+    public static UGrafic UG = new UGrafic();
     public static Uxt Uform = new Uxt();
 }
 
@@ -86,15 +87,29 @@ public static class РабКонсоль
     public static void SetPolesDef() => SetPoles(РабКонсоль.polesBeg, РабКонсоль.polesEnd, РабКонсоль.steproot, РабКонсоль.epsroot, РабКонсоль.countroot);
     #endregion
 
-    public static double ThU = 1e-3, SpU = 1e3, wc = 0.1 * 2 * Math.PI, _T;
+    public static double ThU = 1e-3, SpU = 1e3, wc = 0.6283185/*0.1 * 2 * Math.PI*/, _T;
     public static double T => 2 * Math.PI / wc * ThU / SpU;
-    public static double wbeg = 0.02, wend = 1.5;
+    public static double wbeg = 0.01256637061435917295385057353312, wend = 1.2566370614359172953850573533118;//wbeg = 0.0314159265358979, wend = 1.06814150222053;  
     public static int wcount = 400;
+
+    /// <summary>
+    /// Текущий массив частот
+    /// </summary>
+    public static double[] wmas;
 
     /// <summary>
     /// Скорость смены картинок для анимации (в ммсек)
     /// </summary>
-    public static int animatime = 250;
+    public static int animatime = 70;
+    /// <summary>
+    /// Число кластеров при создании анимации
+    /// </summary>
+    public static int clastersCount = 3;
+
+    /// <summary>
+    /// Максимальное число циклов анимации
+    /// </summary>
+    public static int animacycles = 15;
 }
 
 public static class Functions
@@ -107,7 +122,10 @@ public static class Functions
         II = new Complex(0, 1);
         I2 = new Complex(0, 0.5);
     }
-    private static Complex II,I2;
+    public static Complex II, I2;
+    public static double sqrtfrac2pi = Math.Sqrt(2.0 / Math.PI),
+    fracpi4 = Math.PI / 4;
+
     public static void AfterChaigeData()
     {
         ml2 = 2 * mu + lamda;
@@ -116,6 +134,7 @@ public static class Functions
         h = z1 - z2;
         k2coef = ro / mu;
         k1coef = ro / ml2;
+        Expendator.WriteStringInFile("ClastersCount.txt", clastersCount.ToString());
 
         //var KMatr = new Memoize<Tuple<Complex, Complex, double, double>, CSqMatrix>((Tuple<Complex, Complex, double, double> t) => K(t.Item1, t.Item2, t.Item3, t.Item4)).Value;
         //KMatrix = (Complex a1, Complex a2, double z, double w) => KMatr(new Tuple<Complex, Complex, double, double>(a1, a2, z, w));
@@ -132,36 +151,49 @@ public static class Functions
         //var han = new Memoize<Tuple<double, double>, Complex>((Tuple<double, double> t) => Computator.NET.Core.Functions.SpecialFunctions.Hankel1(t.Item1, t.Item2)).Value;
         //Hankel = (double n, double x) => han(new Tuple<double, double>(n, x));
 
-        prmsnmem = new Memoize<Tuple<Complex, double>, Complex[]>((Tuple<Complex,  double> t) => _PRMSN(t.Item1, t.Item2));
+        prmsnmem = new Memoize<Tuple<Complex, double>, Complex[]>((Tuple<Complex, double> t) => PRMSN(t.Item1, t.Item2));
         var prmsn = prmsnmem.Value;
-        PRMSN = (Complex a,  double w) => prmsn(new Tuple<Complex, double>(a, w));
+        PRMSN_Memoized = (Complex a, double w) => prmsn(new Tuple<Complex, double>(a, w));
 
         //var prmsnmemup = new Memoize<Tuple<Complex, double, double,bool>, Complex[]>((Tuple<Complex, double, double,bool> t) => _PRMSNUp(t.Item1, t.Item2, t.Item3,t.Item4));
         //var prmsnup = prmsnmemup.Value;
         //PRMSNUp = (Complex a, double z, double w,bool first) => prmsnup(new Tuple<Complex, double, double,bool>(a, z, w,first));
-        ////PRMSN = new Func<Complex, double, double, Complex[]>(_PRMSN);
+        ////PRMSN_Memoized = new Func<Complex, double, double, Complex[]>(PRMSN);
 
-        var pol = new Memoize<double, Vectors>((double t) => _PolesPoles(t)).Value;
-        PolesPoles = (double x) => pol(x);
+        var pol = new Memoize<double, Vectors>((double t) => PolesMas(t)).Value;
+        PolesMasMemoized = (double x) => pol(x);
 
         //var JJ = new Memoize<Complex, Tuple<Complex, Complex>>((Complex c) => new Tuple<Complex, Complex>(МатКлассы.SpecialFunctions.MyBessel(1.0, c), МатКлассы.SpecialFunctions.MyBessel(0.0, c))).Value;
         //J = (Complex c) => JJ(c);
 
-        var seq = new Memoize<Tuple<double, double, int>, double[]>((Tuple<double, double, int> t) => _Seqw(t.Item1, t.Item2, t.Item3));
-        Seqw = (double a, double b, int c) => seq.Value(new Tuple<double, double, int>(a, b, c));
+        var seq = new Memoize<Tuple<double, double, int>, double[]>((Tuple<double, double, int> t) => SeqW(t.Item1, t.Item2, t.Item3));
+        SeqWMemoized = (double a, double b, int c) => seq.Value(new Tuple<double, double, int>(a, b, c));
 
-        ur = new Memoize<Tuple<double, double,  double, Normal2D[]>, Complex[]>((Tuple<double, double, double, Normal2D[]> t) => _uRes(t.Item1, t.Item2, t.Item3, t.Item4));
-        uRes = (double x, double y,  double w, Normal2D[] n) => ur.Value(new Tuple<double, double,  double, Normal2D[]>(x, y,  w, n));
+        ur = new Memoize<Tuple<double, double, double, Source>, Tuple<Complex,Complex>>((Tuple<double, double, double, Source> t) => uxw(t.Item1, t.Item2, t.Item3, t.Item4));
+        uxwMemoized = (double x, double y, double w, Source n) => ur.Value(new Tuple<double, double, double, Source>(x, y, w, n));
+
+        cmas = new Memoize<Tuple<double, double, Source>, Tuple<Complex, Complex>[]>((Tuple<double, double, Source> t) => CMAS(t.Item1, t.Item2, t.Item3));
+        CMAS_Memoized = (double x, double y,Source s) => cmas.Value(new Tuple<double, double, Source>(x, y, s));
+
+        wmas = SeqWMemoized(РабКонсоль.wbeg, РабКонсоль.wend, РабКонсоль.wcount);
+        var fs = new Memoize<double, CVectors>((double t) => Fi(wmas, t));
+        Phi = (double t) => fs.Value(t);
+
+        var cs = new Memoize<Tuple<Complex[], double>, CVectors>((Tuple<Complex[], double> t) => t.Item1 * Phi(t.Item2));
+        Phif = (Complex[] fw, double t) => cs.Value(new Tuple<Complex[], double>(fw, t));
+
+        OtherMethods.CopyFilesR();
     }
-    public static Memoize<Tuple<double, double, double, Normal2D[]>, Complex[]> ur;
+    public static Memoize<Tuple<double, double, double, Source>,Tuple<Complex,Complex>> ur;
+    public static Memoize<Tuple<double, double, Source>, Tuple<Complex, Complex>[]> cmas;
 
 
-    public static Func<double, double, int, double[]> _Seqw = (double wbeg, double wend, int count) => Expendator.Seq(wbeg, wend, count);
-    public static Func<double, double, int, double[]> Seqw;
+    public static Func<double, double, int, double[]> SeqW = (double wbeg, double wend, int count) => Expendator.Seq(wbeg, wend, count);
+    public static Func<double, double, int, double[]> SeqWMemoized;
     public static Memoize<Tuple<Complex, double>, Complex[]> prmsnmem;
 
-    public static double lamda = 51.0835913312694, mu = 26.3157894736842, ro = 2.7, h;
-    private static double ml2, z1 = 0, z2 = -2.0, mu2, k1coef, k2coef;
+    public static double lamda = 51.0835913312694, mu = 26.3157894736842, ro = 2.7, h, crosscoef = 0.2;
+    public static double ml2, z1 = 0, z2 = -2.0, mu2, k1coef, k2coef;
     private static Complex im;
 
     private static Func<Complex, Tuple<Complex, Complex>> J;
@@ -289,7 +321,7 @@ public static class Functions
 
     #region Функции знаменателя, его производных и корней
 
-    public static double epsforder =>РабКонсоль.eps;
+    public static double epsforder => РабКонсоль.eps;
 
     /// <summary>
     /// Функция знаменателя, выраженная явно
@@ -358,7 +390,8 @@ public static class Functions
     /// <summary>
     /// Производная общего знаменателя
     /// </summary>
-    public static Func<Complex, double, Complex> BigDeltaDeriv0 = (Complex alp, double w) => {
+    public static Func<Complex, double, Complex> BigDeltaDeriv0 = (Complex alp, double w) =>
+    {
 
         Complex D = Deltass(alp, w), N = DeltassN(alp, w), dD = DeltaDeriv(alp, w), dN = DeltaNDeriv(alp, w);
         return D * dN + N * dD;
@@ -407,10 +440,10 @@ public static class Functions
     /// <summary>
     /// Возвращает массив полюсов при такой-то частоте
     /// </summary>
-    private static Func<double, Vectors> _PolesPoles = (double w) =>
+    private static Func<double, Vectors> PolesMas = (double w) =>
        {
            ComplexFunc del = (Complex a) => Deltass(a, w);
-           Vectors v1 = w<0.1? Roots.OtherMethod(del, РабКонсоль.polesBeg, РабКонсоль.polesEnd, РабКонсоль.steproot/200, 1e-12, Roots.MethodRoot.Brent, false):Roots.OtherMethod(del, РабКонсоль.polesBeg, РабКонсоль.polesEnd,РабКонсоль.steproot, 1e-10, Roots.MethodRoot.Brent, false);
+           Vectors v1 = w < 0.1 ? Roots.OtherMethod(del, РабКонсоль.polesBeg, РабКонсоль.polesEnd, РабКонсоль.steproot / 200, 1e-12, Roots.MethodRoot.Brent, false) : Roots.OtherMethod(del, РабКонсоль.polesBeg, РабКонсоль.polesEnd, РабКонсоль.steproot, 1e-10, Roots.MethodRoot.Brent, false);
            Vectors v2 = DeltassNPosRoots(w, РабКонсоль.polesBeg, РабКонсоль.polesEnd);
            // return new Vectors(Expendator.Distinct(v1.DoubleMas, v2.DoubleMas));
            v1.UnionWith(v2);
@@ -426,9 +459,9 @@ public static class Functions
     }
 
     /// <summary>
-    /// Мемоизированная _PolesPoles
+    /// Мемоизированная PolesMas
     /// </summary>
-    public static Func<double, Vectors> PolesPoles;
+    public static Func<double, Vectors> PolesMasMemoized;
     #endregion
 
     #region Матрица K
@@ -437,7 +470,7 @@ public static class Functions
     ///// </summary>
     //public static Func<Complex, double, double, double, double, CSqMatrix> K = (Complex a,double x,double y, double z, double w) =>
     //      {
-    //          var c = PRMSN(a, z, w);
+    //          var c = PRMSN_Memoized(a, z, w);
     //          var b = Bessel(a, x, y);
 
     //          Complex P = c[0], R = c[1], M = c[2], S = c[3], N = c[4];
@@ -464,154 +497,209 @@ public static class Functions
     /// <summary>
     /// Матрица Грина как функция альфы, частоты и координат
     /// </summary>
-    public static Func<Complex, double, double,  double, CSqMatrix> K = (Complex a, double x, double y,  double w) =>
-    {
-        var c = PRMSN(a, w);
-        Complex ar = a * Math.Sqrt(x * x + y * y);
-        Tuple<Complex, Complex> tup = new Tuple<Complex, Complex>(МатКлассы.SpecialFunctions.MyBessel(1, ar), МатКлассы.SpecialFunctions.MyBessel(0, ar));
-        //Tuple<Complex, Complex> tup = J(ar);
-        return InK(a, c, tup, x, y);
-    };
+    public static Func<Complex, double, double, double, CSqMatrix> K = (Complex a, double x, double y, double w) =>
+   {
+       var c = PRMSN_Memoized(a, w);
+       Complex ar = a * Math.Sqrt(x * x + y * y);
+       Tuple<Complex, Complex> tup = new Tuple<Complex, Complex>(МатКлассы.SpecialFunctions.MyBessel(1, ar), МатКлассы.SpecialFunctions.MyBessel(0, ar));
+       //Tuple<Complex, Complex> tup = J(ar);
+       return InK(a, c, tup, x, y);
+   };
     /// <summary>
     /// Матрица Грина при наборе нормалей
     /// </summary>
-    public static Func<Complex, double, double,  double, Normal2D[],Func<Point,CVectors>, CVectors> Ksum=(Complex a, double x, double y,  double w, Normal2D[] nd, Func<Point, CVectors> Q) =>
-    {
-        var c = PRMSN(a, w);
-        Complex ar;
-        Tuple<Complex, Complex> tup;
-        CVectors mat = new CVectors(3);
-        Point xy = new Point(x, y);
+    public static Func<Complex, double, double, double, Normal2D[], Func<Point, CVectors>, CVectors> Ksum = (Complex a, double x, double y, double w, Normal2D[] nd, Func<Point, CVectors> Q) =>
+       {
+           var c = PRMSN_Memoized(a, w);
+           Complex ar;
+           Tuple<Complex, Complex> tup;
+           CVectors mat = new CVectors(3);
+           Point xy = new Point(x, y);
 
-        for(int i = 0; i < nd.Length; i++)
-        {
-            ar = a * Point.Eudistance(nd[i].Position, xy);
-            tup = new Tuple<Complex, Complex>(МатКлассы.SpecialFunctions.MyBessel(1, ar), МатКлассы.SpecialFunctions.MyBessel(0, ar));
-            mat.FastAdd( InK(a, c, tup, x-nd[i].Position.x, y - nd[i].Position.y) *Q(nd[i].n));
-        }
-        return mat;
-    };
+           for (int i = 0; i < nd.Length; i++)
+           {
+               ar = a * Point.Eudistance(nd[i].Position, xy);
+               tup = new Tuple<Complex, Complex>(МатКлассы.SpecialFunctions.MyBessel(1, ar), МатКлассы.SpecialFunctions.MyBessel(0, ar));
+               mat.FastAdd(InK(a, c, tup, x - nd[i].Position.x, y - nd[i].Position.y) * Q(nd[i].n));
+           }
+           return mat;
+       };
 
     /// <summary>
     /// Матрица Грина как функция от функция альфы, частоты и координат (без знаменателя)
     /// </summary>
-    public static Func<Complex, double, double,  double, bool,CSqMatrix> KRes = (Complex a, double x, double y,  double w, bool first) =>
+    public static Func<Complex, double, double, double, bool, CSqMatrix> KRes = (Complex a, double x, double y, double w, bool first) =>
     {
-        var c = PRMSNUp(a, w,first);//c.Show();
+        var c = PRMSNUp(a, w, first);//c.Show();
         Complex ar = a * Math.Sqrt(x * x + y * y);
         Tuple<Complex, Complex> tup = new Tuple<Complex, Complex>(МатКлассы.SpecialFunctions.Hankel(1, ar.Re), МатКлассы.SpecialFunctions.Hankel(0, ar.Re));
-        return InK(a, c,tup, x, y);
+        return InK(a, c, tup, x, y);
     };
+
+
+    public static Func<double, Tuple<Complex, Complex>> HankelTuple/*Old*/ = (double ar) =>
+        {
+            //double arsqrt = Math.Sqrt(ar);
+            //return new Tuple<Complex, Complex>(МатКлассы.SpecialFunctions.Hankel(1.0, ar) * arsqrt, МатКлассы.SpecialFunctions.Hankel(0.0, ar) * arsqrt);
+            return new Tuple<Complex, Complex>(sqrtfrac2pi * Complex.Expi(ar + fracpi4), sqrtfrac2pi * Complex.Expi(ar - fracpi4));
+        };
+
+    //public static Func<double, Tuple<Complex, Complex>> HankelTuple = (double ar) =>
+    //{
+    //    double arsqrt = Math.Sqrt(ar);
+    //    //return new Tuple<Complex, Complex>(МатКлассы.SpecialFunctions.Hankel(1.0, ar) * arsqrt, МатКлассы.SpecialFunctions.Hankel(0.0, ar) * arsqrt);
+    //    return new Tuple<Complex, Complex>(sqrtfrac2pi/arsqrt * Complex.Expi(ar + fracpi4), sqrtfrac2pi/arsqrt * Complex.Expi(ar - fracpi4));
+    //};
 
     /// <summary>
     /// Матрица Грина при наборе нормалей
     /// </summary>
-    public static Func<double, double, double,  Normal2D[], Func<Point, Vectors>, CVectors> KsumRes = (double x, double y,  double w, Normal2D[] nd, Func<Point, Vectors> Q) =>
-    {
-        var poles = PolesPoles(w);//w.Show();
-       Complex[][] c1=new Complex[poles.Deg][], c2 = new Complex[poles.Deg][];
-        double ar;
-        Tuple<Complex, Complex> tup;
-        CVectors sum = new CVectors(3);
-        Point xy = new Point(x, y);
-        Vectors QQ;
+    public static Func<double, double, double, Normal2D[], Func<Point, Vectors>, CVectors> KsumRes = (double x, double y, double w, Normal2D[] nd, Func<Point, Vectors> Q) =>
+   {
+       var poles = PolesMasMemoized(w);//w.Show();
+       Complex[][] c1 = new Complex[poles.Deg][], c2 = new Complex[poles.Deg][];
+       double ar, arsqrt;
+       Tuple<Complex, Complex> tup;
+       CVectors sum = new CVectors(3);
+       Point xy = new Point(x, y);
+       Vectors QQ;
 
-        double dist = Vectors.Union2(new Vectors(0.0), poles).MinDist,xp,yp;
+       double dist = Vectors.Union2(new Vectors(0.0), poles).MinDist, xp, yp;
 
-        double eps = dist/*poles.MinDist*/ * 0.4, eps2 = 0.5 * eps;
-        double[] plus = new double[poles.Deg], pminus = new double[poles.Deg];
+       double eps = dist * crosscoef, eps2 = 0.5 * eps;
+       double[] plus = new double[poles.Deg], pminus = new double[poles.Deg];
 
-        for (int k = 0; k < poles.Deg; k++)
-        {
-            plus[k] = poles[k] + eps;
-            pminus[k] = poles[k] - eps;
-            c1[k] = PRMSN(plus[k],  w);
-                c2[k] = PRMSN(pminus[k],  w);
-            
-        }
+       for (int k = 0; k < poles.Deg; k++)
+       {
+           plus[k] = poles[k] + eps;
+           pminus[k] = poles[k] - eps;
+           c1[k] = PRMSN_Memoized(plus[k], w);
+           c2[k] = PRMSN_Memoized(pminus[k], w);
 
+       }
 
-        //CSqMatrix m1=new CSqMatrix(new Complex[3,3]);
-        for (int i = 0; i < nd.Length; i++)
-        {
-            QQ = (Q(nd[i].n) * eps2);
+       //CSqMatrix m1=new CSqMatrix(new Complex[3,3]);
+       for (int i = 0; i < nd.Length; i++)
+       {
+           QQ = (Q(nd[i].n) * eps2);
 
-            xp = x - nd[i].Position.x;
-            yp = y - nd[i].Position.y;
+           xp = x - nd[i].Position.x;
+           yp = y - nd[i].Position.y;
 
-            for (int k = 0; k < poles.Deg; k++)
-            {
-                ar = poles[k] * Point.Eudistance(nd[i].Position, xy);
-                tup = new Tuple<Complex, Complex>(МатКлассы.SpecialFunctions.Hankel(1.0, ar), МатКлассы.SpecialFunctions.Hankel(0.0, ar));
+           for (int k = 0; k < poles.Deg; k++)
+           {
+               ar = poles[k] * Point.Eudistance(nd[i].Position, xy);
+               //arsqrt = Math.Sqrt(ar);
+               tup = HankelTuple(ar); //= new Tuple<Complex, Complex>(МатКлассы.SpecialFunctions.Hankel(1.0, ar)*arsqrt, МатКлассы.SpecialFunctions.Hankel(0.0, ar)*arsqrt);
 
-                sum.FastAdd(KQmult(InKtwice(plus[k], pminus[k], c1[k], c2[k], tup, xp, yp), QQ));
+               sum.FastAdd(KQmult(InKtwice(plus[k], pminus[k], c1[k], c2[k], tup, xp, yp), QQ));
 
                // sum.FastAdd(InKtwice(plus[k], pminus[k], c1[k], c2[k], tup, xp, yp) * QQ);
 
-                //sum.FastAdd(InK(plus[k], c1[k], tup,xp , yp) * QQ);
-                //sum.FastLessen(InK(pminus[k], c2[k], tup, xp, yp) * QQ);
+               //sum.FastAdd(InK(plus[k], c1[k], tup,xp , yp) * QQ);
+               //sum.FastLessen(InK(pminus[k], c2[k], tup, xp, yp) * QQ);
 
                // m1.FastAdd(InK(poles[k] + eps, c1[k], tup, x - nd[i].Position.x, y - nd[i].Position.y));
                // m1.FastLessen(InK(poles[k] - eps, c2[k], tup, x - nd[i].Position.x, y - nd[i].Position.y));
 
-            }
-            //sum.FastAdd(m1 *(Q(nd[i].n) * 0.5 * eps));
-            //m1 = new CSqMatrix(new Complex[3, 3]);
-        }
+           }
+           //sum.FastAdd(m1 *(Q(nd[i].n) * 0.5 * eps));
+           //m1 = new CSqMatrix(new Complex[3, 3]);
+       }
 
-        return sum * /*Math.PI **/ I2;
-    };
+       return sum * /*Math.PI **/ I2;
+   };
 
-    public static Func<Complex, Complex[],Tuple<Complex,Complex>,double, double, CSqMatrix> InK = (Complex a, Complex[] PRMSN,Tuple<Complex,Complex> beshank,double x, double y) =>
-      {
-   
-        double x2 = x * x, y2 = y * y, r2 = x2 + y2, r = Math.Sqrt(r2);
-        Complex ar = a * r,a2=a*a;
-        Complex j1ar = beshank.Item1/*МатКлассы.SpecialFunctions.MyBessel(1, ar)*/, j0ar = beshank.Item2/*МатКлассы.SpecialFunctions.MyBessel(0, ar)*/;
+    public static Func<Complex, Complex[], Tuple<Complex, Complex>, double, double, CSqMatrix> InK = (Complex a, Complex[] PRMSN_Memoized, Tuple<Complex, Complex> beshank, double x, double y) =>
+         {
 
-        Complex P = PRMSN[0], R = PRMSN[1], Mi = PRMSN[2] * II, Si = PRMSN[3] * II, Ni = PRMSN[4]*II;
-          Complex
-            j1arr= j1ar / r,
-            jx = -x * j1arr,
-            jy = -y * j1arr,
-            //jxx =-(j0ar*a*x2+r*j1ar)/r2 , 
-            //jxy =-a/r2*x*y*j0ar , 
-            //jyy = -(j0ar * a * y2 + r * j1ar) / r2;
-            j0ara=j0ar*a,
-            jtmp= j1arr * (x2 - y2),
-            jxx = -(j0ara * x2 - jtmp) / r2,
-            jxy = -x * y/ r2 *(j0ara-2*j1arr),
-            jyy = -(j0ara * y2 + jtmp) / r2;
-          //Complex i = new Complex(0, 1);
+             double x2 = x * x, y2 = y * y, r2 = x2 + y2, r = Math.Sqrt(r2);
+             Complex ar = a * r, a2 = a * a;
+             Complex j1ar = beshank.Item1/*МатКлассы.SpecialFunctions.MyBessel(1, ar)*/, j0ar = beshank.Item2/*МатКлассы.SpecialFunctions.MyBessel(0, ar)*/;
 
-        Complex
-        K11 = (Mi * jxx + Ni * jyy),
-        K12 = (Mi - Ni) * jxy,
-        K13 = P * jx*a2,
-       // K21 = new Complex(K12),
-        K22 = (Mi *jyy + Ni * jxx),
-        K23 = P * jy*a2,
-        K31 = Si * jx,
-        K32 = Si * jy,
-        K33 = R*j0ara;
-        //K22.Show();"".Show();
-        return new CSqMatrix(new Complex[3,3] {
+             Complex P = PRMSN_Memoized[0], R = PRMSN_Memoized[1], Mi = PRMSN_Memoized[2] * II, Si = PRMSN_Memoized[3] * II, Ni = PRMSN_Memoized[4] * II;
+             Complex
+               j1arr = j1ar / r,
+               jx = -x * j1arr,
+               jy = -y * j1arr,
+               //jxx =-(j0ar*a*x2+r*j1ar)/r2 , 
+               //jxy =-a/r2*x*y*j0ar , 
+               //jyy = -(j0ar * a * y2 + r * j1ar) / r2;
+               j0ara = j0ar * a,
+               jtmp = j1arr * (x2 - y2),
+               jxx = -(j0ara * x2 - jtmp) / r2,
+               jxy = -x * y / r2 * (j0ara - 2 * j1arr),
+               jyy = -(j0ara * y2 + jtmp) / r2;
+             //Complex i = new Complex(0, 1);
+
+             Complex
+             K11 = (Mi * jxx + Ni * jyy),
+             K12 = (Mi - Ni) * jxy,
+             K13 = P * jx * a2,
+             // K21 = new Complex(K12),
+             K22 = (Mi * jyy + Ni * jxx),
+             K23 = P * jy * a2,
+             K31 = Si * jx,
+             K32 = Si * jy,
+             K33 = R * j0ara;
+             //K22.Show();"".Show();
+             return new CSqMatrix(new Complex[3, 3] {
                  {K11,K12, K13},
              { K12,K22,K23},
              { K31,K32,K33}
-              });
-      };
+                 });
+         };
 
-    public static Func<Complex,Complex,Complex[], Complex[], Tuple<Complex, Complex>, double, double, Complex[,]> InKtwice = (Complex a1, Complex a2, Complex[] PRMSN1, Complex[] PRMSN2, Tuple<Complex, Complex> beshank, double x, double y) =>
+    public static Func<Complex, Complex, Complex[], Complex[], Tuple<Complex, Complex>, double, double, Complex[]> InKtwice = (Complex a1, Complex a2, Complex[] PRMSN1, Complex[] PRMSN2, Tuple<Complex, Complex> beshank, double x, double y) =>
+      {
+
+          double x2 = x * x, y2 = y * y, r2 = x2 + y2, r = Math.Sqrt(r2), xy = x * y;
+          Complex ar1 = a1 * r, a21 = a1 * a1;
+          Complex ar2 = a2 * r, a22 = a2 * a2;
+
+          Complex j1ar = beshank.Item1, j0ar = beshank.Item2;
+
+          Complex P = PRMSN1[0] * a21 - PRMSN2[0] * a22, R1 = PRMSN1[1], Mi1 = PRMSN1[2] * II, Si = (PRMSN1[3] - PRMSN2[3]) * II, Ni1 = PRMSN1[4] * II;
+          Complex R2 = PRMSN2[1], Mi2 = PRMSN2[2] * II, Ni2 = PRMSN2[4] * II;
+
+          Complex
+            j1arr = j1ar / r,
+            jx = -x * j1arr,
+            jy = -y * j1arr,
+            j0ara1 = j0ar * a1,
+             j0ara2 = j0ar * a2,
+            jtmp = j1arr * (x2 - y2),
+            jxx1 = -(j0ara1 * x2 - jtmp),
+            jxy1 = -xy * (j0ara1 - 2 * j1arr),
+            jyy1 = -(j0ara1 * y2 + jtmp),
+          jxx2 = -(j0ara2 * x2 - jtmp),
+            jxy2 = -xy * (j0ara2 - 2 * j1arr),
+            jyy2 = -(j0ara2 * y2 + jtmp);
+
+          Complex
+          K12 = ((Mi1 - Ni1) * jxy1 - (Mi2 - Ni2) * jxy2) / r2;
+
+          return new Complex[] {
+                 ((Mi1 * jxx1 + Ni1 * jyy1)- (Mi2 * jxx2 + Ni2 * jyy2)) / r2,K12, P*jx, K12,
+              ((Mi1 * jyy1 + Ni1 * jxx1)- (Mi2 * jyy2 + Ni2 * jxx2)) / r2,P * jy, Si * jx,Si * jy,R1 * j0ara1- R2 * j0ara2
+  };
+
+          //return new CSqMatrix(new Complex[3, 3] {
+          //         {K11,K12, K13},
+          //     { K12,K22,K23},
+          //     { K31,K32,K33}
+          //      });
+      };
+    public static void InKtwiceFast(Complex a1, Complex a2, Complex[] PRMSN1, Complex[] PRMSN2, Tuple<Complex, Complex> beshank, double x, double y, ref Complex[] res)
     {
 
-        double x2 = x * x, y2 = y * y, r2 = x2 + y2, r = Math.Sqrt(r2),xy=x*y;
+        double x2 = x * x, y2 = y * y, r2 = x2 + y2, r = Math.Sqrt(r2), xy = x * y;
         Complex ar1 = a1 * r, a21 = a1 * a1;
         Complex ar2 = a2 * r, a22 = a2 * a2;
 
         Complex j1ar = beshank.Item1, j0ar = beshank.Item2;
 
-        Complex P = PRMSN1[0]*a21-PRMSN2[0]*a22, R1 = PRMSN1[1], Mi1 = PRMSN1[2] * II, Si = (PRMSN1[3]-PRMSN2[3]) * II, Ni1 = PRMSN1[4] * II;
+        Complex P = PRMSN1[0] * a21 - PRMSN2[0] * a22, R1 = PRMSN1[1], Mi1 = PRMSN1[2] * II, Si = (PRMSN1[3] - PRMSN2[3]) * II, Ni1 = PRMSN1[4] * II;
         Complex R2 = PRMSN2[1], Mi2 = PRMSN2[2] * II, Ni2 = PRMSN2[4] * II;
 
         Complex
@@ -631,40 +719,38 @@ public static class Functions
         Complex
         K12 = ((Mi1 - Ni1) * jxy1 - (Mi2 - Ni2) * jxy2) / r2;
 
-        return new Complex[3, 3] {
-                 {((Mi1 * jxx1 + Ni1 * jyy1)- (Mi2 * jxx2 + Ni2 * jyy2)) / r2,K12, P*jx},
-             { K12,((Mi1 * jyy1 + Ni1 * jxx1)- (Mi2 * jyy2 + Ni2 * jxx2)) / r2,P * jy},
-             { Si * jx,Si * jy,R1 * j0ara1- R2 * j0ara2}
-              };
+        res[0] = ((Mi1 * jxx1 + Ni1 * jyy1) - (Mi2 * jxx2 + Ni2 * jyy2)) / r2;
+        res[1] = K12;
+        res[2] = P * jx;
+        res[3] = K12;
+        res[4] = ((Mi1 * jyy1 + Ni1 * jxx1) - (Mi2 * jyy2 + Ni2 * jxx2)) / r2;
+        res[5] = P * jy;
+        res[6] = Si * jx;
+        res[7] = Si * jy;
+        res[8] = R1 * j0ara1 - R2 * j0ara2;
 
-        //return new CSqMatrix(new Complex[3, 3] {
-        //         {K11,K12, K13},
-        //     { K12,K22,K23},
-        //     { K31,K32,K33}
-        //      });
-    };
-
+    }
 
     /// <summary>
     /// Матрица Грина в чистом виде (в программе не нужна)
     /// </summary>
     public static Func<Complex, Complex, double, CSqMatrix> ClearK = (Complex a1, Complex a2, double w) =>
       {
-          Complex a12 = a1 * a1,a22=a2*a2,a=a12+a22,aa=a1*a2;
-          var c = PRMSN(Complex.Sqrt(a), w);
+          Complex a12 = a1 * a1, a22 = a2 * a2, a = a12 + a22, aa = a1 * a2;
+          var c = PRMSN_Memoized(Complex.Sqrt(a), w);
 
           Complex P = c[0], R = c[1], M = c[2], S = c[3], N = c[4];
           Complex i = new Complex(0, 1);
 
           Complex
-          K11 = -i * (M * a12 + N * a22)/a,
-          K12 = -i * (M - N) * aa/a,
-          K13 = -i*P * a1,
+          K11 = -i * (M * a12 + N * a22) / a,
+          K12 = -i * (M - N) * aa / a,
+          K13 = -i * P * a1,
           K21 = new Complex(K12),
-          K22 = -i * (M * a22 + N * a12)/a,
-          K23 = -i*P *  a2,
-          K31 = S * a1/a,
-          K32 = S * a2/2,
+          K22 = -i * (M * a22 + N * a12) / a,
+          K23 = -i * P * a2,
+          K31 = S * a1 / a,
+          K32 = S * a2 / 2,
           K33 = R;
           //K22.Show();"".Show();
           return new CSqMatrix(new Complex[,] {
@@ -680,11 +766,19 @@ public static class Functions
     /// <param name="M"></param>
     /// <param name="v"></param>
     /// <returns></returns>
-    public static CVectors KQmult(CSqMatrix M,Vectors v)
+    public static CVectors KQmult(CSqMatrix M, Vectors v)
     {
         CVectors r = new CVectors(3);
         for (int k = 0; k < 3; k++)
             r[k] = M[k, 0] * v[0] + M[k, 1] * v[1];
+        return r;
+    }
+    public static CVectors KQmult(Complex[] M, Vectors v)
+    {
+        CVectors r = new CVectors(3);
+        r[0] = M[0] * v[0] + M[1] * v[1];
+        r[1] = M[3] * v[0] + M[4] * v[1];
+        r[2] = M[6] * v[0] + M[7] * v[1];
         return r;
     }
 
@@ -694,17 +788,16 @@ public static class Functions
     /// <param name="M"></param>
     /// <param name="v"></param>
     /// <returns></returns>
-    public static CVectors KQmult(Complex[,] M, Vectors v)=> new CVectors(new Complex[3] { M[0, 0] * v[0] + M[0, 1] * v[1], M[1, 0] * v[0] + M[1, 1] * v[1], M[2, 0] * v[0] + M[2, 1] * v[1] });
-    
+    public static CVectors KQmult(Complex[,] M, Vectors v) => new CVectors(new Complex[3] { M[0, 0] * v[0] + M[0, 1] * v[1], M[1, 0] * v[0] + M[1, 1] * v[1], M[2, 0] * v[0] + M[2, 1] * v[1] });
 
     #endregion
 
     #region Функции для определения коэффициентов матрицы K
     private static Complex littleBessel1(Complex a) => МатКлассы.SpecialFunctions.MyBessel(1, a);
-    private static Complex littleBessel2( Complex a) => МатКлассы.SpecialFunctions.MyBessel(2, a);
-    private static Func<Complex, Complex> LittleBessel1,LittleBessel2;
+    private static Complex littleBessel2(Complex a) => МатКлассы.SpecialFunctions.MyBessel(2, a);
+    private static Func<Complex, Complex> LittleBessel1, LittleBessel2;
 
-    private static Complex[] _Bessel(Complex a,double x,double y)
+    private static Complex[] _Bessel(Complex a, double x, double y)
     {
         //Complex jx, jy, jxx, jxy, jyy;
         //double x2=x*x,y2=y*y, r = Math.Sqrt(x2 + y2);
@@ -721,17 +814,17 @@ public static class Functions
         //$"{jx} {jy} {jxx} {jxy} {jyy}".Show();
 
         Complex jx, jy, jxx, jxy, jyy;
-        double x2 = x * x, y2 = y * y, r = Math.Sqrt(x2 + y2),r2=x2+y2;
-        Complex ar = a * r, a_r = a / r, a_r2 = a_r * a_r,a_rr=a_r/r;
-        Complex j1ar =МатКлассы.SpecialFunctions.MyBessel(1, ar), j0ar = МатКлассы.SpecialFunctions.MyBessel(0, ar);
+        double x2 = x * x, y2 = y * y, r = Math.Sqrt(x2 + y2), r2 = x2 + y2;
+        Complex ar = a * r, a_r = a / r, a_r2 = a_r * a_r, a_rr = a_r / r;
+        Complex j1ar = МатКлассы.SpecialFunctions.MyBessel(1, ar), j0ar = МатКлассы.SpecialFunctions.MyBessel(0, ar);
 
         //(a).Show();
 
         jx = -j1ar * x * a_r;
         jy = -j1ar * y * a_r;
-        jxx = -a_rr*(j0ar*a*x2+r*j1ar);
-        jyy = -a_rr * (j0ar * a * y2 + r*j1ar);
-        jxy = -a_r2 * x * y*j0ar;
+        jxx = -a_rr * (j0ar * a * x2 + r * j1ar);
+        jyy = -a_rr * (j0ar * a * y2 + r * j1ar);
+        jxy = -a_r2 * x * y * j0ar;
 
         return new Complex[] { jx, jy, jxx, jxy, jyy };
     }
@@ -756,7 +849,7 @@ public static class Functions
     /// <summary>
     /// Возвращает первые и вторые производные функции J0(alpha,x,y), мемоизируется
     /// </summary>
-    public static Func<Complex, double,double, Complex[]> Bessel;
+    public static Func<Complex, double, double, Complex[]> Bessel;
     public static Func<double, double, Complex> Hankel;
 
     /// <summary>
@@ -764,7 +857,7 @@ public static class Functions
     /// </summary>
     /// <param name="a"></param>
     /// <returns></returns>
-    public static Tuple<CVectors,CVectors> Arev(Complex al,double w)
+    public static Tuple<CVectors, CVectors> Arev(Complex al, double w)
     {
         //Complex alp = al * al,ima=Complex.I*mu*alp;
         //Complex s1=sigma(alp,k1(w)),s2=sigma(alp,k2(w));
@@ -829,7 +922,7 @@ public static class Functions
 
         //return new Tuple<CVectors, CVectors>(new CVectors(m1), new CVectors(m2));
 
-       // CSqMatrix Mat = A(al, w).Invert();
+        // CSqMatrix Mat = A(al, w).Invert();
         CSqMatrix Mat = A(al, w).InvertByMathNet();
         //CSqMatrix S = A(al, w).InvertByMathNet();  $"{(A(al, w) * Mat - SqMatrix.E(4)).CubeNorm} {(A(al, w) * S - SqMatrix.E(4)).CubeNorm}".Show();
         //CSqMatrix Mat2 = A(al, w).InvertSum;$"{(A(al, w) * Mat-SqMatrix.E(4)).CubeNorm} \t{(A(al, w) * Mat2 - SqMatrix.E(4)).CubeNorm}".Show();
@@ -848,26 +941,26 @@ public static class Functions
     public static Tuple<CVectors, CVectors> ArevUp(Complex al, double w)
     {
         CSqMatrix Mat = A(al, w);
-        CVectors t1 = new CVectors(new Complex[] {Mat.GetMinMat(1,1).Det, -Mat.GetMinMat(1, 2).Det, Mat.GetMinMat(1, 3).Det, -Mat.GetMinMat(1, 4).Det });
+        CVectors t1 = new CVectors(new Complex[] { Mat.GetMinMat(1, 1).Det, -Mat.GetMinMat(1, 2).Det, Mat.GetMinMat(1, 3).Det, -Mat.GetMinMat(1, 4).Det });
         CVectors t2 = new CVectors(new Complex[] { -Mat.GetMinMat(2, 1).Det, Mat.GetMinMat(2, 2).Det, -Mat.GetMinMat(2, 3).Det, Mat.GetMinMat(2, 4).Det });
         return new Tuple<CVectors, CVectors>(t1, t2);
     }
 
     /// <summary>
-    /// Возвращает компоненты PRMSN, нужные для матрицы Грина
+    /// Возвращает компоненты PRMSN_Memoized, нужные для матрицы Грина
     /// </summary>
     /// <param name="al"></param>
     /// <param name="z"></param>
     /// <param name="w"></param>
     /// <returns></returns>
-    public static Complex[] _PRMSN(Complex al, double w)
+    public static Complex[] PRMSN(Complex al, double w)
     {
         var c = Arev(al, w);
         CVectors v1 = c.Item1, v2 = c.Item2;
-        Complex alp = al * al, s1 = sigma(alp, k1(w)), s2 = sigma(alp, k2(w)),ai=(alp*Complex.I);
-        Complex e1 = 1, e3 = 1, e2 = Complex.Exp(-s1 * ( h)), e4 = Complex.Exp(-s2 * ( h));
+        Complex alp = al * al, s1 = sigma(alp, k1(w)), s2 = sigma(alp, k2(w)), ai = (alp * Complex.I);
+        Complex e1 = 1, e3 = 1, e2 = Complex.Exp(-s1 * (h)), e4 = Complex.Exp(-s2 * (h));
 
-        CVectors c1=new CVectors(new Complex[] { e1, /*ai**/e2,s2 * e3 , -s2 *e4/**ai*/})/mu2,c2=new CVectors(new Complex[] { s1*e1, -s1 *e2/**ai*/, alp* e3, alp*e4/**ai*/})/mu2;
+        CVectors c1 = new CVectors(new Complex[] { e1, /*ai**/e2, s2 * e3, -s2 * e4/**ai*/}) / mu2, c2 = new CVectors(new Complex[] { s1 * e1, -s1 * e2/**ai*/, alp * e3, alp * e4/**ai*/}) / mu2;
         //Complex del = Deltass(al, w);//!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!я там случаной поставил 2 вместо w
 
         //CSqMatrix Mat = A(al, w);//Mat.Show(); "".Show();
@@ -885,18 +978,18 @@ public static class Functions
         Complex M = v2 * c1;
         Complex S = v2 * c2;
         //Complex N = Complex.I*Complex.Ch(s2 * (z + h))/mu/*/s2/im/alp/Complex.Sh(s2*h)*/;
-        Complex N = Complex.I * Complex.Cth(s2*h) / (mu * /*alp **/ s2);
+        Complex N = Complex.I * Complex.Cth(s2 * h) / (mu * /*alp **/ s2);
 
 
         //$"{P} {R} {M} {S} \t{N} \t{del} \t{al}".Show();
         return new Complex[] { P/*/del*/, R/*/del*/, M/*/del*/, S/*/del*/, N/*/DeltassN(al,w) */};
     }
-    public static Complex[] _PRMSNUp(Complex al,  double w,bool first)
+    public static Complex[] _PRMSNUp(Complex al, double w, bool first)
     {
         var c = ArevUp(al, w);
         CVectors v1 = c.Item1, v2 = c.Item2;
         Complex alp = al * al, s1 = sigma(alp, k1(w)), s2 = sigma(alp, k2(w)), ai = (alp * Complex.I);
-        Complex e1 = 1, e3 = 1, e2 = Complex.Exp(-s1 * ( h)), e4 = Complex.Exp(-s2 * ( h));
+        Complex e1 = 1, e3 = 1, e2 = Complex.Exp(-s1 * (h)), e4 = Complex.Exp(-s2 * (h));
 
         CVectors c1 = new CVectors(new Complex[] { e1, /*ai**/e2, s2 * e3, -s2 * e4/**ai*/}) / mu2, c2 = new CVectors(new Complex[] { s1 * e1, -s1 * e2/**ai*/, alp * e3, alp * e4/**ai*/}) / mu2;
 
@@ -907,7 +1000,7 @@ public static class Functions
         Complex N = Complex.I * Complex.Ch(s2 * h) / (mu/*alp **/)/*/s2/im/alp/Complex.Sh(s2*h)*/;
 
         //Complex del = Deltass(al, w), nel = DeltassN(al, w);
-        Complex del = DeltaDeriv(al, w),nel=DeltaNDeriv(al, w);//$"det = {del}  Ndet = {nel}".Show();
+        Complex del = DeltaDeriv(al, w), nel = DeltaNDeriv(al, w);//$"det = {del}  Ndet = {nel}".Show();
 
         //$"Pup = {P} Rup = {R} Mup= {M} Sup = {S} Nup = {N}".Show();
 
@@ -918,15 +1011,15 @@ public static class Functions
     }
 
     /// <summary>
-    /// Возвращает компоненты PRMSN, нужные для матрицы Грина (мемоизированная)
+    /// Возвращает компоненты PRMSN_Memoized, нужные для матрицы Грина (мемоизированная)
     /// </summary>
     /// <param name="al"></param>
     /// <param name="z"></param>
     /// <param name="w"></param>
     /// <returns></returns>
-    public static Func<Complex, double, Complex[]> PRMSN;
+    public static Func<Complex, double, Complex[]> PRMSN_Memoized;
     /// <summary>
-    /// Возвращает компоненты PRMSN, нужные для матрицы Грина (мемоизированная)
+    /// Возвращает компоненты PRMSN_Memoized, нужные для матрицы Грина (мемоизированная)
     /// </summary>
     /// <param name="al"></param>
     /// <param name="z"></param>
@@ -936,12 +1029,12 @@ public static class Functions
     public static Func<Complex, double, CSqMatrix> A = (Complex alp, double w) =>
         {
             double kt1 = k1(w), kt2 = k2(w);
-            Complex al = alp * alp,ai=/*al**/Complex.I;
+            Complex al = alp * alp, ai =/*al**/Complex.I;
             Complex s1 = sigma(al, kt1), s2 = sigma(al, kt2);
-            Complex a = (al - 0.5*kt2);//*mu2;
-            Complex b = s1*ai;// * mu2;// *();
-            Complex c = al *s2;// * mu2;
-            Complex d = -a*ai;// * (al * Complex.I);
+            Complex a = (al - 0.5 * kt2);//*mu2;
+            Complex b = s1 * ai;// * mu2;// *();
+            Complex c = al * s2;// * mu2;
+            Complex d = -a * ai;// * (al * Complex.I);
             //Complex q = Complex.Exp(s1 * h), ww = Complex.Exp(s2 * h);
             Complex q = Complex.Exp(-s1 * h), ww = Complex.Exp(-s2 * h);
             //$"{a} {b} {c} {d} {q} {ww}".Show();
@@ -950,7 +1043,7 @@ public static class Functions
             //$"exp {q} {ww}".Show();
             //$"elem a= {a*mu2} b= {b * mu2} c= {c * mu2} d= {d * mu2}".Show();
 
-            CSqMatrix res =new CSqMatrix(new Complex[,] { 
+            CSqMatrix res = new CSqMatrix(new Complex[,] {
                 {a,a*q,c,-c*ww },
                 {-b,b*q,d,d*ww },
                 {a*q ,a,c*ww,-c },
@@ -966,15 +1059,15 @@ public static class Functions
     /// <summary>
     /// Возвращает вектор преобразований Фурье от шапочек
     /// </summary>
-    public static Func<double[], double, CVectors> Fi = (double[] w, double t) => {
+    public static Func<double[], double, CVectors> Fi = (double[] w, double t) =>
+    {
         double dw = w[1] - w[0];
         Complex it = Complex.I / t;
 
-        //Debug.WriteLine($"{it * (1 - Complex.Exp(Complex.I * dw * t))/dw}");
-
-        Complex left(int i) => it * Complex.Exp(-Complex.I * w[i] * t) * (1 - it * (1 - Complex.Exp(Complex.I * dw * t)) / dw);
-        Complex right(int i) => it * Complex.Exp(-Complex.I * w[i] * t) * (-1 - it * (1 - Complex.Exp(-Complex.I * dw * t)) / dw);
-        Complex sum(int i) => Complex.Exp(-Complex.I * w[i] * t) / t / t / dw * (1.0 - Complex.Ch(Complex.I * dw * t)) / 2;
+        Complex left(int i) => it * Complex.Expi(-w[i] * t) * (1 - it * (1 - Complex.Expi(dw * t)) / dw);
+        Complex right(int i) => it * Complex.Expi(-w[i] * t) * (-1 - it * (1 - Complex.Expi(-dw * t)) / dw);
+        //Complex sum(int i) => Complex.Exp(-Complex.I * w[i] * t) / t / t / dw * (1.0 - Complex.Ch(Complex.I * dw * t)) / 2;
+        Complex sum(int i) => Complex.Expi(-w[i] * t) / t / t / dw * (2.0 - 2.0 * Math.Cos(t * dw));
 
         CVectors r = new CVectors(w.Length);
         r[0] = right(0);
@@ -984,45 +1077,145 @@ public static class Functions
         return r;
 
     };
+    public static Func<double, CVectors> Phi;
+    public static Func<Complex[], double, CVectors> Phif;
 
-    public static Func<double, double, double,  Normal2D[], Complex[]> _uRes = (double x, double y,  double w, Normal2D[] normal) => KsumRes(x, y, w, normal, (Point t) =>  new Vectors(t.x, t.y, 0.0)).ComplexMas;
+    private static Tuple<Complex,Complex> ToURUZ(CVectors v,Source s,double x,double y)
+    {
+        double cor = new Number.Complex(x - s.Center.x, y - s.Center.y).Arg;
+        return new Tuple<Complex, Complex>(v[0] * Math.Cos(cor) + v[1] * Math.Sin(cor), v[2]);
+    } 
 
-    public static Func<double, double, double,  Normal2D[], Complex[]> uRes;
+    public static Func<double, double, double, Source,Tuple<Complex,Complex>> uxw = (double x, double y, double w, Source s) =>ToURUZ( KsumRes(x, y, w, s.Norms, (Point t) => new Vectors(t.x, t.y, 0.0)),s,x,y);
+
+    public static Func<double, double, double, Source,Tuple<Complex,Complex>> uxwMemoized;
+
+    /// <summary>
+    /// tex: ${\bar c}= f({\bar w}) \cdot u(x,y,z,{\bar w}) $ покомпонентно
+    /// </summary>
+    public static Func<double, double, Source, Tuple<Complex,Complex>[]> CMAS = (double x, double y, Source s) =>
+  {
+      Tuple<Complex, Complex>[] c = new Tuple<Complex, Complex>[wcount];
+      //tex: ${\bar c}= f({\bar w}) \cdot u(x,y,z,{\bar w}) $ покомпонентно
+
+      //Parallel.For(0, wcount, (int i) =>
+      for (int i = 0; i < wcount; i++)
+      {
+          c[i] = Expendator.Mult(uxwMemoized(x, y, wmas[i], s), s.Fmas[i]);
+      }
+      //);
+
+      return c;
+  };
+
+    /// <summary>
+    /// Мемоизированная функция вычисления коэффициентов
+    /// </summary>
+    public static Func<double, double, Source, Tuple<Complex, Complex>[]> CMAS_Memoized;
+
+    public static Func<double, double, double, Source, Tuple<Complex,Complex>> TripleMult = (double x, double y, double t, Source s) =>
+        {
+            Tuple<Complex, Complex> v;
+            Complex tmp1=0, tmp2=0;
+            double[] w = wmas;
+            Complex[] fw = s.Fmas;
+            CVectors ft = Fi(w, t);
+
+            for (int i = 0; i < wcount; i++)
+            {
+                v = Expendator.Mult(uxwMemoized(x, y, w[i], s), fw[i] * ft[i]);
+                tmp1 += v.Item1;
+                tmp2 += v.Item2;
+            }
+
+            return new Tuple<Complex, Complex>(tmp1,tmp2);
+        };
+
+    /// <summary>
+    /// tex: ${\bar c}= f({\bar w}) \cdot u(x,y,z,{\bar w}) $ покомпонентно
+    /// </summary>
+    private static Func<double, double, double, Source, Tuple<Complex,Complex>> Integraluxt = (double x, double y, double t, Source s) =>
+     { 
+         var p = Phif(s.Fmas, t);
+         Complex t1=0,t2=0;
+         Tuple<Complex, Complex> tmp;
+
+         for (int i = 0; i < wcount; i++)
+         {
+             tmp = Expendator.Mult(uxwMemoized(x, y, wmas[i], s), p[i]);
+             t1 += tmp.Item1;
+             t2 += tmp.Item2;
+         }
+
+         return new Tuple<Complex, Complex>(t1,t2);
+     };
+
+
     /// <summary>
     /// Итоговая функция (через вычисленные массивы w и f(w)) для одного источника
     /// </summary>
-    public static Func<double, double, double, Tuple<double[], Complex[]>, Normal2D[], double[]> UxtOne = (double x, double y,  double t, Tuple<double[], Complex[]> tuple, Normal2D[] normal) =>
-    {
-        double[] w = tuple.Item1;
-        Complex[] fw = tuple.Item2;
+    public static Func<double, double, double, Source, Tuple<Complex,Complex>> UxtOne = (double x, double y, double t, Source s) =>
+   {
+       //return ((Integraluxt(x,y,t,tuple,normal)).Re / Math.PI).DoubleMas;
 
-        CVectors[] c = new CVectors[wcount];
-        //tex: ${\bar c}= f({\bar w}) \cdot u(x,y,z,{\bar w}) $ покомпонентно
-        Parallel.For(0, wcount, (int i) =>
-        {
-            c[i] = new CVectors(Expendator.Mult(uRes(x, y, w[i], normal), fw[i]));
-        });
-        return ((c * Fi(w, t)).Re / Math.PI).DoubleMas;
-    };
+       return ((CMAS_Memoized(x, y, s) * Phi(t)));//этот вариант почему-то самый быстрый
+
+       //double[] w = tuple.Item1;
+       //return ((CMAS_Memoized(x, y, tuple, normal) * Fi(w, t)).Re / Math.PI).DoubleMas;
+
+       // return ((TripleMult(x,y,t,tuple,normal)).Re / Math.PI).DoubleMas;
+   };
 
     /// <summary>
     /// Функция u(x,t) по массиву источников
     /// </summary>
-    public static Func<double, double,  double, Source[], Tuple<double, double>> Uxt = (double x, double y,  double t, Source[] smas) => {
+    public static Func<double, double, double, Source[], Tuple<double, double>> Uxt3 = (double x, double y, double t, Source[] smas) =>
+    {
+        Tuple<Complex,Complex> tmp;
+        double d1 = 0, d2 = 0;
 
-        Tuple<double, double> res = new Tuple<double, double>(0,0);
-        double[] tmp;
-        double cor;
-
-        for(int i = 0; i < smas.Length; i++)
+        for (int i = 0; i < smas.Length; i++)
         {
-            tmp = UxtOne(x, y, t, smas[i].Fmas, smas[i].Norms);
-             cor = new Number.Complex(x - smas[i].Center.x, y -smas[i].Center.y).Arg;
-            res = new Tuple<double, double>(res.Item1+tmp[0]*Math.Cos(cor)+tmp[1]*Math.Sin(cor), res.Item2+tmp[2]);
+            tmp = UxtOne(x, y, t, smas[i]);
+            d1 += tmp.Item1.Re;
+            d2 += tmp.Item2.Re;
         }
-
-        return res;
+        return new Tuple<double, double>(d1/ Math.PI,d2 / Math.PI);
     };
+    /// <summary>
+    /// Функция u(x,t) по массиву источников
+    /// </summary>
+    public static Func<double, double, double, Source[], Tuple<double, double>> Uxt2 = (double x, double y, double t, Source[] smas) =>
+    {
+        Tuple<Complex, Complex> tmp;
+        Complex c1=0, c2=0;
+
+        for (int i = 0; i < smas.Length; i++)
+        {
+            tmp = UxtOne(x, y, t, smas[i]);
+
+            c1+=tmp.Item1;
+            c2 += tmp.Item2;
+        }
+        return new Tuple<double, double>(c1.Abs, c2.Abs);
+    };
+    /// <summary>
+    /// Функция u(x,t) по массиву источников
+    /// </summary>
+    public static Func<double, double, double, Source[], Tuple<double, double>> Uxt1 = (double x, double y, double t, Source[] smas) =>
+    {
+        double d1 = 0, d2 = 0;
+        Tuple<Complex,Complex> tmp;
+
+        for (int i = 0; i < smas.Length; i++)
+        {
+            tmp = UxtOne(x, y, t, smas[i]);
+            d1 += tmp.Item1.Re ;
+            d2 += tmp.Item2.Re;
+        }
+        return new Tuple<double, double>((d1/ Math.PI).Sqr(), (d2/ Math.PI).Sqr());
+    };
+
 
     #endregion
 }
@@ -1032,14 +1225,18 @@ public static class OtherMethods
     /// <summary>
     /// Число сохранённых значений
     /// </summary>
-    public static int Saved=0;
+    public static int Saved = 0;
     /// <summary>
     /// Число значений, которое надо сохранить вообще
     /// </summary>
-    public static int SaveCount=1;
+    public static int SaveCount = 1;
+    /// <summary>
+    /// Информация о том, что сейчас происходит
+    /// </summary>
+    public static string info = null;
 
     /// <summary>
-    /// Просто сохранять значения u(x,w), чтобы не тратить время зря
+    /// Просто сохранять значения u(x,w), чтобы не тратить время зря (примитивная медленная версия)
     /// </summary>
     /// <param name="x0"></param>
     /// <param name="X"></param>
@@ -1059,19 +1256,15 @@ public static class OtherMethods
             for (int j = 0; j < ycount; j++)
                 for (int s = 0; s < smas.Length; s++)
                 {
-                //Parallel.For(0, wcount, (int k) => ur.OnlyAdd(new Tuple<double, double, double, Normal2D[]>(x[i],y[j],w[k],smas[s].Norms) ,_uRes(x[i], y[j], w[k], smas[s].Norms)));
-                    Parallel.For(0, wcount, (int k) => uRes(x[i], y[j], w[k], smas[s].Norms));
+                    //Parallel.For(0, wcount, (int k) => ur.OnlyAdd(new Tuple<double, double, double, Normal2D[]>(x[i],y[j],w[k],smas[s].Norms) ,uxw(x[i], y[j], w[k], smas[s].Norms)));
+                    Parallel.For(0, wcount, (int k) => uxwMemoized(x[i], y[j], w[k], smas[s]));
                     Saved++;
                 }
         Saved = 0;
     }
-    public static void Saveuxw2(double x0, double X, int xcount, double y0, double Y, int ycount, Source[] smas)
-    {
-       DataToFiles(x0, X, xcount, y0, Y, ycount, smas);
-    }
 
     /// <summary>
-    /// Записать основные данные в файл для последующего вызова скрипта
+    /// Сохранить значения по сетке от массива источников (самая быстрая версия)
     /// </summary>
     /// <param name="x0"></param>
     /// <param name="X"></param>
@@ -1080,64 +1273,264 @@ public static class OtherMethods
     /// <param name="Y"></param>
     /// <param name="ycount"></param>
     /// <param name="smas"></param>
-    public static void DataToFiles(double x0, double X, int xcount, double y0, double Y, int ycount, Source[] smas)
+    public static void Saveuxw3(double x0, double X, int xcount, double y0, double Y, int ycount, Source[] smas)
     {
-        var w = Expendator.Seq(wbeg, wend, wcount);
+        bool rs = !EqualConfigs(x0, X, xcount, y0, Y, smas, out Source[] arr);
 
-        Debug.WriteLine("Происходит запись файлов");
+        if (rs)
+        {
+            var w = wmas;
 
-        Parallel.Invoke(
-            ()=>Space(x0,X,xcount,y0,Y,smas),
-            ()=>Poles(w),
-            ()=>Normals(smas)
-            );
+            info = "Происходит запись вспомогательных файлов";
+            Debug.WriteLine(info);
 
-        Debug.WriteLine("Файлы записаны. Выпзывается скрипт на D");
+            Centers(smas);
+            //Parallel.Invoke(
+            //() => 
+            Space(x0, X, xcount, y0, Y, smas);
+                //,
+                //() => Poles(w),
+                //() => Normals(smas)
+               // );
 
-        Process process = new Process();
-        process.StartInfo.FileName = "dscript.exe";//исправить
-        process.Start();
-        process.WaitForExit();
+            info = "Файлы записаны";
+            Debug.WriteLine(info);
+            info = null;
+            CalcD(x0, X, xcount, y0, Y, ycount, smas);
+            info = "Происходит сохранение результата, чтобы в другой раз избежать повторных вычислений";
+            Debug.WriteLine(info);
+            WriteData(smas);
+            info = "Результат записан";
+            Debug.WriteLine(info);
+        }
+        else
+        {
+            if (arr.Length > 0)
+            {
+                info = "Создание недостающих файлов";
+                CalcD(x0, X, xcount, y0, Y, ycount, arr);
+                info = "Происходит сохранение результата, чтобы в другой раз избежать повторных вычислений";
+                Debug.WriteLine(info);
+                WriteData(arr);
+                info = "Результат записан";
+                Debug.WriteLine(info);
+            }
 
-        Debug.WriteLine("Данные считываются");
-        ReadData(x0,X,xcount,y0,Y,smas);
-        Debug.WriteLine("Данные считаны");
+            info = "Считываются данные с сохранённых источников";
+            Debug.WriteLine(info);
+            ReadData(x0, X, xcount, y0, Y, smas.Where(p=>!arr.Contains(p)).ToArray());
+            info = "Данные считаны";
+            Debug.WriteLine(info);
+        }
+        info = null;
+    }
+    /// <summary>
+    /// Вычислить значения по сетке от массива источников
+    /// </summary>
+    /// <param name="x0"></param>
+    /// <param name="X"></param>
+    /// <param name="xcount"></param>
+    /// <param name="y0"></param>
+    /// <param name="Y"></param>
+    /// <param name="ycount"></param>
+    /// <param name="smas"></param>
+    public static void CalcD(double x0, double X, int xcount, double y0, double Y, int ycount, Source[] smas)
+    {
+        SaveCount = xcount * ycount * smas.Length;
+        var w = wmas;
+
+        double x, y;
+        double xh = (X - x0) / (xcount - 1), yh = (Y - y0) / (xcount - 1);
+        sbyte scount = (sbyte)(smas.Length);
+
+        bool b;
+        Point xy;
+
+        double[] xp, yp, ros;
+
+        Complex[][][] c1, c2;
+        double[] eps2;
+        double[][] plus, pminus;
+        Vectors[] poles = new Vectors[wcount];
+        double cor,sin,cos;
+
+        void firstpolescalc()
+        {
+            c1 = new Complex[wcount][][];
+            c2 = new Complex[wcount][][];
+            eps2 = new double[wcount];
+            plus = new double[wcount][];
+            pminus = new double[wcount][];
+
+            Parallel.For(0, wcount, (int i) =>
+            {
+                // for (int i = 0; i < wcount; i++)
+                //  {
+                poles[i] = PolesMasMemoized(w[i]);
+
+                c1[i] = new Complex[poles[i].Deg][];
+                c2[i] = new Complex[poles[i].Deg][];
+
+                double eps = Vectors.Union2(new Vectors(0.0), poles[i]).MinDist * crosscoef;
+                eps2[i] = 0.5 * eps;
+                plus[i] = new double[poles[i].Deg];
+                pminus[i] = new double[poles[i].Deg];
+
+                for (int k = 0; k < poles[i].Deg; k++)
+                {
+                    plus[i][k] = poles[i][k] + eps;
+                    pminus[i][k] = poles[i][k] - eps;
+                    c1[i][k] = PRMSN_Memoized(plus[i][k], w[i]);
+                    c2[i][k] = PRMSN_Memoized(pminus[i][k], w[i]);
+                }
+                //}
+            });
+        }
+
+        Tuple<Complex,Complex> CALC(Source s, int ii)
+        {
+            Complex[] res = new Complex[9];
+            Complex s1=0, s2=0, s3=0;
+            Point QQ;
+
+            for (int i = 0; i < s.Norms.Length; i++)
+            {
+                QQ = new Point(eps2[ii] * s.Norms[i].n.x, eps2[ii] * s.Norms[i].n.y); //это тоже можно улучшить, но труднее
+
+                for (int k = 0; k < poles[ii].Deg; k++)
+                {
+                    //res = InKtwice(plus[ii][k], pminus[ii][k], c1[ii][k], c2[ii][k], HankelTuple(poles[ii][k] * ros[i]), xp[i], yp[i]);
+                    InKtwiceFast(plus[ii][k], pminus[ii][k], c1[ii][k], c2[ii][k], HankelTuple(poles[ii][k] * ros[i]), xp[i], yp[i], ref res);
+                    s1 += res[0] * QQ.x + res[1] * QQ.y;
+                    s2 += res[3] * QQ.x + res[4] * QQ.y;
+                    s3 += res[6] * QQ.x + res[7] * QQ.y;
+
+                }
+            }
+            return new Tuple<Complex, Complex>((s1*cos+s2*sin)*I2,s3*I2);
+        }
+
+        firstpolescalc();
+        for (int i = 0; i < xcount; i++)
+        {
+            x = x0 + i * xh;
+            for (int j = 0; j < xcount; j++)
+            {
+                y = y0 + j * yh;
+                xy = new Point(x, y);
+
+                //проверить принадлежность точки к какому-либо из источников
+                b = false;
+                for (int c = 0; c < scount; c++)
+                    if (Point.Eudistance(xy, smas[c].Center) <= smas[c].radius * 2.0)
+                    {
+                        b = true;
+                        break;
+                    }
+
+                if (!b)
+                    for (sbyte s = 0; s < scount; s++)
+                    {
+                        cor = new Number.Complex(x - smas[s].Center.x, y - smas[s].Center.y).Arg;
+                        sin = Math.Sin(cor);
+                        cos = Math.Cos(cor);
+
+                        //заполнить массив расстояний, уникальный для источника и точки, но одинаковый при любых нормалях
+                        xp = new double[smas[s].Norms.Length];
+                        yp = new double[smas[s].Norms.Length];
+                        ros = new double[smas[s].Norms.Length];
+                        for (int ii = 0; ii < smas[s].Norms.Length; ii++)
+                        {
+                            xp[ii] = x - smas[s].Norms[ii].Position.x;
+                            yp[ii] = y - smas[s].Norms[ii].Position.y;
+                            ros[ii] = Point.Eudistance(smas[s].Norms[ii].Position, xy);
+                        }
+
+                        Parallel.For(0, wcount, (int k) => ur.OnlyAdd(new Tuple<double, double, double, Source>(x, y, w[k], smas[s]), CALC(smas[s], k)));
+                        Saved++;
+                    }
+                else
+                    Saved += scount;
+
+            }
+        }
     }
 
-    private static void Space(double x0, double X, int xcount, double y0, double Y,Source[] smas)
+    /// <summary>
+    /// Просчитать CMAS_Memoized для последующего ускорения 
+    /// </summary>
+    /// <param name="xmas"></param>
+    /// <param name="ymas"></param>
+    /// <param name="sources"></param>
+    public static void CalcUXT(double[] xmas,double[] ymas,Source[] sources)
     {
-        int sourceCount = smas.Length;
-        using (StreamWriter f=new StreamWriter("Space.txt"))
-        {
-            f.WriteLine($"xmin= {x0}".Replace(',','.'));
-            f.WriteLine($"ymin= {y0}".Replace(',', '.'));
-            f.WriteLine($"xmax= {X}".Replace(',', '.'));
-            f.WriteLine($"ymax= {Y}".Replace(',', '.'));
-            f.WriteLine($"countS= {xcount}".Replace(',', '.'));
-            f.WriteLine($"countW= {wcount}".Replace(',', '.'));
-            f.Write($"sourceCount= {sourceCount}");
-            for (int i = 0; i < sourceCount; i++)
-                f.Write($" {smas[i].Norms.Length}");
-            f.WriteLine();
+        int count = xmas.Length;
+        Tuple<Complex, Complex>[] tmp;
+        for (int ss = 0; ss < sources.Length; ss++)
+            Parallel.For(0, count, (int xi) => {
+                for (int yi = 0; yi < count; yi++)
+                    tmp = Functions.CMAS_Memoized(xmas[xi], ymas[yi], sources[ss]);
+            }
+            );
+    }
 
-            f.WriteLine($"wbeg= {wbeg}".Replace(',', '.'));
-            f.WriteLine($"wend= {wend}".Replace(',', '.'));
-            f.WriteLine($"lamda= {lamda}".Replace(',', '.'));
-            f.WriteLine($"mu= {mu}".Replace(',', '.'));
-            f.WriteLine($"ro= {ro}".Replace(',', '.'));
-            f.WriteLine($"h= {h}".Replace(',', '.'));
+    public enum ModeSourcesWriting { ReWrite,Add};
+    private static void Centers(Source[] smas,ModeSourcesWriting mode= ModeSourcesWriting.ReWrite)
+    {
+        if(mode== ModeSourcesWriting.ReWrite)
+        using (StreamWriter f = new StreamWriter("Centers.txt"))
+        {
+            f.WriteLine("Short sources defenition");
+            for (int i = 0; i < smas.Length; i++)
+                f.WriteLine(smas[i].ToShortString());
+        }
+        else
+        {
+            string[] txt;
+            using (StreamReader f = new StreamReader("Centers.txt"))
+            {
+                txt = f.ReadToEnd().Split(new string[] { "\n" }, StringSplitOptions.RemoveEmptyEntries);
+            }
+
+            using (StreamWriter f = new StreamWriter("Centers.txt"))
+            {
+                for (int i = 0; i < txt.Length; i++)
+                    f.WriteLine(txt[i]);
+
+                    for (int i = 0; i < smas.Length; i++)
+                    f.WriteLine(smas[i].ToShortString());
+            }
+          
+        }
+    }
+    private static void Space(double x0, double X, int xcount, double y0, double Y, Source[] smas)
+    {
+        using (StreamWriter f = new StreamWriter("Space.txt"))
+        {
+            f.WriteLine($"xmin= {x0.ToRString()}");
+            f.WriteLine($"ymin= {y0.ToRString()}");
+            f.WriteLine($"xmax= {X.ToRString()}");
+            f.WriteLine($"ymax= {Y.ToRString()}");
+            f.WriteLine($"countS= {xcount}");
+            f.WriteLine($"countW= {wcount}");
+            f.WriteLine($"wbeg= {wbeg.ToRString()}");
+            f.WriteLine($"wend= {wend.ToRString()}");
+            f.WriteLine($"lamda= {lamda.ToRString()}");
+            f.WriteLine($"mu= {mu.ToRString()}");
+            f.WriteLine($"ro= {ro.ToRString()}");
+            f.WriteLine($"h= {h.ToRString()}");
         }
     }
     private static void Poles(double[] w)
     {
         using (StreamWriter f = new StreamWriter("Poles.txt"))
         {
-            string[] s=new string[w.Length];
-            Parallel.For(0, w.Length, (int i) => s[i]=PolesPoles(w[i]).ToString().Replace(',', '.'));
+            string[] s = new string[w.Length];
+            Parallel.For(0, w.Length, (int i) => s[i] = PolesMasMemoized(w[i]).ToString().Replace(',', '.'));
 
             foreach (string c in s)
             {
-                f.WriteLine(c.Substring(3,c.Length-6).Replace('\t',' ').Replace("  "," "));
+                f.WriteLine(c.Substring(3, c.Length - 6).Replace('\t', ' ').Replace("  ", " "));
             }
         }
     }
@@ -1148,43 +1541,150 @@ public static class OtherMethods
             f.WriteLine("number \tposition.x \tposition.y \tn.x \tn.y");
             for (int i = 0; i < mas.Length; i++)
                 for (int j = 0; j < mas[i].Norms.Length; j++)
-                    f.WriteLine($"{i+1} {mas[i].Norms[j].Position.x} {mas[i].Norms[j].Position.y} {mas[i].Norms[j].n.x} {mas[i].Norms[j].n.y}".Replace(',','.'));
+                    f.WriteLine($"{i + 1} {mas[i].Norms[j].Position.x.ToRString()} {mas[i].Norms[j].Position.y.ToRString()} {mas[i].Norms[j].n.x.ToRString()} {mas[i].Norms[j].n.y.ToRString()}".Replace(',', '.'));
         }
     }
     private static void ReadData(double x0, double X, int xcount, double y0, double Y, Source[] mas)
     {
-        Vectors xx = new Vectors(Seqw(x0, X, xcount));
-        Vectors yy = new Vectors(Seqw(y0, Y, xcount));
-        Vectors w = new Vectors(Seqw(wbeg, wend, wcount));
+        SaveCount = xcount * xcount * wcount * mas.Length;
+        Saved = 0;
+        int[] saves = new int[mas.Length];
+        Vectors xx = new Vectors(SeqWMemoized(x0, X, xcount));
+        Vectors yy = new Vectors(SeqWMemoized(y0, Y, xcount));
+        Vectors w = new Vectors(SeqWMemoized(wbeg, wend, wcount));
 
-        using (StreamReader f=new StreamReader("uxw.txt"))
+        Parallel.For(0, mas.Length, (int i) => {
+        using (StreamReader f = new StreamReader($"uxw {mas[i].ToShortString()}.txt"))
         {
             string s = f.ReadLine();
             s = f.ReadLine();
             double[] st;
-            
-            while(s!=null && s.Length > 0)
-            {
-                st=s.Replace('.', ',').ToDoubleMas();
 
-                int ind = (int)st[3] - 1;
+            while (s != null && s.Length > 0)
+            {
+                st = s.ToDoubleMas();
 
                 Functions.ur.OnlyAdd(
-                    new Tuple<double, double, double, Normal2D[]>(
-                       xx.BinaryApproxSearch( st[0]),
-                       yy.BinaryApproxSearch( st[1]),
-                       w.BinaryApproxSearch( st[2]),
-                        mas[ind].Norms
+                    new Tuple<double, double, double,Source>(
+                                             st[0], st[1], st[2],   mas[i]
                         ),
-                    new Complex[] { new Complex(st[4],st[5]),new Complex(st[6],st[7]),new Complex(st[8],st[9])});
+                    new Tuple<Complex, Complex> ( new Complex(st[3], st[4]), new Complex(st[5], st[6]) ));
 
+                saves[i]++;
                 s = f.ReadLine();
+                    if (saves[i] % 12 == 0)
+                        Saved = saves.Sum();
             }
-           
-            
         }
+        });
+        Saved = 0;
+    }
+    /// <summary>
+    /// Записать сохранённые значения u(x,y,w,s) в файлы
+    /// </summary>
+    /// <param name="mas"></param>
+    private static void WriteData(Source[] mas)
+    {
+        SaveCount = ur.dic.Count;
+        Saved = 0;
+        int which(Source f)
+        {
+            for (int i = 1; i < mas.Length; i++)
+                if (f == mas[i])
+                {
+                    return i;
+                }
+            return 0;
+        }
+
+        StreamWriter[] writers = new StreamWriter[mas.Length];
+        for (int i = 0; i < mas.Length; i++)
+        {
+            writers[i] = new StreamWriter($"uxw {mas[i].ToShortString()}.txt");
+            writers[i].WriteLine("x y w Reur Imur Reuz Imuz");
+        }
+
+        foreach (var p in ur.dic)
+        {
+            writers[which(p.Key.Item4)].WriteLine($"{p.Key.Item1.ToRString()} {p.Key.Item2.ToRString()} {p.Key.Item3.ToRString()} {p.Value.Item1.Re.ToRString()} {p.Value.Item1.Im.ToRString()} {p.Value.Item2.Re.ToRString()} {p.Value.Item2.Im.ToRString()}");
+            Saved++;
+        }
+
+
+        for (int i = 0; i < mas.Length; i++)
+            writers[i].Close();
     }
 
+    private static bool EqualConfigs(double x0, double X, int xcount, double y0, double Y, Source[] smas,out Source[] emptymas)
+    {
+        List<Source> list = new List<Source>();
+        List<string> names = new List<string>();
+        for (int i = 0; i < smas.Length; i++)
+        {
+list.Add(smas[i].dup);
+            names.Add($"uxw {smas[i].ToShortString()}.txt");
+        }           
+        emptymas = list.ToArray();
+
+        if (!File.Exists("Space.txt"))
+            return false;
+
+        string s;
+      
+        using (StreamReader f = new StreamReader("Space.txt"))
+        {
+            if (x0 != f.ReadLine().Split(' ')[1].ToDouble()) return false;
+        if (y0 != f.ReadLine().Split(' ')[1].ToDouble()) return false;
+        if (X != f.ReadLine().Split(' ')[1].ToDouble()) return false;
+        if (Y != f.ReadLine().Split(' ')[1].ToDouble()) return false;
+        if (xcount != f.ReadLine().Split(' ')[1].ToInt32()) return false;
+        if (wcount != f.ReadLine().Split(' ')[1].ToInt32()) return false;
+        if (wbeg != f.ReadLine().Split(' ')[1].ToDouble()) return false;
+        if (wend != f.ReadLine().Split(' ')[1].ToDouble()) return false;
+        if (lamda != f.ReadLine().Split(' ')[1].ToDouble()) return false;
+        if (mu != f.ReadLine().Split(' ')[1].ToDouble()) return false;
+        if (ro != f.ReadLine().Split(' ')[1].ToDouble()) return false;
+        if (h != f.ReadLine().Split(' ')[1].ToDouble()) return false;
+        }
+
+
+        System.IO.FileInfo file2 = new System.IO.FileInfo("Space.txt");
+        System.IO.FileInfo file1;// = new System.IO.FileInfo("uxw.txt");
+        for(int i=0;i<names.Count;i++)
+        {
+            file1= new System.IO.FileInfo(names[i]);
+            if(File.Exists(names[i])&&file1.LastWriteTime > file2.LastWriteTime)
+            {
+                names.RemoveAt(i);
+                list.RemoveAt(i);
+                i--;
+            }
+        }
+
+        emptymas = list.ToArray();
+        return true;
+    }
+
+    public static void StartProcessOnly(string fileName, bool global = false , string path=null)
+    {     
+            path =path?? Environment.CurrentDirectory;
+
+        Process process = new Process();
+        process.StartInfo.FileName =Path.Combine(path, fileName);
+        process.StartInfo.WorkingDirectory = path;
+
+        if (!global)
+        {
+            process.StartInfo.UseShellExecute = true;
+            process.StartInfo.CreateNoWindow = true;
+            process.StartInfo.WindowStyle = ProcessWindowStyle.Hidden;
+        }
+
+        process.Start();
+
+        process.WaitForExit();
+
+    }
     public static void StartProcess2(string fileName)
     {
         Process process = new Process();
@@ -1194,12 +1694,25 @@ public static class OtherMethods
         process.StartInfo.CreateNoWindow = true;
         process.StartInfo.WindowStyle = ProcessWindowStyle.Hidden;
 
-
         process.EnableRaisingEvents = true;
-
-
         process.Start();
-
         process.WaitForExit();
+    }
+
+    public static void CopyFilesR()
+    {
+        string[] dir = Expendator.GetStringArrayFromFile("WhereData.txt", true);
+        //  for (int i = 0; i < dir.Length; i++)
+        Parallel.For(0, dir.Length, (int i) => { 
+            Expendator.CopyFiles(Environment.CurrentDirectory, dir[i], "3Duxt(better).r", "3Duxt.r", "ReDraw3Duxt2.r", "Truezlims.r", "WavesSurface.r");
+         });
+    }
+    public static void CopyFilesTxt()
+    {
+        string[] dir = Expendator.GetStringArrayFromFile("WhereData.txt", true);
+        //  for (int i = 0; i < dir.Length; i++)
+        Parallel.For(0, dir.Length, (int i) => {
+            Expendator.CopyFiles(Environment.CurrentDirectory, dir[i],  "zlims(real).txt", "zlims.txt", "MetrixSumOrMax.txt", "MakeUxtByEvery.txt", "MakePDFs.txt", "MakeDistanceToDefect.txt", "ClastersCount.txt", "AutoLims.txt", "SurfaceMain.txt", "RMdator.exe","LastTimeConfig.txt");
+        });
     }
 }

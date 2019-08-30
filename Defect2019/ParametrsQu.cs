@@ -36,12 +36,14 @@ namespace Defect2019
             numericUpDown2.Value = wcount;
 
             numericUpDown3.Value = РабКонсоль.animatime;
+            numericUpDown4.Value = РабКонсоль.animacycles;
+            numericUpDown5.Value = РабКонсоль.clastersCount;
         }
 
         private void button1_Click(object sender, EventArgs e)
         {
             ro = Convert.ToDouble(textBox6.Text);
-            h = Convert.ToDouble(textBox8.Text);
+            z2 = -Convert.ToDouble(textBox8.Text);
             lamda = Convert.ToDouble(textBox5.Text);
             mu = Convert.ToDouble(textBox9.Text);
             РабКонсоль.wold = Convert.ToDouble(textBox7.Text);
@@ -50,7 +52,7 @@ namespace Defect2019
             РабКонсоль.countroot = Convert.ToInt32(numericUpDown1.Value);
             РабКонсоль.polesBeg = Convert.ToDouble(textBox3.Text);
             РабКонсоль.polesEnd = Convert.ToDouble(textBox12.Text);
-            AfterChaigeData();
+            
 
             wc = textBox11.Text.ToDouble();
             wbeg=textBox4.Text.ToDouble()*2*Math.PI*1e-6;
@@ -59,7 +61,10 @@ namespace Defect2019
           UGrafic.wchange = true;
 
              РабКонсоль.animatime = Convert.ToInt32(numericUpDown3.Value);
+            РабКонсоль.animacycles = Convert.ToInt32(numericUpDown4.Value);
+              РабКонсоль.clastersCount= Convert.ToInt32(numericUpDown5.Value);
 
+            AfterChaigeData();
             this.Close();
         }
     }

@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.Linq;
 using System.IO;
 using static МатКлассы.Number;
+using System.Threading.Tasks;
 
 /// <summary>
 /// Библиотека математических классов, написанная Опасным Пасей (Дмитрией Пасько/Деметрием Паскалём).
@@ -436,7 +437,7 @@ namespace МатКлассы
         public override string ToString()
         {
             string s = "( ";
-            for (int i = 0; i < this.n; i++) s += String.Format("\t{0} ", this[i]);
+            for (int i = 0; i < this.n; i++) s += String.Format("\t{0} ", this[i].ToRString());
             s += "\t)";
             return s;
         }
@@ -1918,6 +1919,66 @@ namespace МатКлассы
             }
 
             return (Math.Abs(this[i] - d) < Math.Abs(this[j] - d)) ? this[i] : this[j];
+        }
+
+        /// <summary>
+        /// Быстро создаёт вектор за счёт копирования ссылки на массив, а не дублирования массива
+        /// </summary>
+        /// <param name="m"></param>
+        /// <returns></returns>
+        public static Vectors CreateFast(double[] m)
+        {
+            Vectors r = new Vectors();
+            r.n = m.Length;
+            r.vector = m;
+            return r;
+        }
+
+        /// <summary>
+        /// Прочитать вектор из файла
+        /// </summary>
+        /// <param name="filename"></param>
+        /// <returns></returns>
+        public  static Vectors VectorFromFile(string filename)
+        {
+            Vectors res;
+            using (StreamReader f = new StreamReader(filename))
+                res= Vectors.CreateFast( f.ReadToEnd().Replace('.', ',').Replace("NA","NaN").ToDoubleMas());
+
+            //List<double> p = new List<double>();
+            //string s;
+            //using (StreamReader f = new StreamReader(filename))
+            //{
+            //    s = f.ReadLine();
+            //    while(s!= null && s.Length > 0)
+            //    {
+            //        p.Add(Convert.ToDouble( s.Replace('.', ',').Replace("NA", "NaN")));
+            //        s = f.ReadLine();
+            //    }
+            //}
+
+                return res;
+          }
+
+        /// <summary>
+        /// Записать вектор в файл
+        /// </summary>
+        /// <param name="filename"></param>
+        public void ToFile(string filename, bool NanIsNA=true)
+        {
+            if (!NanIsNA)
+                using (StreamWriter f = new StreamWriter(filename))
+                    for (int i = 0; i < Deg; i++)
+                        f.Write($"{this[i]} ".Replace(',', '.'));
+            else
+                using (StreamWriter f = new StreamWriter(filename))
+                    for (int i = 0; i < Deg; i++)
+                        if (Double.IsNaN(this[i]))
+                            f.Write($"NA ");
+                        else
+                            f.Write($"{this[i]} ".Replace(',', '.'));
+
+
         }
     }
 

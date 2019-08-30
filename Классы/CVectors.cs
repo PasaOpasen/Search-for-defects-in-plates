@@ -1,4 +1,5 @@
-﻿using System.Collections;
+﻿using System;
+using System.Collections;
 using static МатКлассы.Number;
 
 /// <summary>
@@ -89,6 +90,20 @@ namespace МатКлассы
             }
         }
         /// <summary>
+        /// Вектор модулей
+        /// </summary>
+        public Vectors AbsVector
+        {
+            get
+            {
+                Vectors v = new Vectors(this.mas.Length);
+                for (int i = 0; i < v.n; i++)
+                    v[i] = mas[i].Abs;
+                return v;
+            }
+        }
+
+        /// <summary>
         /// Размерность вектора
         /// </summary>
         public int Degree => mas.Length;
@@ -136,7 +151,7 @@ namespace МатКлассы
         /// Копирование коплексного вектора
         /// </summary>
         /// <param name="v"></param>
-        public CVectors(CVectors v) : this(v.ComplexMas) { }
+        public CVectors(CVectors v) : this(v.mas) { }
 
         /// <summary>
         /// Комплексно сопряженный вектор
@@ -209,6 +224,21 @@ namespace МатКлассы
         }
 
         /// <summary>
+        /// Нормализованный вектор
+        /// </summary>
+        public CVectors Normalize
+        {
+            get
+            {
+                double d = mas[0].Abs;
+                for (int i = 1; i < mas.Length; i++)
+                    if (d > mas[1].Abs)
+                        d = mas[1].Abs;
+                return (d == 0) ? this : this / d;
+            }
+        }
+
+        /// <summary>
         /// Скалярное произведение векторов
         /// </summary>
         /// <param name="q"></param>
@@ -244,12 +274,31 @@ namespace МатКлассы
 
         public static CVectors operator *(CVectors[] mas,CVectors vec)
         {
-            CVectors res = new CVectors(mas[0].Degree);
-            for (int i = 0; i < mas.Length; i++)
+            CVectors res = new CVectors(mas[0]*vec[0]);
+            for (int i = 1; i < mas.Length; i++)
                 res.FastAdd(mas[i] * vec[i]);
             return res;
         }
+        public static Tuple<Complex, Complex> operator *(Tuple<Complex,Complex>[] mas, CVectors vec)
+        {
+            Tuple<Complex, Complex> tmp;
+            Complex c1 = 0, c2 = 0;
 
+            for (int i = 0; i < mas.Length; i++)
+            {
+                c1 += mas[i].Item1 * vec[i];
+                c2 += mas[i].Item2 * vec[i];
+            }
+            return new Tuple<Complex, Complex>(c1,c2);
+        }
+        public static CVectors operator *(Complex[] coefs,CVectors vec)
+        {
+            CVectors res = vec.dup;
+            for (int i = 0; i < coefs.Length; i++)
+                res[i] *= coefs[i];
+            return res;
+        }
+                
     }
 }
 
