@@ -114,6 +114,11 @@ namespace Работа2019
             return ps;
         }
 
+        /// <summary>
+        /// Преобразовать источник в массив точек (для рисования)
+        /// </summary>
+        /// <param name="ss"></param>
+        /// <returns></returns>
         private PointF[] SourceToFpoint(Source ss)
         {
             var s = ss.NormsPositionArray;
