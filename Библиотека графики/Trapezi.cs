@@ -7,11 +7,13 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 using System.Windows.Forms;
+using МатКлассы;
 
 namespace Библиотека_графики
 {
     public partial class Trapezi : Form
     {
+        int mantis = 3;
         double beg = 0.01, end = 0.58, s = 0.04;
         int h;
         double t => (100 - trackBar1.Value - trackBar3.Value - 2 * trackBar2.Value);
@@ -22,6 +24,7 @@ namespace Библиотека_графики
             gr = g;
             chart1.Series[0].IsVisibleInLegend = false;
             h = g.arr[0].Length;
+            dt = g.xmas[1] - g.xmas[0];
             ReDraw();
             Библиотека_графики.ForChart.SetToolTips(ref chart1);
             trackBar1.Value =(int) (100 * beg);
@@ -35,19 +38,28 @@ namespace Библиотека_графики
             trackBar2_Scroll(new object(), new EventArgs());
             trackBar3_Scroll(new object(), new EventArgs());
 
-
+            if(gr.MeMode== JustGrafic.Mode.Tick)
             chart1.ChartAreas[0].AxisX.LabelStyle.Format = "{0:0,}K";
+            //else chart1.ChartAreas[0].AxisX.LabelStyle.Format = "{0,4}";
         }
         JustGrafic gr;
+        double dt;
         void ReDraw()
         {
+            double ToMode(double t)
+            {
+                if (gr.MeMode == JustGrafic.Mode.Tick)
+                    return t;
+                return gr.xmas[0] + (gr.xmas.Last() - gr.xmas[0]) / (h-1) * t;
+            }
+
             chart1.Series[0].Points.Clear();
-            chart1.Series[0].Points.AddXY(0, 0);
-            chart1.Series[0].Points.AddXY(beg*h, 0);
-            chart1.Series[0].Points.AddXY((beg+s)*h, 1);
-            chart1.Series[0].Points.AddXY((1-end-s)*h, 1);
-            chart1.Series[0].Points.AddXY((1-end)*h, 0);
-            chart1.Series[0].Points.AddXY(h, 0);
+            chart1.Series[0].Points.AddXY(ToMode(0), 0);
+            chart1.Series[0].Points.AddXY(ToMode(beg *h), 0);
+            chart1.Series[0].Points.AddXY(ToMode((beg+s)*h), 1);
+            chart1.Series[0].Points.AddXY(ToMode((1-end-s)*h), 1);
+            chart1.Series[0].Points.AddXY(ToMode((1-end)*h), 0);
+            chart1.Series[0].Points.AddXY(ToMode(h), 0);
         }
         void SetParams()
         {
@@ -99,7 +111,7 @@ namespace Библиотека_графики
             }
             else
                 trackBar1.Value = 100 - trackBar2.Value * 2 - trackBar3.Value;
-            label1.Text = $"До трапеции{Environment.NewLine}({trackBar1.Value*h/100})";
+            label1.Text = $"До трапеции{Environment.NewLine}({Math.Round(trackBar1.Value*h/100* dt,mantis)})";
         }
 
         private void button3_Click(object sender, EventArgs e)
@@ -116,7 +128,7 @@ namespace Библиотека_графики
             }
             else
                 trackBar2.Value = (100 - trackBar1.Value - trackBar3.Value)/2;
-            label2.Text = "Под"+Environment.NewLine+"боковой" +Environment.NewLine+"стороной" +$"{Environment.NewLine}({trackBar2.Value * h / 100})";
+            label2.Text = "Под"+Environment.NewLine+"боковой" +Environment.NewLine+"стороной" +$"{Environment.NewLine}({Math.Round((trackBar2.Value * h / 100* dt),mantis)})";
         }
         private void trackBar3_Scroll(object sender, EventArgs e)
         {
@@ -127,7 +139,7 @@ namespace Библиотека_графики
             }
             else
                 trackBar3.Value = 100 - trackBar2.Value * 2 - trackBar1.Value;
-            label3.Text = $"После трапеции{Environment.NewLine}({trackBar3.Value * h / 100})";
+            label3.Text = $"После трапеции{Environment.NewLine}({Math.Round((trackBar3.Value * h / 100*dt),mantis)})";
         }
     }
 }
