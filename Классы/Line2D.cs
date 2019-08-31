@@ -159,7 +159,7 @@ namespace МатКлассы
         /// <param name="a"></param>
         /// <param name="b"></param>
         /// <returns></returns>
-        public static Point InterSecPoint(Line2D a, Line2D b)
+        public static Point? InterSecPoint(Line2D a, Line2D b)
         {
             if (IsParallel(a, b)) return null;
             SLAU s = new SLAU(new Matrix(new double[,] { { a.A, a.B, -a.C }, { b.A, b.B, -b.C } }));

@@ -1256,48 +1256,5 @@ namespace МатКлассы
             //Константы класса
         }
     }
-
-    //-----------------------------------------чисто для курсача
-    /// <summary>
-    /// Класс базисных точек
-    /// </summary>
-    public class BasisPoint : Point
-    {
-        public BasisPoint() : base(0) { }
-        public BasisPoint(double a) : base(a) { }
-        public BasisPoint(double a, double b) : base(a, b) { }
-        public BasisPoint(Point p) : base(p) { }
-
-        /// <summary>
-        /// Функция базисного потенциала, сцепленного с точкой z
-        /// </summary>
-        /// <param name="z"></param>
-        /// <returns></returns>
-        public double PotentialF(BasisPoint z)
-        {
-            return Math.Log(1.0 / Point.Eudistance(this, z));
-        }
-        /// <summary>
-        /// Функция базисного потенциала, сцепленного с точкой z
-        /// </summary>
-        /// <param name="z"></param>
-        /// <returns></returns>
-        public double PotentialF(Point z)
-        {
-            return Math.Log(1.0 / Point.Eudistance(this, z));
-        }
-        /// <summary>
-        /// Функция второго базисного потенциала, сцепленного с точкой z
-        /// </summary>
-        /// <param name="z"></param>
-        /// <returns></returns>
-        public double BPotentialF(Point z)
-        {
-            double r = Point.Eudistance(this, z);
-            return Math.Log(1.0 / r)*r*r;
-        }
-
-        //public static explicit operator Point(BasisPoint p)=>
-    }
 }
 

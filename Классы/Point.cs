@@ -32,7 +32,7 @@ namespace МатКлассы
     /// <summary>
     /// Точки на плоскости
     /// </summary>
-    public class Point : IComparable, ICloneable, Idup<Point>
+    public struct Point : IComparable, ICloneable, Idup<Point>
     {
         /// <summary>
         /// Начало координат в нуле
@@ -40,25 +40,18 @@ namespace МатКлассы
         public static readonly Point Zero;
 
         /// <summary>
-        /// Первая координата точки
+        /// Абцисса
         /// </summary>
-        public double x = 0;
-
+        public double x;
         /// <summary>
-        /// Вторая координата точки
+        /// Ордината
         /// </summary>
-        public double y = 0;
+        public double y;
 
         static Point()
         {
             Zero = new Point(0, 0);
         }
-
-        //конструкторы
-        /// <summary>
-        /// Точка с нулевыми координатами
-        /// </summary>
-        public Point() { x = 0; y = 0; }
 
         /// <summary>
         /// Точка с одинаковыми координатами
@@ -82,17 +75,41 @@ namespace МатКлассы
         /// <summary>
         /// Расстояние от точки до (0,0)
         /// </summary>
-        public double Abs => new Number.Complex(x, y).Abs;
+        public double Abs => Eudistance(this,Zero);
 
         /// <summary>
         /// Дубликат точки
         /// </summary>
         public Point dup => new Point(this);
 
+        /// <summary>
+        /// Точка с переставленными координатами
+        /// </summary>
         public Point Swap => new Point(this.y, this.x);
+        /// <summary>
+        /// Добавить число к обеим координатам точки
+        /// </summary>
+        /// <param name="p"></param>
+        /// <param name="d"></param>
+        /// <returns></returns>
         public static Point Add(Point p, double d) => new Point(p.x + d, p.y + d);
 
+        /// <summary>
+        /// Сложить точки как вектора
+        /// </summary>
+        /// <param name="p"></param>
+        /// <param name="d"></param>
+        /// <returns></returns>
         public static Point Add(Point p, Point d) => new Point(p.x + d.x, p.y + d.y);
+
+        /// <summary>
+        /// Сместить точку
+        /// </summary>
+        /// <param name="p"></param>
+        /// <param name="dx"></param>
+        /// <param name="dy"></param>
+        /// <returns></returns>
+        public static Point Add(Point p, double dx, double dy) => Add(p, new Point(dx, dy));
 
         /// <summary>
         /// Центр множества точек как их взвешенная сумма
@@ -116,10 +133,25 @@ namespace МатКлассы
         /// <param name="z"></param>
         /// <param name="w"></param>
         /// <returns></returns>
-        public static double Eudistance(Point z, Point w)
+        public static double Eudistance(Point z, Point w)=>Math.Sqrt((z.x - w.x) * (z.x - w.x) + (z.y - w.y) * (z.y - w.y));
+        /// <summary>
+        /// Значение функции базисного потенциала, связанного с этой точкой
+        /// </summary>
+        /// <param name="z"></param>
+        /// <returns></returns>
+        public double PotentialF(Point z)=>Math.Log(1.0 / Point.Eudistance(this, z));
+
+        /// <summary>
+        /// Функция второго базисного потенциала, сцепленного с точкой z
+        /// </summary>
+        /// <param name="z"></param>
+        /// <returns></returns>
+        public double BPotentialF(Point z)
         {
-            return Math.Sqrt((z.x - w.x) * (z.x - w.x) + (z.y - w.y) * (z.y - w.y));
+            double r = Point.Eudistance(this, z);
+            return Math.Log(1.0 / r) * r * r;
         }
+
 
         /// <summary>
         /// Возвращает координаты нижнего левого и верхнего правого угла прямоугольника, содержащего все точки массива
@@ -176,11 +208,7 @@ namespace МатКлассы
 
         public static Point operator -(Point p) => new Point(-p.x, -p.y);
 
-        public static bool operator !=(Point a, Point b)
-        {
-            /*if (Convert.IsDBNull((object)b) || Convert.IsDBNull((object)a)) return false;*/
-            return !(a == b);
-        }
+        public static bool operator !=(Point a, Point b)=>!(a == b);
 
         /// <summary>
         /// Скалярное произведение точек как векторов
@@ -194,7 +222,7 @@ namespace МатКлассы
 
         public static Point operator +(Point a, Point b) => new Point(a.x + b.x, a.y + b.y);
 
-        public static bool operator <(Point a, Point b) //функция компоратора
+        public static bool operator <(Point a, Point b)
         {
             if (a.y < b.y)
             {
@@ -210,7 +238,6 @@ namespace МатКлассы
             }
         }
 
-        //public static bool operator ==(Point a, Point b) => (new Complex(a) - new Complex(b)).Abs == 0;
         public static bool operator ==(Point a, Point b) { /*if (a == null || b == null) return false;bool tmp = false; try { tmp=(a.x == b.x) && (a.y == b.y); } catch(NullReferenceException e){ }return tmp;*/  return (a.x == b.x) && (a.y == b.y); }
 
         /// <summary>
@@ -224,7 +251,6 @@ namespace МатКлассы
             return (b < a);
         }
 
-        //методы
         /// <summary>
         /// Набор n+1 точек на графике функции f, разбитых равномерно на отрезке от a до b
         /// </summary>
@@ -432,11 +458,8 @@ namespace МатКлассы
             //return x.CompareTo(obj);
         }
 
-        public override bool Equals(object obj)
-        {
-            var point = obj as Point;
-            return /*point != null &&*/ x == point.x && y == point.y;
-        }
+        public override bool Equals(object obj)=>Equals((Point)obj);
+        public bool Equals(Point point) => x == point.x && y == point.y;
 
         public override int GetHashCode()
         {

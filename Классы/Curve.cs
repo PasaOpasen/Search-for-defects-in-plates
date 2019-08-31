@@ -107,17 +107,17 @@ namespace МатКлассы
         /// </summary>
         /// <param name="t"></param>
         /// <returns></returns>
-        public BasisPoint Transfer(double t)
+        public Point Transfer(double t)
         {
             if (!GetTRANSFER)
             {
                 //"Begin".Show();
-                BasisPoint point = new BasisPoint();
+                Point point = new Point();
                 point.x = this.u(t);
                 point.y = this.v(t);//point.Show();//"End".Show();
                 return point;
             }
-            return (BasisPoint)Trans(t, radius);
+            return (Point)Trans(t, radius);
         }
 
         private bool GetTRANSFER = false;
@@ -235,7 +235,7 @@ namespace МатКлассы
             double value = 0;
             for (int k = 0; k <= M - 1; k++)
             {
-                value += f(Transfer((a + (k + 1) * _h + a + (k) * _h) / 2)) * BasisPoint.Eudistance(Transfer(a + (k + 1) * _h), Transfer(a + (k) * _h));
+                value += f(Transfer((a + (k + 1) * _h + a + (k) * _h) / 2)) * Point.Eudistance(Transfer(a + (k + 1) * _h), Transfer(a + (k) * _h));
             }
             return value;
         }
