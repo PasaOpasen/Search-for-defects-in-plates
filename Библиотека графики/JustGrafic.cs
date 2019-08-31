@@ -16,7 +16,6 @@ namespace Библиотека_графики
 {
     public partial class JustGrafic : Form
     {
-        private int ind = 1;
         public int step;
         public enum Mode { Time,Tick};
         internal Mode MeMode = Mode.Tick;
@@ -44,10 +43,7 @@ namespace Библиотека_графики
             fnames = filenames;
             
             this.chart1.Series.Clear();
-
-            for (int i = 0; i < names.Length; i++)
-                this.chart1.Series.Add(names[i]);
-
+            
             arr = new double[names.Length][];
             arr2 = new double[names.Length][];           
 
@@ -66,6 +62,7 @@ namespace Библиотека_графики
 
             for (int i = 0; i < names.Length; i++)
             {
+                this.chart1.Series.Add(names[i]);
                 this.chart1.Series[i].BorderWidth = 1;
                 this.chart1.Series[i].Color = colors[i];
                 this.chart1.Series[i].ChartType = System.Windows.Forms.DataVisualization.Charting.SeriesChartType.Line;
@@ -140,7 +137,6 @@ namespace Библиотека_графики
                 List<double> l = new List<double>();
                 using (StreamReader f = new StreamReader(fnames[i]))
                 {
-
                     p = f.ReadLine();
                     while(p!=null && p.Length>0)
                     {
@@ -167,18 +163,18 @@ namespace Библиотека_графики
 
         private void button1_Click(object sender, EventArgs e)
         {
-            Библиотека_графики.ForChart.SaveImageFromChart(chart1, $"Изображение от {DateTime.Now.ToString().Replace(':', ' ')}", System.Windows.Forms.DataVisualization.Charting.ChartImageFormat.Png);
+            SaveImage();
+        }
+        private void SaveImage()
+        {
+ Библиотека_графики.ForChart.SaveImageFromChart(chart1, $"Изображение от {DateTime.Now.ToString().Replace(':', ' ')}", System.Windows.Forms.DataVisualization.Charting.ChartImageFormat.Png);
         }
 
         public string[] fnames;
         public void CreateCheckBoxes()
         {
-            bool str(string text)
-            {
-                string s = text.Substring(8, text.Length - 8);
-                int k = Convert.ToInt32(s);//$"{k - 1} {chart1.Series.Count}".Show();
-                return k - 1 < chart1.Series.Count;
-            }
+            ///с помощью этой функции определяются, какие чекбоксы соответствуют графикам функций
+            bool str(string text)=> Convert.ToInt32(text.Substring(8, text.Length - 8)) - 1 < chart1.Series.Count;
 
             void SetNullInTextBox(Control.ControlCollection control)
             {
@@ -188,17 +184,16 @@ namespace Библиотека_графики
                     {
                         if (str(_control.Name))
                         {
-                            //"yes".Show();
                             (_control as CheckBox).Checked = true;
                             _control.Show();
                         }
                         else
                         {
-                            //"No".Show();
                             (_control as CheckBox).Checked = false;
                             _control.Hide();
                         }
                     }
+                    else
                     if (_control.Controls.Count > 0)
                     {
                         SetNullInTextBox(_control.Controls);
@@ -215,63 +210,37 @@ namespace Библиотека_графики
         }
 
 
-      internal  double[] xtime, xticks,xmas;
+        internal  double[] xtime, xticks,xmas;
         public double[][] arr, arr2;
         private double xmin, xmax, ymin, ymax;
-        private bool first = true;
 
-        public void ReSaveMas()
-        {
-            //Parallel.For(0, chart1.Series.Count, (int i) => {
-            //    //chart1.Series[i].Points.Clear();
+        public void ReSaveMas()=>ReDraw();
 
-            //    for (int k = 1; k <= arr[i].Length; k += step)
-            //    {
-            //        //this.chart1.Series[i].Points.AddXY(k, arr[i][k - 1]);
-            //        arr2[i][k - 1] = arr[i][k - 1];
-            //    }
-            //});
-
-            //Lims();
-            ReDraw();
-
-            //for (int i = 0; i < chart1.Series.Count; i++)
-            //{
-            //    chart1.Series[i].Points.Clear();
-            //    for (int k = 1; k <= arr[i].Length; k += step)
-            //        this.chart1.Series[i].Points.AddXY(k, arr2[i][k - 1]);
-               
-            //}
-            //Lims();
-           // Библиотека_графики.ForChart.SetToolTips(ref chart1);
-        }
+        /// <summary>
+        /// Отмена изменений, перерисовка под изначальный массив и копирование изначального массива в рабочий
+        /// </summary>
         public void Cancel()
         {
             for(int i=0;i<chart1.Series.Count;i++)
             {
                 chart1.Series[i].Points.Clear();
 
-                for (int k = 1; k <= arr[i].Length; k += step)
+                for (int k = 0; k < arr[i].Length; k += step)
                 {
-                    this.chart1.Series[i].Points.AddXY(k, arr[i][k - 1]);
-                    arr2[i][k - 1] = arr[i][k - 1];
+                    this.chart1.Series[i].Points.AddXY(k, arr[i][k]);
+                    arr2[i][k] = arr[i][k];
                 }
             }        
 
             Lims();
-
         }
 
         private void ReDraw()
         {
-            int str(string text)
-            {
-                string s = text.Substring(8, text.Length - 8);
-                int k = Convert.ToInt32(s);//$"{k - 1} {chart1.Series.Count}".Show();
-                return k - 1;
-            }
-
-            void SetNullInTextBox2(Control.ControlCollection control)
+            ///возвращает номер чекбокса (начиная с 0) по названию
+            int str(string text)=>  Convert.ToInt32(text.Substring(8, text.Length - 8))- 1;
+            
+            void SetNullInTextBox(Control.ControlCollection control)
             {
                 foreach (Control _control in control)
                 {
@@ -283,7 +252,7 @@ namespace Библиотека_графики
                             chart1.Series[k].Points.Clear();
                             if ((_control as CheckBox).Checked)
                             {
-                                for (int i = 0; i < arr[k].Length; i += step)
+                                for (int i = 0; i < arr2[k].Length; i += step)
                                     chart1.Series[k].Points.AddXY(xmas[i], arr2[k][i]);
                                 chart1.Series[k].IsVisibleInLegend = true;
                                 if (step <= 30) this.Refresh();
@@ -294,14 +263,14 @@ namespace Библиотека_графики
                             }
                         }
                     }
-
+                    else
                     if (_control.Controls.Count > 0)
                     {
-                        SetNullInTextBox2(_control.Controls);
+                        SetNullInTextBox(_control.Controls);
                     }
                 }
             }
-            SetNullInTextBox2(this.Controls);
+            SetNullInTextBox(this.Controls);
 
             Lims();
             //Библиотека_графики.ForChart.SetToolTips(ref chart1);
@@ -405,18 +374,17 @@ namespace Библиотека_графики
 
         private void сохранитьИзображениеВРабочуюПапкуToolStripMenuItem_Click(object sender, EventArgs e)
         {
-            Библиотека_графики.ForChart.SaveImageFromChart(chart1, $"Изображение от {DateTime.Now.ToString().Replace(':',' ')}", System.Windows.Forms.DataVisualization.Charting.ChartImageFormat.Png);
+            SaveImage();
         }
 
         private void сохранитьНовыеМассивыВИсходныеФайлыToolStripMenuItem_Click(object sender, EventArgs e)
         {
            // for (int i = 0; i < fnames.Length; i++)
                 Parallel.For(0, fnames.Length, (int i) => { 
-                using (StreamWriter t = new StreamWriter(fnames[i]))
-                {
-                    for (int j = 0; j < arr[i].Length; j++)
+                using (StreamWriter t = new StreamWriter(fnames[i]))           
+                    for (int j = 0; j < arr2[i].Length; j++)
                         t.WriteLine(arr2[i][j].ToString().Replace(',', '.'));
-                }
+                
                 });
         }
 
@@ -441,6 +409,7 @@ namespace Библиотека_графики
                 if (!trap.IsDisposed)
                     trap.Close();
             });
+            //диалог сделан, чтобы не обрабатывать ситуацию, когда после запуска трапеции на основной форме меняется режим, так как надо тогда менять режим и на трапеции
             trap.ShowDialog();
         }
 

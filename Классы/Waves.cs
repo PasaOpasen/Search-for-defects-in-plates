@@ -27,8 +27,6 @@ namespace МатКлассы
             /// Позиция приложения
             /// </summary>
             public Point Position;
-            private double coef = 1;
-
 
             /// <summary>
             /// Создание вектора нормали к точке на окружности
@@ -41,12 +39,11 @@ namespace МатКлассы
                 double dx = position.x - center.x;
                 double dy = position.y - center.y;
                 double div = Math.Sqrt(dx * dx + dy * dy);
-                this.coef = coefficent;
-                this.n = new Point(dx / div * coef, dy / div * coef);
+                this.n = new Point(dx / div * coefficent, dy / div * coefficent);
                 this.Position = new Point(position);
             }
             /// <summary>
-            /// Конструктор копирования
+            /// Конструктор для копирования с дополнительным умножением
             /// </summary>
             /// <param name="coef"></param>
             /// <param name="normal"></param>
@@ -55,7 +52,6 @@ namespace МатКлассы
             {
                 this.n = new Point(normal.x * coef, normal.y * coef);
                 this.Position = new Point(position);
-                this.coef = coef;
             }
 
             /// <summary>
@@ -77,11 +73,9 @@ namespace МатКлассы
             /// <param name="s"></param>
             /// <param name="d"></param>
             /// <returns></returns>
-            public static Normal2D operator *(Normal2D s, double d) => new Normal2D(s.coef * d, s.n, s.Position);
-            public override string ToString()
-            {
-                return $"({Position.x}; {Position.y}) -> [{n.x}; {n.y}] ";
-            }
+            public static Normal2D operator *(Normal2D s, double d) => new Normal2D( d, s.n, s.Position);
+            public override string ToString()=> $"({Position.x}; {Position.y}) -> [{n.x}; {n.y}]";
+            
 
             /// <summary>
             /// Угол относительно оси Х и точки, из которой исходит нормаль

@@ -39,7 +39,6 @@ namespace МатКлассы
         /// </summary>
         public static readonly Point Zero;
 
-        //координаты
         /// <summary>
         /// Первая координата точки
         /// </summary>
