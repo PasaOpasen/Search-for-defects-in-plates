@@ -29,9 +29,6 @@ namespace Defect2019
         public WaveContinious(Source[] mas) : this()
         {
             sourcesArray = mas.dup();
-            //sourcesArray = new Source[mas.Length];
-            //for (int i = 0; i < sourcesArray.Length; i++)
-            //    sourcesArray[i] = new Source(mas[i]);
         }
 
         private void BaseConstruct()
@@ -345,7 +342,7 @@ namespace Defect2019
             await Task.Run(
                 () =>
                 Parallel.Invoke(
-                    ()=>OtherMethods.Saveuxw3(xmin, xmax, count, ymin, ymax, count, sourcesArray),
+                    ()=>OtherMethods.Saveuxw3(xmin, xmax, count, ymin, ymax, sourcesArray),
                     () => { if (checkBox4.Checked) IlushaMethod(); }
                     )
                 );
@@ -357,9 +354,11 @@ namespace Defect2019
             toolStripStatusLabel1.Text = "Начинается построение";
 
             другиеПараметрыToolStripMenuItem.Visible = false;
-        await    UxtCalc();
+              await    UxtCalc();
             толькоПросуммироватьToolStripMenuItem.Visible = true;
             другиеПараметрыToolStripMenuItem.Visible = true;
+
+            toolStripProgressBar1.Value = 0;
         }
 
         /// <summary>

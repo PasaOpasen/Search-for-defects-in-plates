@@ -1247,6 +1247,7 @@ public static class OtherMethods
     /// <param name="smas"></param>
     public static void Saveuxw(double x0, double X, int xcount, double y0, double Y, int ycount, Source[] smas)
     {
+        Saved = 0;
         SaveCount = xcount * ycount * smas.Length;
         var w = Expendator.Seq(wbeg, wend, wcount);
         var x = Expendator.Seq(x0, X, xcount);
@@ -1273,7 +1274,7 @@ public static class OtherMethods
     /// <param name="Y"></param>
     /// <param name="ycount"></param>
     /// <param name="smas"></param>
-    public static void Saveuxw3(double x0, double X, int xcount, double y0, double Y, int ycount, Source[] smas)
+    public static void Saveuxw3(double x0, double X, int xcount, double y0, double Y,  Source[] smas)
     {
         bool rs = !EqualConfigs(x0, X, xcount, y0, Y, smas, out Source[] arr);
 
@@ -1296,7 +1297,7 @@ public static class OtherMethods
             info = "Файлы записаны";
             Debug.WriteLine(info);
             info = null;
-            CalcD(x0, X, xcount, y0, Y, ycount, smas);
+            CalcD(x0, X, xcount, y0, Y,  smas);
             info = "Происходит сохранение результата, чтобы в другой раз избежать повторных вычислений";
             Debug.WriteLine(info);
             WriteData(smas);
@@ -1308,7 +1309,7 @@ public static class OtherMethods
             if (arr.Length > 0)
             {
                 info = "Создание недостающих файлов";
-                CalcD(x0, X, xcount, y0, Y, ycount, arr);
+                CalcD(x0, X, xcount, y0, Y,  arr);
                 info = "Происходит сохранение результата, чтобы в другой раз избежать повторных вычислений";
                 Debug.WriteLine(info);
                 WriteData(arr);
@@ -1334,9 +1335,10 @@ public static class OtherMethods
     /// <param name="Y"></param>
     /// <param name="ycount"></param>
     /// <param name="smas"></param>
-    public static void CalcD(double x0, double X, int xcount, double y0, double Y, int ycount, Source[] smas)
+    public static void CalcD(double x0, double X, int xcount, double y0, double Y,  Source[] smas)
     {
-        SaveCount = xcount * ycount * smas.Length;
+        Saved = 0;
+        SaveCount = xcount * xcount * smas.Length;
         var w = wmas;
 
         double x, y;
@@ -1613,6 +1615,7 @@ public static class OtherMethods
 
         for (int i = 0; i < mas.Length; i++)
             writers[i].Close();
+        Saved = 0;
     }
 
     private static bool EqualConfigs(double x0, double X, int xcount, double y0, double Y, Source[] smas,out Source[] emptymas)
