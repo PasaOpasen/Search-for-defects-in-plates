@@ -1737,7 +1737,6 @@ namespace МатКлассы
                 res[i] = min + t.NextDouble() * (max - min);
             return res;
         }
-
         /// <summary>
         /// Перевести матрицу в вектор
         /// </summary>
@@ -1758,7 +1757,6 @@ namespace МатКлассы
                         res[k++] = A[i, j];
             return res;
         }
-
         /// <summary>
         /// Создать случайный вектор из delta-окрестности указанного вектора
         /// </summary>
@@ -1787,6 +1785,19 @@ namespace МатКлассы
                 res[i] += r.NextDouble() * (max[i]-min[i]);
             return res;
         }
+        /// <summary>
+        /// Создать вектор по массиву чисел
+        /// </summary>
+        /// <param name="mas"></param>
+        /// <returns></returns>
+        public static Vectors Create(params double[] mas) => new Vectors(mas);
+        /// <summary>
+        /// Вектор, заполненный одинаковыми числами
+        /// </summary>
+        /// <param name="number"></param>
+        /// <param name="repeatcount"></param>
+        /// <returns></returns>
+        public static Vectors Create(double number, int repeatcount) => new Vectors(repeatcount, number);
 
         /// <summary>
         /// Случайный вектор указанной размерности
@@ -1992,7 +2003,6 @@ namespace МатКлассы
         /// Мощность множества
         /// </summary>
         public int M => mas.Length;
-
 
         public SetOfVectors(params Vectors[] vec)
         {

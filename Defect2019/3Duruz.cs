@@ -101,7 +101,7 @@ namespace Defect2019
             if(radioButton1.Checked)
             await Task.Run(() =>
             {
-                МатКлассы.Waves.Circle.FieldToFile(savedialog.FileName,
+                МатКлассы.Waves.Circle.FieldToFileParallel(savedialog.FileName,
                     (double x, double y/*, МатКлассы.Point normal*/) =>
                     {
                         var t = Forms.UG.ujRes(x, y, w, norms);

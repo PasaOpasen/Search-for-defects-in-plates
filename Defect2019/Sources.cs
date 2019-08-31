@@ -40,9 +40,7 @@ namespace Defect2019
                 Source.Type.Circle,
                 r);
 
-
             Uxt.sources.Add(s);
-            //Uxt.addnewsource = true;
             Uform.Recostract();
 
             this.Close();

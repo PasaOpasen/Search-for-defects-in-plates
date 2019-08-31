@@ -17,7 +17,7 @@ namespace МатКлассы
         /// <summary>
         /// Нормаль
         /// </summary>
-        public class Normal2D
+        public struct Normal2D
         {
             /// <summary>
             /// Вектор нормали
@@ -98,9 +98,9 @@ namespace МатКлассы
         }
 
         /// <summary>
-        /// Окружность (пьезоэлемент)
+        /// Окружность
         /// </summary>
-        public class Circle
+        public struct Circle
         {
             /// <summary>
             /// Центр окружности
@@ -110,13 +110,23 @@ namespace МатКлассы
             /// Радиус окружности
             /// </summary>
             public double radius;
+            /// <summary>
+            /// Создать окружность по центру и радиусу
+            /// </summary>
+            /// <param name="center"></param>
+            /// <param name="radius"></param>
             public Circle(Point center, double radius) { this.center = new Point(center); this.radius = radius; }
+            /// <summary>
+            /// Конструктор копирования
+            /// </summary>
+            /// <param name="c"></param>
             public Circle(Circle c) : this(c.center, c.radius) { }
 
             /// <summary>
             /// Возврат нормали в точке по аргументу
             /// </summary>
             /// <param name="arg"></param>
+            /// <param name="len"></param>
             /// <returns></returns>
             public Normal2D GetNormal(double arg, double len = 1)
             {
@@ -125,11 +135,12 @@ namespace МатКлассы
             }
 
             /// <summary>
-            /// Создержит ли круг точку
+            /// Создержит ли круг точку (взято с запасом)
             /// </summary>
             /// <param name="p"></param>
+            /// <param name="RadiusCoef">Коэффициент определяющий, сколько радиусов от центра круга считаются собственностью окружности</param>
             /// <returns></returns>
-            public bool ContainPoint(Point p) => Point.Eudistance(p, this.center) < this.radius * 2.0;
+            public bool ContainPoint(Point p,double RadiusCoef=2.0) => Point.Eudistance(p, this.center) < this.radius * RadiusCoef;
 
             /// <summary>
             /// Возвращает массив точек на окружности
@@ -139,9 +150,11 @@ namespace МатКлассы
             /// <returns></returns>
             public Normal2D[] GetNormalsOnCircle(double[] args, double[] weights = null)
             {
+                weights = weights ?? Vectors.Create(1.0, args.Length).DoubleMas;
+
                 Normal2D[] res = new Normal2D[args.Length];
                 for (int i = 0; i < res.Length; i++)
-                    res[i] = new Normal2D(this.center, new Point(center.x + radius * Math.Cos(args[i]), center.y + radius * Math.Sin(args[i])), (weights == null) ? 1 : weights[i]);
+                    res[i] = new Normal2D(this.center, new Point(center.x + radius * Math.Cos(args[i]), center.y + radius * Math.Sin(args[i])), weights[i]);
                 return res;
             }
             /// <summary>
@@ -152,58 +165,46 @@ namespace МатКлассы
             /// <returns></returns>
             public Normal2D[] GetNormalsOnCircle(int count, double[] weights = null)
             {
-                if (weights == null)
-                {
-                    weights = new double[count];
-                    double w = 2.0 * Math.PI * radius / count;
-                    for (int i = 0; i < count; i++)
-                        weights[i] = w;
-                }
-
-                double h = 2 * Math.PI / (count /*- 1*/);
+                double h = 2 * Math.PI / count;
+                weights = weights ?? Vectors.Create(h* radius , count).DoubleMas;
+                
                 double[] args = new double[count];
                 for (int i = 0; i < count; i++)
                     args[i] = i * h;
-                //$"{args[0]} {args[count-1]- 2 * Math.PI}".Show();
-                //new Vectors(args).Show();
-                //new Vectors(weights).Show();
 
                 return GetNormalsOnCircle(args, weights);
             }
 
 
             /// <summary>
-            /// Записать поле (массивы аргументов x,y) и массивы значений Re ur, Im ur, Abs ur, Re uz, Im uz, Abs us в файл (чтобы потом нарисовать графики)
+            /// Записать поле (массивы аргументов x,y) и массивы значений Re ur, Im ur, Abs ur, Re uz, Im uz, Abs uz в файл (чтобы потом нарисовать графики). Реализация параллельная
             /// </summary>
             /// <param name="filename">Имя файла</param>
             /// <param name="title">То, что должно быть позже написано над графиками</param>
             /// <param name="F">Функция (x,y,normal) -> (ur, uz)</param>
-            /// <param name="circle">Окружность, относительно которой всё происходит</param>
             /// <param name="x0">Начало отрезка по х</param>
             /// <param name="X">Конец отрезка по х</param>
             /// <param name="xcount">Число точек по х</param>
             /// <param name="y0">Начало отрезка по у</param>
             /// <param name="Y">Конец отрезка по у</param>
             /// <param name="ycount">Число точек по у</param>
-            /// <param name="k">Массив для отслеживания прогресса</param>
-            public static void FieldToFile(string filename, Func<double, double, Tuple<Complex, Complex>> F, double x0, double X, int xcount, double y0, double Y, int ycount, /*Circle circle,*/ IProgress<int> progress/*ref int[] k*/, System.Threading.CancellationToken token, Func<Point, bool> Filter, string title = "", int normalscount = 100)
+            public static void FieldToFileParallel(string filename, Func<double, double, Tuple<Complex, Complex>> F, double x0, double X, int xcount, double y0, double Y, int ycount, /*Circle circle,*/ IProgress<int> progress/*ref int[] k*/, System.Threading.CancellationToken token, Func<Point, bool> Filter, string title = "", int normalscount = 100)
             {
                 int[] k = new int[xcount * ycount];
                 double[] x = Expendator.Seq(x0, X, xcount);
                 double[] y = Expendator.Seq(y0, Y, ycount);
                 Complex[,] ur = new Complex[xcount, ycount], uz = new Complex[xcount, ycount];
-                //Point[] Nmas = Waves.Normal2D.NormalsToPoins(circle.GetNormalsOnCircle(normalscount));
 
                 //нахождение массивов
                 Parallel.For(0, xcount, (int i) =>
                 {
-                    // for(int i=0;i<xcount;i++)
+                    Tuple<Complex, Complex> tmp;
                     for (int j = 0; j < ycount; j++)
                     {
                         if (token.IsCancellationRequested) return;
-                        if (!Filter(new Point(x[i], y[j])))//больше или равно, потому что в массивах изначально нули
+                        if (!Filter(new Point(x[i], y[j])))
                         {
-                            var tmp = F(x[i], y[j]);//if (Double.IsNaN((tmp.Item1 + tmp.Item2).Abs) || Double.IsInfinity((tmp.Item1 + tmp.Item2).Abs)) tmp = new Tuple<Complex, Complex>(0, 0);
+                            tmp = F(x[i], y[j]);
                             ur[i, j] = new Complex(tmp.Item1);
                             uz[i, j] = new Complex(tmp.Item2);
                         }
@@ -212,22 +213,20 @@ namespace МатКлассы
                             ur[i, j] = new Complex(Double.NaN);
                             uz[i, j] = new Complex(Double.NaN);
                         }
-                        k[(i) * ycount + j] = 1;
-
-                        progress.Report(k.Sum());
+                        k[(i) * ycount + j] = 1;                       
                     }
+                   progress.Report(k.Sum());
                 });
+
                 //-------------------------------------------------------------------------------------
                 //запись в файлы
                 StreamWriter fs = new StreamWriter(filename);
                 string se = filename.Substring(0, filename.Length - 4);//-.txt
                 StreamWriter ts = new StreamWriter(se + "(title).txt");
-                //StreamWriter ds = new StreamWriter(se + "(dim).txt");
                 StreamWriter xs = new StreamWriter(se + "(x).txt");
                 StreamWriter ys = new StreamWriter(se + "(y).txt");
 
                 ts.WriteLine($"{title}");
-                //fs.WriteLine($"dim {xcount} {ycount}");
 
                 xs.WriteLine("x");
                 for (int i = 0; i < xcount; i++)
@@ -240,7 +239,7 @@ namespace МатКлассы
                 fs.WriteLine("urRe urIm urAbs uzRe uzIm uzAbs");
                 for (int i = 0; i < xcount; i++)
                     for (int j = 0; j < ycount; j++)
-                        if (Double.IsNaN(ur[i, j].Abs) || Double.IsNaN(uz[i, j].Abs))
+                        if (Double.IsNaN(ur[i, j].Abs))
                             fs.WriteLine("NA NA NA NA NA NA");
                         else
                             fs.WriteLine($"{ur[i, j].Re} {ur[i, j].Im} {ur[i, j].Abs} {uz[i, j].Re} {uz[i, j].Im} {uz[i, j].Abs}");
@@ -275,12 +274,13 @@ namespace МатКлассы
                 if (parallel)
                     Parallel.For(0, xcount, (int i) =>
                     {
+                        Tuple<double, double> tmp;
                         for (int j = 0; j < ycount; j++)
                         {
                             if (token.IsCancellationRequested) return;
-                            if (!Filter(new Point(x[i], y[j])))//больше или равно, потому что в массивах изначально нули
+                            if (!Filter(new Point(x[i], y[j])))
                             {
-                                var tmp = F(x[i], y[j]);
+                                 tmp = F(x[i], y[j]);
                                 ur[i, j] = tmp.Item1;
                                 uz[i, j] = tmp.Item2;
                             }
@@ -291,18 +291,18 @@ namespace МатКлассы
                             }
                             k[(i) * ycount + j] = 1;
                         }
-
                         progress.Report(k.Sum());
                     });
                 else
                     for (int i = 0; i < xcount; i++)
                     {
+                        Tuple<double, double> tmp;
                         for (int j = 0; j < ycount; j++)
                         {
                             if (token.IsCancellationRequested) return;
-                            if (!Filter(new Point(x[i], y[j])))//больше или равно, потому что в массивах изначально нули
+                            if (!Filter(new Point(x[i], y[j])))
                             {
-                                var tmp = F(x[i], y[j]);
+                                tmp = F(x[i], y[j]);
                                 ur[i, j] = tmp.Item1;
                                 uz[i, j] = tmp.Item2;
                             }
@@ -311,10 +311,9 @@ namespace МатКлассы
                                 ur[i, j] = Double.NaN;
                                 uz[i, j] = Double.NaN;
                             }
-                            k[(i) * ycount + j] = 1;
-
-                            progress.Report(k.Sum());
+                            k[(i) * ycount + j] = 1;   
                         }
+                        progress.Report(k.Sum());
                     }
 
                 //-------------------------------------------------------------------------------------
@@ -322,17 +321,14 @@ namespace МатКлассы
                 StreamWriter fs = new StreamWriter(Path.Combine(path, filename));
                 string se = filename.Substring(0, filename.Length - 4);//-.txt
                 StreamWriter ts = new StreamWriter(Path.Combine(path, se + "(title).txt"));
-                //StreamWriter ds = new StreamWriter(se + "(dim).txt");
                 StreamWriter xs = new StreamWriter(Path.Combine(path, se + "(x).txt"));
                 StreamWriter ys = new StreamWriter(Path.Combine(path, se + "(y).txt"));
                 StreamWriter info = new StreamWriter(Path.Combine(path, se + "(info).txt"));
-                //info.WriteLine($"ur(x,{t})");
 
                 Parallel.Invoke(
                     () =>
                     {
                         ts.WriteLine($"{title}");
-                        //fs.WriteLine($"dim {xcount} {ycount}");
 
                         xs.WriteLine("x");
                         for (int i = 0; i < xcount; i++)
@@ -345,7 +341,7 @@ namespace МатКлассы
                         fs.WriteLine("ur uz");
                         for (int i = 0; i < xcount; i++)
                             for (int j = 0; j < ycount; j++)
-                                if (Double.IsNaN(ur[i, j].Abs()) || Double.IsNaN(uz[i, j].Abs()))
+                                if (Double.IsNaN(ur[i, j].Abs()))
                                     fs.WriteLine("NA NA");
                                 else
                                     fs.WriteLine($"{ur[i, j]} {uz[i, j]}");
@@ -357,7 +353,7 @@ namespace МатКлассы
                         {
                             for (int j = 0; j < ycount; j++)
                                 for (int i = 0; i < xcount; i++)
-                                    if (Double.IsNaN(ur[i, j].Abs()) || Double.IsNaN(uz[i, j].Abs()))
+                                    if (Double.IsNaN(ur[i, j].Abs()))
                                     {
                                         fur.Write("NA ");
                                         fuz.Write("NA ");
@@ -380,24 +376,26 @@ namespace МатКлассы
             }
 
             /// <summary>
-            /// Записать поле (массивы аргументов x,y) и массивы значенийur, ur, uz в файл (чтобы потом нарисовать графики)
+            /// Записать поле (массивы аргументов x,y) и массивы значенийur, ur, uz в файл (чтобы потом нарисовать графики). Рабочая версия для последовательного вызова
             /// </summary>
             /// <param name="filename">Имя файла</param>
+            /// <param name="path"></param>
             /// <param name="title">То, что должно быть позже написано над графиками</param>
+            /// <param name="parallel"></param>
             /// <param name="F">Функция (x,y,normal) -> (ur, uz)</param>
-            /// <param name="x0">Начало отрезка по х</param>
-            /// <param name="X">Конец отрезка по х</param>
-            /// <param name="xcount">Число точек по х</param>
-            /// <param name="y0">Начало отрезка по у</param>
+            /// <param name="x"></param>
+            /// <param name="y"></param>
+            /// <param name="urt"></param>
+            /// <param name="uzt"></param>
+            /// <param name="token"></param>
+            /// <param name="Filter"></param>
             /// <param name="Y">Конец отрезка по у</param>
-            /// <param name="ycount">Число точек по у</param>
             /// <param name="k">Массив для отслеживания прогресса</param>
             public static void FieldToFile(string filename, string path, Func<double, double, Tuple<double, double>> F, double[] x, double[] y, ref double[,] urt, ref double[,] uzt, System.Threading.CancellationToken token, Func<Point, bool> Filter, string title = "", bool parallel = true)
             {
                 int xcount = x.Length;
                 double[,] ur = urt, uz = uzt;
 
-                //нахождение массивов
                 if (parallel)
                     Parallel.For(0, xcount, (int i) =>
                     {
@@ -406,7 +404,7 @@ namespace МатКлассы
                         for (int j = 0; j < xcount; j++)
                         {
                             if (token.IsCancellationRequested) return;
-                            if (!Filter(new Point(x[i], y[j])))//больше или равно, потому что в массивах изначально нули
+                            if (!Filter(new Point(x[i], y[j])))
                             {
                                 tmp = F(x[i], y[j]);
                                 ur[i, j] = tmp.Item1;
@@ -422,12 +420,13 @@ namespace МатКлассы
                 else
                     for (int i = 0; i < xcount; i++)
                     {
+                        Tuple<double, double> tmp;
                         for (int j = 0; j < xcount; j++)
                         {
                             if (token.IsCancellationRequested) return;
-                            if (!Filter(new Point(x[i], y[j])))//больше или равно, потому что в массивах изначально нули
+                            if (!Filter(new Point(x[i], y[j])))
                             {
-                                var tmp = F(x[i], y[j]);
+                                tmp = F(x[i], y[j]);
                                 ur[i, j] = tmp.Item1;
                                 uz[i, j] = tmp.Item2;
                             }
@@ -471,7 +470,7 @@ namespace МатКлассы
                 info.Close();
             }
             /// <summary>
-            /// Записать поле (массивы аргументов x,y) и массивы значений ur, uz в файл последовательно (не для рисования графиков)
+            /// Записать поле (массивы аргументов x,y) и массивы значений ur, uz в файл последовательно (не для рисования графиков). Рабочая версия для параллельного вызова
             /// </summary>
             /// <param name="filename">Имя файла</param>
             /// <param name="title">То, что должно быть позже написано над графиками</param>
@@ -489,8 +488,7 @@ namespace МатКлассы
                 Tuple<double, double> tmp;
 
                 using (StreamWriter fur = new StreamWriter(Path.Combine(path, title + " (ur).txt")))
-                using (StreamWriter fuz = new StreamWriter(Path.Combine(path, title + " (uz).txt")))
-                {
+                using (StreamWriter fuz = new StreamWriter(Path.Combine(path, title + " (uz).txt")))               
                     for (int j = 0; j < xcount; j++)
                         for (int i = 0; i < xcount; i++)
                         {
@@ -507,20 +505,15 @@ namespace МатКлассы
                                 fuz.Write("NA ");
 
                             }
-
-                        }
-
-                }
-
+                        }                
             }
         }
 
         /// <summary>
         /// Окружность с вырезом, представимым как круг с центром на большой окружности
         /// </summary>
-        public class DCircle
+        public class DCircle:Idup<DCircle>
         {
-
             public static DCircle Example = new DCircle(new Point(1, 1), 15, 5);
 
             /// <summary>
@@ -536,13 +529,27 @@ namespace МатКлассы
             /// </summary>
             private double alp1, alp2;
 
-            public int n1 = 90, n2 = 30;
+            public int FirstNomnalsCount = 90, SecondNomnalsCount = 30;
 
+            /// <summary>
+            /// Радиус большего круга
+            /// </summary>
             public double Radius => circle1.radius;
+            /// <summary>
+            /// Центр полумесяца как центр большего круга
+            /// </summary>
             public Point Center => circle1.center;
+            /// <summary>
+            /// Копия большего круга
+            /// </summary>
             public Circle BigCircle => new Circle(circle1);
 
+            /// <summary>
+            /// Возвращает пару диаметров и аргумент центра
+            /// </summary>
             public Tuple<double, double, double> DiamsAndArg => new Tuple<double, double, double>(circle1.radius * 2, circle2.radius * 2, arg);
+
+            public DCircle dup => new DCircle(this);
 
             /// <summary>
             /// Окружность с вырезом
@@ -551,22 +558,28 @@ namespace МатКлассы
             /// <param name="diam1">Диамерт большей окружности</param>
             /// <param name="diam2">Диаметр меньшей окружности</param>
             /// <param name="arg">Угол в радианах, определяющий положение центра меньшей окружности</param>
-            public DCircle(Point center, double diam1 = 1.6, double diam2 = 0.5, double arg = 4.8, int n1 = 90, int n2 = 30)
+            /// <param name="FirstNomnalsCount"></param>
+            /// <param name="SecondNomnalsCount"></param>
+            public DCircle(Point center, double diam1 = 1.6, double diam2 = 0.5, double arg = 4.8, int FirstNomnalsCount = 90, int SecondNomnalsCount = 30)
             {
                 this.arg = arg;
 
-                double r1 = diam1 / 2, r2 = diam2 / 2;
+                double r1 = diam1 / 2.0, r2 = diam2 / 2.0;
                 circle1 = new Circle(center, r1);
-                circle2 = new Circle(new Point(/*-*/center.x + r1 /** Math.Cos(arg)*/, /*-*/center.y + 0/*r1 * Math.Sin(arg)*/), r2);
+                circle2 = new Circle(new Point(center.x + r1, center.y), r2);
 
                 double tmp = r2 / r1;
-                alp1 = Math.Acos(1.0 - 0.5 * tmp * tmp);//alp1.Show();
-                alp2 = Math.Acos(0.5 * tmp);//alp2.Show();
+                alp1 = Math.Acos(1.0 - 0.5 * tmp * tmp);
+                alp2 = Math.Acos(0.5 * tmp);
 
-                this.n1 = n1;
-                this.n2 = n2;
+                this.FirstNomnalsCount = FirstNomnalsCount;
+                this.SecondNomnalsCount = SecondNomnalsCount;
             }
 
+            /// <summary>
+            /// Конструктор копирования
+            /// </summary>
+            /// <param name="dc"></param>
             public DCircle(DCircle dc)
             {
                 this.alp1 = dc.alp1;
@@ -575,20 +588,26 @@ namespace МатКлассы
                 this.circle1 = new Circle(dc.circle1);
                 this.circle2 = new Circle(dc.circle2);
 
-                this.n1 = dc.n1;
-                this.n2 = dc.n2;
+                this.FirstNomnalsCount = dc.FirstNomnalsCount;
+                this.SecondNomnalsCount = dc.SecondNomnalsCount;
             }
 
             /// <summary>
-            /// Содержит ли окружность с вырезом точку в своей внутренности
+            /// Содержит ли окружность с вырезом точку в своей внутренности (взято с запасом)
             /// </summary>
             /// <param name="p"></param>
             /// <returns></returns>
-            public bool ContainPoint(Point p)
+            public bool ContainPoint(Point p,double radius=2.0)=> circle1.ContainPoint(p,radius);
+
+            /// <summary>
+            /// Содержит ли окружность с вырезом точку
+            /// </summary>
+            /// <param name="p"></param>
+            /// <returns></returns>
+            public bool ContainPointCurrent(Point p)
             {
-                return circle1.ContainPoint(p);
-                //p = p.Turn(circle1.center, -arg);
-                //return Point.Eudistance(circle1.center, p) < circle1.radius && Point.Eudistance(circle2.center, p) > circle2.radius;
+                p = p.Turn(circle1.center, -arg);
+                return Point.Eudistance(circle1.center, p) <= circle1.radius && Point.Eudistance(circle2.center, p) >= circle2.radius;
             }
 
             /// <summary>
@@ -599,16 +618,16 @@ namespace МатКлассы
             public Point GetNormal(Point p, double len = 0.1, double eps = 0.01)
             {
                 p = p.Turn(circle1.center, -arg);
-                Point nil = new Point(0);
-                double corner = new Complex(p.x - circle1.center.x, p.y - circle1.center.y).Arg;//corner.Show();
+                Point nil = Point.Zero;
+                double corner = new Complex(p.x - circle1.center.x, p.y - circle1.center.y).Arg;
                 if (corner < -alp1 - eps || corner > alp1 + eps)
-                    return circle1.GetNormal(corner, len).n.Turn(nil, arg);//sec1.Show();sec2.Show();
+                    return circle1.GetNormal(corner, len).n.Turn(nil, arg);
 
-                double d1 = Point.Eudistance(circle1.center, p); //circle2.center.Show();
+                double d1 = Point.Eudistance(circle1.center, p);
                 double d2 = Point.Eudistance(circle2.center, p);
 
                 if (d2 == 0) return new Point(Math.Cos(arg) * len, Math.Sin(arg) * len);
-                Normal2D res = new Normal2D(circle2.center, p, len);//res.n.Show(); circle1.radius.Show();
+                Normal2D res = new Normal2D(circle2.center, p, len);
                 if (d1 > circle1.radius + eps)
                     return res.n.Turn(nil, arg);
                 return (res * (-1)).n.Turn(nil, arg);
@@ -617,27 +636,28 @@ namespace МатКлассы
             /// <summary>
             /// Возвращает массив точек и массив нормалей в этих точках
             /// </summary>
-            /// <param name="n1">Число точек на большей окружности</param>
-            /// <param name="n2">Число точек на меньшей окружности</param>
+            /// <param name="FirstNomnalsCount">Число точек на большей окружности</param>
+            /// <param name="SecondNomnalsCount">Число точек на меньшей окружности</param>
             /// <returns></returns>
-            public Tuple<Point[], Point[]> DrawMasses(int n1 = 100, int n2 = 10, double len = 0.1, double eps = 0.00001)
+            public Tuple<Point[], Point[]> GetArraysForDraw(int FirstNomnalsCount = 100, int SecondNomnalsCount = 10, double len = 0.1, double eps = 0.00001)
             {
-                double h1 = (Math.PI * 2 - 2 * alp1 - 2 * eps) / (n1 - 1);
-                double h2 = (2 * alp2) / (n2 - 1), tmp;
+                double h1 = 2.0*(Math.PI  -  alp1 -  eps) / (FirstNomnalsCount - 1);
+                double h2 = 2 * alp2 / (SecondNomnalsCount - 1), tmp;
 
-                Point[] p = new Point[n1 + n2];
-                Point[] n = new Point[n1 + n2];
-                for (int i = 0; i < n1; i++)
+                Point[] p = new Point[FirstNomnalsCount + SecondNomnalsCount];
+                Point[] n = new Point[FirstNomnalsCount + SecondNomnalsCount];
+
+                for (int i = 0; i < FirstNomnalsCount; i++)
                 {
                     tmp = alp1 + eps + i * h1;
                     p[i] = new Point(circle1.radius * Math.Cos(tmp) + circle1.center.x, circle1.radius * Math.Sin(tmp) + circle1.center.y).Turn(circle1.center, arg);
                     n[i] = GetNormal(p[i], 0.05 * circle1.radius);
                 }
-                for (int i = 0; i < n2; i++)
+                for (int i = 0; i < SecondNomnalsCount; i++)
                 {
                     tmp = -Math.PI + alp2 - i * h2;
-                    p[n1 + i] = new Point(circle2.radius * Math.Cos(tmp) + circle2.center.x, circle2.radius * Math.Sin(tmp) + circle2.center.y).Turn(circle1.center, arg);
-                    n[n1 + i] = GetNormal(p[n1 + i], 0.2 * circle2.radius);
+                    p[FirstNomnalsCount + i] = new Point(circle2.radius * Math.Cos(tmp) + circle2.center.x, circle2.radius * Math.Sin(tmp) + circle2.center.y).Turn(circle1.center, arg);
+                    n[FirstNomnalsCount + i] = GetNormal(p[FirstNomnalsCount + i], 0.2 * circle2.radius);
                 }
                 return new Tuple<Point[], Point[]>(p, n);
             }
@@ -648,39 +668,38 @@ namespace МатКлассы
             /// <returns></returns>
             public Normal2D[] GetNormalsOnDCircle(double eps = 0.01)
             {
-                double m1 = 2 * Math.PI * circle1.radius / n1;
-                double m2 = 0.85 * 2 * circle2.radius * alp2 / n2;
+                double m1 = 2 * Math.PI * circle1.radius / FirstNomnalsCount;
+                double m2 = 0.85 * 2 * circle2.radius * alp2 / SecondNomnalsCount;
 
-                Debug.WriteLine($"m1 = {m1} m2 = {m2}");
+                double h1 = 2*(Math.PI  -  alp1 - eps) / (FirstNomnalsCount - 1);
+                double h2 = 2 * alp2 / (SecondNomnalsCount - 1), tmp;
 
-                double h1 = (Math.PI * 2 - 2 * alp1 - 2 * eps) / (n1 - 1);
-                double h2 = (2 * alp2) / (n2 - 1), tmp;
+                Point p, n;
+                Normal2D[] res = new Normal2D[FirstNomnalsCount + SecondNomnalsCount];
 
-                Point[] p = new Point[n1 + n2];
-                Point[] n = new Point[n1 + n2];
-                Normal2D[] res = new Normal2D[n1 + n2];
-                for (int i = 0; i < n1; i++)
+                for (int i = 0; i < FirstNomnalsCount; i++)
                 {
                     tmp = alp1 + eps + i * h1;
-                    p[i] = new Point(circle1.radius * Math.Cos(tmp) + circle1.center.x, circle1.radius * Math.Sin(tmp) + circle1.center.y).Turn(circle1.center, arg);
-                    n[i] = GetNormal(p[i], 1);
-                    res[i] = new Normal2D(m1, n[i], p[i]);
+                    p = new Point(circle1.radius * Math.Cos(tmp) + circle1.center.x, circle1.radius * Math.Sin(tmp) + circle1.center.y).Turn(circle1.center, arg);
+                    n = GetNormal(p, 1);
+                    res[i] = new Normal2D(m1, n, p);
                 }
-                for (int i = 0; i < n2; i++)
+                for (int i = 0; i < SecondNomnalsCount; i++)
                 {
                     tmp = -Math.PI + alp2 - i * h2;
-                    p[n1 + i] = new Point(circle2.radius * Math.Cos(tmp) + circle2.center.x, circle2.radius * Math.Sin(tmp) + circle2.center.y).Turn(circle1.center, arg);
-                    n[n1 + i] = GetNormal(p[n1 + i], 1);
-                    res[n1 + i] = new Normal2D(m2, n[n1 + i], p[n1 + i]);
+                    p = new Point(circle2.radius * Math.Cos(tmp) + circle2.center.x, circle2.radius * Math.Sin(tmp) + circle2.center.y).Turn(circle1.center, arg);
+                    n = GetNormal(p, 1);
+                    res[FirstNomnalsCount + i] = new Normal2D(m2, n, p);
                 }
                 return res;
             }
         }
 
         /// <summary>
-        /// Поворот точки на угол
+        /// Поворот точки на угол относительно центра
         /// </summary>
         /// <param name="p"></param>
+        /// <param name="center"></param>
         /// <param name="corner"></param>
         /// <returns></returns>
         public static Point Turn(this Point p, Point center, double corner)
