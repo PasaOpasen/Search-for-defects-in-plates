@@ -32,8 +32,6 @@ public static class Forms
 
 public static class РабКонсоль
 {
-    public static double wold = 2;
-
     #region Параметры DINN
     public static bool DINNplay = false;
 
@@ -72,19 +70,6 @@ public static class РабКонсоль
     public static double steproot = 1e-3, polesBeg = 0.0, polesEnd = 15;
     public static double epsjump = 1e-1, epsroot = 1e-3;
     public static int countroot = 50;
-    public static void SetPoles(double beg = 0.005, double end = 15, double step = 1e-3, double eps = 1e-4, int count = 50)
-    {
-        РабКонсоль.Poles = ((Complex[])FuncMethods.Optimization.Halfc(Deltas, beg, end, step, eps, count))/*.Where(c=>c!=0).ToArray()*/;
-        List<Complex> value = new List<Complex>(), newmas = new List<Complex>();
-
-        double wtf = Deltas(РабКонсоль.Poles[0]).Abs;
-        if (wtf < 1e-3)
-            newmas.Add(РабКонсоль.Poles[0]);
-        for (int j = 1; j < РабКонсоль.Poles.Length; j++)
-            newmas.Add(РабКонсоль.Poles[j]);
-        РабКонсоль.Poles = newmas.ToArray();
-    }
-    public static void SetPolesDef() => SetPoles(РабКонсоль.polesBeg, РабКонсоль.polesEnd, РабКонсоль.steproot, РабКонсоль.epsroot, РабКонсоль.countroot);
     #endregion
 
     public static double ThU = 1e-3, SpU = 1e3, wc = 0.6283185/*0.1 * 2 * Math.PI*/, _T;
@@ -328,45 +313,18 @@ public static class Functions
     /// </summary>
     public static Func<Complex, double, Complex> Deltass = (Complex alp, double w) =>
         {
-            //double kt1 = k1(w), kt2 = k2(w);
-            //Complex al = alp * alp;
-            //Complex s1 = sigma(al, kt1), s2 = sigma(al, kt2);
-
-            //Complex a = 2 * mu * al - ml2 * kt1;
-            //Complex b = /*im * al **/ 2 * s1;
-            //Complex c = 2 * mu * al * s2;
-            //Complex d = -/*im * al **/ (2 * al - kt2);
-            ////м б надо будет в числителе на - умножить, так как я тут i*i вынес
-            //Complex ad = a * d, bc = b * c;
-            ////Complex e1 = Complex.Exp(h * s1), e2 = Complex.Exp(h * s2),e12=e1/e2,e21=1.0/e12,e12n=e1*e2,e21n=1.0/e12n;
-            //return /*mu*mu**/(4 * ad * bc - Complex.Ch(h * (s1 + s2)) * (ad + bc).Sqr() + Complex.Ch(h * (s1 - s2)) * (ad - bc).Sqr());
-
-            //исходный вариант
-            //Complex a = al - kt2 / 2;
-            //Complex b = s1;
-            //Complex c = al * s2;
-            //Complex d = -a;
-            //Complex ad = a * d, bc = b * c;
-            //return (4 * ad * bc - Complex.Ch(h * (s1 + s2)) * (ad + bc).Sqr() + Complex.Ch(h * (s1 - s2)) * (ad - bc).Sqr());
-
-            //return A(alp, w).Det;
 
             double kt1 = k1(w), kt2 = k2(w);
-            Complex al = alp * alp, ai =/*al**/Complex.I;
+            Complex al = alp * alp, ai =Complex.I;
             Complex s1 = sigma(al, kt1), s2 = sigma(al, kt2);
-            Complex a = (al - 0.5 * kt2);//*mu2;
-            Complex b = s1 * ai;// * mu2;// *();
-            Complex c = al * s2;// * mu2;
-            Complex d = -a * ai;// * (al * Complex.I);
-            //Complex q = Complex.Exp(s1 * h), ww = Complex.Exp(s2 * h);
+            Complex a = (al - 0.5 * kt2);
+            Complex b = s1 * ai;
+            Complex c = al * s2;
+            Complex d = -a * ai;
             Complex q = Complex.Exp(-s1 * h), ww = Complex.Exp(-s2 * h);
 
             Complex ad = a * d, bc = b * c;
             return -((q * ww).Sqr() + 1.0) * (ad + bc).Sqr() + (ad * q + bc * ww).Sqr() + (ad * ww + bc * q).Sqr() - 2 * ad * bc * (q - ww).Sqr();
-
-            //Complex a = (al - 0.5 * kt2), a2 = a * a;
-            //Complex g = s1 * s2 * al*Complex.I;
-            //return (-4 * a2 * g - Complex.Ch(h * (s1 + s2)) * (a2 - g).Sqr() + Complex.Ch(h * (s1 - s2)) * (a2 - g).Sqr()) * 2 * mu;
         };
     /// <summary>
     /// Дополнительный знаменатель, полученный от N
@@ -376,7 +334,7 @@ public static class Functions
         double kt2 = k2(w);
         Complex al = alp * alp;
         Complex s2 = sigma(al, kt2);
-        return/* mu**/ /*al**/ s2 * Complex.Sh(s2 * h);
+        return s2 * Complex.Sh(s2 * h);
     };
     /// <summary>
     /// Общий знаменатель
@@ -392,10 +350,8 @@ public static class Functions
     /// </summary>
     public static Func<Complex, double, Complex> BigDeltaDeriv0 = (Complex alp, double w) =>
     {
-
         Complex D = Deltass(alp, w), N = DeltassN(alp, w), dD = DeltaDeriv(alp, w), dN = DeltaNDeriv(alp, w);
         return D * dN + N * dD;
-
     };
 
     public static Func<Complex, double, Complex> DeltaDeriv = (Complex alp, double w) => (Deltass(alp + epsforder, w) - Deltass(alp - epsforder, w) / (2 * epsforder));
@@ -432,10 +388,6 @@ public static class Functions
         while (/*alp <= tmax && alp >= tmin &&*/ s >= 0);//new Vectors(list.ToArray()).Show();
         return new Vectors(list.Where(n => n >= tmin && n <= tmax).ToArray());
     }
-    /// <summary>
-    /// Функция знаменателя, выраженная явно (при глобальной частоте)
-    /// </summary>
-    public static ComplexFunc Deltas = (Complex a) => Deltass(a, РабКонсоль.wold);
 
     /// <summary>
     /// Возвращает массив полюсов при такой-то частоте

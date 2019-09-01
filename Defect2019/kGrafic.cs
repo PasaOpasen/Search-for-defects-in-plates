@@ -89,17 +89,17 @@ namespace Defect2019
             else
             {
                 chart1.Series.Clear();
-                РабКонсоль.wold = Convert.ToDouble(textBox13.Text);
+                double wold = Convert.ToDouble(textBox13.Text);
                 double beg = Convert.ToDouble(textBox4.Text), end = Convert.ToDouble(textBox5.Text); int itcount = РабКонсоль.countroot, k = Convert.ToInt32(numericUpDown1.Value);
                 double h = (end - beg) / (k - 1);
-                double kt1 = k1(РабКонсоль.wold), kt2 = k2(РабКонсоль.wold);
+                double kt1 = k1(wold), kt2 = k2(wold);
 
                 ComplexFunc s1 = (Complex alp) => sigma(alp * alp, kt1);
                 ComplexFunc s2 = (Complex alp) => sigma(alp * alp, kt2);
 
                 if (radioButton5.Checked)
                 {
-                    othergraph("Δ", Deltas, beg, k, h);
+                    othergraph("Δ",(Complex c)=> Deltass(c,wold), beg, k, h);
                 }
                 if (radioButton6.Checked) { othergraph("σ1", s1, beg, k, h); }
                 if (radioButton7.Checked) { othergraph("σ2", s2, beg, k, h); }
@@ -358,7 +358,7 @@ namespace Defect2019
         private void button4_Click(object sender, EventArgs e)
         {
             chart1.Series.Clear();
-            РабКонсоль.wold = Convert.ToDouble(textBox13.Text);
+           double wold = Convert.ToDouble(textBox13.Text);
             double beg = Convert.ToDouble(textBox4.Text), end = Convert.ToDouble(textBox5.Text); int itcount = РабКонсоль.countroot, k = Convert.ToInt32(numericUpDown1.Value);
             double h = (end - beg) / (k - 1);
             chart1.Series.Add("Re Δ"); chart1.Series[0].Color = Color.Red;
@@ -373,7 +373,7 @@ namespace Defect2019
             for (int i = 0; i < k; i++)
             {
                 double arg = beg + i * h;
-                Number.Complex val = Deltas(arg); val.Show();
+                Number.Complex val = Deltass(arg,wold); val.Show();
                 chart1.Series[0].Points.AddXY(arg, val.Re);
                 chart1.Series[1].Points.AddXY(arg, val.Im);
                 chart1.Series[2].Points.AddXY(arg, val.Abs);

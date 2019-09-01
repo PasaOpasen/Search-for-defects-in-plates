@@ -28,12 +28,11 @@
         /// </summary>
         private void InitializeComponent()
         {
+            this.components = new System.ComponentModel.Container();
             this.textBox9 = new System.Windows.Forms.TextBox();
             this.label12 = new System.Windows.Forms.Label();
             this.textBox8 = new System.Windows.Forms.TextBox();
             this.label11 = new System.Windows.Forms.Label();
-            this.textBox7 = new System.Windows.Forms.TextBox();
-            this.label9 = new System.Windows.Forms.Label();
             this.textBox5 = new System.Windows.Forms.TextBox();
             this.textBox6 = new System.Windows.Forms.TextBox();
             this.label7 = new System.Windows.Forms.Label();
@@ -60,21 +59,22 @@
             this.textBox10 = new System.Windows.Forms.TextBox();
             this.numericUpDown2 = new System.Windows.Forms.NumericUpDown();
             this.groupBox4 = new System.Windows.Forms.GroupBox();
+            this.numericUpDown5 = new System.Windows.Forms.NumericUpDown();
+            this.label16 = new System.Windows.Forms.Label();
             this.numericUpDown4 = new System.Windows.Forms.NumericUpDown();
             this.label15 = new System.Windows.Forms.Label();
             this.numericUpDown3 = new System.Windows.Forms.NumericUpDown();
             this.label14 = new System.Windows.Forms.Label();
-            this.label16 = new System.Windows.Forms.Label();
-            this.numericUpDown5 = new System.Windows.Forms.NumericUpDown();
+            this.toolTip1 = new System.Windows.Forms.ToolTip(this.components);
             ((System.ComponentModel.ISupportInitialize)(this.numericUpDown1)).BeginInit();
             this.groupBox1.SuspendLayout();
             this.groupBox2.SuspendLayout();
             this.groupBox3.SuspendLayout();
             ((System.ComponentModel.ISupportInitialize)(this.numericUpDown2)).BeginInit();
             this.groupBox4.SuspendLayout();
+            ((System.ComponentModel.ISupportInitialize)(this.numericUpDown5)).BeginInit();
             ((System.ComponentModel.ISupportInitialize)(this.numericUpDown4)).BeginInit();
             ((System.ComponentModel.ISupportInitialize)(this.numericUpDown3)).BeginInit();
-            ((System.ComponentModel.ISupportInitialize)(this.numericUpDown5)).BeginInit();
             this.SuspendLayout();
             // 
             // textBox9
@@ -112,24 +112,6 @@
             this.label11.Size = new System.Drawing.Size(36, 19);
             this.label11.TabIndex = 59;
             this.label11.Text = "h =";
-            // 
-            // textBox7
-            // 
-            this.textBox7.Location = new System.Drawing.Point(135, 111);
-            this.textBox7.Name = "textBox7";
-            this.textBox7.Size = new System.Drawing.Size(68, 26);
-            this.textBox7.TabIndex = 58;
-            this.textBox7.Text = "1";
-            this.textBox7.TextAlign = System.Windows.Forms.HorizontalAlignment.Center;
-            // 
-            // label9
-            // 
-            this.label9.AutoSize = true;
-            this.label9.Location = new System.Drawing.Point(98, 114);
-            this.label9.Name = "label9";
-            this.label9.Size = new System.Drawing.Size(36, 19);
-            this.label9.TabIndex = 57;
-            this.label9.Text = "w =";
             // 
             // textBox5
             // 
@@ -175,6 +157,7 @@
             this.label1.Size = new System.Drawing.Size(36, 19);
             this.label1.TabIndex = 67;
             this.label1.Text = "eps";
+            this.toolTip1.SetToolTip(this.label1, "Допустимая погрешность");
             // 
             // label2
             // 
@@ -184,6 +167,7 @@
             this.label2.Size = new System.Drawing.Size(45, 19);
             this.label2.TabIndex = 68;
             this.label2.Text = "step";
+            this.toolTip1.SetToolTip(this.label2, "Шаг при поиске корней");
             // 
             // label3
             // 
@@ -242,6 +226,7 @@
             this.button1.Size = new System.Drawing.Size(170, 60);
             this.button1.TabIndex = 73;
             this.button1.Text = "Задать параметры";
+            this.toolTip1.SetToolTip(this.button1, "Сохраняет заданные параметры и закрывает форму");
             this.button1.UseVisualStyleBackColor = true;
             this.button1.Click += new System.EventHandler(this.button1_Click);
             // 
@@ -253,6 +238,7 @@
             this.label4.Size = new System.Drawing.Size(126, 19);
             this.label4.TabIndex = 74;
             this.label4.Text = "poles are in ";
+            this.toolTip1.SetToolTip(this.label4, "На каком отрезке ищутся полюса функции. Отрезок не должен быть слишком большим");
             // 
             // textBox3
             // 
@@ -278,15 +264,13 @@
             this.groupBox1.Controls.Add(this.label7);
             this.groupBox1.Controls.Add(this.textBox6);
             this.groupBox1.Controls.Add(this.textBox5);
-            this.groupBox1.Controls.Add(this.label9);
-            this.groupBox1.Controls.Add(this.textBox7);
             this.groupBox1.Controls.Add(this.label11);
             this.groupBox1.Controls.Add(this.textBox8);
             this.groupBox1.Controls.Add(this.label12);
             this.groupBox1.Controls.Add(this.textBox9);
             this.groupBox1.Location = new System.Drawing.Point(12, 12);
             this.groupBox1.Name = "groupBox1";
-            this.groupBox1.Size = new System.Drawing.Size(316, 147);
+            this.groupBox1.Size = new System.Drawing.Size(316, 146);
             this.groupBox1.TabIndex = 77;
             this.groupBox1.TabStop = false;
             this.groupBox1.Text = "Общие параметры";
@@ -329,17 +313,18 @@
             // label13
             // 
             this.label13.AutoSize = true;
-            this.label13.Location = new System.Drawing.Point(186, 82);
+            this.label13.Location = new System.Drawing.Point(168, 82);
             this.label13.Name = "label13";
             this.label13.Size = new System.Drawing.Size(27, 19);
             this.label13.TabIndex = 79;
             this.label13.Text = "wc";
+            this.toolTip1.SetToolTip(this.label13, "Параметр для построения искусственной функции f(w)");
             // 
             // textBox11
             // 
-            this.textBox11.Location = new System.Drawing.Point(231, 79);
+            this.textBox11.Location = new System.Drawing.Point(201, 79);
             this.textBox11.Name = "textBox11";
-            this.textBox11.Size = new System.Drawing.Size(73, 26);
+            this.textBox11.Size = new System.Drawing.Size(103, 26);
             this.textBox11.TabIndex = 80;
             this.textBox11.Text = "1e-4";
             this.textBox11.TextAlign = System.Windows.Forms.HorizontalAlignment.Center;
@@ -347,20 +332,22 @@
             // label5
             // 
             this.label5.AutoSize = true;
-            this.label5.Location = new System.Drawing.Point(31, 82);
+            this.label5.Location = new System.Drawing.Point(8, 82);
             this.label5.Name = "label5";
             this.label5.Size = new System.Drawing.Size(45, 19);
             this.label5.TabIndex = 73;
             this.label5.Text = "wmax";
+            this.toolTip1.SetToolTip(this.label5, "Максимальная частота");
             // 
             // label6
             // 
             this.label6.AutoSize = true;
-            this.label6.Location = new System.Drawing.Point(31, 44);
+            this.label6.Location = new System.Drawing.Point(8, 44);
             this.label6.Name = "label6";
             this.label6.Size = new System.Drawing.Size(45, 19);
             this.label6.TabIndex = 74;
             this.label6.Text = "wmin";
+            this.toolTip1.SetToolTip(this.label6, "Минимальная частота");
             // 
             // label10
             // 
@@ -370,21 +357,22 @@
             this.label10.Size = new System.Drawing.Size(63, 19);
             this.label10.TabIndex = 75;
             this.label10.Text = "wcount";
+            this.toolTip1.SetToolTip(this.label10, "Точное количество частот");
             // 
             // textBox4
             // 
-            this.textBox4.Location = new System.Drawing.Point(76, 41);
+            this.textBox4.Location = new System.Drawing.Point(59, 41);
             this.textBox4.Name = "textBox4";
-            this.textBox4.Size = new System.Drawing.Size(68, 26);
+            this.textBox4.Size = new System.Drawing.Size(85, 26);
             this.textBox4.TabIndex = 76;
             this.textBox4.Text = "1e-3";
             this.textBox4.TextAlign = System.Windows.Forms.HorizontalAlignment.Center;
             // 
             // textBox10
             // 
-            this.textBox10.Location = new System.Drawing.Point(76, 79);
+            this.textBox10.Location = new System.Drawing.Point(59, 79);
             this.textBox10.Name = "textBox10";
-            this.textBox10.Size = new System.Drawing.Size(68, 26);
+            this.textBox10.Size = new System.Drawing.Size(85, 26);
             this.textBox10.TabIndex = 77;
             this.textBox10.Text = "1e-4";
             this.textBox10.TextAlign = System.Windows.Forms.HorizontalAlignment.Center;
@@ -430,7 +418,42 @@
             this.groupBox4.Size = new System.Drawing.Size(319, 148);
             this.groupBox4.TabIndex = 80;
             this.groupBox4.TabStop = false;
-            this.groupBox4.Text = "Прочее";
+            this.groupBox4.Text = "Анимация";
+            // 
+            // numericUpDown5
+            // 
+            this.numericUpDown5.Location = new System.Drawing.Point(188, 102);
+            this.numericUpDown5.Maximum = new decimal(new int[] {
+            9,
+            0,
+            0,
+            0});
+            this.numericUpDown5.Minimum = new decimal(new int[] {
+            1,
+            0,
+            0,
+            0});
+            this.numericUpDown5.Name = "numericUpDown5";
+            this.numericUpDown5.Size = new System.Drawing.Size(64, 26);
+            this.numericUpDown5.TabIndex = 83;
+            this.numericUpDown5.TextAlign = System.Windows.Forms.HorizontalAlignment.Center;
+            this.numericUpDown5.Value = new decimal(new int[] {
+            2,
+            0,
+            0,
+            0});
+            // 
+            // label16
+            // 
+            this.label16.AutoSize = true;
+            this.label16.Location = new System.Drawing.Point(35, 94);
+            this.label16.Name = "label16";
+            this.label16.Size = new System.Drawing.Size(144, 38);
+            this.label16.TabIndex = 82;
+            this.label16.Text = "Число кластеров\r\nдля анимации";
+            this.label16.TextAlign = System.Drawing.ContentAlignment.MiddleRight;
+            this.toolTip1.SetToolTip(this.label16, "Число \"потоков\" для построения анимации. k кластеров лучше одного примерно в (1.3" +
+        ")^k раз, пока k не превосходит число процессоров");
             // 
             // numericUpDown4
             // 
@@ -506,39 +529,6 @@
             this.label14.TabIndex = 75;
             this.label14.Text = "Скорость смены кадров (мc)";
             // 
-            // label16
-            // 
-            this.label16.AutoSize = true;
-            this.label16.Location = new System.Drawing.Point(29, 90);
-            this.label16.Name = "label16";
-            this.label16.Size = new System.Drawing.Size(144, 38);
-            this.label16.TabIndex = 82;
-            this.label16.Text = "Число кластеров\r\nдля анимации";
-            this.label16.TextAlign = System.Drawing.ContentAlignment.MiddleRight;
-            // 
-            // numericUpDown5
-            // 
-            this.numericUpDown5.Location = new System.Drawing.Point(185, 102);
-            this.numericUpDown5.Maximum = new decimal(new int[] {
-            9,
-            0,
-            0,
-            0});
-            this.numericUpDown5.Minimum = new decimal(new int[] {
-            1,
-            0,
-            0,
-            0});
-            this.numericUpDown5.Name = "numericUpDown5";
-            this.numericUpDown5.Size = new System.Drawing.Size(64, 26);
-            this.numericUpDown5.TabIndex = 83;
-            this.numericUpDown5.TextAlign = System.Windows.Forms.HorizontalAlignment.Center;
-            this.numericUpDown5.Value = new decimal(new int[] {
-            2,
-            0,
-            0,
-            0});
-            // 
             // ParametrsQu
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(9F, 19F);
@@ -551,6 +541,7 @@
             this.Controls.Add(this.groupBox1);
             this.Controls.Add(this.button1);
             this.Font = new System.Drawing.Font("Consolas", 12F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(204)));
+            this.FormBorderStyle = System.Windows.Forms.FormBorderStyle.FixedToolWindow;
             this.Margin = new System.Windows.Forms.Padding(4);
             this.Name = "ParametrsQu";
             this.Text = "Параметры задачи";
@@ -564,9 +555,9 @@
             ((System.ComponentModel.ISupportInitialize)(this.numericUpDown2)).EndInit();
             this.groupBox4.ResumeLayout(false);
             this.groupBox4.PerformLayout();
+            ((System.ComponentModel.ISupportInitialize)(this.numericUpDown5)).EndInit();
             ((System.ComponentModel.ISupportInitialize)(this.numericUpDown4)).EndInit();
             ((System.ComponentModel.ISupportInitialize)(this.numericUpDown3)).EndInit();
-            ((System.ComponentModel.ISupportInitialize)(this.numericUpDown5)).EndInit();
             this.ResumeLayout(false);
 
         }
@@ -576,8 +567,6 @@
         private System.Windows.Forms.Label label12;
         private System.Windows.Forms.TextBox textBox8;
         private System.Windows.Forms.Label label11;
-        private System.Windows.Forms.TextBox textBox7;
-        private System.Windows.Forms.Label label9;
         private System.Windows.Forms.TextBox textBox5;
         private System.Windows.Forms.TextBox textBox6;
         private System.Windows.Forms.Label label7;
@@ -610,5 +599,6 @@
         private System.Windows.Forms.Label label15;
         private System.Windows.Forms.NumericUpDown numericUpDown5;
         private System.Windows.Forms.Label label16;
+        private System.Windows.Forms.ToolTip toolTip1;
     }
 }

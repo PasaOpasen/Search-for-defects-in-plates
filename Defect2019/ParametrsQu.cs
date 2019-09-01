@@ -23,7 +23,6 @@ namespace Defect2019
             textBox8.Text =h.ToString();
             textBox5.Text = lamda.ToString();
             textBox9.Text = mu.ToString();
-            textBox7.Text = РабКонсоль.wold.ToString();
             textBox1.Text = РабКонсоль.steproot.ToString();
             textBox2.Text = РабКонсоль.epsroot.ToString();
             textBox3.Text = РабКонсоль.polesBeg.ToString();
@@ -46,7 +45,6 @@ namespace Defect2019
             z2 = -Convert.ToDouble(textBox8.Text);
             lamda = Convert.ToDouble(textBox5.Text);
             mu = Convert.ToDouble(textBox9.Text);
-            РабКонсоль.wold = Convert.ToDouble(textBox7.Text);
             РабКонсоль.steproot = Convert.ToDouble(textBox1.Text);
             РабКонсоль.epsroot = Convert.ToDouble(textBox2.Text);
             РабКонсоль.countroot = Convert.ToInt32(numericUpDown1.Value);
