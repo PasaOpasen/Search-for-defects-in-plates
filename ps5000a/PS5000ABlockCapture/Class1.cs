@@ -13,7 +13,6 @@ using System.Globalization;
 using System.Threading;
 using System.IO.Ports;
 using System.IO;
-//using Complex = System.Numerics.Complex;
 using System.Numerics;
 using System.Diagnostics;
 
