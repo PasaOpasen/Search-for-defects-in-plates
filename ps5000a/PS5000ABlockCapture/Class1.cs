@@ -111,28 +111,17 @@ namespace PS5000A
                 using (StreamReader sr = new StreamReader(InFile, System.Text.Encoding.Default))
                 {
                     f = new Complex[count_t];
-                    string line;
                     for (int i = 0; i < count_t; i++)
-                    {
-                        f[i] = Double.Parse(sr.ReadLine().Replace(".", ",")); // тут каст дабла в комплекс, возможны косяки
-                                                                              // Debug.WriteLine(f[i]);
-                    }
-
+                        f[i] = Double.Parse(sr.ReadLine().Replace(".", ",")); 
                 }
                 avg = 0;
-                for (int i = n_ignore; i < n_avg; i++)
-                {
+                for (int i = n_ignore; i < n_avg; i++)                
                     avg += f[i];
-                }
+                
                 avg /= (double)n_avg;
                 for (int i = 0; i < count_t; i++)
-                {
-
-                    f[i] -= avg;
-                }
-
+                    f[i] -= avg;             
             }
-
             catch (Exception e)
             {
                 Console.WriteLine(e.Message);
@@ -236,7 +225,6 @@ namespace PS5000A
             int[] s = new int[count_w];
             bool isnotnull = progress != null;
 
-
             Parallel.For(0, count_w, (int i) =>
             {
                 Complex result = 0;
@@ -249,7 +237,7 @@ namespace PS5000A
                 F[i] = result;
                 s[i]++;
 
-                if (isnotnull && i % 10 == 0)
+                if (isnotnull && i % 7 == 0)
                     progress.Report(s.Sum());
             });
         }
@@ -300,30 +288,12 @@ namespace PS5000A
         }
         public void SaveOut(string filename)
         {
-            try
-            {
                 using (StreamWriter sw = new StreamWriter(filename))
                 {
                     sw.WriteLine("w Re(f(w)) Im(f(w))");
                     for (int i = 0; i < count_w; i++)
-                    {
-                        double w = dw * i + w_0;
-                        //Debug.WriteLine($"{w} {F[i]} {F[i].Real} {F[i].Imaginary}");
-                        //sw.WriteLine($"{w / 2.0 / Math.PI} {F[i].Real } {-F[i].Imaginary}");
-                        string line = (w / 2.0 / Math.PI).ToString() + " " + (F[i].Real).ToString() + " " + (-F[i].Imaginary).ToString();
-                        if ((i + 1) < count_w)
-                        { sw.WriteLine(line); }
-                        else { sw.Write(line); };
-                    }
-
+                        sw.WriteLine(((dw * i + w_0) / 2.0 / Math.PI).ToString() + " " + (F[i].Real).ToString() + " " + (-F[i].Imaginary).ToString());                    
                 }
-            }
-
-            catch (Exception e)
-            {
-                Console.WriteLine(e.Message);
-            }
-
         }
         public void SaveOutAbs(string filename)
         {
@@ -332,9 +302,6 @@ namespace PS5000A
                 OutFile = filename;
                 using (StreamWriter sw = new StreamWriter(OutFile, false, System.Text.Encoding.Default))
                 {
-
-                    //string line = "w Re(f(w)) Im(f(w))";
-                    //sw.WriteLine(line);
                     for (int i = 0; i < count_w; i++)
                     {
                         Complex w = dw * (Complex)i + w_0;
@@ -343,7 +310,6 @@ namespace PS5000A
                         { sw.WriteLine(line); }
                         else { sw.Write(line); };
                     }
-
                 }
             }
 
@@ -353,61 +319,8 @@ namespace PS5000A
             }
 
         }
-        public void UseWindowTrapezoid(int start, int end, int front_len)
-        {
-            double koef = 1 / (double)(front_len - 1);
-            for (int i = 0; i < start; i++)
-            {
-                f[i] = 0;
-            }
-            for (int i = start; i < start + front_len; i++)
-            {
-                f[i] *= koef * (double)(i - start);
-            }
-            //  for (int i = start + front_len; i < end -front_len; i++)
-            //  {
-            // f[i] *=1;
-            //  }
-            for (int i = end - front_len; i < end; i++)
-            {
-                f[i] *= koef * (double)(end - i);
-            }
-            for (int i = end; i < count_t; i++)
-            {
-                f[i] = 0;
-            }
-        }
-        public double[] UseWindowTrapezoidOut(int start, int end, int front_len)
-        {
-            double[] result = new double[count_t];
-            double koef = 1 / (double)(front_len - 1);
-            for (int i = 0; i < start; i++)
-            {
-                result[i] = 0;
-            }
-            for (int i = start; i < start + front_len; i++)
-            {
-                result[i] = f[i].Real * koef * (double)(i - start);
-            }
-            for (int i = start + front_len; i < end - front_len; i++)
-            {
-                result[i] = f[i].Real;
-            }
-            for (int i = end - front_len; i < end; i++)
-            {
-                result[i] = f[i].Real * koef * (double)(end - i);
-            }
-            for (int i = end; i < count_t; i++)
-            {
-                result[i] = 0;
-            }
-            return result;
-        }
-        public CFurieTransformer()
-        {
 
-        }
-        ~CFurieTransformer()
+        public CFurieTransformer()
         {
 
         }

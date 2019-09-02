@@ -189,7 +189,7 @@ namespace PS5000A
                 }
         }
 
-        private async Task MakeTime()
+        private async Task MakeTimeAsync()
         {
             await Task.Run(() =>
             Parallel.For(0, sourcesCount, (int k) =>
@@ -290,19 +290,16 @@ namespace PS5000A
 
         private async void button4_Click(object sender, EventArgs e)
         {
+            InitParams();
             if (!SetGlobalBase())
                 return;
 
-            await MakeTime();
+            await MakeTimeAsync();
 
+            toolStripStatusLabel1.Text = "Создаётся разность для каждого замера";
             await MakeDiffAsync(Normalize: true);
 
-
-            for (int i = 0; i < sourcesCount; i++)
-                if (checkBox2.Checked && !checkBox3.Checked)
-                    Furier(fdiff[i], folderbase[i], i);
-                else if (checkBox3.Checked)
-                    ShowData(fdiff[i], folderbase[i], i);
+            await FurierOrShowForm(i => fdiff[i], i => folderbase[i]);
         }
         #endregion
 
@@ -564,7 +561,7 @@ namespace PS5000A
          */
 
         private string label2String;
-        async void CalcTransform(double f0, double f1, int sc, string from, string to, int[] args, int sourcenumber)
+        async Task CalcTransformAsync(double f0, double f1, int sc, string from, string to, int[] args, int sourcenumber)
         {
             double fl = f1 - f0;
             double df = (f1 - f0) / (sc - 1);
@@ -590,7 +587,7 @@ namespace PS5000A
 
             //параметры вычитания постоянной составляющей
 
-            FTT.n_avg = (int)(countAfter + countBefore) - 2;
+            FTT.n_avg = (countAfter + countBefore) - 2;
             //параметры вычитания постоянной составляющей
 
             FTT.n_ignore = 300;
@@ -615,11 +612,10 @@ namespace PS5000A
                     tos[i] = Path.Combine(to, filenames[args[i]]);
 
                     FTT.LoadIn(froms[i]);
-                    //сделать IProgress
                     FTT.GetSplainFT_old(progress);
                     FTT.SaveOut(tos[i]);
                     FTT.SaveOutAbs(tosABS[i]);
-                    label2String = $"Выполнено {i} из {sourcesCount - 1} для источника {Symbols[sourcenumber]}";
+                    label2String = $"Выполнено {i + 1} из {sourcesCount - 1} для источника {Symbols[sourcenumber]}";
                 }
             });
             label2String = null;
@@ -819,6 +815,7 @@ namespace PS5000A
 
         private async void buttonStart_Click(object sender, EventArgs e)
         {
+            InitParams();
             if (!opened)
                 buttonOpen_Click(sender, e);
 
@@ -829,13 +826,19 @@ namespace PS5000A
 
             DataSbor();
 
+            await FurierOrShowForm(ItFolder, (_) => null);
+        }
+
+        private async Task FurierOrShowForm(Func<int, string> from, Func<int, string> to)
+        {
             for (int i = 0; i < sourcesCount; i++)
                 if (checkBox2.Checked && !checkBox3.Checked)
-                    Furier(ItFolder(i), null, i);
+                    await FurierAsync(from(i), to(i), i);
                 else
-                           if (checkBox3.Checked)
-                    ShowData(ItFolder(i), null, i);
+                       if (checkBox3.Checked)
+                    ShowData(from(i), to(i), i);
 
+            toolStripStatusLabel1.Text = $"Все вычисления завершены";
         }
 
         /// <summary>
@@ -843,17 +846,16 @@ namespace PS5000A
         /// </summary>
         /// <param name="from"></param>
         /// <param name="to"></param>
-        private void Furier(string from, string to = null, int number = 0)
+        private async Task FurierAsync(string from, string to = null, int number = 0)
         {
             to = to ?? from;
-            InitParams();
-            toolStripStatusLabel1.Text = "Запущено преобразование Фурье";
+            //InitParams();
+            toolStripStatusLabel1.Text = $"Запущено преобразование Фурье для источника {Symbols[number]}";
 
-            double dddf = (w1 - w0) / 2 / Math.PI * 1.0E6 / l;
+            double Freq(double w) => w / 2.0 / Math.PI * 1.0E6;
 
-            int[] args = Enumerable.Range(0, sourcesCount).ToArray();
-
-            CalcTransform(w0 / 2.0 / Math.PI * 1.0E6, w1 / 2.0 / Math.PI * 1.0E6, l, from, to, args.Where(n => n != number).ToArray(), number);
+            // double dddf = Freq(w1 - w0) / l;
+            await CalcTransformAsync(Freq(w0), Freq(w1), l, from, to, Enumerable.Range(0, sourcesCount).Where(n => n != number).ToArray(), number);
         }
 
         private void ShowData(string from, string to = null, int number = 0)
@@ -889,7 +891,7 @@ namespace PS5000A
             void cmet(object sender, FormClosedEventArgs e)
             {
                 if (checkBox2.Checked)
-                    Furier(from, to, number);
+                    FurierAsync(from, to, number);
             }
 
             form.FormClosed += new FormClosedEventHandler(cmet);
