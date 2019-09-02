@@ -13,12 +13,12 @@ namespace Библиотека_графики
 {
     public partial class Trapezi : Form
     {
-        int mantis = 3;
+        int mantis = 7;
         double beg = 0.01, end = 0.58, s = 0.04;
         int h;
         double t => (100 - trackBar1.Value - trackBar3.Value - 2 * trackBar2.Value);
         JustGrafic gr;
-        double dt;
+        double dt, len;
 
         public Trapezi(JustGrafic g)
         {
@@ -28,23 +28,107 @@ namespace Библиотека_графики
             chart1.Series[0].IsVisibleInLegend = false;
             h = g.arr[0].Length;
             dt = g.xmas[1] - g.xmas[0];
+            len = g.xmas.Last() - g.xmas[0];
             ReDraw();
             Библиотека_графики.ForChart.SetToolTips(ref chart1);
+
+
+            GetValFunc();
+            GetTracks();
+            GetTimer();
+        }
+        private void GetValFunc()
+        {
+            if (gr.MeMode == JustGrafic.Mode.Tick)
+            {
+                chart1.ChartAreas[0].AxisX.LabelStyle.Format = "{0:0,}K";
+                ValueForBox = ValueForBoxInt;
+            }
+            else
+            {
+                //    chart1.ChartAreas[0].AxisX.LabelStyle.Format = "{0,4}";
+                ValueForBox = ValueForBoxDouble;
+            }
+        }
+        private void GetTracks()
+        {
             trackBar1.Value = (int)(100 * beg);
             trackBar2.Value = (int)(100 * s);
             trackBar3.Value = (int)(100 * end);
-
             trackBar1.Scroll += trackBar1_Scroll;
             trackBar2.Scroll += trackBar2_Scroll;
             trackBar3.Scroll += trackBar3_Scroll;
             trackBar1_Scroll(new object(), new EventArgs());
             trackBar2_Scroll(new object(), new EventArgs());
             trackBar3_Scroll(new object(), new EventArgs());
-
-            if (gr.MeMode == JustGrafic.Mode.Tick)
-                chart1.ChartAreas[0].AxisX.LabelStyle.Format = "{0:0,}K";
-            //else chart1.ChartAreas[0].AxisX.LabelStyle.Format = "{0,4}";
         }
+        private void GetTimer()
+        {
+            bool NonEqu(string s, int i)
+            {
+                try
+                {
+                    return
+                   Math.Abs(Convert.ToDouble(s) / len - i / 100.0) > Math.Pow(10.0, -(mantis - 1));
+                }
+                catch
+                {
+                    return false;
+                }
+
+            }
+            bool NonEqu2(string s, int i)
+            {
+                try
+                {
+                    return
+                   Math.Abs(Convert.ToDouble(s) / h - i / 100.0) > 0;
+                }
+                catch
+                {
+                    return false;
+                }
+
+            }
+
+            if (gr.MeMode == JustGrafic.Mode.Time)
+                timer1.Tick += new EventHandler((object o, EventArgs e) =>
+                {
+                    if (NonEqu(textBox1.Text, trackBar1.Value))
+                        textBox1.BackColor = Color.Red;
+                    else
+                        textBox1.BackColor = Color.White;
+
+                    if (NonEqu(textBox2.Text, trackBar2.Value))
+                        textBox2.BackColor = Color.Red;
+                    else
+                        textBox2.BackColor = Color.White;
+
+                    if (NonEqu(textBox3.Text, trackBar3.Value))
+                        textBox3.BackColor = Color.Red;
+                    else
+                        textBox3.BackColor = Color.White;
+                });
+            timer1.Tick += new EventHandler((object o, EventArgs e) =>
+            {
+                if (NonEqu2(textBox1.Text, trackBar1.Value))
+                    textBox1.BackColor = Color.Red;
+                else
+                    textBox1.BackColor = Color.White;
+
+                if (NonEqu2(textBox2.Text, trackBar2.Value))
+                    textBox2.BackColor = Color.Red;
+                else
+                    textBox2.BackColor = Color.White;
+
+                if (NonEqu2(textBox3.Text, trackBar3.Value))
+                    textBox3.BackColor = Color.Red;
+                else
+                    textBox3.BackColor = Color.White;
+            });
+            timer1.Start();
+        }
+
 
         void ReDraw()
         {
@@ -77,10 +161,15 @@ namespace Библиотека_графики
 
         private async void button2_Click(object sender, EventArgs e)
         {
+            beg = textBox1.Text.ToDouble() / len;
+            s = textBox2.Text.ToDouble() / len;
+            end = textBox3.Text.ToDouble() / len;
+
             int t1 = (int)(beg * h);
             int t2 = (int)((beg + s) * h);
             int t3 = (int)((1.0 - end - s) * h);
             int t4 = (int)((1.0 - end) * h);
+
 
             int t12 = t2 - t1;
             double tg = (t12 == 0) ? 0 : 1.0 / t12;
@@ -106,6 +195,10 @@ namespace Библиотека_графики
             gr.ReSaveMas();
         }
 
+        private double ValueForBoxInt(int val) => Math.Round(val * h / 100.0);
+        private double ValueForBoxDouble(int val) => Math.Round(val * len / 100, mantis);
+        private Func<int, double> ValueForBox;
+
         private void trackBar1_Scroll(object sender, EventArgs e)
         {
             if (t >= 0)
@@ -115,7 +208,8 @@ namespace Библиотека_графики
             }
             else
                 trackBar1.Value = 100 - trackBar2.Value * 2 - trackBar3.Value;
-            label1.Text = $"До трапеции{Environment.NewLine}({Math.Round(trackBar1.Value * h / 100 * dt, mantis)})";
+            label1.Text = $"До трапеции{Environment.NewLine}({trackBar1.Value}%)";
+            textBox1.Text = $"{ValueForBox(trackBar1.Value)}";
         }
 
         private void button3_Click(object sender, EventArgs e)
@@ -132,7 +226,8 @@ namespace Библиотека_графики
             }
             else
                 trackBar2.Value = (100 - trackBar1.Value - trackBar3.Value) / 2;
-            label2.Text = "Под" + Environment.NewLine + "боковой" + Environment.NewLine + "стороной" + $"{Environment.NewLine}({Math.Round((trackBar2.Value * h / 100 * dt), mantis)})";
+            label2.Text = "Под" + Environment.NewLine + "боковой" + Environment.NewLine + "стороной" + $"{Environment.NewLine}({trackBar2.Value}%)";
+            textBox2.Text = $"{ValueForBox(trackBar2.Value)}";
         }
         private void trackBar3_Scroll(object sender, EventArgs e)
         {
@@ -143,7 +238,8 @@ namespace Библиотека_графики
             }
             else
                 trackBar3.Value = 100 - trackBar2.Value * 2 - trackBar1.Value;
-            label3.Text = $"После трапеции{Environment.NewLine}({Math.Round((trackBar3.Value * h / 100 * dt), mantis)})";
+            label3.Text = $"После трапеции{Environment.NewLine}({trackBar3.Value}%)";
+            textBox3.Text = $"{ValueForBox(trackBar3.Value)}";
         }
     }
 }

@@ -17,10 +17,10 @@ namespace Библиотека_графики
     public partial class JustGrafic : Form
     {
         public int step;
-        public enum Mode { Time,Tick};
+        public enum Mode { Time, Tick };
         internal Mode MeMode = Mode.Tick;
 
-        public JustGrafic(string title="График")
+        public JustGrafic(string title = "График")
         {
             InitializeComponent();
             groupBox3.Hide();
@@ -38,20 +38,20 @@ namespace Библиотека_графики
             });
         }
 
-        public JustGrafic(string[] names, string[] filenames,string title= "График",double dt=0,int beforecount=0) : this(title)
+        public JustGrafic(string[] names, string[] filenames, string title = "График", double dt = 0, int beforecount = 0) : this(title)
         {
             fnames = filenames;
-            
-            this.chart1.Series.Clear();
-            
-            arr = new double[names.Length][];
-            arr2 = new double[names.Length][];           
 
-           // ReadDataOld();
+            this.chart1.Series.Clear();
+
+            arr = new double[names.Length][];
+            arr2 = new double[names.Length][];
+
+            // ReadDataOld();
             ReadData();
             xticks = new double[arr[0].Length];
             xtime = new double[arr[0].Length];
-            for(int i = 0; i < xtime.Length; i++)
+            for (int i = 0; i < xtime.Length; i++)
             {
                 xticks[i] = i + 1;
                 xtime[i] = -(beforecount - i) * dt;
@@ -71,7 +71,6 @@ namespace Библиотека_графики
 
                 for (int k = 0; k < arr[i].Length; k += step)
                     this.chart1.Series[i].Points.AddXY(xmas[k], arr[i][k]);
-
             }
 
             this.CreateCheckBoxes();
@@ -84,29 +83,31 @@ namespace Библиотека_графики
 
             Stopwatch sp = new Stopwatch();
             sp.Start();
-            
+
             this.chart1.MouseMove += new MouseEventHandler((object o, MouseEventArgs arg) =>
             {
-                if(arg.Location.X<chart1.Size.Width*0.95&&arg.Location.Y < chart1.Size.Height * 0.95)
-                if (sp.ElapsedMilliseconds > 100)
-                {
-                    x = chart1.ChartAreas[0].AxisX.PixelPositionToValue(arg.Location.X);
-                    y = chart1.ChartAreas[0].AxisY.PixelPositionToValue(arg.Location.Y);
-                    if (x >= xmin && x <= xmax && y >= ymin && y <= ymax)
+                if (arg.Location.X < chart1.Size.Width * 0.95 && arg.Location.Y < chart1.Size.Height * 0.95)
+                    if (sp.ElapsedMilliseconds > 100)
                     {
-                        if (x != xold || y != yold)
+                        x = chart1.ChartAreas[0].AxisX.PixelPositionToValue(arg.Location.X);
+                        y = chart1.ChartAreas[0].AxisY.PixelPositionToValue(arg.Location.Y);
+                        if (x >= xmin && x <= xmax && y >= ymin && y <= ymax)
                         {
-                            s = $"{(MeMode== Mode.Tick?"n":"t")} = {x.ToString(3)}  val = {y.ToString(3)}";//s.Show();
-                            toolTip1.SetToolTip(chart1, s);
-                            xold = x;
-                            yold = y;
+                            if (x != xold || y != yold)
+                            {
+                                if (MeMode == Mode.Tick)
+                                    s = $"n = {(int)x}  val = {y.ToString(4)}";//s.Show();
+                                else
+                                    s = $"t = {x.ToString()}  val = {y.ToString(4)}";//s.Show();
+                                toolTip1.SetToolTip(chart1, s);
+                                xold = x;
+                                yold = y;
+                            }
                         }
+                        else
+                            toolTip1.SetToolTip(chart1, "");
 
                     }
-                    else
-                        toolTip1.SetToolTip(chart1, "");
-
-                }
 
             });
         }
@@ -138,7 +139,7 @@ namespace Библиотека_графики
                 using (StreamReader f = new StreamReader(fnames[i]))
                 {
                     p = f.ReadLine();
-                    while(p!=null && p.Length>0)
+                    while (p != null && p.Length > 0)
                     {
                         l.Add(Convert.ToDouble(p.Replace('.', ',')));
                         p = f.ReadLine();
@@ -154,11 +155,11 @@ namespace Библиотека_графики
         /// Создаёт форму по массиву названий. Предполагается, что данные хранятся в файлах вида $"{s[i]}.txt"
         /// </summary>
         /// <param name="names"></param>
-        public JustGrafic(string[] names, string title = "График", double dt = 0, int beforecount = 0) : this(names, Expendator.Map(names, (string s) => s + ".txt"),title,dt,beforecount)
+        public JustGrafic(string[] names, string title = "График", double dt = 0, int beforecount = 0) : this(names, Expendator.Map(names, (string s) => s + ".txt"), title, dt, beforecount)
         {
 
         }
-        Color[] colors = new Color[] { Color.Blue, Color.Green, Color.Red, Color.Black, Color.Yellow, Color.Violet, Color.SkyBlue,Color.HotPink };
+        Color[] colors = new Color[] { Color.Blue, Color.Green, Color.Red, Color.Black, Color.Yellow, Color.Violet, Color.SkyBlue, Color.HotPink };
 
 
         private void button1_Click(object sender, EventArgs e)
@@ -167,14 +168,14 @@ namespace Библиотека_графики
         }
         private void SaveImage()
         {
- Библиотека_графики.ForChart.SaveImageFromChart(chart1, $"Изображение от {DateTime.Now.ToString().Replace(':', ' ')}", System.Windows.Forms.DataVisualization.Charting.ChartImageFormat.Png);
+            Библиотека_графики.ForChart.SaveImageFromChart(chart1, $"Изображение от {DateTime.Now.ToString().Replace(':', ' ')}", System.Windows.Forms.DataVisualization.Charting.ChartImageFormat.Png);
         }
 
         public string[] fnames;
         public void CreateCheckBoxes()
         {
             ///с помощью этой функции определяются, какие чекбоксы соответствуют графикам функций
-            bool str(string text)=> Convert.ToInt32(text.Substring(8, text.Length - 8)) - 1 < chart1.Series.Count;
+            bool str(string text) => Convert.ToInt32(text.Substring(8, text.Length - 8)) - 1 < chart1.Series.Count;
 
             void SetNullInTextBox(Control.ControlCollection control)
             {
@@ -210,18 +211,18 @@ namespace Библиотека_графики
         }
 
 
-        internal  double[] xtime, xticks,xmas;
+        internal double[] xtime, xticks, xmas;
         public double[][] arr, arr2;
         private double xmin, xmax, ymin, ymax;
 
-        public void ReSaveMas()=>ReDraw();
+        public void ReSaveMas() => ReDraw();
 
         /// <summary>
         /// Отмена изменений, перерисовка под изначальный массив и копирование изначального массива в рабочий
         /// </summary>
         public void Cancel()
         {
-            for(int i=0;i<chart1.Series.Count;i++)
+            for (int i = 0; i < chart1.Series.Count; i++)
             {
                 chart1.Series[i].Points.Clear();
 
@@ -230,7 +231,7 @@ namespace Библиотека_графики
                     this.chart1.Series[i].Points.AddXY(k, arr[i][k]);
                     arr2[i][k] = arr[i][k];
                 }
-            }        
+            }
 
             Lims();
         }
@@ -238,8 +239,8 @@ namespace Библиотека_графики
         private void ReDraw()
         {
             ///возвращает номер чекбокса (начиная с 0) по названию
-            int str(string text)=>  Convert.ToInt32(text.Substring(8, text.Length - 8))- 1;
-            
+            int str(string text) => Convert.ToInt32(text.Substring(8, text.Length - 8)) - 1;
+
             void SetNullInTextBox(Control.ControlCollection control)
             {
                 foreach (Control _control in control)
@@ -379,13 +380,14 @@ namespace Библиотека_графики
 
         private void сохранитьНовыеМассивыВИсходныеФайлыToolStripMenuItem_Click(object sender, EventArgs e)
         {
-           // for (int i = 0; i < fnames.Length; i++)
-                Parallel.For(0, fnames.Length, (int i) => { 
-                using (StreamWriter t = new StreamWriter(fnames[i]))           
+            // for (int i = 0; i < fnames.Length; i++)
+            Parallel.For(0, fnames.Length, (int i) =>
+            {
+                using (StreamWriter t = new StreamWriter(fnames[i]))
                     for (int j = 0; j < arr2[i].Length; j++)
                         t.WriteLine(arr2[i][j].ToString().Replace(',', '.'));
-                
-                });
+
+            });
         }
 
         private void опцииToolStripMenuItem_Click(object sender, EventArgs e)
@@ -396,7 +398,7 @@ namespace Библиотека_графики
         private void button3_Click(object sender, EventArgs e)
         {
             сохранитьНовыеМассивыВИсходныеФайлыToolStripMenuItem_Click(sender, e);
-            
+
             this.Close();
         }
 
