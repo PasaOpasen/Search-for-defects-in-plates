@@ -219,7 +219,7 @@ namespace PS5000A
             }
         }
 
-        private static Complex Expi(double val) => Math.Cos(val) + Complex.ImaginaryOne * Math.Sin(val);
+        private static Complex Expi(double val) => new Complex(Math.Cos(val), Math.Sin(val));
         /// <summary>
         /// Мемоизированная версия преобразования Фурье
         /// </summary>
@@ -237,7 +237,7 @@ namespace PS5000A
                 double w = argi[i];
                 double A = AAMemoized(i);
                 for (int j = n_ignore; j < count_t; j++)
-                    result += f[j] * Expi(w * argj[j-n_ignore]) * A;
+                    result += f[j] * Expi(w * argj[j - n_ignore]) * A;
 
                 F[i] = result;
                 s[i]++;
@@ -352,20 +352,20 @@ namespace PS5000A
         }
 
 
-       static Memoize<Tuple<int, int>, Complex> Dictionary;
-       static Func<int, int, Complex> Fury = (int i, int j) =>
-            {
-               double w = (dw * i + w_0);
-               return Expi(w * (dt * j + t_0)) * AAMemoized(i);
-            };
-       static Func<int, int, Complex> FuryMemoized;
-        static Memoize<int,double> DictionaryA;
-        static Func<int,double> AA = (int i) =>
-        {
-            double w = (dw * i + w_0);
-            double dtw = dt * w;
-           return 2.0 * (1.0 - Math.Cos(dtw)) / (dtw * w);
-        };
+        static Memoize<Tuple<int, int>, Complex> Dictionary;
+        static Func<int, int, Complex> Fury = (int i, int j) =>
+             {
+                 double w = (dw * i + w_0);
+                 return Expi(w * (dt * j + t_0)) * AAMemoized(i);
+             };
+        static Func<int, int, Complex> FuryMemoized;
+        static Memoize<int, double> DictionaryA;
+        static Func<int, double> AA = (int i) =>
+         {
+             double w = (dw * i + w_0);
+             double dtw = dt * w;
+             return 2.0 * (1.0 - Math.Cos(dtw)) / (dtw * w);
+         };
         static Func<int, double> AAMemoized;
         static double[] argi, argj;
 
@@ -374,8 +374,8 @@ namespace PS5000A
         /// </summary>
         public static void CreateNewGen()
         {
-            Dictionary = new Memoize<Tuple<int, int>, Complex>((Tuple<int, int> t)=>Fury(t.Item1,t.Item2));
-            FuryMemoized =(int i,int j)=> Dictionary.Value(new Tuple<int, int>(i,j));
+            Dictionary = new Memoize<Tuple<int, int>, Complex>((Tuple<int, int> t) => Fury(t.Item1, t.Item2));
+            FuryMemoized = (int i, int j) => Dictionary.Value(new Tuple<int, int>(i, j));
 
             DictionaryA = new Memoize<int, double>(i => AA(i));
             AAMemoized = DictionaryA.Value;

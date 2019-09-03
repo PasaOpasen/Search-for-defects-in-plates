@@ -222,25 +222,28 @@ namespace PS5000A
             {
                 Parallel.For(0, sourcesCount, (int i) =>
                 {
-                    //  for (int i = 0; i < sourcesCount; i++)
-                    //  {
                     var args = ar.Where(n => n != i).ToArray();
                     for (int j = 0; j < sourcesCount - 1; j++)
                     {
-                        double max = 0;
-
-                        using (StreamReader f0 = new StreamReader(Path.Combine(fwithout[i], ArraysNames[args[j]])))
-                        using (StreamReader f1 = new StreamReader(Path.Combine(fwith[i], ArraysNames[args[j]])))
+                        double max;
+                        if (Normalize)
                         {
-                            string s = f0.ReadLine();
-                            while (s != null && s.Length > 0)
+                            max = 0;
+                            using (StreamReader f0 = new StreamReader(Path.Combine(fwithout[i], ArraysNames[args[j]])))
+                            using (StreamReader f1 = new StreamReader(Path.Combine(fwith[i], ArraysNames[args[j]])))
                             {
-                                double t = Convert.ToDouble(f1.ReadLine().Replace('.', ',')) - Convert.ToDouble(s.Replace('.', ','));
-                                if (max < t * t) max = t * t;
-                                s = f0.ReadLine();
+                                string s = f0.ReadLine();
+                                while (s != null && s.Length > 0)
+                                {
+                                    double t = Convert.ToDouble(f1.ReadLine().Replace('.', ',')) - Convert.ToDouble(s.Replace('.', ','));
+                                    if (max < t * t) max = t * t;
+                                    s = f0.ReadLine();
+                                }
                             }
+                            max = Math.Sqrt(max);
                         }
-                        max = Math.Sqrt(max);
+                        else
+                            max = 1.0;
 
                         using (StreamWriter res = new StreamWriter(Path.Combine(fdiff[i], ArraysNames[args[j]])))
                         {
@@ -248,24 +251,15 @@ namespace PS5000A
                             using (StreamReader f1 = new StreamReader(Path.Combine(fwith[i], ArraysNames[args[j]])))
                             {
                                 string s = f0.ReadLine();
-                                if (Normalize)
-                                    while (s != null && s.Length > 0)
-                                    {
-                                        double t = Convert.ToDouble(f1.ReadLine().Replace('.', ',')) - Convert.ToDouble(s.Replace('.', ','));
-                                        res.WriteLine(t / max);
-                                        s = f0.ReadLine();
-                                    }
-                                else
-                                    while (s != null && s.Length > 0)
-                                    {
-                                        double t = Convert.ToDouble(f1.ReadLine().Replace('.', ',')) - Convert.ToDouble(s.Replace('.', ','));
-                                        res.WriteLine(t);
-                                        s = f0.ReadLine();
-                                    }
+                                while (s != null && s.Length > 0)
+                                {
+                                    double t = Convert.ToDouble(f1.ReadLine().Replace('.', ',')) - Convert.ToDouble(s.Replace('.', ','));
+                                    res.WriteLine(t / max);
+                                    s = f0.ReadLine();
+                                }
                             }
                         }
                     }
-                    //}
                 });
             });
         }
