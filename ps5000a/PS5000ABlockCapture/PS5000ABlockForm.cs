@@ -103,18 +103,8 @@ namespace PS5000A
             timer1.Interval = 300;
             timer1.Tick += new EventHandler(Timer1_Tick);
 
-            string p = "Замеры";
-            Directory.CreateDirectory(p);
-            globalbase = Path.Combine(Environment.CurrentDirectory, p);
-            textBox12.Text = globalbase;
-            SetForlders();
-            SetFiles();
 
-            listBox2.Items.Clear();
-            for (int i = 0; i < countPorts; i++)
-                listBox2.Items.Add(i);
-            listBox2.SelectedIndex = countPorts / 2;
-            checkBox1.Hide();
+            SetDirects();
         }
 
         #region Димас писал
@@ -134,7 +124,31 @@ namespace PS5000A
             else return fwith[number];
 
         }
+        private void SetDirects()
+        {
+            string p;
+            //using (StreamReader r = new StreamReader(Properties.Resources.LastDirectory))
+            //    p = r.ReadLine();
 
+            //if (Directory.Exists(p))
+            //    globalbase = p;
+            //else
+            //{
+             p = "Замеры";
+            Directory.CreateDirectory(p);
+            globalbase = Path.Combine(Environment.CurrentDirectory, p);
+            //}
+
+            textBox12.Text = globalbase;
+            SetForlders();
+            SetFiles();
+
+            listBox2.Items.Clear();
+            for (int i = 0; i < countPorts; i++)
+                listBox2.Items.Add(i);
+            listBox2.SelectedIndex = countPorts / 2;
+            checkBox1.Hide();
+        }
 
 
         private void Timer1_Tick(object Sender, EventArgs e)
@@ -279,7 +293,11 @@ namespace PS5000A
         private bool SetGlobalBase()
         {
             if (Directory.Exists(textBox12.Text))
+            {
                 globalbase = textBox12.Text;
+                //using (StreamWriter w = new StreamWriter(Properties.Resources.LastDirectory))
+                //    w.WriteLine(globalbase);
+            }
             else
             {
                 MessageBox.Show("Указанной директории не существует!", "Ошибка в пути", MessageBoxButtons.OK, MessageBoxIcon.Exclamation);
@@ -298,6 +316,7 @@ namespace PS5000A
 
             toolStripStatusLabel1.Text = "Создаётся разность для каждого замера";
             await MakeDiffAsync(Normalize: true);
+            new System.Media.SoundPlayer(Properties.Resources.РазницаГотова).Play();
 
             await FurierOrShowForm(i => fdiff[i], i => folderbase[i]);
         }
@@ -826,6 +845,8 @@ namespace PS5000A
 
             DataSbor();
 
+            new System.Media.SoundPlayer(Properties.Resources.ЗамерыСделаны).Play();
+
             await FurierOrShowForm(ItFolder, (_) => null);
         }
 
@@ -839,6 +860,7 @@ namespace PS5000A
                     ShowData(from(i), to(i), i);
 
             toolStripStatusLabel1.Text = $"Все вычисления завершены";
+            new System.Media.SoundPlayer(Properties.Resources.ВычисленияЗавершены).Play();
         }
 
         /// <summary>
@@ -854,8 +876,8 @@ namespace PS5000A
 
             double Freq(double w) => w / 2.0 / Math.PI * 1.0E6;
 
-            // double dddf = Freq(w1 - w0) / l;
             await CalcTransformAsync(Freq(w0), Freq(w1), l, from, to, Enumerable.Range(0, sourcesCount).Where(n => n != number).ToArray(), number);
+            new System.Media.SoundPlayer(Properties.Resources.Преобразование_готово).Play();
         }
 
         private void ShowData(string from, string to = null, int number = 0)

@@ -59,5 +59,41 @@ namespace PS5000A.Properties {
                 resourceCulture = value;
             }
         }
+        
+        /// <summary>
+        ///   Поиск локализованного ресурса типа System.IO.UnmanagedMemoryStream, аналогичного System.IO.MemoryStream.
+        /// </summary>
+        internal static System.IO.UnmanagedMemoryStream ВычисленияЗавершены {
+            get {
+                return ResourceManager.GetStream("ВычисленияЗавершены", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Поиск локализованного ресурса типа System.IO.UnmanagedMemoryStream, аналогичного System.IO.MemoryStream.
+        /// </summary>
+        internal static System.IO.UnmanagedMemoryStream ЗамерыСделаны {
+            get {
+                return ResourceManager.GetStream("ЗамерыСделаны", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Поиск локализованного ресурса типа System.IO.UnmanagedMemoryStream, аналогичного System.IO.MemoryStream.
+        /// </summary>
+        internal static System.IO.UnmanagedMemoryStream Преобразование_готово {
+            get {
+                return ResourceManager.GetStream("Преобразование_готово", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Поиск локализованного ресурса типа System.IO.UnmanagedMemoryStream, аналогичного System.IO.MemoryStream.
+        /// </summary>
+        internal static System.IO.UnmanagedMemoryStream РазницаГотова {
+            get {
+                return ResourceManager.GetStream("РазницаГотова", resourceCulture);
+            }
+        }
     }
 }

@@ -124,4 +124,13 @@
   <data name="po_with_scuter" type="System.Resources.ResXFileRef, System.Windows.Forms">
     <value>..\Resources\po with scuter.ico;System.Drawing.Icon, System.Drawing, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a</value>
   </data>
+  <data name="АнимацияГотова" type="System.Resources.ResXFileRef, System.Windows.Forms">
+    <value>..\Resources\АнимацияГотова.wav;System.IO.MemoryStream, mscorlib, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
+  </data>
+  <data name="ЗамерОбработан" type="System.Resources.ResXFileRef, System.Windows.Forms">
+    <value>..\Resources\ЗамерОбработан.wav;System.IO.MemoryStream, mscorlib, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
+  </data>
+  <data name="ПоверхностиПостроены" type="System.Resources.ResXFileRef, System.Windows.Forms">
+    <value>..\Resources\ПоверхностиПостроены.wav;System.IO.MemoryStream, mscorlib, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
+  </data>
 </root>

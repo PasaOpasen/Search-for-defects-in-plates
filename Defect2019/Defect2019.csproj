@@ -243,7 +243,7 @@
       <DependentUpon>PRMSN.cs</DependentUpon>
     </EmbeddedResource>
     <EmbeddedResource Include="Properties\Resources.resx">
-      <Generator>ResXFileCodeGenerator</Generator>
+      <Generator>PublicResXFileCodeGenerator</Generator>
       <LastGenOutput>Resources.Designer.cs</LastGenOutput>
     </EmbeddedResource>
     <EmbeddedResource Include="Scheme.resx">
@@ -315,6 +315,15 @@
   </ItemGroup>
   <ItemGroup>
     <Resource Include="Resources\8934.ico" />
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="Resources\АнимацияГотова.wav" />
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="Resources\ЗамерОбработан.wav" />
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="Resources\ПоверхностиПостроены.wav" />
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
 </Project>

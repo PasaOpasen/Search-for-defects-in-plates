@@ -19,7 +19,7 @@
     <PlatformTarget>x86</PlatformTarget>
     <DebugSymbols>true</DebugSymbols>
     <DebugType>full</DebugType>
-    <Optimize>false</Optimize>
+    <Optimize>true</Optimize>
     <OutputPath>bin\Debug\</OutputPath>
     <DefineConstants>DEBUG;TRACE</DefineConstants>
     <ErrorReport>prompt</ErrorReport>
@@ -120,6 +120,21 @@
       <Project>{ce3c0ed7-208c-4043-89a9-19e93f1e2e46}</Project>
       <Name>Библиотека графики</Name>
     </ProjectReference>
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="Resources\ВычисленияЗавершены.wav" />
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="Resources\ЗамерыСделаны.wav" />
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="Resources\Преобразование готово.wav" />
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="Resources\РазницаГотова.wav" />
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="Resources\LastDirectory.txt" />
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
   <!-- To modify your build process, add your task inside one of the targets below and uncomment it. 

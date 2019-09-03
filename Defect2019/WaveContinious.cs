@@ -193,6 +193,7 @@ namespace Defect2019
                 FilesToSources(s, dir[i]);
 
                 await ManyPZAsync(s, dir[i]);
+                //new System.Media.SoundPlayer().Play();
             }
 
             await AfterLoopsAct();
