@@ -39,6 +39,7 @@ using System.Threading.Tasks;
 using Библиотека_графики;
 using System.Linq;
 using System.IO.Ports;
+using МатКлассы;
 
 namespace PS5000A
 {
@@ -74,7 +75,7 @@ namespace PS5000A
         private string BlockFile = "block.txt";
         double w0;
         double w1;
-        int l;
+        int wcount;
 
 
         #endregion
@@ -91,18 +92,15 @@ namespace PS5000A
             InitializeComponent();
             w0 = w0_;
             w1 = w1_;
-            l = l_;
+            wcount = l_;
             sourcesCount = Scount;
 
             //     comboRangeA.DataSource = System.Enum.GetValues(typeof(Imports.Range));
-
-
             toolStripStatusLabel1.Text = "Готов к работе";
             toolStripStatusLabel2.Text = "";
 
             timer1.Interval = 300;
             timer1.Tick += new EventHandler(Timer1_Tick);
-
 
             SetDirects();
         }
@@ -127,17 +125,17 @@ namespace PS5000A
         private void SetDirects()
         {
             string p;
-            //using (StreamReader r = new StreamReader(Properties.Resources.LastDirectory))
-            //    p = r.ReadLine();
-
-            //if (Directory.Exists(p))
-            //    globalbase = p;
-            //else
-            //{
-             p = "Замеры";
-            Directory.CreateDirectory(p);
-            globalbase = Path.Combine(Environment.CurrentDirectory, p);
-            //}
+            if (File.Exists("LastDirectory.txt"))
+            {
+                p = Expendator.GetWordFromFile("LastDirectory.txt");
+                globalbase = p;
+            }
+            else
+            {
+                p = "Замеры";
+                Directory.CreateDirectory(p);
+                globalbase = Path.Combine(Environment.CurrentDirectory, p);
+            }
 
             textBox12.Text = globalbase;
             SetForlders();
@@ -147,7 +145,6 @@ namespace PS5000A
             for (int i = 0; i < countPorts; i++)
                 listBox2.Items.Add(i);
             listBox2.SelectedIndex = countPorts / 2;
-            checkBox1.Hide();
         }
 
 
@@ -295,8 +292,7 @@ namespace PS5000A
             if (Directory.Exists(textBox12.Text))
             {
                 globalbase = textBox12.Text;
-                //using (StreamWriter w = new StreamWriter(Properties.Resources.LastDirectory))
-                //    w.WriteLine(globalbase);
+                Expendator.WriteStringInFile("LastDirectory.txt", globalbase);
             }
             else
             {
@@ -571,47 +567,34 @@ namespace PS5000A
         /// Maxinum of an amplitude
         /// </summary>
         double Voltage_Range = 200;
-        /*
-         * 
-         * частоты от 0 Гц 10Mhz
-         * dt =10^-7
-         * df = 100;
-         *
-         */
 
         private string label2String;
-        async Task CalcTransformAsync(double f0, double f1, int sc, string from, string to, int[] args, int sourcenumber)
+        private void CreateFurierTransform(double f0, double f1, int sc)
         {
-            double fl = f1 - f0;
-            double df = (f1 - f0) / (sc - 1);
+            FurierTransformer.w_0 = f0 * 1e6;
+            FurierTransformer.w_m = f1 * 1e6;
+            double Freq(double w) => w / 2.0 / Math.PI * 1.0E6;
+
+            f0 = Freq(f0); f1 = Freq(f1);
             int count_approx = sc;
 
-            CFurieTransformer FTT = new CFurieTransformer();
-            // FTT.LoadCfg("cfg.txt");
-            FTT.t_0 = 0;
-            FTT.t_n = dt * (countAfter + countBefore);
+            FurierTransformer.t_0 = 0;
+            FurierTransformer.count_t = (countAfter + countBefore);
+            FurierTransformer.t_n = dt * FurierTransformer.count_t;
+            FurierTransformer.dt = dt;
+            FurierTransformer.f_0 = f0;
+            FurierTransformer.f_m = f1;
+            FurierTransformer.count_f = count_approx;
+            FurierTransformer.count_w = count_approx;
+            FurierTransformer.df = (f1 - f0) / (sc - 1);
+            FurierTransformer.dw = (FurierTransformer.w_m - FurierTransformer.w_0) / ((double)FurierTransformer.count_w - 1);
 
-            FTT.count_t = (countAfter + countBefore);
-            FTT.dt = dt;
-            //параметры преобразования по частоте
-            FTT.f_0 = f0;
-            FTT.f_m = f1;
-            FTT.count_f = count_approx;
-            FTT.df = (FTT.f_m - FTT.f_0) / ((double)FTT.count_f - 1);
-
-            FTT.w_0 = 2 * Math.PI * FTT.f_0;
-            FTT.w_m = 2 * Math.PI * FTT.f_m;
-            FTT.count_w = FTT.count_f;
-            FTT.dw = (FTT.w_m - FTT.w_0) / ((double)FTT.count_w - 1);
-
-            //параметры вычитания постоянной составляющей
-
-            FTT.n_avg = (countAfter + countBefore) - 2;
-            //параметры вычитания постоянной составляющей
-
-            FTT.n_ignore = 300;
-            //  FTT.LoadIn("ArrayA.txt");
-
+            FurierTransformer.n_avg = (countAfter + countBefore) - 2;
+            FurierTransformer.n_ignore = n_ignore;
+            FurierTransformer.CreateNewGen();
+        }
+        async Task CalcTransformAsync(int sc, string from, string to, int[] args, int sourcenumber)
+        {
             string[] froms = new string[sourcesCount];
             string[] tosABS = new string[sourcesCount];
             string[] tos = new string[sourcesCount];
@@ -630,10 +613,11 @@ namespace PS5000A
                     tosABS[i] = Path.Combine(to, "Abs_" + filenames[args[i]]);
                     tos[i] = Path.Combine(to, filenames[args[i]]);
 
-                    FTT.LoadIn(froms[i]);
-                    FTT.GetSplainFT_old(progress);
-                    FTT.SaveOut(tos[i]);
-                    FTT.SaveOutAbs(tosABS[i]);
+                    FurierTransformer.LoadIn(froms[i]);
+                    //FurierTransformer.GetSplainFT_old(progress);
+                    FurierTransformer.GetSplainFT_new(progress);
+                    FurierTransformer.SaveOut(tos[i]);
+                    FurierTransformer.SaveOutAbs(tosABS[i]);
                     label2String = $"Выполнено {i + 1} из {sourcesCount - 1} для источника {Symbols[sourcenumber]}";
                 }
             });
@@ -724,11 +708,11 @@ namespace PS5000A
 
         }
 
-        private void RunAvg(ref double[] Array_, int l, int kernel_len = 20)
+        private void RunAvg(ref double[] Array_, int wcount, int kernel_len = 20)
         {
             double kl = kernel_len;
-            double[] Array_buf = new double[l];
-            for (int i = kernel_len / 2 + 1; i < l - (kernel_len / 2 + 1); i++)
+            double[] Array_buf = new double[wcount];
+            for (int i = kernel_len / 2 + 1; i < wcount - (kernel_len / 2 + 1); i++)
             {
                 double summ = 0;
                 for (int j = -kernel_len / 2; j < kernel_len / 2; j++)
@@ -737,7 +721,7 @@ namespace PS5000A
                 }
                 Array_buf[i] = summ / kl;
             }
-            for (int i = kernel_len / 2 + 1; i < l - (kernel_len / 2 + 1); i++)
+            for (int i = kernel_len / 2 + 1; i < wcount - (kernel_len / 2 + 1); i++)
             {
                 Array_[i] = Array_buf[i];
             }
@@ -852,6 +836,8 @@ namespace PS5000A
 
         private async Task FurierOrShowForm(Func<int, string> from, Func<int, string> to)
         {
+            CreateFurierTransform(w0, w1, wcount);
+
             for (int i = 0; i < sourcesCount; i++)
                 if (checkBox2.Checked && !checkBox3.Checked)
                     await FurierAsync(from(i), to(i), i);
@@ -860,6 +846,7 @@ namespace PS5000A
                     ShowData(from(i), to(i), i);
 
             toolStripStatusLabel1.Text = $"Все вычисления завершены";
+            FurierTransformer.Dispose();
             new System.Media.SoundPlayer(Properties.Resources.ВычисленияЗавершены).Play();
         }
 
@@ -871,12 +858,9 @@ namespace PS5000A
         private async Task FurierAsync(string from, string to = null, int number = 0)
         {
             to = to ?? from;
-            //InitParams();
             toolStripStatusLabel1.Text = $"Запущено преобразование Фурье для источника {Symbols[number]}";
 
-            double Freq(double w) => w / 2.0 / Math.PI * 1.0E6;
-
-            await CalcTransformAsync(Freq(w0), Freq(w1), l, from, to, Enumerable.Range(0, sourcesCount).Where(n => n != number).ToArray(), number);
+            await CalcTransformAsync(wcount, from, to, Enumerable.Range(0, sourcesCount).Where(n => n != number).ToArray(), number);
             new System.Media.SoundPlayer(Properties.Resources.Преобразование_готово).Play();
         }
 

@@ -16,35 +16,36 @@ using System.IO;
 //using Complex = System.Numerics.Complex;
 using System.Numerics;
 using System.Diagnostics;
+using МатКлассы;
 
 namespace PS5000A
 {
-    public class CFurieTransformer
+    public static class FurierTransformer
     {
-        string InFile;
-        string OutFile;
-        string CfgFile;
-        public double dt;
-        public double t_0;
-        public double t_n;
-        public int count_t;
-        public double f_0;
-        public double f_m;
-        public int count_f;
-        public double df;
-        public double w_0;
-        public double w_m;
-        public int count_w;
-        public double dw;
-        public int n_avg;
-        bool avd_all = false;
-        public int n_ignore;
-        bool no_ignore = false;
-        Complex avg;
-        Complex[] f;
-        Complex[] F;
+        static string InFile;
+        static string OutFile;
+        static string CfgFile;
+        public static double dt;
+        public static double t_0;
+        public static double t_n;
+        public static int count_t;
+        public static double f_0;
+        public static double f_m;
+        public static int count_f;
+        public static double df;
+        public static double w_0;
+        public static double w_m;
+        public static int count_w;
+        public static double dw;
+        public static int n_avg;
+        static bool avd_all = false;
+        public static int n_ignore;
+        static bool no_ignore = false;
+        static Complex avg;
+        static Complex[] f;
+        static Complex[] F;
 
-        public void FilterData(int n = 2)
+        public static void FilterData(int n = 2)
         {
             Complex[] f_ = new Complex[count_t - 2 * n];
             for (int i = 0; i < count_t - 2 * n; i++)
@@ -58,7 +59,7 @@ namespace PS5000A
 
         }
 
-        public void LoadCfg(string filename)
+        public static void LoadCfg(string filename)
         {
             try
             {
@@ -103,7 +104,7 @@ namespace PS5000A
                 Console.WriteLine(e.Message);
             }
         }
-        public void LoadIn(string filename)
+        public static void LoadIn(string filename)
         {
             try
             {
@@ -112,15 +113,15 @@ namespace PS5000A
                 {
                     f = new Complex[count_t];
                     for (int i = 0; i < count_t; i++)
-                        f[i] = Double.Parse(sr.ReadLine().Replace(".", ",")); 
+                        f[i] = Double.Parse(sr.ReadLine().Replace(".", ","));
                 }
                 avg = 0;
-                for (int i = n_ignore; i < n_avg; i++)                
+                for (int i = n_ignore; i < n_avg; i++)
                     avg += f[i];
-                
+
                 avg /= (double)n_avg;
                 for (int i = 0; i < count_t; i++)
-                    f[i] -= avg;             
+                    f[i] -= avg;
             }
             catch (Exception e)
             {
@@ -129,7 +130,7 @@ namespace PS5000A
         }
 
 
-        public void LoadIn2(string filename)
+        public static void LoadIn2(string filename)
         {
             try
             {
@@ -169,7 +170,7 @@ namespace PS5000A
             }
         }
 
-        public void LoadInDiff(string filename1, string filename2, int len)
+        public static void LoadInDiff(string filename1, string filename2, int len)
         {
             try
             {
@@ -218,8 +219,38 @@ namespace PS5000A
             }
         }
 
-        private Complex Expi(double val) => Math.Cos(val) + Complex.ImaginaryOne * Math.Sin(val);
-        public void GetSplainFT_old(IProgress<int> progress = null)
+        private static Complex Expi(double val) => Math.Cos(val) + Complex.ImaginaryOne * Math.Sin(val);
+        /// <summary>
+        /// Мемоизированная версия преобразования Фурье
+        /// </summary>
+        /// <param name="progress"></param>
+        public static void GetSplainFT_new(IProgress<int> progress = null)
+        {
+            F = new Complex[count_w];
+            int[] s = new int[count_w];
+            bool isnotnull = progress != null;
+
+
+            Parallel.For(0, count_w, (int i) =>
+            {
+                Complex result = 0;
+                double w = argi[i];
+                double A = AAMemoized(i);
+                for (int j = n_ignore; j < count_t; j++)
+                    result += f[j] * Expi(w * argj[j-n_ignore]) * A;
+
+                F[i] = result;
+                s[i]++;
+
+                if (isnotnull && i % 7 == 0)
+                    progress.Report(s.Sum());
+            });
+        }
+        /// <summary>
+        /// Оптимизированная версия преобразования Фурье
+        /// </summary>
+        /// <param name="progress"></param>
+        public static void GetSplainFT_old(IProgress<int> progress = null)
         {
             F = new Complex[count_w];
             int[] s = new int[count_w];
@@ -242,7 +273,7 @@ namespace PS5000A
             });
         }
 
-        public void SaveOut_old(string filename)
+        public static void SaveOut_old(string filename)
         {
             try
             {
@@ -264,7 +295,7 @@ namespace PS5000A
                 Console.WriteLine(e.Message);
             }
         }
-        public void SaveIn(string filename)
+        public static void SaveIn(string filename)
         {
 
             try
@@ -286,16 +317,16 @@ namespace PS5000A
             }
 
         }
-        public void SaveOut(string filename)
+        public static void SaveOut(string filename)
         {
-                using (StreamWriter sw = new StreamWriter(filename))
-                {
-                    sw.WriteLine("w Re(f(w)) Im(f(w))");
-                    for (int i = 0; i < count_w; i++)
-                        sw.WriteLine(((dw * i + w_0) / 2.0 / Math.PI).ToString() + " " + (F[i].Real).ToString() + " " + (-F[i].Imaginary).ToString());                    
-                }
+            using (StreamWriter sw = new StreamWriter(filename))
+            {
+                sw.WriteLine("w Re(f(w)) Im(f(w))");
+                for (int i = 0; i < count_w; i++)
+                    sw.WriteLine(((dw * i + w_0) / 2.0 / Math.PI).ToString() + " " + (F[i].Real).ToString() + " " + (-F[i].Imaginary).ToString());
+            }
         }
-        public void SaveOutAbs(string filename)
+        public static void SaveOutAbs(string filename)
         {
             try
             {
@@ -320,9 +351,56 @@ namespace PS5000A
 
         }
 
-        public CFurieTransformer()
-        {
 
+       static Memoize<Tuple<int, int>, Complex> Dictionary;
+       static Func<int, int, Complex> Fury = (int i, int j) =>
+            {
+               double w = (dw * i + w_0);
+               return Expi(w * (dt * j + t_0)) * AAMemoized(i);
+            };
+       static Func<int, int, Complex> FuryMemoized;
+        static Memoize<int,double> DictionaryA;
+        static Func<int,double> AA = (int i) =>
+        {
+            double w = (dw * i + w_0);
+            double dtw = dt * w;
+           return 2.0 * (1.0 - Math.Cos(dtw)) / (dtw * w);
+        };
+        static Func<int, double> AAMemoized;
+        static double[] argi, argj;
+
+        /// <summary>
+        /// Пересоздать словарь для дальнейшего использования в нескольких циклах
+        /// </summary>
+        public static void CreateNewGen()
+        {
+            Dictionary = new Memoize<Tuple<int, int>, Complex>((Tuple<int, int> t)=>Fury(t.Item1,t.Item2));
+            FuryMemoized =(int i,int j)=> Dictionary.Value(new Tuple<int, int>(i,j));
+
+            DictionaryA = new Memoize<int, double>(i => AA(i));
+            AAMemoized = DictionaryA.Value;
+
+            argj = new double[count_t - n_ignore];
+            for (int i = 0; i < argj.Length; i++)
+                argj[i] = t_0 + dt * (i + n_ignore);
+
+            argi = new double[count_w];
+            for (int i = 0; i < argi.Length; i++)
+                argi[i] = dw * i + w_0;
+        }
+
+        /// <summary>
+        /// Освободить ресурсы
+        /// </summary>
+        public static void Dispose()
+        {
+            f = null;
+            F = null;
+            argi = null;
+            argj = null;
+            Dictionary.Dispose();
+            DictionaryA.Dispose();
+            GC.Collect();
         }
     }
 

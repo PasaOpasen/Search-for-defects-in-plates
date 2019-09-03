@@ -130,7 +130,6 @@ namespace PS5000A
             this.toolStripProgressBar1 = new System.Windows.Forms.ToolStripProgressBar();
             this.toolStripStatusLabel2 = new System.Windows.Forms.ToolStripStatusLabel();
             this.timer1 = new System.Windows.Forms.Timer(this.components);
-            this.checkBox1 = new System.Windows.Forms.CheckBox();
             this.folderBrowserDialog1 = new System.Windows.Forms.FolderBrowserDialog();
             this.button3 = new System.Windows.Forms.Button();
             this.tabControl.SuspendLayout();
@@ -1115,16 +1114,6 @@ namespace PS5000A
             this.toolStripStatusLabel2.Size = new System.Drawing.Size(118, 17);
             this.toolStripStatusLabel2.Text = "toolStripStatusLabel2";
             // 
-            // checkBox1
-            // 
-            this.checkBox1.AutoSize = true;
-            this.checkBox1.Location = new System.Drawing.Point(78, 359);
-            this.checkBox1.Name = "checkBox1";
-            this.checkBox1.Size = new System.Drawing.Size(346, 24);
-            this.checkBox1.TabIndex = 1;
-            this.checkBox1.Text = "Построить графики nArrays при закрытии";
-            this.checkBox1.UseVisualStyleBackColor = true;
-            // 
             // button3
             // 
             this.button3.BackColor = System.Drawing.Color.FromArgb(((int)(((byte)(192)))), ((int)(((byte)(192)))), ((int)(((byte)(255)))));
@@ -1144,7 +1133,6 @@ namespace PS5000A
             this.BackColor = System.Drawing.SystemColors.ActiveCaption;
             this.ClientSize = new System.Drawing.Size(767, 408);
             this.Controls.Add(this.button3);
-            this.Controls.Add(this.checkBox1);
             this.Controls.Add(this.statusStrip1);
             this.Controls.Add(this.tabControl);
             this.Font = new System.Drawing.Font("Microsoft Sans Serif", 12F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
@@ -1205,7 +1193,6 @@ namespace PS5000A
         private System.Windows.Forms.ToolStripStatusLabel toolStripStatusLabel1;
         private System.Windows.Forms.ToolStripProgressBar toolStripProgressBar1;
         private System.Windows.Forms.Timer timer1;
-        public System.Windows.Forms.CheckBox checkBox1;
         private System.Windows.Forms.TextBox textBox11;
         private System.Windows.Forms.TextBox textBox10;
         private System.Windows.Forms.Label label14;
