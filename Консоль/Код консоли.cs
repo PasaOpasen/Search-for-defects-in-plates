@@ -701,7 +701,11 @@ namespace Консоль
             //FuncMethods.DefInteg.DemonstrationToFile("eps.txt", "epstime.txt", f, c, c.S, cy, integ, Method.GaussKronrod61);
 
 
-            new Форма_консоли().ShowDialog();
+            //var f = SheringFunction.GetSheredFunction(t=>Math.Sin(t*5),-3, 3, 0.5);
+            var f = SheringFunction.GetSheredFunction(t => Math.Sqrt(t), 0.01, 3, 0.8);
+            new Библиотека_графики.MostSimpleGrafic(f, 0, 4, 150).ShowDialog();
+
+            //new Форма_консоли().ShowDialog();
 
             //Waves.DCircle c = new Waves.DCircle(new Point(0, 0), 2,0.6,arg: 0);
             //c.GetNormal(new Point(1.0,0.1)).Show();

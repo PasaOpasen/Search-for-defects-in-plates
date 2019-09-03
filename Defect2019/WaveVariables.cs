@@ -187,25 +187,7 @@ public static class Functions
     #region Простейшие функции
     public static RealFunc k1 = (double w) => w * w * k1coef;
     public static RealFunc k2 = (double w) => w * w * k2coef;
-    public static Func<Complex, double, Complex> sigma = (Complex a, double kw) =>
-      {
-          return Complex.Sqrt((a - kw)) * Math.Sign(a.Abs - kw);
-
-          if (a.Abs > kw) return Complex.Sqrt((a - kw));
-          Complex tmp = Complex.I * Complex.Sqrt((kw - a));
-          if (a.Im * a.Re > 0) return tmp;
-          return -tmp;
-
-          //Complex tmp = a - kw;
-          //if (a.Abs >= kw) return Complex.I * Complex.Sqrt(tmp);
-          //return -Complex.Sqrt(-tmp);
-
-          //if (a.Abs > kw) return Complex.Sqrt((a - kw));
-          //Complex tmp = -Complex.I * Complex.Sqrt((kw - a));
-          //if (a.Im * a.Re > 0) return tmp;
-          //return -tmp;
-      };
-
+    public static Func<Complex, double, Complex> sigma = (Complex a, double kw) =>Complex.Sqrt((a - kw)) * Math.Sign(a.Abs - kw);
 
     public static Func<double, Complex> F1 = (double w) =>
     {
@@ -215,12 +197,6 @@ public static class Functions
         Complex e(double c) => (Complex.Exp(pi * c) - 1) / c;
 
         return Complex.I * (e(w1) - e(w2) - e(w3) + e(w4));
-
-        ////return Complex.I / w * 130.0 / 63.0;
-        //double t = 2 * T;
-        //Complex tmp = Complex.I * w * t;
-        ////Debug.WriteLine($"tmp={tmp} {Complex.Exp(tmp * 9.0 / 4.0) / 9} { -Complex.Exp(tmp * 7.0 / 4) / 7 - Complex.Exp(tmp / 4) - Complex.Exp(-tmp / 4) + 128.0 / 63.0}");
-        //return Complex.I / w * (Complex.Exp(tmp * 9.0 / 4.0) / 9 - Complex.Exp(tmp * 7.0 / 4) / 7 - Complex.Exp(tmp / 4) - Complex.Exp(-tmp / 4) + 128.0 / 63.0);
     };
     public static Func<double, Complex> F2 = (double w) =>
     {
@@ -231,11 +207,6 @@ public static class Functions
         Complex perv(double t) => ew(t, w1) + ew(t, w2) - ew(t, w3) - ew(t, w4) - 2 * (ew(t, w5) - ew(t, w6));
 
         return (perv(2 * Math.PI * N / wc) - perv(0)) / 8;
-
-        ////return 1.0 / (1 - 4 * N * N) / Complex.I / w;
-        //double t = N * T, n = 1.0 / N;
-        //Complex tmp = Complex.I * w * t;
-        //return -1.0 / 8 / Complex.I * (Complex.Exp(tmp * (2 + n)) / Complex.I / w / (2 + n) + Complex.Exp(tmp * (2 - n)) / Complex.I / w / (2 - n) - Complex.Exp(tmp * (2)) / Complex.I / w - N * Complex.Exp(tmp * n) / Complex.I / w + N * Complex.Exp(-tmp * n) / Complex.I / w + 1.0 / (1 - 4 * N * N) / w / Complex.I);
     };
     #endregion
 
@@ -487,21 +458,6 @@ public static class Functions
         Tuple<Complex, Complex> tup = new Tuple<Complex, Complex>(МатКлассы.SpecialFunctions.Hankel(1, ar.Re), МатКлассы.SpecialFunctions.Hankel(0, ar.Re));
         return InK(a, c, tup, x, y);
     };
-
-
-    public static Func<double, Tuple<Complex, Complex>> HankelTuple/*Old*/ = (double ar) =>
-        {
-            //double arsqrt = Math.Sqrt(ar);
-            //return new Tuple<Complex, Complex>(МатКлассы.SpecialFunctions.Hankel(1.0, ar) * arsqrt, МатКлассы.SpecialFunctions.Hankel(0.0, ar) * arsqrt);
-            return new Tuple<Complex, Complex>(sqrtfrac2pi * Complex.Expi(ar + fracpi4), sqrtfrac2pi * Complex.Expi(ar - fracpi4));
-        };
-
-    //public static Func<double, Tuple<Complex, Complex>> HankelTuple = (double ar) =>
-    //{
-    //    double arsqrt = Math.Sqrt(ar);
-    //    //return new Tuple<Complex, Complex>(МатКлассы.SpecialFunctions.Hankel(1.0, ar) * arsqrt, МатКлассы.SpecialFunctions.Hankel(0.0, ar) * arsqrt);
-    //    return new Tuple<Complex, Complex>(sqrtfrac2pi/arsqrt * Complex.Expi(ar + fracpi4), sqrtfrac2pi/arsqrt * Complex.Expi(ar - fracpi4));
-    //};
 
     /// <summary>
     /// Матрица Грина при наборе нормалей
@@ -1004,6 +960,37 @@ public static class Functions
             //res.ReversColumns(2, 3);
             return res;
         };
+
+    #endregion
+
+
+    #region Функции Ханкеля
+    /// <summary>
+    /// Функция Ханкеля с умножением на корень (этот корень сокращается со знаменателем)
+    /// </summary>
+    public static Func<double, Tuple<Complex, Complex>> HankelTuple/*Old*/ = (double ar) =>
+    {
+        return new Tuple<Complex, Complex>(sqrtfrac2pi * Complex.Expi(ar + fracpi4), sqrtfrac2pi * Complex.Expi(ar - fracpi4));
+    };
+
+    /// <summary>
+    /// Функция Ханкеля без умножения на корень
+    /// </summary>
+    public static Func<double, Tuple<Complex, Complex>> HankelTupleClear = (double ar) =>
+    {
+        double arsqrt = Math.Sqrt(ar);
+        return new Tuple<Complex, Complex>(sqrtfrac2pi / arsqrt * Complex.Expi(ar + fracpi4), sqrtfrac2pi / arsqrt * Complex.Expi(ar - fracpi4));
+    };
+
+    /// <summary>
+    /// Функция Ханкеля с умножением на корень и срезом для ИЛЮШИ
+    /// </summary>
+    public static Func<double, Tuple<Complex, Complex>> HankelTupleИлюшаСюдаСмотри = (double ar) =>
+    {
+        var sd = SheringFunction.GetSheredFunction((double t) => 1.0, 0, 10, 0.4);
+        double tmp = sd(ar);
+        return new Tuple<Complex, Complex>(sqrtfrac2pi*tmp * Complex.Expi(ar + fracpi4), sqrtfrac2pi*tmp * Complex.Expi(ar - fracpi4));
+    };
 
     #endregion
 

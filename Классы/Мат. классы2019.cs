@@ -1151,4 +1151,5 @@ if (list.Count == countpoles) break;
         public BSpline(CVectors mas) { xk = mas.dup; }
 
     }
+
 }

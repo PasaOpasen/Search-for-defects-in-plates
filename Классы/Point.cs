@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.IO;
+using System.Threading.Tasks;
 
 /// <summary>
 /// Библиотека математических классов, написанная Опасным Пасей (Дмитрией Пасько/Деметрием Паскалём).
@@ -75,7 +76,7 @@ namespace МатКлассы
         /// <summary>
         /// Расстояние от точки до (0,0)
         /// </summary>
-        public double Abs => Eudistance(this,Zero);
+        public double Abs => Eudistance(this, Zero);
 
         /// <summary>
         /// Дубликат точки
@@ -126,6 +127,20 @@ namespace МатКлассы
             }
             return new Point(x / mas.Length, y / mas.Length);
         }
+        /// <summary>
+        /// Среднее расстояние от центра множества
+        /// </summary>
+        /// <param name="mas"></param>
+        /// <returns></returns>
+        public static double MeanDist(Point[] mas)
+        {
+            Point center = Center(mas);
+            double dist = 0;
+            for (int i = 0; i < mas.Length; i++)
+                dist += Eudistance(mas[i], center);
+            return dist / mas.Length;
+        }
+
 
         /// <summary>
         /// Евклидово расстояние между точками
@@ -133,13 +148,13 @@ namespace МатКлассы
         /// <param name="z"></param>
         /// <param name="w"></param>
         /// <returns></returns>
-        public static double Eudistance(Point z, Point w)=>Math.Sqrt((z.x - w.x) * (z.x - w.x) + (z.y - w.y) * (z.y - w.y));
+        public static double Eudistance(Point z, Point w) => Math.Sqrt((z.x - w.x) * (z.x - w.x) + (z.y - w.y) * (z.y - w.y));
         /// <summary>
         /// Значение функции базисного потенциала, связанного с этой точкой
         /// </summary>
         /// <param name="z"></param>
         /// <returns></returns>
-        public double PotentialF(Point z)=>Math.Log(1.0 / Point.Eudistance(this, z));
+        public double PotentialF(Point z) => Math.Log(1.0 / Point.Eudistance(this, z));
 
         /// <summary>
         /// Функция второго базисного потенциала, сцепленного с точкой z
@@ -204,11 +219,11 @@ namespace МатКлассы
             return p;
         }
 
-        public static implicit operator Point(Number.Complex e)=>new Point(e.Re, e.Im);
+        public static implicit operator Point(Number.Complex e) => new Point(e.Re, e.Im);
 
         public static Point operator -(Point p) => new Point(-p.x, -p.y);
 
-        public static bool operator !=(Point a, Point b)=>!(a == b);
+        public static bool operator !=(Point a, Point b) => !(a == b);
 
         /// <summary>
         /// Скалярное произведение точек как векторов
@@ -268,6 +283,21 @@ namespace МатКлассы
                 points[i] = new Point(a + h * i, f(a + h * i));
             }
 
+            return points;
+        }
+        /// <summary>
+        /// Набор n+1 точек на графике функции f, разбитых равномерно на отрезке от a до b
+        /// </summary>
+        /// <param name="f"></param>
+        /// <param name="n"></param>
+        /// <param name="a"></param>
+        /// <param name="b"></param>
+        /// <returns></returns>
+        public static Point[] PointsParallel(RealFunc f, int n, double a, double b)
+        {
+            double h = (b - a) / n;
+            Point[] points = new Point[n + 1];
+            Parallel.For(0, n + 1, (int i) => points[i] = new Point(a + h * i, f(a + h * i)));
             return points;
         }
 
@@ -458,7 +488,7 @@ namespace МатКлассы
             //return x.CompareTo(obj);
         }
 
-        public override bool Equals(object obj)=>Equals((Point)obj);
+        public override bool Equals(object obj) => Equals((Point)obj);
         public bool Equals(Point point) => x == point.x && y == point.y;
 
         public override int GetHashCode()

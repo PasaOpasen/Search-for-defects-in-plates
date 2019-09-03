@@ -78,6 +78,7 @@
     <Compile Include="Polygon.cs" />
     <Compile Include="Polynom.cs" />
     <Compile Include="RandomNumbers.cs" />
+    <Compile Include="SheringFunction.cs" />
     <Compile Include="SLAU.cs" />
     <Compile Include="SqMatrix.cs" />
     <Compile Include="SumsAndLimits.cs" />
