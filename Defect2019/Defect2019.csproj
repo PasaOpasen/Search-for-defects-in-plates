@@ -325,5 +325,14 @@
   <ItemGroup>
     <None Include="Resources\ПоверхностиПостроены.wav" />
   </ItemGroup>
+  <ItemGroup>
+    <None Include="Resources\Uxt.wav" />
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="Resources\ВычисленияЗавершены.wav" />
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="Resources\ГенерацияДанных.wav" />
+  </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
 </Project>

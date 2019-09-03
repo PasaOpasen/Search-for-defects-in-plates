@@ -186,8 +186,6 @@ namespace Работа2019
 
             void cmet(object sender, FormClosingEventArgs e)
             {
-                if (form.checkBox1.Checked)
-                    CreateArraysGrafic();
             }
 
             form.FormClosing += new FormClosingEventHandler(cmet);
@@ -220,48 +218,6 @@ namespace Работа2019
 
         }
         Color[] colors = new Color[] { Color.Blue, Color.Green, Color.Red, Color.Black };
-        /// <summary>
-        /// Создание формы с графиками
-        /// </summary>
-        private void CreateArraysGrafic()
-        {
-            string[] fn = new string[4];
-            fn[0] = "ArrayA";
-            fn[1] = "ArrayB";
-            fn[2] = "ArrayC";
-            fn[3] = "ArrayD";
-
-            var form = new JustGrafic();
-            form.chart1.Series.Clear();
-
-            for (int i = 0; i < sources.Length; i++)
-                form.chart1.Series.Add(fn[i]);
-
-            for (int i = 0; i < sources.Length; i++)
-            {
-                form.chart1.Series[i].BorderWidth = 1;
-                form.chart1.Series[i].Color = colors[i];
-                form.chart1.Series[i].ChartType = System.Windows.Forms.DataVisualization.Charting.SeriesChartType.Line;
-                form.chart1.Series[i].BorderDashStyle = System.Windows.Forms.DataVisualization.Charting.ChartDashStyle.Dot;
-                form.chart1.Series[i].Font = new Font("Arial", 16);
-
-                using (StreamReader f = new StreamReader(fn[i] + ".txt"))
-                {
-                    int k = 1;
-                    string s = f.ReadLine();
-                    while (s != null)
-                    {
-                        form.chart1.Series[i].Points.AddXY(k++, s.Replace('.', ',').ToDouble());
-                        s = f.ReadLine();
-                    }
-                }
-            }
-
-            form.CreateCheckBoxes();
-            form.Lims();
-
-            form.ShowDialog();
-        }
 
     }
 }

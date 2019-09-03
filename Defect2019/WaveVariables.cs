@@ -1670,4 +1670,11 @@ list.Add(smas[i].dup);
             Expendator.CopyFiles(Environment.CurrentDirectory, dir[i],  "zlims(real).txt", "zlims.txt", "MetrixSumOrMax.txt", "MakeUxtByEvery.txt", "MakePDFs.txt", "MakeDistanceToDefect.txt", "ClastersCount.txt", "AutoLims.txt", "SurfaceMain.txt", "RMdator.exe","LastTimeConfig.txt");
         });
     }
+
+    public static string GetResource(string name)
+    {
+        string s = Environment.CurrentDirectory;
+        s=s.Substring(0,s.IndexOf("Defect2019")+10);
+        return Path.Combine(s, "Resources", name);        
+    }
 }

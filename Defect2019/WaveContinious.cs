@@ -193,7 +193,7 @@ namespace Defect2019
                 FilesToSources(s, dir[i]);
 
                 await ManyPZAsync(s, dir[i]);
-                //new System.Media.SoundPlayer().Play();
+                new System.Media.SoundPlayer(OtherMethods.GetResource("ЗамерОбработан.wav")).Play();
             }
 
             await AfterLoopsAct();
@@ -255,6 +255,7 @@ namespace Defect2019
             if (source.IsCancellationRequested) return;
             await Task.Run(() => StartProcess("OnlySurface.r", global: true));
             new Библиотека_графики.PdfOpen("Полученные u-surfaces", Path.Combine(Environment.CurrentDirectory, $"{gl} ")).Show();
+            new System.Media.SoundPlayer(OtherMethods.GetResource("ПоверхностиПостроены.wav")).Play();
 
             if (MessageBox.Show("Создавать анимацию? (может занять до 15 минут)", "Анимация", MessageBoxButtons.YesNo, MessageBoxIcon.Question) == System.Windows.Forms.DialogResult.Yes)
             {
@@ -262,11 +263,13 @@ namespace Defect2019
                 await Task.Run(() => OtherMethods.StartProcessOnly("ReDraw3Duxt2.r", true));
 
                 if (source.IsCancellationRequested) return;
-                new Anima(filenames).ShowDialog();
+                new System.Media.SoundPlayer(OtherMethods.GetResource("АнимацияГотова.wav")).Play();
+                new Anima(filenames).ShowDialog();               
             }
 
             toolStripStatusLabel1.Text = $"Операции закончены";
             new Scheme(sourcesArray, new Point(xmin, ymin), xmax - xmin, ymax - ymin, gl + " (heatmap).png").Show();
+            new System.Media.SoundPlayer(OtherMethods.GetResource("ВычисленияЗавершены.wav")).Play();
 
             button4.Show();
             EndShows();
@@ -338,6 +341,7 @@ namespace Defect2019
             checkBox3.Hide();
             groupBox1.Hide();
 
+            new System.Media.SoundPlayer(OtherMethods.GetResource("ГенерацияДанных.wav")).Play();
             timer2.Start();
             toolStripStatusLabel1.Text = "Выполняется генерация u(x,w) и f(w)";
             await Task.Run(
@@ -354,6 +358,7 @@ namespace Defect2019
             button2.Show();
             toolStripStatusLabel1.Text = "Начинается построение";
 
+            new System.Media.SoundPlayer(OtherMethods.GetResource("Uxt.wav")).Play();
             другиеПараметрыToolStripMenuItem.Visible = false;
               await    UxtCalc();
             толькоПросуммироватьToolStripMenuItem.Visible = true;
