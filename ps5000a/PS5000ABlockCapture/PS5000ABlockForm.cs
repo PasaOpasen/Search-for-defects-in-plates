@@ -337,6 +337,7 @@ namespace PS5000A
             new System.Media.SoundPlayer(Properties.Resources.РазницаГотова).Play();
 
             await FurierOrShowForm(i => fdiff[i], i => folderbase[i]);
+            SygnalOfEndCalc();
         }
         #endregion
 
@@ -753,8 +754,6 @@ namespace PS5000A
         {
             int countSum = countAfter + countBefore;
             double[] Array = new double[countSum];
-            double middleA = 0;
-            double mid_ignore = 0;
             double[] arrA = new double[countSum];
             textBoxUnitInfo.AppendText(Switch_.GetAccepted() + "\n");
             Switch_.SendCmd(1, id);
@@ -777,16 +776,14 @@ namespace PS5000A
 
             label1String = null;
             toolStripStatusLabel1.Text = "Замеры выполнены";
-
-
             timer1.Stop();
             toolStripProgressBar1.Value = 0;
 
-            middleA = 0;
-            mid_ignore = 0;
+            double middleA= 0;
+            double coef = Voltage_Range / ((double)usred) / 32767 / 2.0;
             for (int i = 0; i < countSum; i++)
             {
-                arrA[i] = masA[i] / ((double)usred) / 32767 * Voltage_Range / 2.0;
+                arrA[i] = masA[i] *coef;
                 middleA += arrA[i];
             }
             middleA /= countSum;
@@ -801,16 +798,11 @@ namespace PS5000A
                 masA[i] = 0;
             }
 
-            RunAvg(ref Array, countAfter + countBefore, 20);
+            RunAvg(ref Array, countSum, 20);
 
-
-            using (StreamWriter fs = new StreamWriter(filename_))
-            {
-                for (int i = 0; i < countSum; i++)
-                {
-                    fs.WriteLine(Array[i].ToString());
-                }
-            }
+            using (StreamWriter fs = new StreamWriter(filename_))           
+                for (int i = 0; i < countSum; i++)               
+                    fs.WriteLine(Array[i]);                       
         }
 
 
@@ -831,9 +823,11 @@ namespace PS5000A
                     if (i != j)
                     {
                         await DataSborCh(j, Path.Combine(ItFolder(i), ArraysNames[j]));
-                        toolStripStatusLabel2.Text = $"Выполнено {++it} из {mx}";
+                        toolStripStatusLabel2.Text = $"Выполнено {++it} из {mx} ({Expendator.GetProcent(it,mx)}%)";
                     }
                 toolStripStatusLabel2.Text = "";
+
+                FurierOrShowIteration(ItFolder(i), null, i);
             }
 
         }
@@ -853,7 +847,8 @@ namespace PS5000A
 
             new System.Media.SoundPlayer(Properties.Resources.ЗамерыСделаны).Play();
 
-            await FurierOrShowForm(ItFolder, (_) => null);
+            //await FurierOrShowForm(ItFolder, (_) => null);
+            SygnalOfEndCalc();
         }
 
         private async Task FurierOrShowForm(Func<int, string> from, Func<int, string> to)
@@ -861,12 +856,19 @@ namespace PS5000A
             CreateFurierTransform(w0, w1, wcount);
 
             for (int i = 0; i < sourcesCount; i++)
-                if (checkBox2.Checked && !checkBox3.Checked)
-                    await FurierAsync(from(i), to(i), i);
-                else
-                       if (checkBox3.Checked)
-                    ShowData(from(i), to(i), i);
+                await FurierOrShowIteration(from(i), to(i), i);            
+        }
+        private async Task FurierOrShowIteration(string from,string to,int number)
+        {
+            if (checkBox2.Checked && !checkBox3.Checked)
+                await FurierAsync(from, to, number);
+            else
+            if (checkBox3.Checked)
+                ShowData(from, to, number);
+        }
 
+        private void SygnalOfEndCalc()
+        {
             toolStripStatusLabel1.Text = $"Все вычисления завершены";            
             new System.Media.SoundPlayer(Properties.Resources.ВычисленияЗавершены).Play();
         }

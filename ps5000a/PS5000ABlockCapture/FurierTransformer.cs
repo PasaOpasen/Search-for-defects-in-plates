@@ -368,6 +368,7 @@ namespace PS5000A
          };
         static Func<int, double> AAMemoized;
         static double[] argi, argj;
+        //static Complex[,] tmpArray;
 
         /// <summary>
         /// Пересоздать словарь для дальнейшего использования в нескольких циклах
@@ -387,7 +388,20 @@ namespace PS5000A
             argi = new double[count_w];
             for (int i = 0; i < argi.Length; i++)
                 argi[i] = dw * i + w_0;
+
+            //CreateTmpArray();
         }
+        //private static void CreateTmpArray()
+        //{
+        //    tmpArray = new Complex[argi.Length, argj.Length];
+        //    Parallel.For(0, argi.Length, (int i) =>
+        //    {
+        //        double w = argi[i];
+        //    double A = AAMemoized(i);
+        //        for (int j = 0; j < argj.Length; j++)
+        //            tmpArray[i, j] = Expi(w * argj[j - n_ignore]) * A;
+        //    });
+        //}
 
         /// <summary>
         /// Освободить ресурсы
@@ -398,6 +412,7 @@ namespace PS5000A
             F = null;
             argi = null;
             argj = null;
+           // tmpArray = null;
             if(Dictionary!=null)
             Dictionary.Dispose();
             if (DictionaryA != null)

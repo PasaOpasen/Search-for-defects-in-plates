@@ -413,6 +413,14 @@ namespace МатКлассы
             return 0;
         }
 
+        /// <summary>
+        /// Получить отношение двух чисел в процентах
+        /// </summary>
+        /// <param name="exist"></param>
+        /// <param name="all"></param>
+        /// <returns></returns>
+        public static double GetProcent(double exist, double all) => exist / all * 100.0;
+
         public static CVectors ToCVector(this Complex[] m) => new CVectors(m);
 
         /// <summary>
