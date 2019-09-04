@@ -201,7 +201,7 @@ namespace PS5000A
             // label21
             // 
             this.label21.AutoSize = true;
-            this.label21.Location = new System.Drawing.Point(263, 60);
+            this.label21.Location = new System.Drawing.Point(263, 63);
             this.label21.Name = "label21";
             this.label21.Size = new System.Drawing.Size(169, 20);
             this.label21.TabIndex = 13;
@@ -219,7 +219,7 @@ namespace PS5000A
             // label20
             // 
             this.label20.AutoSize = true;
-            this.label20.Location = new System.Drawing.Point(300, 95);
+            this.label20.Location = new System.Drawing.Point(300, 101);
             this.label20.Name = "label20";
             this.label20.Size = new System.Drawing.Size(132, 20);
             this.label20.TabIndex = 11;
@@ -238,7 +238,7 @@ namespace PS5000A
             // label15
             // 
             this.label15.AutoSize = true;
-            this.label15.Location = new System.Drawing.Point(275, 170);
+            this.label15.Location = new System.Drawing.Point(282, 170);
             this.label15.Name = "label15";
             this.label15.Size = new System.Drawing.Size(150, 20);
             this.label15.TabIndex = 9;

@@ -32,7 +32,7 @@ namespace Библиотека_графики
             ReDraw();
             Библиотека_графики.ForChart.SetToolTips(ref chart1);
 
-
+            GetParamsFromFile();
             GetValFunc();
             GetTracks();
             GetTimer();
@@ -129,6 +129,18 @@ namespace Библиотека_графики
             timer1.Start();
         }
 
+        private void GetParamsFromFile()
+        {
+            if (System.IO.File.Exists("TrapeziParams.txt"))
+            {
+                var ss = Expendator.GetWordFromFile("TrapeziParams.txt").Split(' ');
+                beg = ss[0].ToInt32() / 100.0;
+                s = ss[1].ToInt32() / 100.0;
+                end = ss[2].ToInt32() / 100.0;
+            }
+        }
+        private void SetParamsInFile()=>Expendator.WriteStringInFile("TrapeziParams.txt", $"{trackBar1.Value} {trackBar2.Value} {trackBar3.Value}");
+        
 
         void ReDraw()
         {
@@ -156,6 +168,7 @@ namespace Библиотека_графики
 
         private void button1_Click(object sender, EventArgs e)
         {
+            SetParamsInFile();
             this.Close();
         }
 

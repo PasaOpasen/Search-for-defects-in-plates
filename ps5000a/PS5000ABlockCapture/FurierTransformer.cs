@@ -398,8 +398,10 @@ namespace PS5000A
             F = null;
             argi = null;
             argj = null;
+            if(Dictionary!=null)
             Dictionary.Dispose();
-            DictionaryA.Dispose();
+            if (DictionaryA != null)
+                DictionaryA.Dispose();
             GC.Collect();
         }
     }

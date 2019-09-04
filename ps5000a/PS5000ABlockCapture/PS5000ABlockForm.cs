@@ -103,8 +103,13 @@ namespace PS5000A
             timer1.Tick += new EventHandler(Timer1_Tick);
 
             SetDirects();
+            SetParams();
 
-            this.FormClosed += new FormClosedEventHandler((object o, FormClosedEventArgs a) => FurierTransformer.Dispose());
+            this.FormClosed += new FormClosedEventHandler((object o, FormClosedEventArgs a) => 
+            {
+                FurierTransformer.Dispose();
+                GetParams();
+            });
         }
 
         #region Димас писал
@@ -148,6 +153,31 @@ namespace PS5000A
             listBox2.SelectedIndex = countPorts / 2;
         }
 
+        private void SetParams()
+        {
+            string GetNumberString(string s) => s.Split(' ')[1];
+
+            if(File.Exists("FirstWindowConfig.txt"))
+                using(StreamReader f=new StreamReader("FirstWindowConfig.txt"))
+                {
+                    textBox9.Text = GetNumberString(f.ReadLine());
+                    textBox14.Text = GetNumberString(f.ReadLine());
+                    textBox13.Text = GetNumberString(f.ReadLine());
+                    textBox10.Text = GetNumberString(f.ReadLine());
+                    textBox11.Text = GetNumberString(f.ReadLine());
+                }
+        }
+        private void GetParams()
+        {
+            using(StreamWriter f=new StreamWriter("FirstWindowConfig.txt"))
+            {
+                f.WriteLine($"timebase= {textBox9.Text}");
+                f.WriteLine($"counttrig= {textBox14.Text}");
+                f.WriteLine($"countbefore= {textBox13.Text}");
+                f.WriteLine($"countafter= {textBox10.Text}");
+                f.WriteLine($"countmeans= {textBox11.Text}");
+            }
+        }
 
         private void Timer1_Tick(object Sender, EventArgs e)
         {
