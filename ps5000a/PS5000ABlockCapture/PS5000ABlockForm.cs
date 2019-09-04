@@ -103,6 +103,8 @@ namespace PS5000A
             timer1.Tick += new EventHandler(Timer1_Tick);
 
             SetDirects();
+
+            this.FormClosed += new FormClosedEventHandler((object o, FormClosedEventArgs a) => FurierTransformer.Dispose());
         }
 
         #region Димас писал
@@ -125,9 +127,8 @@ namespace PS5000A
         private void SetDirects()
         {
             string p;
-            if (File.Exists("LastDirectory.txt"))
+            if (File.Exists("LastDirectory.txt") && Expendator.IfDirectoryExists("LastDirectory.txt", out p))
             {
-                p = Expendator.GetWordFromFile("LastDirectory.txt");
                 globalbase = p;
             }
             else
@@ -205,12 +206,9 @@ namespace PS5000A
             await Task.Run(() =>
             Parallel.For(0, sourcesCount, (int k) =>
             {
-                //for (int k = 0; k < sourcesCount; k++)
                 using (StreamWriter res = new StreamWriter(Path.Combine(fdiff[k], "time.txt")))
-                {
                     for (int i = -countBefore; i < countAfter; i++)
-                        res.WriteLine(dt * i);
-                }
+                        res.WriteLine(dt * i);               
             })
             );
         }
@@ -235,7 +233,7 @@ namespace PS5000A
                                 string s = f0.ReadLine();
                                 while (s != null && s.Length > 0)
                                 {
-                                    double t = Convert.ToDouble(f1.ReadLine().Replace('.', ',')) - Convert.ToDouble(s.Replace('.', ','));
+                                    double t = Convert.ToDouble(f1.ReadLine()) - Convert.ToDouble(s);
                                     if (max < t * t) max = t * t;
                                     s = f0.ReadLine();
                                 }
@@ -253,7 +251,7 @@ namespace PS5000A
                                 string s = f0.ReadLine();
                                 while (s != null && s.Length > 0)
                                 {
-                                    double t = Convert.ToDouble(f1.ReadLine().Replace('.', ',')) - Convert.ToDouble(s.Replace('.', ','));
+                                    double t = Convert.ToDouble(f1.ReadLine()) - Convert.ToDouble(s);
                                     res.WriteLine(t / max);
                                     s = f0.ReadLine();
                                 }
@@ -585,6 +583,7 @@ namespace PS5000A
 
             FurierTransformer.n_avg = (countAfter + countBefore) - 2;
             FurierTransformer.n_ignore = n_ignore;
+
             FurierTransformer.CreateNewGen();
         }
         async Task CalcTransformAsync(int sc, string from, string to, int[] args, int sourcenumber)
@@ -611,7 +610,6 @@ namespace PS5000A
                     //FurierTransformer.GetSplainFT_old(progress);
                     FurierTransformer.GetSplainFT_new(progress);
                     FurierTransformer.SaveOut(tos[i]);
-                    FurierTransformer.SaveOutAbs(tosABS[i]);
                     label2String = $"Выполнено {i + 1} из {sourcesCount - 1} для источника {Symbols[sourcenumber]}";
                 }
             });
@@ -721,7 +719,7 @@ namespace PS5000A
             }
         }
         private string label1String;
-        public async void DataSborCh(int id, string filename_)
+        public async Task DataSborCh(int id, string filename_)
         {
             int countSum = countAfter + countBefore;
             double[] Array = new double[countSum];
@@ -780,13 +778,13 @@ namespace PS5000A
             {
                 for (int i = 0; i < countSum; i++)
                 {
-                    fs.WriteLine(Array[i].ToString().Replace(',', '.'));
+                    fs.WriteLine(Array[i].ToString());
                 }
             }
         }
 
 
-        public void DataSbor()
+        public async Task DataSbor()
         {
             masA = new long[countAfter + countBefore];
             int it = 0;
@@ -802,10 +800,10 @@ namespace PS5000A
                 for (int j = 0; j < sourcesCount; j++)
                     if (i != j)
                     {
-                        DataSborCh(j, Path.Combine(ItFolder(i), ArraysNames[j]));
-                        toolStripStatusLabel2.Text = $"Выполнено {it++} из {mx}";
+                        await DataSborCh(j, Path.Combine(ItFolder(i), ArraysNames[j]));
+                        toolStripStatusLabel2.Text = $"Выполнено {++it} из {mx}";
                     }
-
+                toolStripStatusLabel2.Text = "";
             }
 
         }
@@ -821,7 +819,7 @@ namespace PS5000A
 
             SetFiles();
 
-            DataSbor();
+            await DataSbor();
 
             new System.Media.SoundPlayer(Properties.Resources.ЗамерыСделаны).Play();
 
@@ -839,8 +837,7 @@ namespace PS5000A
                        if (checkBox3.Checked)
                     ShowData(from(i), to(i), i);
 
-            toolStripStatusLabel1.Text = $"Все вычисления завершены";
-            FurierTransformer.Dispose();
+            toolStripStatusLabel1.Text = $"Все вычисления завершены";            
             new System.Media.SoundPlayer(Properties.Resources.ВычисленияЗавершены).Play();
         }
 
@@ -876,7 +873,7 @@ namespace PS5000A
                     }
 
             toolStripStatusLabel1.Text = "Строится график...";
-            this.Refresh();
+            //this.Refresh();
 
             string[] sst = new string[sourcesCount - 1], nnames = new string[sourcesCount - 1];
             for (int i = 0; i < (sourcesCount - 1); i++)
@@ -888,14 +885,11 @@ namespace PS5000A
 
             var form = new JustGrafic(sst, nnames, $"График от {Symbols[number]}", dt, countBefore);
 
-            void cmet(object sender, FormClosedEventArgs e)
+            form.FormClosed += new FormClosedEventHandler((object sender, FormClosedEventArgs e) => 
             {
                 if (checkBox2.Checked)
-                    FurierAsync(from, to, number);
-            }
-
-            form.FormClosed += new FormClosedEventHandler(cmet);
-            //form.FormClosed += new FormClosedEventHandler(cmet);
+                FurierAsync(from, to, number)/*.RunSynchronously()*/;
+            });
             form.Show();
 
         }

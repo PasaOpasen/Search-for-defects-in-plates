@@ -87,7 +87,7 @@ namespace Библиотека_графики
             this.chart1.MouseMove += new MouseEventHandler((object o, MouseEventArgs arg) =>
             {
                 if (arg.Location.X < chart1.Size.Width * 0.95 && arg.Location.Y < chart1.Size.Height * 0.95)
-                    if (sp.ElapsedMilliseconds > 100)
+                    if (sp.ElapsedMilliseconds > 600)
                     {
                         x = chart1.ChartAreas[0].AxisX.PixelPositionToValue(arg.Location.X);
                         y = chart1.ChartAreas[0].AxisY.PixelPositionToValue(arg.Location.Y);
@@ -141,7 +141,7 @@ namespace Библиотека_графики
                     p = f.ReadLine();
                     while (p != null && p.Length > 0)
                     {
-                        l.Add(Convert.ToDouble(p.Replace('.', ',')));
+                        l.Add(Convert.ToDouble(p));
                         p = f.ReadLine();
                     }
                 }
@@ -385,7 +385,7 @@ namespace Библиотека_графики
             {
                 using (StreamWriter t = new StreamWriter(fnames[i]))
                     for (int j = 0; j < arr2[i].Length; j++)
-                        t.WriteLine(arr2[i][j].ToString().Replace(',', '.'));
+                        t.WriteLine(arr2[i][j].ToString());
 
             });
         }

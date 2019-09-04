@@ -113,7 +113,7 @@ namespace PS5000A
                 {
                     f = new Complex[count_t];
                     for (int i = 0; i < count_t; i++)
-                        f[i] = Double.Parse(sr.ReadLine().Replace(".", ","));
+                        f[i] = Double.Parse(sr.ReadLine());
                 }
                 avg = 0;
                 for (int i = n_ignore; i < n_avg; i++)

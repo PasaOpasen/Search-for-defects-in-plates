@@ -452,7 +452,24 @@ namespace МатКлассы
             return st;
         }
 
+        /// <summary>
+        /// Получить первую строку из файла
+        /// </summary>
+        /// <param name="filename"></param>
+        /// <returns></returns>
         public static string GetWordFromFile(string filename) => GetStringArrayFromFile(filename, true)[0];
+
+        /// <summary>
+        /// Определяет директорию, считанную из файла и возвращает ответ о её существовании
+        /// </summary>
+        /// <param name="filename"></param>
+        /// <param name="directory"></param>
+        /// <returns></returns>
+        public static bool IfDirectoryExists(string filename,out string directory)
+        {
+            directory = GetWordFromFile(filename);
+            return Directory.Exists(directory);
+        }
 
         /// <summary>
         /// Скопировать набор файлов из одной директории в другую, сохраняя имена
