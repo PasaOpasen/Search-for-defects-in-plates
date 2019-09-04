@@ -105,7 +105,7 @@ namespace PS5000A
             SetDirects();
             SetParams();
 
-            this.FormClosed += new FormClosedEventHandler((object o, FormClosedEventArgs a) => 
+            this.FormClosed += new FormClosedEventHandler((object o, FormClosedEventArgs a) =>
             {
                 FurierTransformer.Dispose();
                 GetParams();
@@ -152,13 +152,17 @@ namespace PS5000A
                 listBox2.Items.Add(i);
             listBox2.SelectedIndex = countPorts / 2;
         }
+        /// <summary>
+        /// Число связей между всеми парами источников
+        /// </summary>
+        private int CountOfEdges => sourcesCount * (sourcesCount - 1);
 
         private void SetParams()
         {
             string GetNumberString(string s) => s.Split(' ')[1];
 
-            if(File.Exists("FirstWindowConfig.txt"))
-                using(StreamReader f=new StreamReader("FirstWindowConfig.txt"))
+            if (File.Exists("FirstWindowConfig.txt"))
+                using (StreamReader f = new StreamReader("FirstWindowConfig.txt"))
                 {
                     textBox9.Text = GetNumberString(f.ReadLine());
                     textBox14.Text = GetNumberString(f.ReadLine());
@@ -169,7 +173,7 @@ namespace PS5000A
         }
         private void GetParams()
         {
-            using(StreamWriter f=new StreamWriter("FirstWindowConfig.txt"))
+            using (StreamWriter f = new StreamWriter("FirstWindowConfig.txt"))
             {
                 f.WriteLine($"timebase= {textBox9.Text}");
                 f.WriteLine($"counttrig= {textBox14.Text}");
@@ -238,7 +242,7 @@ namespace PS5000A
             {
                 using (StreamWriter res = new StreamWriter(Path.Combine(fdiff[k], "time.txt")))
                     for (int i = -countBefore; i < countAfter; i++)
-                        res.WriteLine(dt * i);               
+                        res.WriteLine(dt * i);
             })
             );
         }
@@ -779,11 +783,11 @@ namespace PS5000A
             timer1.Stop();
             toolStripProgressBar1.Value = 0;
 
-            double middleA= 0;
+            double middleA = 0;
             double coef = Voltage_Range / ((double)usred) / 32767 / 2.0;
             for (int i = 0; i < countSum; i++)
             {
-                arrA[i] = masA[i] *coef;
+                arrA[i] = masA[i] * coef;
                 middleA += arrA[i];
             }
             middleA /= countSum;
@@ -800,9 +804,9 @@ namespace PS5000A
 
             RunAvg(ref Array, countSum, 20);
 
-            using (StreamWriter fs = new StreamWriter(filename_))           
-                for (int i = 0; i < countSum; i++)               
-                    fs.WriteLine(Array[i]);                       
+            using (StreamWriter fs = new StreamWriter(filename_))
+                for (int i = 0; i < countSum; i++)
+                    fs.WriteLine(Array[i]);
         }
 
 
@@ -810,7 +814,7 @@ namespace PS5000A
         {
             masA = new long[countAfter + countBefore];
             int it = 0;
-            int mx = sourcesCount * (sourcesCount - 1);
+            int mx = CountOfEdges;
 
             for (int i = 0; i < sourcesCount; i++)
             {
@@ -823,7 +827,7 @@ namespace PS5000A
                     if (i != j)
                     {
                         await DataSborCh(j, Path.Combine(ItFolder(i), ArraysNames[j]));
-                        toolStripStatusLabel2.Text = $"Выполнено {++it} из {mx} ({Expendator.GetProcent(it,mx)}%)";
+                        toolStripStatusLabel2.Text = $"Выполнено {++it} из {mx} ({Expendator.GetProcent(it, mx)}%)";
                     }
                 toolStripStatusLabel2.Text = "";
 
@@ -851,33 +855,43 @@ namespace PS5000A
             SygnalOfEndCalc();
         }
 
+        /// <summary>
+        /// Запустить циклом преобразования Фурье и/или формы
+        /// </summary>
+        /// <param name="from"></param>
+        /// <param name="to"></param>
+        /// <returns></returns>
         private async Task FurierOrShowForm(Func<int, string> from, Func<int, string> to)
         {
             CreateFurierTransform(w0, w1, wcount);
 
             for (int i = 0; i < sourcesCount; i++)
-                await FurierOrShowIteration(from(i), to(i), i);            
+                await FurierOrShowIteration(from(i), to(i), i);
         }
-        private async Task FurierOrShowIteration(string from,string to,int number)
+        private async Task FurierOrShowIteration(string from, string to, int number)
         {
             if (checkBox2.Checked && !checkBox3.Checked)
                 await FurierAsync(from, to, number);
             else
             if (checkBox3.Checked)
-                ShowData(from, to, number);
-        }
-
-        private void SygnalOfEndCalc()
-        {
-            toolStripStatusLabel1.Text = $"Все вычисления завершены";            
-            new System.Media.SoundPlayer(Properties.Resources.ВычисленияЗавершены).Play();
+                await ShowDataAsync(from, to, number);
         }
 
         /// <summary>
-        ///------------------------------------------------------------------------
+        /// Сигнализирует о завершении всех операций
+        /// </summary>
+        private void SygnalOfEndCalc()
+        {
+            toolStripStatusLabel1.Text = $"Все вычисления завершены";
+            new System.Media.SoundPlayer(Properties.Resources.ВычисленияЗавершены).Play();
+        }
+        /// <summary>
+        /// Запускает преобразование Фурье
         /// </summary>
         /// <param name="from"></param>
         /// <param name="to"></param>
+        /// <param name="number"></param>
+        /// <returns></returns>
         private async Task FurierAsync(string from, string to = null, int number = 0)
         {
             to = to ?? from;
@@ -886,12 +900,38 @@ namespace PS5000A
             await CalcTransformAsync(wcount, from, to, Enumerable.Range(0, sourcesCount).Where(n => n != number).ToArray(), number);
             new System.Media.SoundPlayer(Properties.Resources.Преобразование_готово).Play();
         }
-
-        private void ShowData(string from, string to = null, int number = 0)
+        /// <summary>
+        /// Запускает форму с графиками и возможным запуском преобразования Фурье при закрытии
+        /// </summary>
+        /// <param name="from"></param>
+        /// <param name="to"></param>
+        /// <param name="number"></param>
+        /// <returns></returns>
+        private Task ShowDataAsync(string from, string to = null, int number = 0)
         {
             to = to ?? from;
 
-            int counttt = sourcesCount * (sourcesCount - 1);
+            var arrays = GetSTandNAMESforGrafic(from, number);
+
+            toolStripStatusLabel1.Text = "Строится график...";
+            var tcs = new TaskCompletionSource<bool>();
+            var form = new JustGrafic(arrays.Item1, arrays.Item2, $"График от {Symbols[number]}", dt, countBefore);
+
+            form.FormClosed += async (object sender, FormClosedEventArgs e) =>
+            {
+                if (checkBox2.Checked)
+                {
+                    await FurierAsync(from, to, number);
+                    tcs.SetResult(true);
+                }
+            };
+            form.Show();
+            return tcs.Task;
+        }
+
+        private Tuple<string[], string[]> GetSTandNAMES(string from)
+        {
+            int counttt = CountOfEdges;
             string[] st = new string[counttt];
             string[] names = new string[counttt];
             int index = 0;
@@ -903,9 +943,14 @@ namespace PS5000A
                         names[index] = Path.Combine(from, ArraysNames[j]);
                         index++;
                     }
+            return new Tuple<string[], string[]>(st, names);
+        }
 
-            toolStripStatusLabel1.Text = "Строится график...";
-            //this.Refresh();
+        private Tuple<string[], string[]> GetSTandNAMESforGrafic(string from, int number)
+        {
+            var stnames = GetSTandNAMES(from);
+            string[] st = stnames.Item1;
+            string[] names = stnames.Item2;
 
             string[] sst = new string[sourcesCount - 1], nnames = new string[sourcesCount - 1];
             for (int i = 0; i < (sourcesCount - 1); i++)
@@ -914,16 +959,7 @@ namespace PS5000A
                 nnames[i] = names[number * (sourcesCount - 1) + i];
             }
 
-
-            var form = new JustGrafic(sst, nnames, $"График от {Symbols[number]}", dt, countBefore);
-
-            form.FormClosed += new FormClosedEventHandler((object sender, FormClosedEventArgs e) => 
-            {
-                if (checkBox2.Checked)
-                FurierAsync(from, to, number)/*.RunSynchronously()*/;
-            });
-            form.Show();
-
+            return new Tuple<string[], string[]>(sst, nnames);
         }
     }
 }
