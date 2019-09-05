@@ -157,7 +157,7 @@ namespace Defect2019
         /// </summary>
         private void SetLastTimeConfig()
         {
-            using(StreamWriter f=new StreamWriter("LastTimeConfig.txt"))
+            using (StreamWriter f = new StreamWriter("LastTimeConfig.txt"))
             {
                 f.WriteLine($"tmin= {tmin}");
                 f.WriteLine($"tmax= {tmax}");
@@ -172,7 +172,7 @@ namespace Defect2019
         /// </summary>
         /// <param name="sender"></param>
         /// <param name="e"></param>
-        private async Task UxtCalc()
+        private async Task UxtCalcAsync()
         {
             label9.Show();
             пределыПоОсиZПриПромежуточномРисованииToolStripMenuItem.Enabled = false;
@@ -183,20 +183,23 @@ namespace Defect2019
             label9.Text = "Копирование скриптов";
             OtherMethods.CopyFilesTxt();
             string[] dir = Expendator.GetStringArrayFromFile("WhereData.txt", true);
-            for (int i = 0; i < dir.Length; i++)//между циклами можно включить задержку на время выбора параметров, хотя лучше не надо
-            {
-                save = 0;
-                Timer1_Tick(new object(), new EventArgs());
-                label9.Text = $"Обрабатывается{Environment.NewLine}замер {i + 1} (из {dir.Length})";
-                var s = Source.GetSourcesWithFw(sourcesArray, dir[i]);
-                toolStripStatusLabel1.Text = $"Считывается f(w) для замера {i + 1}";
-                FilesToSources(s, dir[i]);
 
-                await ManyPZAsync(s, dir[i]);
-                new System.Media.SoundPlayer(OtherMethods.GetResource("ЗамерОбработан.wav")).Play();
-            }
+            for (int i = 0; i < dir.Length; i++)//между циклами можно включить задержку на время выбора параметров, хотя лучше не надо
+                await UxtIterationAsync(dir[i], i, dir.Length);
 
             await AfterLoopsAct();
+        }
+        private async Task UxtIterationAsync(string dir,int i, int len)
+        {
+                save = 0;
+                Timer1_Tick(new object(), new EventArgs());
+                label9.Text = $"Обрабатывается{Environment.NewLine}замер {i + 1} (из {len})";
+                var s = Source.GetSourcesWithFw(sourcesArray, dir);
+                toolStripStatusLabel1.Text = $"Считывается f(w) для замера {i + 1}";
+                FilesToSources(s, dir);
+
+                await ManyPZAsync(s, dir);
+                OtherMethods.PlaySound("ЗамерОбработан");
         }
 
         /// <summary>
@@ -210,7 +213,7 @@ namespace Defect2019
             toolStripStatusLabel1.Text = $"Запущено построение u-surfaces";
             toolStripStatusLabel2.Text = $"";
             BegShow();
-            string gl = $"{Source.ToString(sourcesArray)}, (xmin, xmax, xcount, ymin, ymax) = ({xmin}, {xmax}, {count}, {ymin}, {ymax})";
+            string gl = $"{Source.ToString(sourcesArray)}, (xmin, xmax, count, ymin, ymax) = ({xmin}, {xmax}, {count}, {ymin}, {ymax})";
 
             await Task.Run(() =>
             {
@@ -225,7 +228,7 @@ namespace Defect2019
                     double t = tmin + i * th;
                     if (t == 0)
                         continue;
-                    string tit = $"{Source.ToString(sourcesArray)}, t = {t.ToString(4)}, (xmin, xmax, xcount, ymin, ymax) = ({xmin}, {xmax}, {count}, {ymin}, {ymax})";
+                    string tit = $"{Source.ToString(sourcesArray)}, t = {t.ToString(4)}, (xmin, xmax, count, ymin, ymax) = ({xmin}, {xmax}, {count}, {ymin}, {ymax})";
                     ts.WriteLine(tit + ".txt");
                     pds.WriteLine($"3D ur, uz(title , {tit} ).pdf");
                     filenames[i] = "3D " + tit + " .png";
@@ -240,8 +243,8 @@ namespace Defect2019
                     {
                         if (Functions.ur.Lenght > 0)
                         {
-                        Functions.ur.Dispose();
-                        GC.Collect();
+                            Functions.ur.Dispose();
+                            GC.Collect();
                         }
 
                     });
@@ -255,7 +258,7 @@ namespace Defect2019
             if (source.IsCancellationRequested) return;
             await Task.Run(() => StartProcess("OnlySurface.r", global: true));
             new Библиотека_графики.PdfOpen("Полученные u-surfaces", Path.Combine(Environment.CurrentDirectory, $"{gl} ")).Show();
-            new System.Media.SoundPlayer(OtherMethods.GetResource("ПоверхностиПостроены.wav")).Play();
+            OtherMethods.PlaySound("ПоверхностиПостроены");
 
             if (MessageBox.Show("Создавать анимацию? (может занять до 15 минут)", "Анимация", MessageBoxButtons.YesNo, MessageBoxIcon.Question) == System.Windows.Forms.DialogResult.Yes)
             {
@@ -263,16 +266,13 @@ namespace Defect2019
                 await Task.Run(() => OtherMethods.StartProcessOnly("ReDraw3Duxt2.r", true));
 
                 if (source.IsCancellationRequested) return;
-                new System.Media.SoundPlayer(OtherMethods.GetResource("АнимацияГотова.wav")).Play();
-                new Anima(filenames).ShowDialog();               
+                OtherMethods.PlaySound("АнимацияГотова");
+                new Anima(filenames).ShowDialog();
             }
 
             toolStripStatusLabel1.Text = $"Операции закончены";
             new Scheme(sourcesArray, new Point(xmin, ymin), xmax - xmin, ymax - ymin, gl + " (heatmap).png").Show();
-            new System.Media.SoundPlayer(OtherMethods.GetResource("ВычисленияЗавершены.wav")).Play();
-
-            button4.Show();
-            EndShows();
+            OtherMethods.PlaySound("ВычисленияЗавершены");
         }
 
         /// <summary>
@@ -312,10 +312,10 @@ namespace Defect2019
             for (int i = 0; i < names.Length; i++)
                 names[i] = Path.Combine(p[i], Expendator.GetWordFromFile(Path.Combine(p[i], "SurfaceMain.txt")));
 
-            Vectors vv1= new Vectors(len), vv2= new Vectors(len);
+            Vectors vv1 = new Vectors(len), vv2 = new Vectors(len);
             for (int k = 0; k < p.Length; k++)
             {
-                vv1+= Vectors.VectorFromFile(names[k] + " (ur).txt").Norming;
+                vv1 += Vectors.VectorFromFile(names[k] + " (ur).txt").Norming;
                 vv2 += Vectors.VectorFromFile(names[k] + " (uz).txt").Norming;
             }
             (vv1 / p.Length).ToFile(name + " (ur).txt");
@@ -330,6 +330,21 @@ namespace Defect2019
         /// <param name="e"></param>
         public async void button4_Click(object sender, EventArgs e)
         {
+            BeforeGenerateUXW();
+
+            await GenerateUXW();
+
+            button2.Show();
+            toolStripStatusLabel1.Text = "Начинается построение";
+            OtherMethods.PlaySound("Uxt");
+            другиеПараметрыToolStripMenuItem.Visible = false;
+            await UxtCalcAsync();
+
+            AfterGenerate();
+        }
+
+        private void BeforeGenerateUXW()
+        {
             толькоПросуммироватьToolStripMenuItem.Visible = false;
             button2.Hide();
             button4.Hide();
@@ -340,30 +355,30 @@ namespace Defect2019
                 FilesFromSources(sourcesArray);
             checkBox3.Hide();
             groupBox1.Hide();
-
-            new System.Media.SoundPlayer(OtherMethods.GetResource("ГенерацияДанных.wav")).Play();
+        }
+        private async Task GenerateUXW()
+        {
+            OtherMethods.PlaySound("ГенерацияДанных");
             timer2.Start();
             toolStripStatusLabel1.Text = "Выполняется генерация u(x,w) и f(w)";
             await Task.Run(
                 () =>
                 Parallel.Invoke(
-                    ()=>OtherMethods.Saveuxw3(xmin, xmax, count, ymin, ymax, sourcesArray),
+                    () => OtherMethods.Saveuxw3(xmin, xmax, count, ymin, ymax, sourcesArray),
                     () => { if (checkBox4.Checked) IlushaMethod(); }
                     )
                 );
-            Timer2_Tick(sender, e);
+            Timer2_Tick(new object(), new EventArgs());
             timer2.Stop();
             toolStripStatusLabel2.Text = "";
+        }
 
-            button2.Show();
-            toolStripStatusLabel1.Text = "Начинается построение";
-
-            new System.Media.SoundPlayer(OtherMethods.GetResource("Uxt.wav")).Play();
-            другиеПараметрыToolStripMenuItem.Visible = false;
-              await    UxtCalc();
+        private void AfterGenerate()
+        {
+            button4.Show();
+            EndShows();
             толькоПросуммироватьToolStripMenuItem.Visible = true;
             другиеПараметрыToolStripMenuItem.Visible = true;
-
             toolStripProgressBar1.Value = 0;
         }
 
@@ -401,7 +416,7 @@ namespace Defect2019
             var form = new PS5000A.PS5000ABlockForm(РабКонсоль.wbeg, РабКонсоль.wend, РабКонсоль.wcount);
 
             void cmet(object sender, FormClosingEventArgs e)
-            {                
+            {
             }
 
             form.FormClosing += new FormClosingEventHandler(cmet);
@@ -416,7 +431,7 @@ namespace Defect2019
         /// <param name="path"></param>
         private void ZlimsCalculate(int count = 1, string path = null)
         {
-            path =path?? Environment.CurrentDirectory;
+            path = path ?? Environment.CurrentDirectory;
 
             if (высчитатьИИспользоватьНовыеЗначенияToolStripMenuItem.Checked)
             {
@@ -463,10 +478,8 @@ namespace Defect2019
             new Helper(textBox5.Text.ToDouble(), textBox6.Text.ToDouble(), numericUpDown2.Value.ToInt32()).Show();
         }
 
-        private void button6_Click(object sender, EventArgs e)
-        {
-            new Библиотека_графики.PdfOpen("Варианты метрик", "formula").ShowDialog();
-        }
+        private void button6_Click(object sender, EventArgs e)=> new Библиотека_графики.PdfOpen("Варианты метрик", "formula").ShowDialog();
+        
 
         /// <summary>
         /// Скрыть основные элементы
@@ -537,7 +550,8 @@ namespace Defect2019
         {
             GetFields();
             checkBox4.Hide();
-           await AfterLoopsAct();
+            await AfterLoopsAct();
+            AfterGenerate();
         }
 
         private void даToolStripMenuItem_Click(object sender, EventArgs e)
@@ -635,25 +649,25 @@ namespace Defect2019
             all = tcount;
             timer1.Start();
             IProgress<int> progress = new Progress<int>((p) => { save = p; });
-            toolStripStatusLabel1.Text = "Вычисления запущены";         
+            toolStripStatusLabel1.Text = "Вычисления запущены";
             System.Threading.CancellationToken token = source.Token;
 
             StreamWriter ts = new StreamWriter(Path.Combine(path, "textnames.txt"));
             StreamWriter pds = new StreamWriter(Path.Combine(path, "pdfnames.txt"));
-            string gl = $"{Source.ToString(sources)}, (xmin, xmax, xcount, ymin, ymax) = ({xmin}, {xmax}, {count}, {ymin}, {ymax})";
+            string gl = $"{Source.ToString(sources)}, (xmin, xmax, count, ymin, ymax) = ({xmin}, {xmax}, {count}, {ymin}, {ymax})";
 
             Expendator.WriteStringInFile(Path.Combine(path, "SurfaceMain.txt"), gl);
 
             double[] xmas = Expendator.Seq(xmin, xmax, count);
             double[] ymas = Expendator.Seq(ymin, ymax, count);
 
-                Func<Point, bool> Filt = (Point point) =>
-                       {
-                           for (int q = 0; q < sources.Length; q++)
-                               if (sources[q].Filter(point))
-                                   return true;
-                           return false;
-                       };
+            Func<Point, bool> Filt = (Point point) =>
+                   {
+                       for (int q = 0; q < sources.Length; q++)
+                           if (sources[q].Filter(point))
+                               return true;
+                       return false;
+                   };
             string filename = "3D ur, uz.txt";
 
             async Task SlowUxt()
@@ -666,7 +680,7 @@ namespace Defect2019
                         continue;
 
                     toolStripStatusLabel1.Text = $"Построение графика при t = {t.ToString(3)}";
-                    string tit = $"{Source.ToString(sources)}, t = {t.ToString(4)}, (xmin, xmax, xcount, ymin, ymax) = ({xmin}, {xmax}, {count}, {ymin}, {ymax})";
+                    string tit = $"{Source.ToString(sources)}, t = {t.ToString(4)}, (xmin, xmax, count, ymin, ymax) = ({xmin}, {xmax}, {count}, {ymin}, {ymax})";
 
                     ts.WriteLine(tit + ".txt");
                     pds.WriteLine($"3D ur, uz(title , {tit} ).pdf");
@@ -688,9 +702,9 @@ namespace Defect2019
                     if (source.IsCancellationRequested)
                         return;
 
-                    if (checkBox1.Checked)                   
+                    if (checkBox1.Checked)
                         await Task.Run(() => StartProcess("3Duxt.r", tit, false, path));
-                    
+
                     filenames[i] = "3D " + tit + " .png";
                     save = i + 1;
                     if (source.IsCancellationRequested) return;
@@ -701,10 +715,10 @@ namespace Defect2019
             async Task FastUxt()
             {
                 save = 0;
-                string[] tsmas = new string[tcount],pdsmas=new string[tcount];
+                string[] tsmas = new string[tcount], pdsmas = new string[tcount];
                 toolStripStatusLabel1.Text = $"Построение u(x,t) с усиленным параллелизмом";
                 int[] kmas = new int[tcount];
-              
+
                 await Task.Run(() =>
                 {
                     OtherMethods.CalcUXT(xmas, ymas, sources);
@@ -715,33 +729,33 @@ namespace Defect2019
                         double t = tmin + i * th;
                         if (t != 0)
                         {
-                        string tit = $"{Source.ToString(sources)}, t = {t.ToString(4)}, (xmin, xmax, xcount, ymin, ymax) = ({xmin}, {xmax}, {count}, {ymin}, {ymax})";
+                            string tit = $"{Source.ToString(sources)}, t = {t.ToString(4)}, (xmin, xmax, count, ymin, ymax) = ({xmin}, {xmax}, {count}, {ymin}, {ymax})";
 
-                            tsmas[i]=tit + ".txt";
+                            tsmas[i] = tit + ".txt";
                             pdsmas[i] = $"3D ur, uz(title , {tit} ).pdf";
- filenames[i] = "3D " + tit + " .png";
-                            
-                        МатКлассы.Waves.Circle.FieldToFile(path,(double x, double y) => Uxt(x, y, t, sources),
-                                xmas, ymas,
-                                token,
-                                Filt,
-                                tit   );
+                            filenames[i] = "3D " + tit + " .png";
 
-                        if (source.IsCancellationRequested)
-                            return;
-                           
+                            МатКлассы.Waves.Circle.FieldToFile(path, (double x, double y) => Uxt(x, y, t, sources),
+                                    xmas, ymas,
+                                    token,
+                                    Filt,
+                                    tit);
+
+                            if (source.IsCancellationRequested)
+                                return;
+
                         }
                         kmas[i] = 1;
 
                         save = kmas.Sum();
                         if (source.IsCancellationRequested) return;
-    
+
                     }
                     );
                 });
 
                 tsmas = tsmas.Where(n => n != null).ToArray();
-                pdsmas=pdsmas.Where(n => n != null).ToArray();
+                pdsmas = pdsmas.Where(n => n != null).ToArray();
                 for (int i = 0; i < tsmas.Length; i++)
                 {
                     ts.WriteLine(tsmas[i]);
@@ -749,7 +763,7 @@ namespace Defect2019
                 }
             }
 
-            WriteXY(filename, path, xmas, ymas);          
+            WriteXY(filename, path, xmas, ymas);
             //выбор параллельного или последовательного методов
             if (даToolStripMenuItem.Checked)
                 await FastUxt();
@@ -766,7 +780,8 @@ namespace Defect2019
 
             await Animate(gl, path);
         }
-        private async Task Animate(string gl,string path)
+
+        private async Task Animate(string gl, string path)
         {
             toolStripStatusLabel1.Text = $"Запущено построение поверхностей";
             toolStripStatusLabel2.Text = $"";
@@ -798,7 +813,7 @@ namespace Defect2019
             }
         }
 
-        private void WriteXY(string filename,string path,double[] xmas,double[] ymas)
+        private void WriteXY(string filename, string path, double[] xmas, double[] ymas)
         {
             string se = filename.Substring(0, filename.Length - 4);//-.txt
             StreamWriter xs = new StreamWriter(Path.Combine(path, se + "(x).txt"));
@@ -838,9 +853,9 @@ namespace Defect2019
             // this.Close();
         }
 
-        public void StartProcess(string fileName, string tit=null, bool global = false, string path = null)
-        {      
-           path =path??Environment.CurrentDirectory;
+        public void StartProcess(string fileName, string tit = null, bool global = false, string path = null)
+        {
+            path = path ?? Environment.CurrentDirectory;
 
             Process process = new Process();
             process.StartInfo.FileName = Path.Combine(path, fileName);
@@ -860,7 +875,7 @@ namespace Defect2019
                 if (!global)
                 {
                     webBrowser1.Navigate(Path.Combine(path, $"3D ur, uz(title , {tit} ).pdf"));
-                webBrowser1.Refresh();
+                    webBrowser1.Refresh();
                 }
 
             };

@@ -9,7 +9,6 @@ using System.Text;
 using System.Threading.Tasks;
 using System.Windows.Forms;
 using МатКлассы;
-using МатКлассы;
 using static Functions;
 using static МатКлассы.Waves;
 

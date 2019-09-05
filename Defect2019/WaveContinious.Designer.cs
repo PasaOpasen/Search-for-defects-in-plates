@@ -244,7 +244,7 @@
             // label8
             // 
             this.label8.AutoSize = true;
-            this.label8.Location = new System.Drawing.Point(18, 91);
+            this.label8.Location = new System.Drawing.Point(17, 91);
             this.label8.Name = "label8";
             this.label8.Size = new System.Drawing.Size(72, 19);
             this.label8.TabIndex = 11;
@@ -257,7 +257,7 @@
             0,
             0,
             0});
-            this.numericUpDown2.Location = new System.Drawing.Point(96, 89);
+            this.numericUpDown2.Location = new System.Drawing.Point(86, 89);
             this.numericUpDown2.Maximum = new decimal(new int[] {
             3000,
             0,

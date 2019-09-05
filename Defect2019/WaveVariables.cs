@@ -23,65 +23,55 @@ using static РабКонсоль;
 using System.Diagnostics;
 using System.Runtime.Serialization.Formatters.Binary;
 
-
+/// <summary>
+/// Формы, хранящиеся в приложении
+/// </summary>
 public static class Forms
 {
     public static UGrafic UG = new UGrafic();
     public static Uxt Uform = new Uxt();
 }
 
+/// <summary>
+/// Основные константы программы
+/// </summary>
 public static class РабКонсоль
 {
     #region Параметры DINN
+    /// <summary>
+    /// Воспроизведение музыки на форме
+    /// </summary>
     public static bool DINNplay = false;
 
-    private static double t11 = 0, t44 = 15;
-    public static double t1
-    {
-        get
-        {
-            //if (t11 < 0) t11 = Math.Min(k1(w), k2(w)) / 2;
-            return t11;
-        }
-        set
-        {
-            t11 = value;
-        }
-    }
-    public static double t4
-    {
-        get
-        {
-            //if (t44 < 0) t44 = Math.Max(k1(w), k2(w)) * 2;
-            return t44;
-        }
-        set
-        {
-            t44 = value;
-        }
-    }
-
+    public static double t1 { get; set; } = 0;
+    public static double t4 { get; set; } = 15;
     public static double t2 = t1, t3 = t1, tm = 0.02, tp = 0, eps = 1e-6, pr = 1e-3, gr = 1e3;
+    /// <summary>
+    /// Число узлов в методе Гаусса-Кронрода
+    /// </summary>
     public static GaussKronrod.NodesCount NodesCount = GaussKronrod.NodesCount.GK15;
     #endregion
 
-    #region Параметры для дисперсионок
-    public static Complex[] Poles;
+    #region Параметры для дисперсионных кривых
     public static double steproot = 1e-3, polesBeg = 0.0, polesEnd = 15;
     public static double epsjump = 1e-1, epsroot = 1e-3;
     public static int countroot = 50;
     #endregion
 
+    #region Параметры по частотам
     public static double ThU = 1e-3, SpU = 1e3, wc = 0.6283185/*0.1 * 2 * Math.PI*/, _T;
     public static double T => 2 * Math.PI / wc * ThU / SpU;
-    public static double wbeg = 0.01256637061435917295385057353312, wend = 1.2566370614359172953850573533118;//wbeg = 0.0314159265358979, wend = 1.06814150222053;  
+
+    public static double wbeg = 0.01256637061435917295385057353312, wend = 1.2566370614359172953850573533118; 
     public static int wcount = 400;
 
     /// <summary>
     /// Текущий массив частот
     /// </summary>
     public static double[] wmas;
+    #endregion
 
+    #region Параметры анимации
     /// <summary>
     /// Скорость смены картинок для анимации (в ммсек)
     /// </summary>
@@ -90,66 +80,54 @@ public static class РабКонсоль
     /// Число кластеров при создании анимации
     /// </summary>
     public static int clastersCount = 3;
-
     /// <summary>
     /// Максимальное число циклов анимации
     /// </summary>
     public static int animacycles = 15;
+    #endregion
 }
 
+/// <summary>
+/// Класс с методами самой модели
+/// </summary>
 public static class Functions
 {
     #region Конструктор и константы
     static Functions()
     {
         AfterChaigeData();
-
-        II = new Complex(0, 1);
-        I2 = new Complex(0, 0.5);
     }
-    public static Complex II, I2;
-    public static double sqrtfrac2pi = Math.Sqrt(2.0 / Math.PI),
+    public static readonly 
+        Complex I= Complex.I, 
+        I2= new Complex(0, 0.5);
+    public static readonly double 
+        sqrtfrac2pi = Math.Sqrt(2.0 / Math.PI),
     fracpi4 = Math.PI / 4;
 
     public static void AfterChaigeData()
     {
-        ml2 = 2 * mu + lamda;
-        im = Complex.I * mu;
         mu2 = 2 * mu;
+        ml2 = mu2 + lamda;
+        im = new Complex(0, mu);
+        
         h = z1 - z2;
         k2coef = ro / mu;
         k1coef = ro / ml2;
         Expendator.WriteStringInFile("ClastersCount.txt", clastersCount.ToString());
-
-        //var KMatr = new Memoize<Tuple<Complex, Complex, double, double>, CSqMatrix>((Tuple<Complex, Complex, double, double> t) => K(t.Item1, t.Item2, t.Item3, t.Item4)).Value;
-        //KMatrix = (Complex a1, Complex a2, double z, double w) => KMatr(new Tuple<Complex, Complex, double, double>(a1, a2, z, w));
 
         var del = new Memoize<Tuple<Complex, Complex, double>, CSqMatrix>((Tuple<Complex, Complex, double> t) => delta(t.Item1, t.Item2, t.Item3)).Value;
         Delta = (Complex a1, Complex a2, double w) => del(new Tuple<Complex, Complex, double>(a1, a2, w));
         var det = new Memoize<Tuple<Complex, Complex, double>, Complex>((Tuple<Complex, Complex, double> t) => delta(t.Item1, t.Item2, t.Item3).Det).Value;
         DeltaDet = (Complex a1, Complex a2, double w) => det(new Tuple<Complex, Complex, double>(a1, a2, w));
 
-        //var bes = new Memoize<Tuple<Complex,double, double>, Complex[]>((Tuple<Complex, double, double> t) => _Bessel(t.Item1, t.Item2,t.Item3)).Value;
-        //Bessel = (Complex a,double x,double y) => bes(new Tuple<Complex, double, double>(a,x,y));
         Bessel = new Func<Complex, double, double, Complex[]>(_Bessel);
-
-        //var han = new Memoize<Tuple<double, double>, Complex>((Tuple<double, double> t) => Computator.NET.Core.Functions.SpecialFunctions.Hankel1(t.Item1, t.Item2)).Value;
-        //Hankel = (double n, double x) => han(new Tuple<double, double>(n, x));
 
         prmsnmem = new Memoize<Tuple<Complex, double>, Complex[]>((Tuple<Complex, double> t) => PRMSN(t.Item1, t.Item2));
         var prmsn = prmsnmem.Value;
         PRMSN_Memoized = (Complex a, double w) => prmsn(new Tuple<Complex, double>(a, w));
 
-        //var prmsnmemup = new Memoize<Tuple<Complex, double, double,bool>, Complex[]>((Tuple<Complex, double, double,bool> t) => _PRMSNUp(t.Item1, t.Item2, t.Item3,t.Item4));
-        //var prmsnup = prmsnmemup.Value;
-        //PRMSNUp = (Complex a, double z, double w,bool first) => prmsnup(new Tuple<Complex, double, double,bool>(a, z, w,first));
-        ////PRMSN_Memoized = new Func<Complex, double, double, Complex[]>(PRMSN);
-
         var pol = new Memoize<double, Vectors>((double t) => PolesMas(t)).Value;
         PolesMasMemoized = (double x) => pol(x);
-
-        //var JJ = new Memoize<Complex, Tuple<Complex, Complex>>((Complex c) => new Tuple<Complex, Complex>(МатКлассы.SpecialFunctions.MyBessel(1.0, c), МатКлассы.SpecialFunctions.MyBessel(0.0, c))).Value;
-        //J = (Complex c) => JJ(c);
 
         var seq = new Memoize<Tuple<double, double, int>, double[]>((Tuple<double, double, int> t) => SeqW(t.Item1, t.Item2, t.Item3));
         SeqWMemoized = (double a, double b, int c) => seq.Value(new Tuple<double, double, int>(a, b, c));
@@ -171,17 +149,16 @@ public static class Functions
     }
     public static Memoize<Tuple<double, double, double, Source>,Tuple<Complex,Complex>> ur;
     public static Memoize<Tuple<double, double, Source>, Tuple<Complex, Complex>[]> cmas;
-
+    public static Memoize<Tuple<Complex, double>, Complex[]> prmsnmem;
 
     public static Func<double, double, int, double[]> SeqW = (double wbeg, double wend, int count) => Expendator.Seq(wbeg, wend, count);
     public static Func<double, double, int, double[]> SeqWMemoized;
-    public static Memoize<Tuple<Complex, double>, Complex[]> prmsnmem;
+    
 
     public static double lamda = 51.0835913312694, mu = 26.3157894736842, ro = 2.7, h, crosscoef = 0.2;
     public static double ml2, z1 = 0, z2 = -2.0, mu2, k1coef, k2coef;
     private static Complex im;
 
-    private static Func<Complex, Tuple<Complex, Complex>> J;
     #endregion
 
     #region Простейшие функции
@@ -209,72 +186,7 @@ public static class Functions
         return (perv(2 * Math.PI * N / wc) - perv(0)) / 8;
     };
     #endregion
-
-    #region Устаревшие функции
-    private static Func<Complex, Complex, Complex> als = (Complex al1, Complex al2) => al1.Sqr() + al2.Sqr();
-    private static Func<Complex, Complex, double, CSqMatrix> delta = (Complex a1, Complex a2, double w) =>
-        {
-            double kt1 = k1(w), kt2 = k2(w);
-            Complex al = als(a1, a2);
-            Complex s1s = al - kt1, s2s = al - kt2, s1 = sigma(al, kt1), s2 = sigma(al, kt2);
-
-            Complex a = -lamda * al + ml2 * s1s;
-            Complex b = im * al * 2 * s1;
-            Complex c = 2 * mu * al * s2;
-            Complex d = -im * al * (s2s + al);
-            Complex e11 = Complex.Exp(s1 * z1), e12 = Complex.Exp(s1 * z2), e21 = Complex.Exp(s2 * z1), e22 = Complex.Exp(s2 * z2);
-
-            return new CSqMatrix(new Complex[,] {
-                 { a*e11,a/e11,c*e21,-c/e21},
-                 { -b*e11,b/e11,d*e21,d/e21},
-                 {a*e12,a/e12,c*e22,-c/e22 },
-                 {-b*e12,b/e12,d*e22,d/e22 }
-             });
-        };
-    /// <summary>
-    /// Функция, возвращающая матрицу, чей определитель есть знаменатель delta
-    /// </summary>
-    public static Func<Complex, Complex, double, CSqMatrix> Delta;
-    /// <summary>
-    /// Функция, возвращающая матрицу, чей определитель есть знаменатель delta
-    /// </summary>
-    public static Func<Complex, Complex, double, Complex> DeltaDet;
-
-    /// <summary>
-    /// Матрица Грина при alpha=0, умноженнная на alpha
-    /// </summary>
-    public static Func<double, double, double, double, CSqMatrix> K0a = (double x, double y, double z, double w) =>
-    {
-        var b = Bessel(0, x, y);
-
-        Complex i = new Complex(0, 1);
-        Complex s2 = i * k2(w);
-        Complex N = Math.Tan(k2(w) * h).Reverse() / mu / k2(w);
-        Complex r = Math.Sqrt(x * x + y * y);
-
-        Complex jxx = x * x / r / r, jxy = x * y / r / r, jyy = y * y / r / r;//jxx.Show();
-
-        Complex
-        K11 = N * jyy,
-        K12 = -N * jxy,
-        K13 = 0,
-        K21 = new Complex(K12),
-        K22 = N * jxx,
-        K23 = 0,
-        K31 = 0,
-        K32 = 0,
-        K33 = 0;
-
-        return new CSqMatrix(new Complex[,] {
-                 {K11,K12, K13},
-             { K21,K22,K23},
-             { K31,K32,K33}
-              });
-    };
-
-    #endregion
-
-
+    //-----
     #region Функции знаменателя, его производных и корней
 
     public static double epsforder => РабКонсоль.eps;
@@ -525,7 +437,7 @@ public static class Functions
              Complex ar = a * r, a2 = a * a;
              Complex j1ar = beshank.Item1/*МатКлассы.SpecialFunctions.MyBessel(1, ar)*/, j0ar = beshank.Item2/*МатКлассы.SpecialFunctions.MyBessel(0, ar)*/;
 
-             Complex P = PRMSN_Memoized[0], R = PRMSN_Memoized[1], Mi = PRMSN_Memoized[2] * II, Si = PRMSN_Memoized[3] * II, Ni = PRMSN_Memoized[4] * II;
+             Complex P = PRMSN_Memoized[0], R = PRMSN_Memoized[1], Mi = PRMSN_Memoized[2] * I, Si = PRMSN_Memoized[3] * I, Ni = PRMSN_Memoized[4] * I;
              Complex
                j1arr = j1ar / r,
                jx = -x * j1arr,
@@ -567,8 +479,8 @@ public static class Functions
 
           Complex j1ar = beshank.Item1, j0ar = beshank.Item2;
 
-          Complex P = PRMSN1[0] * a21 - PRMSN2[0] * a22, R1 = PRMSN1[1], Mi1 = PRMSN1[2] * II, Si = (PRMSN1[3] - PRMSN2[3]) * II, Ni1 = PRMSN1[4] * II;
-          Complex R2 = PRMSN2[1], Mi2 = PRMSN2[2] * II, Ni2 = PRMSN2[4] * II;
+          Complex P = PRMSN1[0] * a21 - PRMSN2[0] * a22, R1 = PRMSN1[1], Mi1 = PRMSN1[2] * I, Si = (PRMSN1[3] - PRMSN2[3]) * I, Ni1 = PRMSN1[4] * I;
+          Complex R2 = PRMSN2[1], Mi2 = PRMSN2[2] * I, Ni2 = PRMSN2[4] * I;
 
           Complex
             j1arr = j1ar / r,
@@ -607,8 +519,8 @@ public static class Functions
 
         Complex j1ar = beshank.Item1, j0ar = beshank.Item2;
 
-        Complex P = PRMSN1[0] * a21 - PRMSN2[0] * a22, R1 = PRMSN1[1], Mi1 = PRMSN1[2] * II, Si = (PRMSN1[3] - PRMSN2[3]) * II, Ni1 = PRMSN1[4] * II;
-        Complex R2 = PRMSN2[1], Mi2 = PRMSN2[2] * II, Ni2 = PRMSN2[4] * II;
+        Complex P = PRMSN1[0] * a21 - PRMSN2[0] * a22, R1 = PRMSN1[1], Mi1 = PRMSN1[2] * I, Si = (PRMSN1[3] - PRMSN2[3]) * I, Ni1 = PRMSN1[4] * I;
+        Complex R2 = PRMSN2[1], Mi2 = PRMSN2[2] * I, Ni2 = PRMSN2[4] * I;
 
         Complex
           j1arr = j1ar / r,
@@ -962,7 +874,6 @@ public static class Functions
         };
 
     #endregion
-
 
     #region Функции Ханкеля
     /// <summary>
@@ -1664,4 +1575,6 @@ list.Add(smas[i].dup);
         s=s.Substring(0,s.IndexOf("Defect2019")+10);
         return Path.Combine(s, "Resources", name);        
     }
+
+    public static void PlaySound(string NameInResources)=> new System.Media.SoundPlayer(OtherMethods.GetResource(NameInResources+".wav")).Play();
 }
