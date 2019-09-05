@@ -233,7 +233,7 @@ namespace PS5000A
             // 
             this.label16.AutoSize = true;
             this.label16.Font = new System.Drawing.Font("Microsoft Sans Serif", 9.75F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-            this.label16.Location = new System.Drawing.Point(259, 240);
+            this.label16.Location = new System.Drawing.Point(301, 246);
             this.label16.Name = "label16";
             this.label16.Size = new System.Drawing.Size(403, 16);
             this.label16.TabIndex = 10;
@@ -370,7 +370,7 @@ namespace PS5000A
             this.label41.AutoSize = true;
             this.label41.Font = new System.Drawing.Font("Microsoft Sans Serif", 14.25F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(204)));
             this.label41.ForeColor = System.Drawing.Color.Red;
-            this.label41.Location = new System.Drawing.Point(374, 202);
+            this.label41.Location = new System.Drawing.Point(397, 243);
             this.label41.Name = "label41";
             this.label41.Size = new System.Drawing.Size(25, 24);
             this.label41.TabIndex = 50;
@@ -381,7 +381,7 @@ namespace PS5000A
             this.label40.AutoSize = true;
             this.label40.Font = new System.Drawing.Font("Microsoft Sans Serif", 14.25F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(204)));
             this.label40.ForeColor = System.Drawing.Color.Red;
-            this.label40.Location = new System.Drawing.Point(6, 205);
+            this.label40.Location = new System.Drawing.Point(5, 246);
             this.label40.Name = "label40";
             this.label40.Size = new System.Drawing.Size(24, 24);
             this.label40.TabIndex = 49;
@@ -392,7 +392,7 @@ namespace PS5000A
             this.label39.AutoSize = true;
             this.label39.Font = new System.Drawing.Font("Microsoft Sans Serif", 14.25F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(204)));
             this.label39.ForeColor = System.Drawing.Color.Red;
-            this.label39.Location = new System.Drawing.Point(374, 144);
+            this.label39.Location = new System.Drawing.Point(398, 171);
             this.label39.Name = "label39";
             this.label39.Size = new System.Drawing.Size(25, 24);
             this.label39.TabIndex = 48;
@@ -403,7 +403,7 @@ namespace PS5000A
             this.label38.AutoSize = true;
             this.label38.Font = new System.Drawing.Font("Microsoft Sans Serif", 14.25F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(204)));
             this.label38.ForeColor = System.Drawing.Color.Red;
-            this.label38.Location = new System.Drawing.Point(6, 147);
+            this.label38.Location = new System.Drawing.Point(6, 174);
             this.label38.Name = "label38";
             this.label38.Size = new System.Drawing.Size(24, 24);
             this.label38.TabIndex = 47;
@@ -414,7 +414,7 @@ namespace PS5000A
             this.label37.AutoSize = true;
             this.label37.Font = new System.Drawing.Font("Microsoft Sans Serif", 14.25F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(204)));
             this.label37.ForeColor = System.Drawing.Color.Red;
-            this.label37.Location = new System.Drawing.Point(374, 89);
+            this.label37.Location = new System.Drawing.Point(398, 104);
             this.label37.Name = "label37";
             this.label37.Size = new System.Drawing.Size(23, 24);
             this.label37.TabIndex = 46;
@@ -425,7 +425,7 @@ namespace PS5000A
             this.label36.AutoSize = true;
             this.label36.Font = new System.Drawing.Font("Microsoft Sans Serif", 14.25F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(204)));
             this.label36.ForeColor = System.Drawing.Color.Red;
-            this.label36.Location = new System.Drawing.Point(374, 29);
+            this.label36.Location = new System.Drawing.Point(398, 29);
             this.label36.Name = "label36";
             this.label36.Size = new System.Drawing.Size(24, 24);
             this.label36.TabIndex = 45;
@@ -436,7 +436,7 @@ namespace PS5000A
             this.label35.AutoSize = true;
             this.label35.Font = new System.Drawing.Font("Microsoft Sans Serif", 14.25F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(204)));
             this.label35.ForeColor = System.Drawing.Color.Red;
-            this.label35.Location = new System.Drawing.Point(6, 88);
+            this.label35.Location = new System.Drawing.Point(6, 103);
             this.label35.Name = "label35";
             this.label35.Size = new System.Drawing.Size(23, 24);
             this.label35.TabIndex = 45;
@@ -455,7 +455,7 @@ namespace PS5000A
             // 
             // textBox15
             // 
-            this.textBox15.Location = new System.Drawing.Point(595, 223);
+            this.textBox15.Location = new System.Drawing.Point(618, 264);
             this.textBox15.Margin = new System.Windows.Forms.Padding(4, 5, 4, 5);
             this.textBox15.Name = "textBox15";
             this.textBox15.Size = new System.Drawing.Size(97, 26);
@@ -466,7 +466,7 @@ namespace PS5000A
             // label22
             // 
             this.label22.AutoSize = true;
-            this.label22.Location = new System.Drawing.Point(381, 53);
+            this.label22.Location = new System.Drawing.Point(405, 53);
             this.label22.Margin = new System.Windows.Forms.Padding(4, 0, 4, 0);
             this.label22.Name = "label22";
             this.label22.Size = new System.Drawing.Size(80, 20);
@@ -476,7 +476,7 @@ namespace PS5000A
             // label23
             // 
             this.label23.AutoSize = true;
-            this.label23.Location = new System.Drawing.Point(700, 226);
+            this.label23.Location = new System.Drawing.Point(723, 267);
             this.label23.Margin = new System.Windows.Forms.Padding(4, 0, 4, 0);
             this.label23.Name = "label23";
             this.label23.Size = new System.Drawing.Size(14, 20);
@@ -485,7 +485,7 @@ namespace PS5000A
             // 
             // textBox16
             // 
-            this.textBox16.Location = new System.Drawing.Point(469, 48);
+            this.textBox16.Location = new System.Drawing.Point(493, 48);
             this.textBox16.Margin = new System.Windows.Forms.Padding(4, 5, 4, 5);
             this.textBox16.Name = "textBox16";
             this.textBox16.Size = new System.Drawing.Size(97, 26);
@@ -496,7 +496,7 @@ namespace PS5000A
             // label24
             // 
             this.label24.AutoSize = true;
-            this.label24.Location = new System.Drawing.Point(574, 227);
+            this.label24.Location = new System.Drawing.Point(597, 268);
             this.label24.Margin = new System.Windows.Forms.Padding(4, 0, 4, 0);
             this.label24.Name = "label24";
             this.label24.Size = new System.Drawing.Size(13, 20);
@@ -506,7 +506,7 @@ namespace PS5000A
             // label25
             // 
             this.label25.AutoSize = true;
-            this.label25.Location = new System.Drawing.Point(574, 51);
+            this.label25.Location = new System.Drawing.Point(598, 51);
             this.label25.Margin = new System.Windows.Forms.Padding(4, 0, 4, 0);
             this.label25.Name = "label25";
             this.label25.Size = new System.Drawing.Size(13, 20);
@@ -516,7 +516,7 @@ namespace PS5000A
             // label26
             // 
             this.label26.AutoSize = true;
-            this.label26.Location = new System.Drawing.Point(381, 226);
+            this.label26.Location = new System.Drawing.Point(404, 267);
             this.label26.Margin = new System.Windows.Forms.Padding(4, 0, 4, 0);
             this.label26.Name = "label26";
             this.label26.Size = new System.Drawing.Size(80, 20);
@@ -526,7 +526,7 @@ namespace PS5000A
             // label27
             // 
             this.label27.AutoSize = true;
-            this.label27.Location = new System.Drawing.Point(700, 50);
+            this.label27.Location = new System.Drawing.Point(724, 50);
             this.label27.Margin = new System.Windows.Forms.Padding(4, 0, 4, 0);
             this.label27.Name = "label27";
             this.label27.Size = new System.Drawing.Size(14, 20);
@@ -535,7 +535,7 @@ namespace PS5000A
             // 
             // textBox17
             // 
-            this.textBox17.Location = new System.Drawing.Point(469, 224);
+            this.textBox17.Location = new System.Drawing.Point(492, 265);
             this.textBox17.Margin = new System.Windows.Forms.Padding(4, 5, 4, 5);
             this.textBox17.Name = "textBox17";
             this.textBox17.Size = new System.Drawing.Size(97, 26);
@@ -545,7 +545,7 @@ namespace PS5000A
             // 
             // textBox18
             // 
-            this.textBox18.Location = new System.Drawing.Point(595, 47);
+            this.textBox18.Location = new System.Drawing.Point(619, 47);
             this.textBox18.Margin = new System.Windows.Forms.Padding(4, 5, 4, 5);
             this.textBox18.Name = "textBox18";
             this.textBox18.Size = new System.Drawing.Size(97, 26);
@@ -555,7 +555,7 @@ namespace PS5000A
             // 
             // textBox19
             // 
-            this.textBox19.Location = new System.Drawing.Point(595, 165);
+            this.textBox19.Location = new System.Drawing.Point(619, 192);
             this.textBox19.Margin = new System.Windows.Forms.Padding(4, 5, 4, 5);
             this.textBox19.Name = "textBox19";
             this.textBox19.Size = new System.Drawing.Size(97, 26);
@@ -565,7 +565,7 @@ namespace PS5000A
             // 
             // textBox20
             // 
-            this.textBox20.Location = new System.Drawing.Point(469, 108);
+            this.textBox20.Location = new System.Drawing.Point(493, 123);
             this.textBox20.Margin = new System.Windows.Forms.Padding(4, 5, 4, 5);
             this.textBox20.Name = "textBox20";
             this.textBox20.Size = new System.Drawing.Size(97, 26);
@@ -576,7 +576,7 @@ namespace PS5000A
             // label28
             // 
             this.label28.AutoSize = true;
-            this.label28.Location = new System.Drawing.Point(700, 168);
+            this.label28.Location = new System.Drawing.Point(724, 195);
             this.label28.Margin = new System.Windows.Forms.Padding(4, 0, 4, 0);
             this.label28.Name = "label28";
             this.label28.Size = new System.Drawing.Size(14, 20);
@@ -586,7 +586,7 @@ namespace PS5000A
             // label29
             // 
             this.label29.AutoSize = true;
-            this.label29.Location = new System.Drawing.Point(381, 113);
+            this.label29.Location = new System.Drawing.Point(405, 128);
             this.label29.Margin = new System.Windows.Forms.Padding(4, 0, 4, 0);
             this.label29.Name = "label29";
             this.label29.Size = new System.Drawing.Size(80, 20);
@@ -596,7 +596,7 @@ namespace PS5000A
             // label30
             // 
             this.label30.AutoSize = true;
-            this.label30.Location = new System.Drawing.Point(574, 169);
+            this.label30.Location = new System.Drawing.Point(598, 196);
             this.label30.Margin = new System.Windows.Forms.Padding(4, 0, 4, 0);
             this.label30.Name = "label30";
             this.label30.Size = new System.Drawing.Size(13, 20);
@@ -606,7 +606,7 @@ namespace PS5000A
             // label31
             // 
             this.label31.AutoSize = true;
-            this.label31.Location = new System.Drawing.Point(574, 111);
+            this.label31.Location = new System.Drawing.Point(598, 126);
             this.label31.Margin = new System.Windows.Forms.Padding(4, 0, 4, 0);
             this.label31.Name = "label31";
             this.label31.Size = new System.Drawing.Size(13, 20);
@@ -616,7 +616,7 @@ namespace PS5000A
             // label32
             // 
             this.label32.AutoSize = true;
-            this.label32.Location = new System.Drawing.Point(381, 168);
+            this.label32.Location = new System.Drawing.Point(405, 195);
             this.label32.Margin = new System.Windows.Forms.Padding(4, 0, 4, 0);
             this.label32.Name = "label32";
             this.label32.Size = new System.Drawing.Size(80, 20);
@@ -626,7 +626,7 @@ namespace PS5000A
             // label33
             // 
             this.label33.AutoSize = true;
-            this.label33.Location = new System.Drawing.Point(700, 110);
+            this.label33.Location = new System.Drawing.Point(724, 125);
             this.label33.Margin = new System.Windows.Forms.Padding(4, 0, 4, 0);
             this.label33.Name = "label33";
             this.label33.Size = new System.Drawing.Size(14, 20);
@@ -635,7 +635,7 @@ namespace PS5000A
             // 
             // textBox21
             // 
-            this.textBox21.Location = new System.Drawing.Point(469, 166);
+            this.textBox21.Location = new System.Drawing.Point(493, 193);
             this.textBox21.Margin = new System.Windows.Forms.Padding(4, 5, 4, 5);
             this.textBox21.Name = "textBox21";
             this.textBox21.Size = new System.Drawing.Size(97, 26);
@@ -645,7 +645,7 @@ namespace PS5000A
             // 
             // textBox22
             // 
-            this.textBox22.Location = new System.Drawing.Point(595, 107);
+            this.textBox22.Location = new System.Drawing.Point(619, 122);
             this.textBox22.Margin = new System.Windows.Forms.Padding(4, 5, 4, 5);
             this.textBox22.Name = "textBox22";
             this.textBox22.Size = new System.Drawing.Size(97, 26);
@@ -655,7 +655,7 @@ namespace PS5000A
             // 
             // textBox7
             // 
-            this.textBox7.Location = new System.Drawing.Point(231, 223);
+            this.textBox7.Location = new System.Drawing.Point(230, 264);
             this.textBox7.Margin = new System.Windows.Forms.Padding(4, 5, 4, 5);
             this.textBox7.Name = "textBox7";
             this.textBox7.Size = new System.Drawing.Size(97, 26);
@@ -676,7 +676,7 @@ namespace PS5000A
             // label10
             // 
             this.label10.AutoSize = true;
-            this.label10.Location = new System.Drawing.Point(336, 226);
+            this.label10.Location = new System.Drawing.Point(335, 267);
             this.label10.Margin = new System.Windows.Forms.Padding(4, 0, 4, 0);
             this.label10.Name = "label10";
             this.label10.Size = new System.Drawing.Size(14, 20);
@@ -696,7 +696,7 @@ namespace PS5000A
             // label11
             // 
             this.label11.AutoSize = true;
-            this.label11.Location = new System.Drawing.Point(210, 227);
+            this.label11.Location = new System.Drawing.Point(209, 268);
             this.label11.Margin = new System.Windows.Forms.Padding(4, 0, 4, 0);
             this.label11.Name = "label11";
             this.label11.Size = new System.Drawing.Size(13, 20);
@@ -716,7 +716,7 @@ namespace PS5000A
             // label12
             // 
             this.label12.AutoSize = true;
-            this.label12.Location = new System.Drawing.Point(17, 229);
+            this.label12.Location = new System.Drawing.Point(16, 270);
             this.label12.Margin = new System.Windows.Forms.Padding(4, 0, 4, 0);
             this.label12.Name = "label12";
             this.label12.Size = new System.Drawing.Size(80, 20);
@@ -735,7 +735,7 @@ namespace PS5000A
             // 
             // textBox8
             // 
-            this.textBox8.Location = new System.Drawing.Point(105, 224);
+            this.textBox8.Location = new System.Drawing.Point(104, 265);
             this.textBox8.Margin = new System.Windows.Forms.Padding(4, 5, 4, 5);
             this.textBox8.Name = "textBox8";
             this.textBox8.Size = new System.Drawing.Size(97, 26);
@@ -756,7 +756,7 @@ namespace PS5000A
             // 
             // textBox5
             // 
-            this.textBox5.Location = new System.Drawing.Point(231, 165);
+            this.textBox5.Location = new System.Drawing.Point(231, 192);
             this.textBox5.Margin = new System.Windows.Forms.Padding(4, 5, 4, 5);
             this.textBox5.Name = "textBox5";
             this.textBox5.Size = new System.Drawing.Size(97, 26);
@@ -766,7 +766,7 @@ namespace PS5000A
             // 
             // textBox4
             // 
-            this.textBox4.Location = new System.Drawing.Point(105, 107);
+            this.textBox4.Location = new System.Drawing.Point(105, 122);
             this.textBox4.Margin = new System.Windows.Forms.Padding(4, 5, 4, 5);
             this.textBox4.Name = "textBox4";
             this.textBox4.Size = new System.Drawing.Size(97, 26);
@@ -777,7 +777,7 @@ namespace PS5000A
             // label7
             // 
             this.label7.AutoSize = true;
-            this.label7.Location = new System.Drawing.Point(336, 168);
+            this.label7.Location = new System.Drawing.Point(336, 195);
             this.label7.Margin = new System.Windows.Forms.Padding(4, 0, 4, 0);
             this.label7.Name = "label7";
             this.label7.Size = new System.Drawing.Size(14, 20);
@@ -787,7 +787,7 @@ namespace PS5000A
             // label6
             // 
             this.label6.AutoSize = true;
-            this.label6.Location = new System.Drawing.Point(17, 112);
+            this.label6.Location = new System.Drawing.Point(17, 127);
             this.label6.Margin = new System.Windows.Forms.Padding(4, 0, 4, 0);
             this.label6.Name = "label6";
             this.label6.Size = new System.Drawing.Size(80, 20);
@@ -797,7 +797,7 @@ namespace PS5000A
             // label8
             // 
             this.label8.AutoSize = true;
-            this.label8.Location = new System.Drawing.Point(210, 169);
+            this.label8.Location = new System.Drawing.Point(210, 196);
             this.label8.Margin = new System.Windows.Forms.Padding(4, 0, 4, 0);
             this.label8.Name = "label8";
             this.label8.Size = new System.Drawing.Size(13, 20);
@@ -807,7 +807,7 @@ namespace PS5000A
             // label5
             // 
             this.label5.AutoSize = true;
-            this.label5.Location = new System.Drawing.Point(210, 110);
+            this.label5.Location = new System.Drawing.Point(210, 125);
             this.label5.Margin = new System.Windows.Forms.Padding(4, 0, 4, 0);
             this.label5.Name = "label5";
             this.label5.Size = new System.Drawing.Size(13, 20);
@@ -817,7 +817,7 @@ namespace PS5000A
             // label9
             // 
             this.label9.AutoSize = true;
-            this.label9.Location = new System.Drawing.Point(17, 171);
+            this.label9.Location = new System.Drawing.Point(17, 198);
             this.label9.Margin = new System.Windows.Forms.Padding(4, 0, 4, 0);
             this.label9.Name = "label9";
             this.label9.Size = new System.Drawing.Size(80, 20);
@@ -827,7 +827,7 @@ namespace PS5000A
             // label4
             // 
             this.label4.AutoSize = true;
-            this.label4.Location = new System.Drawing.Point(336, 109);
+            this.label4.Location = new System.Drawing.Point(336, 124);
             this.label4.Margin = new System.Windows.Forms.Padding(4, 0, 4, 0);
             this.label4.Name = "label4";
             this.label4.Size = new System.Drawing.Size(14, 20);
@@ -836,7 +836,7 @@ namespace PS5000A
             // 
             // textBox6
             // 
-            this.textBox6.Location = new System.Drawing.Point(105, 166);
+            this.textBox6.Location = new System.Drawing.Point(105, 193);
             this.textBox6.Margin = new System.Windows.Forms.Padding(4, 5, 4, 5);
             this.textBox6.Name = "textBox6";
             this.textBox6.Size = new System.Drawing.Size(97, 26);
@@ -846,7 +846,7 @@ namespace PS5000A
             // 
             // textBox3
             // 
-            this.textBox3.Location = new System.Drawing.Point(231, 106);
+            this.textBox3.Location = new System.Drawing.Point(231, 121);
             this.textBox3.Margin = new System.Windows.Forms.Padding(4, 5, 4, 5);
             this.textBox3.Name = "textBox3";
             this.textBox3.Size = new System.Drawing.Size(97, 26);
@@ -909,7 +909,7 @@ namespace PS5000A
             // 
             this.groupBox2.Controls.Add(this.radioButton2);
             this.groupBox2.Controls.Add(this.radioButton1);
-            this.groupBox2.Location = new System.Drawing.Point(67, 112);
+            this.groupBox2.Location = new System.Drawing.Point(67, 113);
             this.groupBox2.Name = "groupBox2";
             this.groupBox2.Size = new System.Drawing.Size(184, 83);
             this.groupBox2.TabIndex = 4;
@@ -940,7 +940,7 @@ namespace PS5000A
             // 
             // button2
             // 
-            this.button2.Location = new System.Drawing.Point(559, 210);
+            this.button2.Location = new System.Drawing.Point(572, 241);
             this.button2.Name = "button2";
             this.button2.Size = new System.Drawing.Size(115, 42);
             this.button2.TabIndex = 3;
@@ -951,7 +951,7 @@ namespace PS5000A
             // textBox12
             // 
             this.textBox12.Font = new System.Drawing.Font("Microsoft Sans Serif", 11.25F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-            this.textBox12.Location = new System.Drawing.Point(226, 210);
+            this.textBox12.Location = new System.Drawing.Point(239, 241);
             this.textBox12.Multiline = true;
             this.textBox12.Name = "textBox12";
             this.textBox12.Size = new System.Drawing.Size(313, 42);
@@ -961,7 +961,7 @@ namespace PS5000A
             // label17
             // 
             this.label17.AutoSize = true;
-            this.label17.Location = new System.Drawing.Point(24, 221);
+            this.label17.Location = new System.Drawing.Point(37, 252);
             this.label17.Name = "label17";
             this.label17.Size = new System.Drawing.Size(196, 20);
             this.label17.TabIndex = 1;
@@ -969,10 +969,10 @@ namespace PS5000A
             // 
             // buttonStart
             // 
-            this.buttonStart.Location = new System.Drawing.Point(78, 40);
+            this.buttonStart.Location = new System.Drawing.Point(67, 45);
             this.buttonStart.Margin = new System.Windows.Forms.Padding(4, 5, 4, 5);
             this.buttonStart.Name = "buttonStart";
-            this.buttonStart.Size = new System.Drawing.Size(153, 46);
+            this.buttonStart.Size = new System.Drawing.Size(164, 46);
             this.buttonStart.TabIndex = 0;
             this.buttonStart.Text = "Пуск замера";
             this.buttonStart.UseVisualStyleBackColor = true;
@@ -1002,7 +1002,7 @@ namespace PS5000A
             // 
             this.label19.AutoSize = true;
             this.label19.BackColor = System.Drawing.Color.FromArgb(((int)(((byte)(192)))), ((int)(((byte)(255)))), ((int)(((byte)(192)))));
-            this.label19.Location = new System.Drawing.Point(217, 146);
+            this.label19.Location = new System.Drawing.Point(212, 169);
             this.label19.Name = "label19";
             this.label19.Size = new System.Drawing.Size(45, 20);
             this.label19.TabIndex = 14;
@@ -1021,14 +1021,14 @@ namespace PS5000A
             // 
             this.listBox1.FormattingEnabled = true;
             this.listBox1.ItemHeight = 20;
-            this.listBox1.Location = new System.Drawing.Point(202, 174);
+            this.listBox1.Location = new System.Drawing.Point(197, 197);
             this.listBox1.Name = "listBox1";
             this.listBox1.Size = new System.Drawing.Size(76, 84);
             this.listBox1.TabIndex = 12;
             // 
             // button7
             // 
-            this.button7.Location = new System.Drawing.Point(12, 197);
+            this.button7.Location = new System.Drawing.Point(7, 220);
             this.button7.Name = "button7";
             this.button7.Size = new System.Drawing.Size(128, 53);
             this.button7.TabIndex = 9;
@@ -1038,7 +1038,7 @@ namespace PS5000A
             // 
             // button6
             // 
-            this.button6.Location = new System.Drawing.Point(12, 146);
+            this.button6.Location = new System.Drawing.Point(7, 169);
             this.button6.Name = "button6";
             this.button6.Size = new System.Drawing.Size(128, 45);
             this.button6.TabIndex = 8;
@@ -1083,7 +1083,7 @@ namespace PS5000A
             this.textBoxUnitInfo.Margin = new System.Windows.Forms.Padding(4, 5, 4, 5);
             this.textBoxUnitInfo.Multiline = true;
             this.textBoxUnitInfo.Name = "textBoxUnitInfo";
-            this.textBoxUnitInfo.Size = new System.Drawing.Size(349, 277);
+            this.textBoxUnitInfo.Size = new System.Drawing.Size(411, 316);
             this.textBoxUnitInfo.TabIndex = 3;
             // 
             // statusStrip1
