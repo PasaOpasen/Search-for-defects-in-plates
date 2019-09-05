@@ -105,10 +105,15 @@ namespace PS5000A
             SetDirects();
             SetParams();
 
+            this.FormClosing += (object o, FormClosingEventArgs aa) =>
+              {
+                  if (opened) buttonOpen_Click(new object(), new EventArgs());
+                  GetParams();
+              };
+
             this.FormClosed += new FormClosedEventHandler((object o, FormClosedEventArgs a) =>
             {
-                FurierTransformer.Dispose();
-                GetParams();
+                FurierTransformer.Dispose();                           
             });
         }
 
@@ -156,6 +161,7 @@ namespace PS5000A
         /// Число связей между всеми парами источников
         /// </summary>
         private int CountOfEdges => sourcesCount * (sourcesCount - 1);
+        private int CountSum => countBefore + countAfter;
 
         private void SetParams()
         {
@@ -296,7 +302,6 @@ namespace PS5000A
             });
         }
 
-
         private void button2_Click(object sender, EventArgs e)
         {
             if (folderBrowserDialog1.ShowDialog() == DialogResult.OK)
@@ -305,12 +310,6 @@ namespace PS5000A
                 globalbase = textBox12.Text;
                 SetForlders();
             }
-
-        }
-        private void button3_Click(object sender, EventArgs e)
-        {
-            if (opened) buttonOpen_Click(new object(), new EventArgs());
-            this.Close();
         }
 
         private bool SetGlobalBase()
@@ -606,7 +605,7 @@ namespace PS5000A
             int count_approx = sc;
 
             FurierTransformer.t_0 = 0;
-            FurierTransformer.count_t = (countAfter + countBefore);
+            FurierTransformer.count_t = (CountSum);
             FurierTransformer.t_n = dt * FurierTransformer.count_t;
             FurierTransformer.dt = dt;
             FurierTransformer.f_0 = f0;
@@ -616,7 +615,7 @@ namespace PS5000A
             FurierTransformer.df = (f1 - f0) / (sc - 1);
             FurierTransformer.dw = (FurierTransformer.w_m - FurierTransformer.w_0) / ((double)FurierTransformer.count_w - 1);
 
-            FurierTransformer.n_avg = (countAfter + countBefore) - 2;
+            FurierTransformer.n_avg = (CountSum) - 2;
             FurierTransformer.n_ignore = n_ignore;
 
             FurierTransformer.CreateNewGen();
@@ -754,15 +753,16 @@ namespace PS5000A
             }
         }
         private string label1String;
-        public async Task DataSborCh(int id, string filename_)
+        public async Task GetDataMiniAsync(int id, string filename_)
         {
-            int countSum = countAfter + countBefore;
+            int countSum = CountSum;
             double[] Array = new double[countSum];
             double[] arrA = new double[countSum];
+
             textBoxUnitInfo.AppendText(Switch_.GetAccepted() + "\n");
             Switch_.SendCmd(1, id);
             textBoxUnitInfo.AppendText(Switch_.GetAccepted() + "\n");
-            System.Threading.Thread.Sleep(2000);
+            System.Threading.Thread.Sleep(500);
 
 
             all = usred;
@@ -782,6 +782,8 @@ namespace PS5000A
             toolStripStatusLabel1.Text = "Замеры выполнены";
             timer1.Stop();
             toolStripProgressBar1.Value = 0;
+
+            await Task.Run(() => { 
 
             double middleA = 0;
             double coef = Voltage_Range / ((double)usred) / 32767 / 2.0;
@@ -807,12 +809,14 @@ namespace PS5000A
             using (StreamWriter fs = new StreamWriter(filename_))
                 for (int i = 0; i < countSum; i++)
                     fs.WriteLine(Array[i]);
+
+            });
         }
 
 
-        public async Task DataSbor()
+        public async Task GetDataAsync()
         {
-            masA = new long[countAfter + countBefore];
+            masA = new long[CountSum];
             int it = 0;
             int mx = CountOfEdges;
 
@@ -826,7 +830,7 @@ namespace PS5000A
                 for (int j = 0; j < sourcesCount; j++)
                     if (i != j)
                     {
-                        await DataSborCh(j, Path.Combine(ItFolder(i), ArraysNames[j]));
+                        await GetDataMiniAsync(j, Path.Combine(ItFolder(i), ArraysNames[j]));
                         toolStripStatusLabel2.Text = $"Выполнено {++it} из {mx} ({Expendator.GetProcent(it, mx)}%)";
                     }
                 toolStripStatusLabel2.Text = "";
@@ -847,7 +851,7 @@ namespace PS5000A
 
             SetFiles();
 
-            await DataSbor();
+            await GetDataAsync();
 
             new System.Media.SoundPlayer(Properties.Resources.ЗамерыСделаны).Play();
 
@@ -920,10 +924,9 @@ namespace PS5000A
             form.FormClosed += async (object sender, FormClosedEventArgs e) =>
             {
                 if (checkBox2.Checked)
-                {
                     await FurierAsync(from, to, number);
-                    tcs.SetResult(true);
-                }
+                    
+                tcs.SetResult(true);
             };
             form.Show();
             return tcs.Task;

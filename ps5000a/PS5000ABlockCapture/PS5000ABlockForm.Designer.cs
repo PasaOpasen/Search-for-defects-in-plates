@@ -131,7 +131,6 @@ namespace PS5000A
             this.toolStripStatusLabel2 = new System.Windows.Forms.ToolStripStatusLabel();
             this.timer1 = new System.Windows.Forms.Timer(this.components);
             this.folderBrowserDialog1 = new System.Windows.Forms.FolderBrowserDialog();
-            this.button3 = new System.Windows.Forms.Button();
             this.tabControl.SuspendLayout();
             this.tabUnit.SuspendLayout();
             this.tabChannels.SuspendLayout();
@@ -144,13 +143,16 @@ namespace PS5000A
             // 
             // buttonOpen
             // 
-            this.buttonOpen.Location = new System.Drawing.Point(26, 76);
+            this.buttonOpen.BackColor = System.Drawing.Color.FromArgb(((int)(((byte)(192)))), ((int)(((byte)(192)))), ((int)(((byte)(255)))));
+            this.buttonOpen.FlatStyle = System.Windows.Forms.FlatStyle.Flat;
+            this.buttonOpen.Font = new System.Drawing.Font("Microsoft Sans Serif", 15.75F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(204)));
+            this.buttonOpen.Location = new System.Drawing.Point(31, 76);
             this.buttonOpen.Margin = new System.Windows.Forms.Padding(4, 5, 4, 5);
             this.buttonOpen.Name = "buttonOpen";
-            this.buttonOpen.Size = new System.Drawing.Size(160, 64);
+            this.buttonOpen.Size = new System.Drawing.Size(163, 82);
             this.buttonOpen.TabIndex = 0;
             this.buttonOpen.Text = "Запуск";
-            this.buttonOpen.UseVisualStyleBackColor = true;
+            this.buttonOpen.UseVisualStyleBackColor = false;
             this.buttonOpen.Click += new System.EventHandler(this.buttonOpen_Click);
             // 
             // tabControl
@@ -159,11 +161,13 @@ namespace PS5000A
             this.tabControl.Controls.Add(this.tabChannels);
             this.tabControl.Controls.Add(this.tabGetData);
             this.tabControl.Controls.Add(this.tabAbout);
-            this.tabControl.Location = new System.Drawing.Point(18, 18);
+            this.tabControl.Dock = System.Windows.Forms.DockStyle.Fill;
+            this.tabControl.HotTrack = true;
+            this.tabControl.Location = new System.Drawing.Point(0, 0);
             this.tabControl.Margin = new System.Windows.Forms.Padding(4, 5, 4, 5);
             this.tabControl.Name = "tabControl";
             this.tabControl.SelectedIndex = 0;
-            this.tabControl.Size = new System.Drawing.Size(736, 310);
+            this.tabControl.Size = new System.Drawing.Size(767, 372);
             this.tabControl.TabIndex = 3;
             // 
             // tabUnit
@@ -184,7 +188,7 @@ namespace PS5000A
             this.tabUnit.Margin = new System.Windows.Forms.Padding(4, 5, 4, 5);
             this.tabUnit.Name = "tabUnit";
             this.tabUnit.Padding = new System.Windows.Forms.Padding(4, 5, 4, 5);
-            this.tabUnit.Size = new System.Drawing.Size(728, 277);
+            this.tabUnit.Size = new System.Drawing.Size(759, 339);
             this.tabUnit.TabIndex = 0;
             this.tabUnit.Text = "Модуль";
             this.tabUnit.UseVisualStyleBackColor = true;
@@ -298,7 +302,7 @@ namespace PS5000A
             this.tabChannels.Margin = new System.Windows.Forms.Padding(4, 5, 4, 5);
             this.tabChannels.Name = "tabChannels";
             this.tabChannels.Padding = new System.Windows.Forms.Padding(4, 5, 4, 5);
-            this.tabChannels.Size = new System.Drawing.Size(728, 277);
+            this.tabChannels.Size = new System.Drawing.Size(759, 339);
             this.tabChannels.TabIndex = 1;
             this.tabChannels.Text = "Каналы";
             this.tabChannels.UseVisualStyleBackColor = true;
@@ -356,7 +360,7 @@ namespace PS5000A
             this.groupBox1.Dock = System.Windows.Forms.DockStyle.Fill;
             this.groupBox1.Location = new System.Drawing.Point(4, 5);
             this.groupBox1.Name = "groupBox1";
-            this.groupBox1.Size = new System.Drawing.Size(720, 267);
+            this.groupBox1.Size = new System.Drawing.Size(751, 329);
             this.groupBox1.TabIndex = 24;
             this.groupBox1.TabStop = false;
             this.groupBox1.Text = "Имена для файлов (указать центры источников)";
@@ -864,7 +868,7 @@ namespace PS5000A
             this.tabGetData.Margin = new System.Windows.Forms.Padding(4, 5, 4, 5);
             this.tabGetData.Name = "tabGetData";
             this.tabGetData.Padding = new System.Windows.Forms.Padding(4, 5, 4, 5);
-            this.tabGetData.Size = new System.Drawing.Size(728, 277);
+            this.tabGetData.Size = new System.Drawing.Size(759, 339);
             this.tabGetData.TabIndex = 3;
             this.tabGetData.Text = "Получение информации";
             this.tabGetData.UseVisualStyleBackColor = true;
@@ -874,7 +878,7 @@ namespace PS5000A
             this.checkBox3.AutoSize = true;
             this.checkBox3.Checked = true;
             this.checkBox3.CheckState = System.Windows.Forms.CheckState.Checked;
-            this.checkBox3.Location = new System.Drawing.Point(202, 112);
+            this.checkBox3.Location = new System.Drawing.Point(283, 82);
             this.checkBox3.Name = "checkBox3";
             this.checkBox3.Size = new System.Drawing.Size(163, 24);
             this.checkBox3.TabIndex = 7;
@@ -884,7 +888,7 @@ namespace PS5000A
             // checkBox2
             // 
             this.checkBox2.AutoSize = true;
-            this.checkBox2.Location = new System.Drawing.Point(202, 142);
+            this.checkBox2.Location = new System.Drawing.Point(283, 112);
             this.checkBox2.Name = "checkBox2";
             this.checkBox2.Size = new System.Drawing.Size(275, 24);
             this.checkBox2.TabIndex = 6;
@@ -893,7 +897,7 @@ namespace PS5000A
             // 
             // button4
             // 
-            this.button4.Location = new System.Drawing.Point(418, 40);
+            this.button4.Location = new System.Drawing.Point(527, 40);
             this.button4.Name = "button4";
             this.button4.Size = new System.Drawing.Size(147, 56);
             this.button4.TabIndex = 5;
@@ -905,7 +909,7 @@ namespace PS5000A
             // 
             this.groupBox2.Controls.Add(this.radioButton2);
             this.groupBox2.Controls.Add(this.radioButton1);
-            this.groupBox2.Location = new System.Drawing.Point(202, 21);
+            this.groupBox2.Location = new System.Drawing.Point(67, 112);
             this.groupBox2.Name = "groupBox2";
             this.groupBox2.Size = new System.Drawing.Size(184, 83);
             this.groupBox2.TabIndex = 4;
@@ -965,7 +969,7 @@ namespace PS5000A
             // 
             // buttonStart
             // 
-            this.buttonStart.Location = new System.Drawing.Point(18, 42);
+            this.buttonStart.Location = new System.Drawing.Point(78, 40);
             this.buttonStart.Margin = new System.Windows.Forms.Padding(4, 5, 4, 5);
             this.buttonStart.Name = "buttonStart";
             this.buttonStart.Size = new System.Drawing.Size(153, 46);
@@ -989,7 +993,7 @@ namespace PS5000A
             this.tabAbout.Margin = new System.Windows.Forms.Padding(4, 5, 4, 5);
             this.tabAbout.Name = "tabAbout";
             this.tabAbout.Padding = new System.Windows.Forms.Padding(4, 5, 4, 5);
-            this.tabAbout.Size = new System.Drawing.Size(728, 277);
+            this.tabAbout.Size = new System.Drawing.Size(759, 339);
             this.tabAbout.TabIndex = 2;
             this.tabAbout.Text = "Дополнительно";
             this.tabAbout.UseVisualStyleBackColor = true;
@@ -1089,7 +1093,7 @@ namespace PS5000A
             this.toolStripStatusLabel1,
             this.toolStripProgressBar1,
             this.toolStripStatusLabel2});
-            this.statusStrip1.Location = new System.Drawing.Point(0, 386);
+            this.statusStrip1.Location = new System.Drawing.Point(0, 350);
             this.statusStrip1.Name = "statusStrip1";
             this.statusStrip1.Size = new System.Drawing.Size(767, 22);
             this.statusStrip1.TabIndex = 4;
@@ -1114,25 +1118,12 @@ namespace PS5000A
             this.toolStripStatusLabel2.Size = new System.Drawing.Size(118, 17);
             this.toolStripStatusLabel2.Text = "toolStripStatusLabel2";
             // 
-            // button3
-            // 
-            this.button3.BackColor = System.Drawing.Color.FromArgb(((int)(((byte)(192)))), ((int)(((byte)(192)))), ((int)(((byte)(255)))));
-            this.button3.FlatStyle = System.Windows.Forms.FlatStyle.Flat;
-            this.button3.Location = new System.Drawing.Point(525, 337);
-            this.button3.Name = "button3";
-            this.button3.Size = new System.Drawing.Size(218, 46);
-            this.button3.TabIndex = 5;
-            this.button3.Text = "Всё готово. Закрыть";
-            this.button3.UseVisualStyleBackColor = false;
-            this.button3.Click += new System.EventHandler(this.button3_Click);
-            // 
             // PS5000ABlockForm
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(9F, 20F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
             this.BackColor = System.Drawing.SystemColors.ActiveCaption;
-            this.ClientSize = new System.Drawing.Size(767, 408);
-            this.Controls.Add(this.button3);
+            this.ClientSize = new System.Drawing.Size(767, 372);
             this.Controls.Add(this.statusStrip1);
             this.Controls.Add(this.tabControl);
             this.Font = new System.Drawing.Font("Microsoft Sans Serif", 12F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
@@ -1205,7 +1196,6 @@ namespace PS5000A
         private System.Windows.Forms.TextBox textBox12;
         private System.Windows.Forms.Label label17;
         private System.Windows.Forms.FolderBrowserDialog folderBrowserDialog1;
-        private System.Windows.Forms.Button button3;
         private System.Windows.Forms.GroupBox groupBox2;
         private System.Windows.Forms.RadioButton radioButton2;
         private System.Windows.Forms.RadioButton radioButton1;
