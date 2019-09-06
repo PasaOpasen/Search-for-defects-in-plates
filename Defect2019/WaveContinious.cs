@@ -237,6 +237,7 @@ namespace Defect2019
                 ts.Close();
                 pds.Close();
 
+                OtherMethods.PlaySound("ДанныеСуммируются");
                 Parallel.Invoke(
                     () => SSum(),
                     () =>
@@ -249,7 +250,6 @@ namespace Defect2019
 
                     });
 
-
                 Expendator.CopyFiles(Expendator.GetWordFromFile("WhereData.txt"), Environment.CurrentDirectory, "3D ur, uz(x).txt", "3D ur, uz(y).txt");
             });
 
@@ -257,7 +257,9 @@ namespace Defect2019
 
             if (source.IsCancellationRequested) return;
             await Task.Run(() => StartProcess("OnlySurface.r", global: true));
-            new Библиотека_графики.PdfOpen("Полученные u-surfaces", Path.Combine(Environment.CurrentDirectory, $"{gl} .pdf")).Show();
+            //new Библиотека_графики.PdfOpen("Полученные u-surfaces", Path.Combine(Environment.CurrentDirectory, $"{gl} .pdf")).Show();
+            ShowImages(gl);
+
             OtherMethods.PlaySound("ПоверхностиПостроены");
 
             if (MessageBox.Show("Создавать анимацию? (может занять до 15 минут)", "Анимация", MessageBoxButtons.YesNo, MessageBoxIcon.Question) == System.Windows.Forms.DialogResult.Yes)
@@ -275,14 +277,37 @@ namespace Defect2019
             OtherMethods.PlaySound("ВычисленияЗавершены");
         }
 
+        private void ShowImages(string name)
+        {
+            string main = "Полученные u-surfaces";
+            var titles = new string[] 
+            {
+                "ur, uz в pdf",
+                "Тепловая карта ur",
+                "Тепловая карта uz",
+                "Объёмный график ur",
+                "Объёмный график uz"
+            };
+            var docs = new string[] 
+            {
+                $"{name} .pdf",
+                $"{name} (heatmap).png",
+                $"{name} (heatmap_uz).png",
+                $"{name} (ur).html",
+                $"{name} (uz).html"
+            };
+            new Библиотека_графики.ManyDocumentsShower(main, titles, docs).Show();
+        }
+
         /// <summary>
         /// Просуммировать все замеры
         /// </summary>
         private void SSum()
-        {
+        {           
             var p = Expendator.GetStringArrayFromFile("WhereData.txt");
             string[] names = Expendator.GetStringArrayFromFile("textnames.txt");
             string[][] fnames = new string[p.Length][];
+
             for (int k = 0; k < p.Length; k++)
             {
                 string[] tmp = Expendator.GetStringArrayFromFile(Path.Combine(p[k], "textnames.txt"));
@@ -303,8 +328,7 @@ namespace Defect2019
                 }
 
                 v.ToFile(names[i].Replace(".txt", " (ur).txt"));
-                v1.ToFile(names[i].Replace(".txt", " (uz).txt"));
-
+                v1.ToFile(names[i].Replace(".txt", " (uz).txt"));               
             });
 
             string name = Expendator.GetWordFromFile("SurfaceMain.txt");

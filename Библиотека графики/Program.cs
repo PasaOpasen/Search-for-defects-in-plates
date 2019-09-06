@@ -6,6 +6,7 @@ using System.Threading.Tasks;
 using System.Windows.Forms;
 using System.Windows.Forms.DataVisualization.Charting;
 using System.Reflection;
+using System.IO;
 
 namespace Библиотека_графики
 {
@@ -21,7 +22,8 @@ namespace Библиотека_графики
             Application.SetCompatibleTextRenderingDefault(false);
             Application.Run(
                 //new PdfOpen("e33", "formula")
-                new JustGrafic(new string[] { "ArrayA","ArrayB","ArrayC"},"Жопа",0.021,11420)
+                //new JustGrafic(new string[] { "ArrayA","ArrayB","ArrayC"},"Жопа",0.021,11420)
+                new ManyDocumentsShower("maint",new string[] {"T1","T2","T3" }, new string[3] { "22.pdf",  "22.png", "23.pdf" })
                 );
         }
     }

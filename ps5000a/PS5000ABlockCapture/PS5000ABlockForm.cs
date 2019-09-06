@@ -256,6 +256,10 @@ namespace PS5000A
         {
             var ar = Enumerable.Range(0, sourcesCount).ToArray();
 
+            all = CountOfEdges;
+            int[] tmp = new int[all];
+            save = 0;
+            timer1.Start();
             await Task.Run(() =>
             {
                 Parallel.For(0, sourcesCount, (int i) =>
@@ -297,9 +301,15 @@ namespace PS5000A
                                 }
                             }
                         }
+
+                        tmp[i * (sourcesCount-1) + j]++;
+                        save = tmp.Sum();
                     }
                 });
             });
+            save = 0;
+            Timer1_Tick(new object(), new EventArgs());
+            timer1.Stop();
         }
 
         private void button2_Click(object sender, EventArgs e)

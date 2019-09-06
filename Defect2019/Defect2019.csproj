@@ -335,5 +335,8 @@
   <ItemGroup>
     <None Include="Resources\ГенерацияДанных.wav" />
   </ItemGroup>
+  <ItemGroup>
+    <None Include="Resources\ДанныеСуммируются.wav" />
+  </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
 </Project>
