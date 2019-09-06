@@ -296,6 +296,7 @@
     </ProjectReference>
   </ItemGroup>
   <ItemGroup>
+    <None Include="Resources\InstallPackages.R" />
     <None Include="Resources\po with scuter.ico" />
   </ItemGroup>
   <ItemGroup>

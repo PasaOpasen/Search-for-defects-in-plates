@@ -20,15 +20,15 @@ namespace Defect2019
         public Uxt()
         {
             InitializeComponent();
-            
+
             timer1.Interval = 350;
             timer1.Tick += new EventHandler(Timer1_Tick);
             timer1.Start();
             Recostract();
 
-            FillExamples();            
+            FillExamples();
         }
-        public List<Source> examples = new List<Source>(),examples2=new List<Source>();
+        public List<Source> examples = new List<Source>(), examples2 = new List<Source>();
         public Point[] centers = new Point[]
         {
             new Point(-150),
@@ -44,7 +44,7 @@ namespace Defect2019
         /// <summary>
         /// Текущие центры источников
         /// </summary>
-        public Point[] centers2 = new Point[] 
+        public Point[] centers2 = new Point[]
         {
             new Point(0, 0),
             new Point(200,0 ),
@@ -60,7 +60,7 @@ namespace Defect2019
             int n = 40;
             double r = 8;
 
-            void CentersToExapmles(Point[] Centers,ref List<Source> expls)
+            void CentersToExapmles(Point[] Centers, ref List<Source> expls)
             {
                 for (int i = 0; i < Centers.Length; i++)
                 {
@@ -79,8 +79,8 @@ namespace Defect2019
                 }
             }
 
-            CentersToExapmles(centers,ref examples);
-            CentersToExapmles(centers2,ref examples2);
+            CentersToExapmles(centers, ref examples);
+            CentersToExapmles(centers2, ref examples2);
         }
         /// <summary>
         /// Передел чек-листа
@@ -90,18 +90,18 @@ namespace Defect2019
             checkedListBox1.Items.Clear();
             for (int i = 0; i < sources.Count; i++)
             {
-               checkedListBox1.Items.Add(sources[i].ToString(), true);
+                checkedListBox1.Items.Add(sources[i].ToString(), true);
             }
             checkedListBox1.Update();
         }
         public static List<Source> sources = new List<Source>();
-        public static bool addnewsource=false;
-        
+        public static bool addnewsource = false;
+
         private void Timer1_Tick(object Sender, EventArgs e)
         {
             if (addnewsource)
             {
-                $"Added source(s) at {DateTime.Now} (count of sources is {sources.Count})".Show();                        
+                $"Added source(s) at {DateTime.Now} (count of sources is {sources.Count})".Show();
                 Recostract();
                 addnewsource = false;
             }
@@ -127,7 +127,7 @@ namespace Defect2019
             checkedListBox1.Items.Clear();
 
             for (int i = 0; i < sources.Count; i++)
-                checkedListBox1.Items.Add(sources[sources.Count-1-i].ToString(), true);
+                checkedListBox1.Items.Add(sources[sources.Count - 1 - i].ToString(), true);
 
             sources.Reverse();
             checkedListBox1.Update();
@@ -136,8 +136,8 @@ namespace Defect2019
         private void удалитьПоследнееВхождениеToolStripMenuItem_Click(object sender, EventArgs e)
         {
             if (sources.Count > 0)
-            {            
-            sources.RemoveAt(sources.Count - 1);
+            {
+                sources.RemoveAt(sources.Count - 1);
                 Recostract();
                 checkedListBox1.Update();
             }
@@ -172,7 +172,7 @@ namespace Defect2019
                     MessageBox.Show("Не отмечено ни одного источника. Отметьте хотя бы один источник", "Ошибка", MessageBoxButtons.OK, MessageBoxIcon.Error);
                 else
                 {
-                   smas = list.ToArray();
+                    smas = list.ToArray();
                     return true;
                 };
             }
@@ -185,7 +185,7 @@ namespace Defect2019
 
         private void button2_Click(object sender, EventArgs e)
         {
-            if(GetCheckedSources(out Source[] smas))
+            if (GetCheckedSources(out Source[] smas))
                 new WaveContinious(smas).Show();
         }
 
@@ -216,7 +216,7 @@ namespace Defect2019
                 form.Show();
                 form.button4_Click(sender, e);
             }
-                
+
         }
 
         private void быстрыйТестToolStripMenuItem_Click_1(object sender, EventArgs e)
@@ -238,7 +238,15 @@ namespace Defect2019
         private void вычислитьUxtВОднойТочкеToolStripMenuItem_Click(object sender, EventArgs e)
         {
             if (GetCheckedSources(out Source[] smas))
-                  new OnePoint(smas).ShowDialog();
+                new OnePoint(smas).ShowDialog();
+        }
+
+        private async void загрузитьНеобходимыеПакетыRToolStripMenuItem_Click(object sender, EventArgs e)
+        {
+            string mess = "Требуется подключение к Интернету. Будут загружены все пакеты R, необходимые программе. Загрузка может занимать несколько минут, по окончанию загрузки консоль закроется. Уже установленные пакеты могут загрузиться заново либо обновиться. Выполнить действие?";
+
+            if (MessageBox.Show(mess, "Требуется подтверждение", MessageBoxButtons.YesNo, MessageBoxIcon.Question) == DialogResult.Yes)
+                await Task.Run(() => OtherMethods.StartProcessOnly(OtherMethods.GetResource("InstallPackages.r"), true));
         }
 
         private void текущиеИсточникиToolStripMenuItem_Click(object sender, EventArgs e)

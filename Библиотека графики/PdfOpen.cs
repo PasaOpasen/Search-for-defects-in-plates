@@ -17,7 +17,7 @@ namespace Библиотека_графики
         {
             InitializeComponent();
             this.Text = caption;
-            webBrowser1.Navigate(Path.Combine( Environment.CurrentDirectory,$"{filename}.pdf"));
+            webBrowser1.Navigate(Path.Combine( Environment.CurrentDirectory,filename));
         }
     }
 }

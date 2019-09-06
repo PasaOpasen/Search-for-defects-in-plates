@@ -36,6 +36,7 @@
             this.дополнительноToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.быстрыйТестToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.вычислитьUxtВОднойТочкеToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
+            this.загрузитьНеобходимыеПакетыRToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.checkedListBox1 = new System.Windows.Forms.CheckedListBox();
             this.contextMenuStrip1 = new System.Windows.Forms.ContextMenuStrip(this.components);
             this.добавитьToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
@@ -94,7 +95,8 @@
             // 
             this.дополнительноToolStripMenuItem.DropDownItems.AddRange(new System.Windows.Forms.ToolStripItem[] {
             this.быстрыйТестToolStripMenuItem,
-            this.вычислитьUxtВОднойТочкеToolStripMenuItem});
+            this.вычислитьUxtВОднойТочкеToolStripMenuItem,
+            this.загрузитьНеобходимыеПакетыRToolStripMenuItem});
             this.дополнительноToolStripMenuItem.Name = "дополнительноToolStripMenuItem";
             this.дополнительноToolStripMenuItem.Size = new System.Drawing.Size(107, 20);
             this.дополнительноToolStripMenuItem.Text = "Дополнительно";
@@ -112,6 +114,13 @@
             this.вычислитьUxtВОднойТочкеToolStripMenuItem.Size = new System.Drawing.Size(267, 22);
             this.вычислитьUxtВОднойТочкеToolStripMenuItem.Text = "Вычислить характеристики в точке";
             this.вычислитьUxtВОднойТочкеToolStripMenuItem.Click += new System.EventHandler(this.вычислитьUxtВОднойТочкеToolStripMenuItem_Click);
+            // 
+            // загрузитьНеобходимыеПакетыRToolStripMenuItem
+            // 
+            this.загрузитьНеобходимыеПакетыRToolStripMenuItem.Name = "загрузитьНеобходимыеПакетыRToolStripMenuItem";
+            this.загрузитьНеобходимыеПакетыRToolStripMenuItem.Size = new System.Drawing.Size(267, 22);
+            this.загрузитьНеобходимыеПакетыRToolStripMenuItem.Text = "Загрузить необходимые пакеты R";
+            this.загрузитьНеобходимыеПакетыRToolStripMenuItem.Click += new System.EventHandler(this.загрузитьНеобходимыеПакетыRToolStripMenuItem_Click);
             // 
             // checkedListBox1
             // 
@@ -280,5 +289,6 @@
         private System.Windows.Forms.ToolStripMenuItem дополнительноToolStripMenuItem;
         private System.Windows.Forms.ToolStripMenuItem быстрыйТестToolStripMenuItem;
         private System.Windows.Forms.ToolStripMenuItem вычислитьUxtВОднойТочкеToolStripMenuItem;
+        private System.Windows.Forms.ToolStripMenuItem загрузитьНеобходимыеПакетыRToolStripMenuItem;
     }
 }

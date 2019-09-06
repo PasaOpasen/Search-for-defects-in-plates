@@ -134,9 +134,9 @@ public static class Functions
 
         wmas = SeqWMemoized(РабКонсоль.wbeg, РабКонсоль.wend, РабКонсоль.wcount);
         var fs = new Memoize<double, CVectors>((double t) => Fi(wmas, t));
-        Phi = (double t) => fs.Value(t);
+        FiMemoized = (double t) => fs.Value(t);
 
-        var cs = new Memoize<Tuple<Complex[], double>, CVectors>((Tuple<Complex[], double> t) => t.Item1 * Phi(t.Item2));
+        var cs = new Memoize<Tuple<Complex[], double>, CVectors>((Tuple<Complex[], double> t) => t.Item1 * FiMemoized(t.Item2));
         Phif = (Complex[] fw, double t) => cs.Value(new Tuple<Complex[], double>(fw, t));
 
         OtherMethods.CopyFilesR();
@@ -863,7 +863,7 @@ public static class Functions
         return r;
 
     };
-    public static Func<double, CVectors> Phi;
+    public static Func<double, CVectors> FiMemoized;
     public static Func<Complex[], double, CVectors> Phif;
 
     private static Tuple<Complex, Complex> ToURUZ(CVectors v, Source s, double x, double y)
@@ -944,7 +944,7 @@ public static class Functions
     {
        //return ((Integraluxt(x,y,t,tuple,normal)).Re / Math.PI).DoubleMas;
 
-       return ((CMAS_Memoized(x, y, s) * Phi(t)));//этот вариант почему-то самый быстрый
+       return ((CMAS_Memoized(x, y, s) * FiMemoized(t)));//этот вариант почему-то самый быстрый
 
        //double[] w = tuple.Item1;
        //return ((CMAS_Memoized(x, y, tuple, normal) * Fi(w, t)).Re / Math.PI).DoubleMas;

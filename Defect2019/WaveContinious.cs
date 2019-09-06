@@ -257,7 +257,7 @@ namespace Defect2019
 
             if (source.IsCancellationRequested) return;
             await Task.Run(() => StartProcess("OnlySurface.r", global: true));
-            new Библиотека_графики.PdfOpen("Полученные u-surfaces", Path.Combine(Environment.CurrentDirectory, $"{gl} ")).Show();
+            new Библиотека_графики.PdfOpen("Полученные u-surfaces", Path.Combine(Environment.CurrentDirectory, $"{gl} .pdf")).Show();
             OtherMethods.PlaySound("ПоверхностиПостроены");
 
             if (MessageBox.Show("Создавать анимацию? (может занять до 15 минут)", "Анимация", MessageBoxButtons.YesNo, MessageBoxIcon.Question) == System.Windows.Forms.DialogResult.Yes)
@@ -478,7 +478,7 @@ namespace Defect2019
             new Helper(textBox5.Text.ToDouble(), textBox6.Text.ToDouble(), numericUpDown2.Value.ToInt32()).Show();
         }
 
-        private void button6_Click(object sender, EventArgs e)=> new Библиотека_графики.PdfOpen("Варианты метрик", "formula").ShowDialog();
+        private void button6_Click(object sender, EventArgs e)=> new Библиотека_графики.PdfOpen("Варианты метрик", "formula.pdf").ShowDialog();
         
 
         /// <summary>
@@ -799,7 +799,7 @@ namespace Defect2019
                 })
                 );
 
-            // new Библиотека_графики.PdfOpen("Полученные u-surfaces", Path.Combine(Environment.CurrentDirectory, $"{gl} ")).Show();
+            // new Библиотека_графики.PdfOpen("Полученные u-surfaces", Path.Combine(Environment.CurrentDirectory, $"{gl} .pdf")).Show();
 
             if (source.IsCancellationRequested) return;
             checkBox2.Hide();

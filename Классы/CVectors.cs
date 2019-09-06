@@ -256,7 +256,6 @@ namespace МатКлассы
         }
         public static Tuple<Complex, Complex> operator *(Tuple<Complex,Complex>[] mas, CVectors vec)
         {
-            Tuple<Complex, Complex> tmp;
             Complex c1 = 0, c2 = 0;
 
             for (int i = 0; i < mas.Length; i++)

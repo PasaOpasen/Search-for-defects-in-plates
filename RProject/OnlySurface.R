@@ -18,7 +18,7 @@ if (FALSE) {
     ur[ur < coeff] = 0
     uz = uz / (max(uz))
     uz[uz < coeff] = 0
-}
+
 for (i in 1:3) {
     #coeff = 0.5
     ur = ur / (max(ur))
@@ -27,6 +27,7 @@ for (i in 1:3) {
     #uz[uz < coeff] = 0
     ur = ur ^ 2
     uz = uz ^ 2
+}
 }
 
 
@@ -74,6 +75,7 @@ library(ggplot2)
 library(viridis)
 library(gridExtra)
 library(fields)
+library(plotly)
 
 len = length(x)
 cat(paste("Maps...", "\n"))
@@ -91,6 +93,24 @@ ggplot(urt, aes(x, y, fill = ur.abs)) +
     scale_y_reverse()
 dev.off()
 
+ur.Abs=matrix(abs(urr),len,len)
+
+p1 = plot_ly(x = x, y = y, z = ~ur.Abs, type = "surface", contours = list(
+    z = list(
+      show = TRUE,
+      usecolormap = TRUE,
+      highlightcolor = "#ff0000",
+      project = list(z = TRUE)
+      )
+    )
+  ) %>%
+  layout(
+    scene = list(
+      camera = list(
+        eye = list(x = 1.87, y = 0.88, z = -0.64)
+        )
+      ))
+
 png(filename = paste(s, "(heatmap_uz).png"), height = 600, width = 750)
 par(cex = 1.0, cex.sub = 1.3, col.sub = "blue")
 urt <- data.frame(uz.abs = c(abs(uzz)), x = rep(x, len), y = rep(y, each = len))
@@ -103,3 +123,25 @@ ggplot(urt, aes(x, y, fill = uz.abs)) +
     scale_fill_viridis() + theme(axis.title.x = element_text(size = 25), axis.title.y = element_text(size = 25), text = element_text(size = 22)) +
     scale_y_reverse()
 dev.off()
+
+uz.Abs=matrix(abs(uzz),len,len)
+p2 = plot_ly(x = x, y = y, z = ~uz.Abs, type = "surface", contours = list(
+    z = list(
+      show = TRUE,
+      usecolormap = TRUE,
+      highlightcolor = "#ff0000",
+      project = list(z = TRUE)
+      )
+    )
+  ) %>%
+  layout(
+    scene = list(
+      camera = list(
+        eye = list(x = 1.87, y = 0.88, z = -0.64)
+        )
+      ))
+
+library(htmlwidgets)
+
+saveWidget(as.widget(p1),paste(s, "(ur).html"), FALSE)
+saveWidget(as.widget(p2), paste(s, "(uz).html"), FALSE)
