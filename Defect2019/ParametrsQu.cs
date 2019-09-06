@@ -20,7 +20,7 @@ namespace Defect2019
         {
             InitializeComponent();
             textBox6.Text = ro.ToString();
-            textBox8.Text =h.ToString();
+            textBox8.Text = h.ToString();
             textBox5.Text = lamda.ToString();
             textBox9.Text = mu.ToString();
             textBox1.Text = РабКонсоль.steproot.ToString();
@@ -29,7 +29,7 @@ namespace Defect2019
             textBox12.Text = РабКонсоль.polesEnd.ToString();
             numericUpDown1.Value = РабКонсоль.countroot;
 
-            textBox4.Text = (wbeg/2/Math.PI*1e6).ToString();
+            textBox4.Text = (wbeg / 2 / Math.PI * 1e6).ToString();
             textBox10.Text = (wend / 2 / Math.PI * 1e6).ToString();
             textBox11.Text = wc.ToString();
             numericUpDown2.Value = wcount;
@@ -42,7 +42,7 @@ namespace Defect2019
         private void button1_Click(object sender, EventArgs e)
         {
             ro = Convert.ToDouble(textBox6.Text);
-            z2 = -Convert.ToDouble(textBox8.Text);
+            h = Convert.ToDouble(textBox8.Text);
             lamda = Convert.ToDouble(textBox5.Text);
             mu = Convert.ToDouble(textBox9.Text);
             РабКонсоль.steproot = Convert.ToDouble(textBox1.Text);
@@ -50,17 +50,17 @@ namespace Defect2019
             РабКонсоль.countroot = Convert.ToInt32(numericUpDown1.Value);
             РабКонсоль.polesBeg = Convert.ToDouble(textBox3.Text);
             РабКонсоль.polesEnd = Convert.ToDouble(textBox12.Text);
-            
+
 
             wc = textBox11.Text.ToDouble();
-            wbeg=textBox4.Text.ToDouble()*2*Math.PI*1e-6;
-            wend=textBox10.Text.ToDouble() * 2 * Math.PI * 1e-6;
-             wcount=Convert.ToInt32(numericUpDown2.Value);
-          UGrafic.wchange = true;
+            wbeg = textBox4.Text.ToDouble() * 2 * Math.PI * 1e-6;
+            wend = textBox10.Text.ToDouble() * 2 * Math.PI * 1e-6;
+            wcount = Convert.ToInt32(numericUpDown2.Value);
+            UGrafic.wchange = true;
 
-             РабКонсоль.animatime = Convert.ToInt32(numericUpDown3.Value);
+            РабКонсоль.animatime = Convert.ToInt32(numericUpDown3.Value);
             РабКонсоль.animacycles = Convert.ToInt32(numericUpDown4.Value);
-              РабКонсоль.clastersCount= Convert.ToInt32(numericUpDown5.Value);
+            РабКонсоль.clastersCount = Convert.ToInt32(numericUpDown5.Value);
 
             AfterChaigeData();
             this.Close();
