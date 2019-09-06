@@ -65,6 +65,7 @@
     <Compile Include="Curve.cs" />
     <Compile Include="Cut.cs" />
     <Compile Include="CVectors.cs" />
+    <Compile Include="Expendator.cs" />
     <Compile Include="FuncMethods.cs" />
     <Compile Include="Graphs.cs" />
     <Compile Include="Interfaces.cs" />
@@ -78,10 +79,12 @@
     <Compile Include="Polygon.cs" />
     <Compile Include="Polynom.cs" />
     <Compile Include="RandomNumbers.cs" />
+    <Compile Include="Roots.cs" />
     <Compile Include="SheringFunction.cs" />
     <Compile Include="SLAU.cs" />
     <Compile Include="SqMatrix.cs" />
     <Compile Include="SumsAndLimits.cs" />
+    <Compile Include="UnderUncertainty.cs" />
     <Compile Include="Vectors.cs" />
     <Compile Include="Wavelet.cs" />
     <Compile Include="Waves.cs" />

@@ -115,11 +115,6 @@ public static class Functions
         k1coef = ro / ml2;
         Expendator.WriteStringInFile("ClastersCount.txt", clastersCount.ToString());
 
-        var del = new Memoize<Tuple<Complex, Complex, double>, CSqMatrix>((Tuple<Complex, Complex, double> t) => delta(t.Item1, t.Item2, t.Item3)).Value;
-        Delta = (Complex a1, Complex a2, double w) => del(new Tuple<Complex, Complex, double>(a1, a2, w));
-        var det = new Memoize<Tuple<Complex, Complex, double>, Complex>((Tuple<Complex, Complex, double> t) => delta(t.Item1, t.Item2, t.Item3).Det).Value;
-        DeltaDet = (Complex a1, Complex a2, double w) => det(new Tuple<Complex, Complex, double>(a1, a2, w));
-
         Bessel = new Func<Complex, double, double, Complex[]>(_Bessel);
 
         prmsnmem = new Memoize<Tuple<Complex, double>, Complex[]>((Tuple<Complex, double> t) => PRMSN(t.Item1, t.Item2));

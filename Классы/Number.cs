@@ -1,31 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
 
-/// <summary>
-/// Библиотека математических классов, написанная Опасным Пасей (Дмитрией Пасько/Деметрием Паскалём).
-/// Начал писать примерно в конце февраля 2018-го, с класса полиномов.
-/// С конца января 2019-го пишу продолжение библиотеки (МатКлассы),
-/// в текущую библиотеку иногда добавляю новый функционал.
-/// Сильные стороны библиотеки: классы комплексный чисел, векторов, полиномов,
-/// матриц, методов интегрирования, графов (особое внимание), СЛАУ, методы расширения
-/// Недостатки: мало где заботился об исключениях, содержимое методов почти не комментрируется,
-/// в классе СЛАУ из-за диплома, вышедшего с С++, есть слишком сложные низкоуровневые методы
-/// и путаница из-за тесной связи с классом кривых, 
-/// класс вероятностей начал из эксперимента и почти ничего не написал,
-/// очень много открытых полей и методов,
-/// почти не проводил тестирование,
-/// но большинство методов использовались в визуальных приложениях
-/// и так были отлажены
-/// Всё написал сам, кроме 3-5% кода, взятого из открытых источников
-/// 
-/// ------------Контакты:
-/// Telegram: 8 961 519 36 46 (на звонки не отвечаю)
-/// Mail:     qtckpuhdsa@gmail.com
-/// Discord:  Пася Опасен#3065
-/// VK:       https://vk.com/roman_disease
-/// Steam:    https://vk.com/away.php?to=https%3A%2F%2Fsteamcommunity.com%2Fid%2FPasaOpasen&cc_key=
-///      Активно пользуюсь всеми указанными сервисами
-/// </summary>
 namespace МатКлассы
 {
     /// <summary>
@@ -36,9 +11,8 @@ namespace МатКлассы
         /// <summary>
         /// Рациональные числа (числа, представимые в виде m/n)
         /// </summary>
-        public class Rational:Idup<Rational>
+        public struct Rational : Idup<Rational>
         {
-
             public Rational dup => new Rational(this);
 
             /// <summary>
@@ -51,11 +25,6 @@ namespace МатКлассы
             /// </summary>
             public static readonly Rational ZERO, ONE;
 
-            //Constructors
-            /// <summary>
-            /// Ноль по умолчанию
-            /// </summary>
-            public Rational() { m = 0; n = 1; }
             /// <summary>
             /// Рациональное число по целому числу
             /// </summary>
@@ -88,7 +57,6 @@ namespace МатКлассы
                 ONE = new Rational(1, 1);
             }
 
-            //Methods
             /// <summary>
             /// Наибольший общий делитель
             /// </summary>
@@ -268,7 +236,11 @@ namespace МатКлассы
 
             public override bool Equals(object obj)
             {
-                var rational = obj as Rational;
+                var rational = (Rational)obj;
+                return this.Equals(rational);
+            }
+            public bool Equals(Rational rational)
+            {
                 return rational != null &&
                        m == rational.m &&
                        n == rational.n &&
@@ -286,7 +258,6 @@ namespace МатКлассы
                 return hashCode;
             }
 
-            //Operators
             public static Rational operator +(Rational a, Rational b) { return new Rational((a.m * b.n + a.n * b.m), (a.n * b.n)); }
             public static Rational operator -(Rational a) { return new Rational(-a.m, a.n); }
             public static Rational operator -(Rational a, Rational b) { return a + (-b); }
@@ -305,7 +276,7 @@ namespace МатКлассы
         /// <summary>
         /// Комплексные числа
         /// </summary>
-        public struct Complex : IComparable,Idup<Complex>
+        public struct Complex : IComparable, Idup<Complex>
         {
             static double _2PI;
             static Complex()
@@ -496,7 +467,7 @@ namespace МатКлассы
             //Перегруженные операторы вычитания
             public static Complex operator -(Complex c1, Complex c2)
             {
-                return new Complex(c1.Re - c2.Re, c1.Im - c2.Im); 
+                return new Complex(c1.Re - c2.Re, c1.Im - c2.Im);
             }
             public static Complex operator -(Complex z) { return new Complex(-z.Re, -z.Im); }
 
@@ -720,7 +691,7 @@ namespace МатКлассы
             /// </summary>
             /// <param name="z"></param>
             /// <returns></returns>
-            public static Complex SqrtSig(Complex z) => Complex.Sqrt(z) * Math.Sign( z.Im);
+            public static Complex SqrtSig(Complex z) => Complex.Sqrt(z) * Math.Sign(z.Im);
 
             /// <summary>
             /// Поменять мнимую и действительную часть местами, выведя результат
@@ -777,7 +748,7 @@ namespace МатКлассы
             /// </summary>
             /// <param name="z"></param>
             /// <returns></returns>
-            public static Complex Cth(Complex z, double eps=1e-15)
+            public static Complex Cth(Complex z, double eps = 1e-15)
             {
                 Complex tmp = Exp(-z);
                 if (tmp.Abs <= eps) return 1.0;
@@ -830,22 +801,23 @@ namespace МатКлассы
             }
 
         }
-            /// <summary>
-            /// Возвращает действительную, мнимую части и модули массива
-            /// </summary>
-            /// <param name="v"></param>
-            /// <returns></returns>
-            public static Tuple<double[], double[], double[]> ReImAbs(this Complex[] v)
+
+        /// <summary>
+        /// Возвращает действительную, мнимую части и модули массива
+        /// </summary>
+        /// <param name="v"></param>
+        /// <returns></returns>
+        public static Tuple<double[], double[], double[]> ReImAbs(this Complex[] v)
+        {
+            double[] re = new double[v.Length], im = new double[v.Length], abs = new double[v.Length];
+            for (int i = 0; i < v.Length; i++)
             {
-                double[] re = new double[v.Length], im = new double[v.Length], abs = new double[v.Length];
-                for (int i = 0; i < v.Length; i++)
-                {
-                    re[i] = v[i].Re;
-                    im[i] = v[i].Im;
-                    abs[i] = v[i].Abs;
-                }
-                return new Tuple<double[], double[], double[]>(re, im, abs);
+                re[i] = v[i].Re;
+                im[i] = v[i].Im;
+                abs[i] = v[i].Abs;
             }
+            return new Tuple<double[], double[], double[]>(re, im, abs);
+        }
     }
 }
 
