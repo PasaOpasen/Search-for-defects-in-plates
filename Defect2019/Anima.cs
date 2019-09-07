@@ -25,6 +25,7 @@ namespace Defect2019
 
             pictureBox1.BackgroundImage = Bitmap.FromFile(files[0]);
             timer1.Start();
+
             this.FormClosing += new FormClosingEventHandler((object o,FormClosingEventArgs f)=> {
                 timer1.Stop();
                 files = null;
@@ -35,6 +36,7 @@ namespace Defect2019
         string[] files;
         int k = 1;
         int cycles;
+
         private void Timer1_Tick(object Sender, EventArgs e)
         {
             //if(pictureBox1.BackgroundImage != null)

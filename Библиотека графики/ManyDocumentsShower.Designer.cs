@@ -76,6 +76,7 @@
             this.Margin = new System.Windows.Forms.Padding(4);
             this.Name = "ManyDocumentsShower";
             this.Text = "ManyDocumentsShower";
+            this.TopMost = true;
             this.tabControl1.ResumeLayout(false);
             this.ResumeLayout(false);
 

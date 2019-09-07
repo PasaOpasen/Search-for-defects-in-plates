@@ -55,6 +55,7 @@
             this.Margin = new System.Windows.Forms.Padding(4);
             this.Name = "Scheme";
             this.Text = "Схема эксперимента";
+            this.TopMost = true;
             ((System.ComponentModel.ISupportInitialize)(this.pictureBox1)).EndInit();
             this.ResumeLayout(false);
 

@@ -650,10 +650,7 @@ namespace PS5000A
                     tosABS[i] = Path.Combine(to, "Abs_" + filenames[args[i]]);
                     tos[i] = Path.Combine(to, filenames[args[i]]);
 
-                    FurierTransformer.LoadIn(froms[i]);
-                    //FurierTransformer.GetSplainFT_old(progress);
-                    FurierTransformer.GetSplainFT_new(progress);
-                    FurierTransformer.SaveOut(tos[i]);
+                    MakeTransform(froms[i],tos[i],progress);
                     label2String = $"Выполнено {i + 1} из {sourcesCount - 1} для источника {Symbols[sourcenumber]}";
                 }
             });
@@ -663,6 +660,14 @@ namespace PS5000A
             toolStripStatusLabel1.Text = $"Преобразование для источника {Symbols[sourcenumber]} завершено. Данные записаны";
             toolStripStatusLabel2.Text = "";
 
+        }
+
+        private void MakeTransform(string from,string to, IProgress<int> progress)
+        {
+            FurierTransformer.LoadIn(from);
+            //FurierTransformer.GetSplainFT_old(progress);
+            FurierTransformer.GetSplainFT_new(progress);
+            FurierTransformer.SaveOut(to);
         }
 
         private void button1_Click_1(object sender, EventArgs e)

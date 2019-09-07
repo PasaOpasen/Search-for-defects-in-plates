@@ -52,6 +52,7 @@
             this.Controls.Add(this.pictureBox1);
             this.Name = "Anima";
             this.Text = "Полученная анимация";
+            this.TopMost = true;
             ((System.ComponentModel.ISupportInitialize)(this.pictureBox1)).EndInit();
             this.ResumeLayout(false);
 

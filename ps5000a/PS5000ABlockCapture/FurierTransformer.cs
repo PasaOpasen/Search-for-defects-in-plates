@@ -41,19 +41,20 @@ namespace PS5000A
         static bool avd_all = false;
         public static int n_ignore;
         static bool no_ignore = false;
-        static Complex avg;
-        static Complex[] f;
+
+        static double avg;
+        static double[] f;
         static Complex[] F;
 
         public static void FilterData(int n = 2)
         {
-            Complex[] f_ = new Complex[count_t - 2 * n];
+            double[] f_ = new double[count_t - 2 * n];
             for (int i = 0; i < count_t - 2 * n; i++)
             {
                 f_[i] = 0;
                 for (int j = 0; j < 2 * n + 1; j++)
                     f_[i] += f[i + j];
-                f_[i] /= (double)(n * 2 + 1);
+                f_[i] /= n * 2 + 1;
                 f[i] = f_[i];
             }
 
@@ -106,27 +107,19 @@ namespace PS5000A
         }
         public static void LoadIn(string filename)
         {
-            try
-            {
-                InFile = filename;
-                using (StreamReader sr = new StreamReader(InFile, System.Text.Encoding.Default))
-                {
-                    f = new Complex[count_t];
-                    for (int i = 0; i < count_t; i++)
-                        f[i] = Double.Parse(sr.ReadLine());
-                }
-                avg = 0;
-                for (int i = n_ignore; i < n_avg; i++)
-                    avg += f[i];
-
-                avg /= (double)n_avg;
+            InFile = filename;
+            f = new double[count_t];
+            using (StreamReader sr = new StreamReader(InFile))
                 for (int i = 0; i < count_t; i++)
-                    f[i] -= avg;
-            }
-            catch (Exception e)
-            {
-                Console.WriteLine(e.Message);
-            }
+                    f[i] = Double.Parse(sr.ReadLine());
+
+            avg = 0;
+            for (int i = n_ignore; i < n_avg; i++)
+                avg += f[i];
+
+            avg /= n_avg;
+            for (int i = 0; i < count_t; i++)
+                f[i] -= avg;
         }
 
 
@@ -137,7 +130,7 @@ namespace PS5000A
                 InFile = filename;
                 using (StreamReader sr = new StreamReader(InFile, System.Text.Encoding.Default))
                 {
-                    f = new Complex[count_t];
+                    f = new double[count_t];
                     string line;
                     for (int i = 0; i < count_t; i++)
                     {
@@ -155,7 +148,7 @@ namespace PS5000A
                 {
                     avg += f[i];
                 }
-                avg /= (double)n_avg;
+                avg /= n_avg;
                 for (int i = 0; i < count_t; i++)
                 {
 
@@ -178,7 +171,7 @@ namespace PS5000A
                 using (StreamReader sr1 = new StreamReader(filename1, System.Text.Encoding.Default))
                 using (StreamReader sr2 = new StreamReader(filename2, System.Text.Encoding.Default))
                 {
-                    f = new Complex[count_t];
+                    f = new double[count_t];
                     string line;
                     // line = sr1.ReadLine();
                     for (int i = 0; i < count_t; i++)
@@ -204,10 +197,9 @@ namespace PS5000A
                 {
                     avg += f[i];
                 }
-                avg /= (double)n_avg;
+                avg /= n_avg;
                 for (int i = 0; i < count_t; i++)
                 {
-
                     f[i] -= avg;
                 }
 
@@ -297,25 +289,9 @@ namespace PS5000A
         }
         public static void SaveIn(string filename)
         {
-
-            try
-            {
-                using (StreamWriter sw = new StreamWriter(filename))
-                {
-                    for (int i = 0; i < count_t; i++)
-                    {
-                        //Debug.WriteLine($"{w} {F[i]} {F[i].Real} {F[i].Imaginary}");
-                        sw.WriteLine($"{f[i].Real}");
-                    }
-
-                }
-            }
-
-            catch (Exception e)
-            {
-                Console.WriteLine(e.Message);
-            }
-
+            using (StreamWriter sw = new StreamWriter(filename))
+                for (int i = 0; i < count_t; i++)
+                    sw.WriteLine(f[i]);
         }
         public static void SaveOut(string filename)
         {
@@ -412,9 +388,9 @@ namespace PS5000A
             F = null;
             argi = null;
             argj = null;
-           // tmpArray = null;
-            if(Dictionary!=null)
-            Dictionary.Dispose();
+            // tmpArray = null;
+            if (Dictionary != null)
+                Dictionary.Dispose();
             if (DictionaryA != null)
                 DictionaryA.Dispose();
             GC.Collect();

@@ -609,6 +609,7 @@
             this.MainMenuStrip = this.menuStrip1;
             this.Margin = new System.Windows.Forms.Padding(4);
             this.Name = "WaveContinious";
+            this.StartPosition = System.Windows.Forms.FormStartPosition.CenterScreen;
             this.Text = "Распространение волны в пространстве";
             this.groupBox1.ResumeLayout(false);
             this.groupBox1.PerformLayout();

@@ -40,6 +40,7 @@ namespace PS5000A
         private void InitializeComponent()
         {
             this.components = new System.ComponentModel.Container();
+            System.ComponentModel.ComponentResourceManager resources = new System.ComponentModel.ComponentResourceManager(typeof(PS5000ABlockForm));
             this.buttonOpen = new System.Windows.Forms.Button();
             this.tabControl = new System.Windows.Forms.TabControl();
             this.tabUnit = new System.Windows.Forms.TabPage();
@@ -131,6 +132,8 @@ namespace PS5000A
             this.toolStripStatusLabel2 = new System.Windows.Forms.ToolStripStatusLabel();
             this.timer1 = new System.Windows.Forms.Timer(this.components);
             this.folderBrowserDialog1 = new System.Windows.Forms.FolderBrowserDialog();
+            this.groupBox3 = new System.Windows.Forms.GroupBox();
+            this.button3 = new System.Windows.Forms.Button();
             this.tabControl.SuspendLayout();
             this.tabUnit.SuspendLayout();
             this.tabChannels.SuspendLayout();
@@ -139,6 +142,7 @@ namespace PS5000A
             this.groupBox2.SuspendLayout();
             this.tabAbout.SuspendLayout();
             this.statusStrip1.SuspendLayout();
+            this.groupBox3.SuspendLayout();
             this.SuspendLayout();
             // 
             // buttonOpen
@@ -146,7 +150,7 @@ namespace PS5000A
             this.buttonOpen.BackColor = System.Drawing.Color.FromArgb(((int)(((byte)(192)))), ((int)(((byte)(192)))), ((int)(((byte)(255)))));
             this.buttonOpen.FlatStyle = System.Windows.Forms.FlatStyle.Flat;
             this.buttonOpen.Font = new System.Drawing.Font("Microsoft Sans Serif", 15.75F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(204)));
-            this.buttonOpen.Location = new System.Drawing.Point(31, 76);
+            this.buttonOpen.Location = new System.Drawing.Point(111, 65);
             this.buttonOpen.Margin = new System.Windows.Forms.Padding(4, 5, 4, 5);
             this.buttonOpen.Name = "buttonOpen";
             this.buttonOpen.Size = new System.Drawing.Size(163, 82);
@@ -172,6 +176,7 @@ namespace PS5000A
             // 
             // tabUnit
             // 
+            this.tabUnit.Controls.Add(this.button3);
             this.tabUnit.Controls.Add(this.textBox14);
             this.tabUnit.Controls.Add(this.label21);
             this.tabUnit.Controls.Add(this.textBox13);
@@ -195,7 +200,7 @@ namespace PS5000A
             // 
             // textBox14
             // 
-            this.textBox14.Location = new System.Drawing.Point(449, 60);
+            this.textBox14.Location = new System.Drawing.Point(523, 86);
             this.textBox14.Name = "textBox14";
             this.textBox14.Size = new System.Drawing.Size(100, 26);
             this.textBox14.TabIndex = 14;
@@ -205,7 +210,7 @@ namespace PS5000A
             // label21
             // 
             this.label21.AutoSize = true;
-            this.label21.Location = new System.Drawing.Point(263, 63);
+            this.label21.Location = new System.Drawing.Point(337, 89);
             this.label21.Name = "label21";
             this.label21.Size = new System.Drawing.Size(169, 20);
             this.label21.TabIndex = 13;
@@ -213,7 +218,7 @@ namespace PS5000A
             // 
             // textBox13
             // 
-            this.textBox13.Location = new System.Drawing.Point(449, 95);
+            this.textBox13.Location = new System.Drawing.Point(523, 121);
             this.textBox13.Name = "textBox13";
             this.textBox13.Size = new System.Drawing.Size(100, 26);
             this.textBox13.TabIndex = 12;
@@ -223,7 +228,7 @@ namespace PS5000A
             // label20
             // 
             this.label20.AutoSize = true;
-            this.label20.Location = new System.Drawing.Point(300, 101);
+            this.label20.Location = new System.Drawing.Point(374, 127);
             this.label20.Name = "label20";
             this.label20.Size = new System.Drawing.Size(132, 20);
             this.label20.TabIndex = 11;
@@ -233,7 +238,7 @@ namespace PS5000A
             // 
             this.label16.AutoSize = true;
             this.label16.Font = new System.Drawing.Font("Microsoft Sans Serif", 9.75F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-            this.label16.Location = new System.Drawing.Point(301, 246);
+            this.label16.Location = new System.Drawing.Point(322, 271);
             this.label16.Name = "label16";
             this.label16.Size = new System.Drawing.Size(403, 16);
             this.label16.TabIndex = 10;
@@ -242,7 +247,7 @@ namespace PS5000A
             // label15
             // 
             this.label15.AutoSize = true;
-            this.label15.Location = new System.Drawing.Point(282, 170);
+            this.label15.Location = new System.Drawing.Point(356, 196);
             this.label15.Name = "label15";
             this.label15.Size = new System.Drawing.Size(150, 20);
             this.label15.TabIndex = 9;
@@ -250,7 +255,7 @@ namespace PS5000A
             // 
             // textBox11
             // 
-            this.textBox11.Location = new System.Drawing.Point(449, 167);
+            this.textBox11.Location = new System.Drawing.Point(523, 193);
             this.textBox11.Name = "textBox11";
             this.textBox11.Size = new System.Drawing.Size(100, 26);
             this.textBox11.TabIndex = 8;
@@ -259,7 +264,7 @@ namespace PS5000A
             // 
             // textBox10
             // 
-            this.textBox10.Location = new System.Drawing.Point(449, 132);
+            this.textBox10.Location = new System.Drawing.Point(523, 158);
             this.textBox10.Name = "textBox10";
             this.textBox10.Size = new System.Drawing.Size(100, 26);
             this.textBox10.TabIndex = 6;
@@ -270,7 +275,7 @@ namespace PS5000A
             // label14
             // 
             this.label14.AutoSize = true;
-            this.label14.Location = new System.Drawing.Point(275, 135);
+            this.label14.Location = new System.Drawing.Point(349, 161);
             this.label14.Name = "label14";
             this.label14.Size = new System.Drawing.Size(157, 20);
             this.label14.TabIndex = 5;
@@ -278,7 +283,7 @@ namespace PS5000A
             // 
             // textBox9
             // 
-            this.textBox9.Location = new System.Drawing.Point(449, 22);
+            this.textBox9.Location = new System.Drawing.Point(523, 48);
             this.textBox9.Name = "textBox9";
             this.textBox9.Size = new System.Drawing.Size(100, 26);
             this.textBox9.TabIndex = 4;
@@ -289,7 +294,7 @@ namespace PS5000A
             // label13
             // 
             this.label13.AutoSize = true;
-            this.label13.Location = new System.Drawing.Point(358, 22);
+            this.label13.Location = new System.Drawing.Point(432, 48);
             this.label13.Name = "label13";
             this.label13.Size = new System.Drawing.Size(74, 20);
             this.label13.TabIndex = 3;
@@ -856,14 +861,13 @@ namespace PS5000A
             // 
             // tabGetData
             // 
+            this.tabGetData.Controls.Add(this.groupBox3);
             this.tabGetData.Controls.Add(this.checkBox3);
             this.tabGetData.Controls.Add(this.checkBox2);
             this.tabGetData.Controls.Add(this.button4);
-            this.tabGetData.Controls.Add(this.groupBox2);
             this.tabGetData.Controls.Add(this.button2);
             this.tabGetData.Controls.Add(this.textBox12);
             this.tabGetData.Controls.Add(this.label17);
-            this.tabGetData.Controls.Add(this.buttonStart);
             this.tabGetData.Location = new System.Drawing.Point(4, 29);
             this.tabGetData.Margin = new System.Windows.Forms.Padding(4, 5, 4, 5);
             this.tabGetData.Name = "tabGetData";
@@ -878,7 +882,7 @@ namespace PS5000A
             this.checkBox3.AutoSize = true;
             this.checkBox3.Checked = true;
             this.checkBox3.CheckState = System.Windows.Forms.CheckState.Checked;
-            this.checkBox3.Location = new System.Drawing.Point(283, 82);
+            this.checkBox3.Location = new System.Drawing.Point(305, 135);
             this.checkBox3.Name = "checkBox3";
             this.checkBox3.Size = new System.Drawing.Size(163, 24);
             this.checkBox3.TabIndex = 7;
@@ -888,7 +892,7 @@ namespace PS5000A
             // checkBox2
             // 
             this.checkBox2.AutoSize = true;
-            this.checkBox2.Location = new System.Drawing.Point(283, 112);
+            this.checkBox2.Location = new System.Drawing.Point(305, 165);
             this.checkBox2.Name = "checkBox2";
             this.checkBox2.Size = new System.Drawing.Size(275, 24);
             this.checkBox2.TabIndex = 6;
@@ -897,21 +901,24 @@ namespace PS5000A
             // 
             // button4
             // 
-            this.button4.Location = new System.Drawing.Point(527, 40);
+            this.button4.BackColor = System.Drawing.Color.FromArgb(((int)(((byte)(192)))), ((int)(((byte)(255)))), ((int)(((byte)(255)))));
+            this.button4.FlatStyle = System.Windows.Forms.FlatStyle.Popup;
+            this.button4.Location = new System.Drawing.Point(406, 48);
             this.button4.Name = "button4";
             this.button4.Size = new System.Drawing.Size(147, 56);
             this.button4.TabIndex = 5;
             this.button4.Text = "Создать разницу замеров";
-            this.button4.UseVisualStyleBackColor = true;
+            this.button4.UseVisualStyleBackColor = false;
             this.button4.Click += new System.EventHandler(this.button4_Click);
             // 
             // groupBox2
             // 
             this.groupBox2.Controls.Add(this.radioButton2);
             this.groupBox2.Controls.Add(this.radioButton1);
-            this.groupBox2.Location = new System.Drawing.Point(67, 113);
+            this.groupBox2.Dock = System.Windows.Forms.DockStyle.Bottom;
+            this.groupBox2.Location = new System.Drawing.Point(3, 76);
             this.groupBox2.Name = "groupBox2";
-            this.groupBox2.Size = new System.Drawing.Size(184, 83);
+            this.groupBox2.Size = new System.Drawing.Size(186, 93);
             this.groupBox2.TabIndex = 4;
             this.groupBox2.TabStop = false;
             this.groupBox2.Text = "Замер выполняется";
@@ -919,7 +926,7 @@ namespace PS5000A
             // radioButton2
             // 
             this.radioButton2.AutoSize = true;
-            this.radioButton2.Location = new System.Drawing.Point(24, 51);
+            this.radioButton2.Location = new System.Drawing.Point(24, 57);
             this.radioButton2.Name = "radioButton2";
             this.radioButton2.Size = new System.Drawing.Size(120, 24);
             this.radioButton2.TabIndex = 1;
@@ -930,7 +937,7 @@ namespace PS5000A
             // 
             this.radioButton1.AutoSize = true;
             this.radioButton1.Checked = true;
-            this.radioButton1.Location = new System.Drawing.Point(24, 21);
+            this.radioButton1.Location = new System.Drawing.Point(24, 27);
             this.radioButton1.Name = "radioButton1";
             this.radioButton1.Size = new System.Drawing.Size(127, 24);
             this.radioButton1.TabIndex = 0;
@@ -940,7 +947,7 @@ namespace PS5000A
             // 
             // button2
             // 
-            this.button2.Location = new System.Drawing.Point(572, 241);
+            this.button2.Location = new System.Drawing.Point(596, 241);
             this.button2.Name = "button2";
             this.button2.Size = new System.Drawing.Size(115, 42);
             this.button2.TabIndex = 3;
@@ -950,11 +957,11 @@ namespace PS5000A
             // 
             // textBox12
             // 
-            this.textBox12.Font = new System.Drawing.Font("Microsoft Sans Serif", 11.25F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+            this.textBox12.Font = new System.Drawing.Font("Microsoft Sans Serif", 12F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(204)));
             this.textBox12.Location = new System.Drawing.Point(239, 241);
             this.textBox12.Multiline = true;
             this.textBox12.Name = "textBox12";
-            this.textBox12.Size = new System.Drawing.Size(313, 42);
+            this.textBox12.Size = new System.Drawing.Size(341, 42);
             this.textBox12.TabIndex = 2;
             this.textBox12.TextAlign = System.Windows.Forms.HorizontalAlignment.Center;
             // 
@@ -969,13 +976,16 @@ namespace PS5000A
             // 
             // buttonStart
             // 
-            this.buttonStart.Location = new System.Drawing.Point(67, 45);
+            this.buttonStart.BackColor = System.Drawing.Color.PeachPuff;
+            this.buttonStart.Dock = System.Windows.Forms.DockStyle.Top;
+            this.buttonStart.FlatStyle = System.Windows.Forms.FlatStyle.Popup;
+            this.buttonStart.Location = new System.Drawing.Point(3, 22);
             this.buttonStart.Margin = new System.Windows.Forms.Padding(4, 5, 4, 5);
             this.buttonStart.Name = "buttonStart";
-            this.buttonStart.Size = new System.Drawing.Size(164, 46);
+            this.buttonStart.Size = new System.Drawing.Size(186, 46);
             this.buttonStart.TabIndex = 0;
             this.buttonStart.Text = "Пуск замера";
-            this.buttonStart.UseVisualStyleBackColor = true;
+            this.buttonStart.UseVisualStyleBackColor = false;
             this.buttonStart.Click += new System.EventHandler(this.buttonStart_Click);
             // 
             // tabAbout
@@ -1028,7 +1038,7 @@ namespace PS5000A
             // 
             // button7
             // 
-            this.button7.Location = new System.Drawing.Point(7, 220);
+            this.button7.Location = new System.Drawing.Point(12, 228);
             this.button7.Name = "button7";
             this.button7.Size = new System.Drawing.Size(128, 53);
             this.button7.TabIndex = 9;
@@ -1038,7 +1048,7 @@ namespace PS5000A
             // 
             // button6
             // 
-            this.button6.Location = new System.Drawing.Point(7, 169);
+            this.button6.Location = new System.Drawing.Point(12, 169);
             this.button6.Name = "button6";
             this.button6.Size = new System.Drawing.Size(128, 45);
             this.button6.TabIndex = 8;
@@ -1118,6 +1128,32 @@ namespace PS5000A
             this.toolStripStatusLabel2.Size = new System.Drawing.Size(118, 17);
             this.toolStripStatusLabel2.Text = "toolStripStatusLabel2";
             // 
+            // groupBox3
+            // 
+            this.groupBox3.Controls.Add(this.buttonStart);
+            this.groupBox3.Controls.Add(this.groupBox2);
+            this.groupBox3.Location = new System.Drawing.Point(52, 31);
+            this.groupBox3.Name = "groupBox3";
+            this.groupBox3.Size = new System.Drawing.Size(192, 172);
+            this.groupBox3.TabIndex = 8;
+            this.groupBox3.TabStop = false;
+            // 
+            // button3
+            // 
+            this.button3.BackColor = System.Drawing.Color.White;
+            this.button3.BackgroundImageLayout = System.Windows.Forms.ImageLayout.None;
+            this.button3.Font = new System.Drawing.Font("Microsoft Sans Serif", 12F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(204)));
+            this.button3.ForeColor = System.Drawing.Color.DarkViolet;
+            this.button3.Image = ((System.Drawing.Image)(resources.GetObject("button3.Image")));
+            this.button3.ImageAlign = System.Drawing.ContentAlignment.MiddleLeft;
+            this.button3.Location = new System.Drawing.Point(8, 176);
+            this.button3.Name = "button3";
+            this.button3.Size = new System.Drawing.Size(197, 142);
+            this.button3.TabIndex = 15;
+            this.button3.Text = "Алгоритм\r\nдействий";
+            this.button3.TextAlign = System.Drawing.ContentAlignment.MiddleRight;
+            this.button3.UseVisualStyleBackColor = false;
+            // 
             // PS5000ABlockForm
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(9F, 20F);
@@ -1127,7 +1163,7 @@ namespace PS5000A
             this.Controls.Add(this.statusStrip1);
             this.Controls.Add(this.tabControl);
             this.Font = new System.Drawing.Font("Microsoft Sans Serif", 12F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-            this.FormBorderStyle = System.Windows.Forms.FormBorderStyle.Fixed3D;
+            this.FormBorderStyle = System.Windows.Forms.FormBorderStyle.FixedToolWindow;
             this.Margin = new System.Windows.Forms.Padding(4, 5, 4, 5);
             this.Name = "PS5000ABlockForm";
             this.Text = "PS5000ABlockCapture";
@@ -1145,6 +1181,7 @@ namespace PS5000A
             this.tabAbout.PerformLayout();
             this.statusStrip1.ResumeLayout(false);
             this.statusStrip1.PerformLayout();
+            this.groupBox3.ResumeLayout(false);
             this.ResumeLayout(false);
             this.PerformLayout();
 
@@ -1243,6 +1280,8 @@ namespace PS5000A
         private System.Windows.Forms.Label label33;
         private System.Windows.Forms.TextBox textBox21;
         private System.Windows.Forms.TextBox textBox22;
+        private System.Windows.Forms.GroupBox groupBox3;
+        private System.Windows.Forms.Button button3;
     }
 }
 
