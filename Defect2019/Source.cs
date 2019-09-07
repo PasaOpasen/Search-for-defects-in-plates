@@ -5,6 +5,9 @@ using МатКлассы;
 using static МатКлассы.Number;
 using static МатКлассы.Waves;
 using Point = МатКлассы.Point;
+using System.Diagnostics;
+using System.Threading.Tasks;
+using System.Windows.Forms;
 
 /// <summary>
 /// Источник с дополнительными свойствами
@@ -209,6 +212,42 @@ public class Source : Idup<Source>
         return t.ToArray();
     }
 
+    /// <summary>
+    /// Возвращает массив источников, для которых существуют f(w) в папке directory, + дополнительно считывает f(w)
+    /// </summary>
+    /// <param name="directory"></param>
+    /// <returns></returns>
+    public static Source[] GetSourcesWithReadFw(string directory,Source[] sourcesArray)
+    {
+        var s = Source.GetSourcesWithFw(sourcesArray, directory);
+        FilesToSources(s, directory);
+        return s;
+    }
+
+    /// <summary>
+    /// Считать файлы и записать f(w) в имеющиеся источники
+    /// </summary>
+    private static void FilesToSources(Source[] sources, string path)
+    {
+        try
+        {
+            Parallel.For(0, sources.Length, (int i) => sources[i].FmasFromFile(path));
+        }
+        catch (Exception e)
+        {
+            MessageBox.Show(e.Message, "Возникла ошибка при чтении файлов", MessageBoxButtons.OK, MessageBoxIcon.Error);
+        }
+    }
+    /// <summary>
+    /// Записать f(w) от всех источников в файлы
+    /// </summary>
+    public static void FilesFromSources(Source[] sources,string filename)
+    {
+        string t;
+        using (StreamReader r = new StreamReader(filename))
+            t = r.ReadLine().Replace("\r\n", "");
+        Parallel.For(0, sources.Length, (int i) => sources[i].FmasToFile(t));
+    }
 
     public static double GetMaxRadius(Source[] s)
     {
