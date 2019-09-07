@@ -1517,12 +1517,7 @@ public static class OtherMethods
         });
     }
 
-    public static string GetResource(string name)
-    {
-        string s = Environment.CurrentDirectory;
-        s = s.Substring(0, s.IndexOf("Defect2019") + 10);
-        return Path.Combine(s, "Resources", name);
-    }
+    public static string GetResource(string name) => Expendator.GetResource(name, "Defect2019");
 
     public static void PlaySound(string NameInResources) => new System.Media.SoundPlayer(OtherMethods.GetResource(NameInResources + ".wav")).Play();
 }

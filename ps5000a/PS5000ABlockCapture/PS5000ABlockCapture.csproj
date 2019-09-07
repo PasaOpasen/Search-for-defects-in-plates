@@ -126,6 +126,7 @@
     </ProjectReference>
   </ItemGroup>
   <ItemGroup>
+    <None Include="Resources\algolIlusha.pdf" />
     <None Include="Resources\ВычисленияЗавершены.wav" />
   </ItemGroup>
   <ItemGroup>

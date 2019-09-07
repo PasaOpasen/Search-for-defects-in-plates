@@ -44,6 +44,7 @@ namespace PS5000A
             this.buttonOpen = new System.Windows.Forms.Button();
             this.tabControl = new System.Windows.Forms.TabControl();
             this.tabUnit = new System.Windows.Forms.TabPage();
+            this.button3 = new System.Windows.Forms.Button();
             this.textBox14 = new System.Windows.Forms.TextBox();
             this.label21 = new System.Windows.Forms.Label();
             this.textBox13 = new System.Windows.Forms.TextBox();
@@ -66,22 +67,18 @@ namespace PS5000A
             this.label35 = new System.Windows.Forms.Label();
             this.label34 = new System.Windows.Forms.Label();
             this.textBox15 = new System.Windows.Forms.TextBox();
-            this.label22 = new System.Windows.Forms.Label();
             this.label23 = new System.Windows.Forms.Label();
             this.textBox16 = new System.Windows.Forms.TextBox();
             this.label24 = new System.Windows.Forms.Label();
             this.label25 = new System.Windows.Forms.Label();
-            this.label26 = new System.Windows.Forms.Label();
             this.label27 = new System.Windows.Forms.Label();
             this.textBox17 = new System.Windows.Forms.TextBox();
             this.textBox18 = new System.Windows.Forms.TextBox();
             this.textBox19 = new System.Windows.Forms.TextBox();
             this.textBox20 = new System.Windows.Forms.TextBox();
             this.label28 = new System.Windows.Forms.Label();
-            this.label29 = new System.Windows.Forms.Label();
             this.label30 = new System.Windows.Forms.Label();
             this.label31 = new System.Windows.Forms.Label();
-            this.label32 = new System.Windows.Forms.Label();
             this.label33 = new System.Windows.Forms.Label();
             this.textBox21 = new System.Windows.Forms.TextBox();
             this.textBox22 = new System.Windows.Forms.TextBox();
@@ -91,31 +88,29 @@ namespace PS5000A
             this.textBox1 = new System.Windows.Forms.TextBox();
             this.label11 = new System.Windows.Forms.Label();
             this.label2 = new System.Windows.Forms.Label();
-            this.label12 = new System.Windows.Forms.Label();
             this.label3 = new System.Windows.Forms.Label();
             this.textBox8 = new System.Windows.Forms.TextBox();
             this.textBox2 = new System.Windows.Forms.TextBox();
             this.textBox5 = new System.Windows.Forms.TextBox();
             this.textBox4 = new System.Windows.Forms.TextBox();
             this.label7 = new System.Windows.Forms.Label();
-            this.label6 = new System.Windows.Forms.Label();
             this.label8 = new System.Windows.Forms.Label();
             this.label5 = new System.Windows.Forms.Label();
-            this.label9 = new System.Windows.Forms.Label();
             this.label4 = new System.Windows.Forms.Label();
             this.textBox6 = new System.Windows.Forms.TextBox();
             this.textBox3 = new System.Windows.Forms.TextBox();
             this.tabGetData = new System.Windows.Forms.TabPage();
-            this.checkBox3 = new System.Windows.Forms.CheckBox();
-            this.checkBox2 = new System.Windows.Forms.CheckBox();
-            this.button4 = new System.Windows.Forms.Button();
+            this.groupBox3 = new System.Windows.Forms.GroupBox();
+            this.buttonStart = new System.Windows.Forms.Button();
             this.groupBox2 = new System.Windows.Forms.GroupBox();
             this.radioButton2 = new System.Windows.Forms.RadioButton();
             this.radioButton1 = new System.Windows.Forms.RadioButton();
+            this.checkBox3 = new System.Windows.Forms.CheckBox();
+            this.checkBox2 = new System.Windows.Forms.CheckBox();
+            this.button4 = new System.Windows.Forms.Button();
             this.button2 = new System.Windows.Forms.Button();
             this.textBox12 = new System.Windows.Forms.TextBox();
             this.label17 = new System.Windows.Forms.Label();
-            this.buttonStart = new System.Windows.Forms.Button();
             this.tabAbout = new System.Windows.Forms.TabPage();
             this.label19 = new System.Windows.Forms.Label();
             this.listBox2 = new System.Windows.Forms.ListBox();
@@ -132,17 +127,22 @@ namespace PS5000A
             this.toolStripStatusLabel2 = new System.Windows.Forms.ToolStripStatusLabel();
             this.timer1 = new System.Windows.Forms.Timer(this.components);
             this.folderBrowserDialog1 = new System.Windows.Forms.FolderBrowserDialog();
-            this.groupBox3 = new System.Windows.Forms.GroupBox();
-            this.button3 = new System.Windows.Forms.Button();
+            this.label6 = new System.Windows.Forms.Label();
+            this.label9 = new System.Windows.Forms.Label();
+            this.label12 = new System.Windows.Forms.Label();
+            this.label22 = new System.Windows.Forms.Label();
+            this.label26 = new System.Windows.Forms.Label();
+            this.label29 = new System.Windows.Forms.Label();
+            this.label32 = new System.Windows.Forms.Label();
             this.tabControl.SuspendLayout();
             this.tabUnit.SuspendLayout();
             this.tabChannels.SuspendLayout();
             this.groupBox1.SuspendLayout();
             this.tabGetData.SuspendLayout();
+            this.groupBox3.SuspendLayout();
             this.groupBox2.SuspendLayout();
             this.tabAbout.SuspendLayout();
             this.statusStrip1.SuspendLayout();
-            this.groupBox3.SuspendLayout();
             this.SuspendLayout();
             // 
             // buttonOpen
@@ -162,9 +162,9 @@ namespace PS5000A
             // tabControl
             // 
             this.tabControl.Controls.Add(this.tabUnit);
+            this.tabControl.Controls.Add(this.tabAbout);
             this.tabControl.Controls.Add(this.tabChannels);
             this.tabControl.Controls.Add(this.tabGetData);
-            this.tabControl.Controls.Add(this.tabAbout);
             this.tabControl.Dock = System.Windows.Forms.DockStyle.Fill;
             this.tabControl.HotTrack = true;
             this.tabControl.Location = new System.Drawing.Point(0, 0);
@@ -197,6 +197,23 @@ namespace PS5000A
             this.tabUnit.TabIndex = 0;
             this.tabUnit.Text = "Модуль";
             this.tabUnit.UseVisualStyleBackColor = true;
+            // 
+            // button3
+            // 
+            this.button3.BackColor = System.Drawing.Color.White;
+            this.button3.BackgroundImageLayout = System.Windows.Forms.ImageLayout.None;
+            this.button3.Font = new System.Drawing.Font("Microsoft Sans Serif", 12F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(204)));
+            this.button3.ForeColor = System.Drawing.Color.DarkViolet;
+            this.button3.Image = ((System.Drawing.Image)(resources.GetObject("button3.Image")));
+            this.button3.ImageAlign = System.Drawing.ContentAlignment.MiddleLeft;
+            this.button3.Location = new System.Drawing.Point(8, 176);
+            this.button3.Name = "button3";
+            this.button3.Size = new System.Drawing.Size(197, 142);
+            this.button3.TabIndex = 15;
+            this.button3.Text = "Алгоритм\r\nдействий";
+            this.button3.TextAlign = System.Drawing.ContentAlignment.MiddleRight;
+            this.button3.UseVisualStyleBackColor = false;
+            this.button3.Click += new System.EventHandler(this.button3_Click);
             // 
             // textBox14
             // 
@@ -309,11 +326,18 @@ namespace PS5000A
             this.tabChannels.Padding = new System.Windows.Forms.Padding(4, 5, 4, 5);
             this.tabChannels.Size = new System.Drawing.Size(759, 339);
             this.tabChannels.TabIndex = 1;
-            this.tabChannels.Text = "Каналы";
+            this.tabChannels.Text = "Источники";
             this.tabChannels.UseVisualStyleBackColor = true;
             // 
             // groupBox1
             // 
+            this.groupBox1.Controls.Add(this.label32);
+            this.groupBox1.Controls.Add(this.label29);
+            this.groupBox1.Controls.Add(this.label26);
+            this.groupBox1.Controls.Add(this.label22);
+            this.groupBox1.Controls.Add(this.label12);
+            this.groupBox1.Controls.Add(this.label9);
+            this.groupBox1.Controls.Add(this.label6);
             this.groupBox1.Controls.Add(this.label41);
             this.groupBox1.Controls.Add(this.label40);
             this.groupBox1.Controls.Add(this.label39);
@@ -323,22 +347,18 @@ namespace PS5000A
             this.groupBox1.Controls.Add(this.label35);
             this.groupBox1.Controls.Add(this.label34);
             this.groupBox1.Controls.Add(this.textBox15);
-            this.groupBox1.Controls.Add(this.label22);
             this.groupBox1.Controls.Add(this.label23);
             this.groupBox1.Controls.Add(this.textBox16);
             this.groupBox1.Controls.Add(this.label24);
             this.groupBox1.Controls.Add(this.label25);
-            this.groupBox1.Controls.Add(this.label26);
             this.groupBox1.Controls.Add(this.label27);
             this.groupBox1.Controls.Add(this.textBox17);
             this.groupBox1.Controls.Add(this.textBox18);
             this.groupBox1.Controls.Add(this.textBox19);
             this.groupBox1.Controls.Add(this.textBox20);
             this.groupBox1.Controls.Add(this.label28);
-            this.groupBox1.Controls.Add(this.label29);
             this.groupBox1.Controls.Add(this.label30);
             this.groupBox1.Controls.Add(this.label31);
-            this.groupBox1.Controls.Add(this.label32);
             this.groupBox1.Controls.Add(this.label33);
             this.groupBox1.Controls.Add(this.textBox21);
             this.groupBox1.Controls.Add(this.textBox22);
@@ -348,17 +368,14 @@ namespace PS5000A
             this.groupBox1.Controls.Add(this.textBox1);
             this.groupBox1.Controls.Add(this.label11);
             this.groupBox1.Controls.Add(this.label2);
-            this.groupBox1.Controls.Add(this.label12);
             this.groupBox1.Controls.Add(this.label3);
             this.groupBox1.Controls.Add(this.textBox8);
             this.groupBox1.Controls.Add(this.textBox2);
             this.groupBox1.Controls.Add(this.textBox5);
             this.groupBox1.Controls.Add(this.textBox4);
             this.groupBox1.Controls.Add(this.label7);
-            this.groupBox1.Controls.Add(this.label6);
             this.groupBox1.Controls.Add(this.label8);
             this.groupBox1.Controls.Add(this.label5);
-            this.groupBox1.Controls.Add(this.label9);
             this.groupBox1.Controls.Add(this.label4);
             this.groupBox1.Controls.Add(this.textBox6);
             this.groupBox1.Controls.Add(this.textBox3);
@@ -368,14 +385,14 @@ namespace PS5000A
             this.groupBox1.Size = new System.Drawing.Size(751, 329);
             this.groupBox1.TabIndex = 24;
             this.groupBox1.TabStop = false;
-            this.groupBox1.Text = "Имена для файлов (указать центры источников)";
+            this.groupBox1.Text = "Центры источников";
             // 
             // label41
             // 
             this.label41.AutoSize = true;
             this.label41.Font = new System.Drawing.Font("Microsoft Sans Serif", 14.25F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(204)));
             this.label41.ForeColor = System.Drawing.Color.Red;
-            this.label41.Location = new System.Drawing.Point(397, 243);
+            this.label41.Location = new System.Drawing.Point(420, 265);
             this.label41.Name = "label41";
             this.label41.Size = new System.Drawing.Size(25, 24);
             this.label41.TabIndex = 50;
@@ -386,7 +403,7 @@ namespace PS5000A
             this.label40.AutoSize = true;
             this.label40.Font = new System.Drawing.Font("Microsoft Sans Serif", 14.25F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(204)));
             this.label40.ForeColor = System.Drawing.Color.Red;
-            this.label40.Location = new System.Drawing.Point(5, 246);
+            this.label40.Location = new System.Drawing.Point(34, 266);
             this.label40.Name = "label40";
             this.label40.Size = new System.Drawing.Size(24, 24);
             this.label40.TabIndex = 49;
@@ -397,7 +414,7 @@ namespace PS5000A
             this.label39.AutoSize = true;
             this.label39.Font = new System.Drawing.Font("Microsoft Sans Serif", 14.25F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(204)));
             this.label39.ForeColor = System.Drawing.Color.Red;
-            this.label39.Location = new System.Drawing.Point(398, 171);
+            this.label39.Location = new System.Drawing.Point(420, 193);
             this.label39.Name = "label39";
             this.label39.Size = new System.Drawing.Size(25, 24);
             this.label39.TabIndex = 48;
@@ -408,7 +425,7 @@ namespace PS5000A
             this.label38.AutoSize = true;
             this.label38.Font = new System.Drawing.Font("Microsoft Sans Serif", 14.25F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(204)));
             this.label38.ForeColor = System.Drawing.Color.Red;
-            this.label38.Location = new System.Drawing.Point(6, 174);
+            this.label38.Location = new System.Drawing.Point(34, 193);
             this.label38.Name = "label38";
             this.label38.Size = new System.Drawing.Size(24, 24);
             this.label38.TabIndex = 47;
@@ -419,7 +436,7 @@ namespace PS5000A
             this.label37.AutoSize = true;
             this.label37.Font = new System.Drawing.Font("Microsoft Sans Serif", 14.25F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(204)));
             this.label37.ForeColor = System.Drawing.Color.Red;
-            this.label37.Location = new System.Drawing.Point(398, 104);
+            this.label37.Location = new System.Drawing.Point(420, 124);
             this.label37.Name = "label37";
             this.label37.Size = new System.Drawing.Size(23, 24);
             this.label37.TabIndex = 46;
@@ -430,7 +447,7 @@ namespace PS5000A
             this.label36.AutoSize = true;
             this.label36.Font = new System.Drawing.Font("Microsoft Sans Serif", 14.25F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(204)));
             this.label36.ForeColor = System.Drawing.Color.Red;
-            this.label36.Location = new System.Drawing.Point(398, 29);
+            this.label36.Location = new System.Drawing.Point(420, 50);
             this.label36.Name = "label36";
             this.label36.Size = new System.Drawing.Size(24, 24);
             this.label36.TabIndex = 45;
@@ -441,7 +458,7 @@ namespace PS5000A
             this.label35.AutoSize = true;
             this.label35.Font = new System.Drawing.Font("Microsoft Sans Serif", 14.25F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(204)));
             this.label35.ForeColor = System.Drawing.Color.Red;
-            this.label35.Location = new System.Drawing.Point(6, 103);
+            this.label35.Location = new System.Drawing.Point(34, 120);
             this.label35.Name = "label35";
             this.label35.Size = new System.Drawing.Size(23, 24);
             this.label35.TabIndex = 45;
@@ -452,7 +469,7 @@ namespace PS5000A
             this.label34.AutoSize = true;
             this.label34.Font = new System.Drawing.Font("Microsoft Sans Serif", 14.25F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(204)));
             this.label34.ForeColor = System.Drawing.Color.Red;
-            this.label34.Location = new System.Drawing.Point(6, 29);
+            this.label34.Location = new System.Drawing.Point(34, 49);
             this.label34.Name = "label34";
             this.label34.Size = new System.Drawing.Size(24, 24);
             this.label34.TabIndex = 44;
@@ -467,16 +484,6 @@ namespace PS5000A
             this.textBox15.TabIndex = 43;
             this.textBox15.Text = "200";
             this.textBox15.TextAlign = System.Windows.Forms.HorizontalAlignment.Center;
-            // 
-            // label22
-            // 
-            this.label22.AutoSize = true;
-            this.label22.Location = new System.Drawing.Point(405, 53);
-            this.label22.Margin = new System.Windows.Forms.Padding(4, 0, 4, 0);
-            this.label22.Name = "label22";
-            this.label22.Size = new System.Drawing.Size(80, 20);
-            this.label22.TabIndex = 25;
-            this.label22.Text = "f(w) from (";
             // 
             // label23
             // 
@@ -517,16 +524,6 @@ namespace PS5000A
             this.label25.Size = new System.Drawing.Size(13, 20);
             this.label25.TabIndex = 26;
             this.label25.Text = ",";
-            // 
-            // label26
-            // 
-            this.label26.AutoSize = true;
-            this.label26.Location = new System.Drawing.Point(404, 267);
-            this.label26.Margin = new System.Windows.Forms.Padding(4, 0, 4, 0);
-            this.label26.Name = "label26";
-            this.label26.Size = new System.Drawing.Size(80, 20);
-            this.label26.TabIndex = 40;
-            this.label26.Text = "f(w) from (";
             // 
             // label27
             // 
@@ -588,16 +585,6 @@ namespace PS5000A
             this.label28.TabIndex = 37;
             this.label28.Text = ")";
             // 
-            // label29
-            // 
-            this.label29.AutoSize = true;
-            this.label29.Location = new System.Drawing.Point(405, 128);
-            this.label29.Margin = new System.Windows.Forms.Padding(4, 0, 4, 0);
-            this.label29.Name = "label29";
-            this.label29.Size = new System.Drawing.Size(80, 20);
-            this.label29.TabIndex = 30;
-            this.label29.Text = "f(w) from (";
-            // 
             // label30
             // 
             this.label30.AutoSize = true;
@@ -617,16 +604,6 @@ namespace PS5000A
             this.label31.Size = new System.Drawing.Size(13, 20);
             this.label31.TabIndex = 31;
             this.label31.Text = ",";
-            // 
-            // label32
-            // 
-            this.label32.AutoSize = true;
-            this.label32.Location = new System.Drawing.Point(405, 195);
-            this.label32.Margin = new System.Windows.Forms.Padding(4, 0, 4, 0);
-            this.label32.Name = "label32";
-            this.label32.Size = new System.Drawing.Size(80, 20);
-            this.label32.TabIndex = 35;
-            this.label32.Text = "f(w) from (";
             // 
             // label33
             // 
@@ -671,12 +648,12 @@ namespace PS5000A
             // label1
             // 
             this.label1.AutoSize = true;
-            this.label1.Location = new System.Drawing.Point(17, 53);
+            this.label1.Location = new System.Drawing.Point(82, 48);
             this.label1.Margin = new System.Windows.Forms.Padding(4, 0, 4, 0);
             this.label1.Name = "label1";
-            this.label1.Size = new System.Drawing.Size(80, 20);
+            this.label1.Size = new System.Drawing.Size(14, 20);
             this.label1.TabIndex = 5;
-            this.label1.Text = "f(w) from (";
+            this.label1.Text = "(";
             // 
             // label10
             // 
@@ -717,16 +694,6 @@ namespace PS5000A
             this.label2.Size = new System.Drawing.Size(13, 20);
             this.label2.TabIndex = 6;
             this.label2.Text = ",";
-            // 
-            // label12
-            // 
-            this.label12.AutoSize = true;
-            this.label12.Location = new System.Drawing.Point(16, 270);
-            this.label12.Margin = new System.Windows.Forms.Padding(4, 0, 4, 0);
-            this.label12.Name = "label12";
-            this.label12.Size = new System.Drawing.Size(80, 20);
-            this.label12.TabIndex = 20;
-            this.label12.Text = "f(w) from (";
             // 
             // label3
             // 
@@ -789,16 +756,6 @@ namespace PS5000A
             this.label7.TabIndex = 17;
             this.label7.Text = ")";
             // 
-            // label6
-            // 
-            this.label6.AutoSize = true;
-            this.label6.Location = new System.Drawing.Point(17, 127);
-            this.label6.Margin = new System.Windows.Forms.Padding(4, 0, 4, 0);
-            this.label6.Name = "label6";
-            this.label6.Size = new System.Drawing.Size(80, 20);
-            this.label6.TabIndex = 10;
-            this.label6.Text = "f(w) from (";
-            // 
             // label8
             // 
             this.label8.AutoSize = true;
@@ -818,16 +775,6 @@ namespace PS5000A
             this.label5.Size = new System.Drawing.Size(13, 20);
             this.label5.TabIndex = 11;
             this.label5.Text = ",";
-            // 
-            // label9
-            // 
-            this.label9.AutoSize = true;
-            this.label9.Location = new System.Drawing.Point(17, 198);
-            this.label9.Margin = new System.Windows.Forms.Padding(4, 0, 4, 0);
-            this.label9.Name = "label9";
-            this.label9.Size = new System.Drawing.Size(80, 20);
-            this.label9.TabIndex = 15;
-            this.label9.Text = "f(w) from (";
             // 
             // label4
             // 
@@ -877,39 +824,29 @@ namespace PS5000A
             this.tabGetData.Text = "Получение информации";
             this.tabGetData.UseVisualStyleBackColor = true;
             // 
-            // checkBox3
+            // groupBox3
             // 
-            this.checkBox3.AutoSize = true;
-            this.checkBox3.Checked = true;
-            this.checkBox3.CheckState = System.Windows.Forms.CheckState.Checked;
-            this.checkBox3.Location = new System.Drawing.Point(305, 135);
-            this.checkBox3.Name = "checkBox3";
-            this.checkBox3.Size = new System.Drawing.Size(163, 24);
-            this.checkBox3.TabIndex = 7;
-            this.checkBox3.Text = "Строить графики";
-            this.checkBox3.UseVisualStyleBackColor = true;
+            this.groupBox3.Controls.Add(this.buttonStart);
+            this.groupBox3.Controls.Add(this.groupBox2);
+            this.groupBox3.Location = new System.Drawing.Point(52, 31);
+            this.groupBox3.Name = "groupBox3";
+            this.groupBox3.Size = new System.Drawing.Size(192, 172);
+            this.groupBox3.TabIndex = 8;
+            this.groupBox3.TabStop = false;
             // 
-            // checkBox2
+            // buttonStart
             // 
-            this.checkBox2.AutoSize = true;
-            this.checkBox2.Location = new System.Drawing.Point(305, 165);
-            this.checkBox2.Name = "checkBox2";
-            this.checkBox2.Size = new System.Drawing.Size(275, 24);
-            this.checkBox2.TabIndex = 6;
-            this.checkBox2.Text = "Строить преобразование Фурье";
-            this.checkBox2.UseVisualStyleBackColor = true;
-            // 
-            // button4
-            // 
-            this.button4.BackColor = System.Drawing.Color.FromArgb(((int)(((byte)(192)))), ((int)(((byte)(255)))), ((int)(((byte)(255)))));
-            this.button4.FlatStyle = System.Windows.Forms.FlatStyle.Popup;
-            this.button4.Location = new System.Drawing.Point(406, 48);
-            this.button4.Name = "button4";
-            this.button4.Size = new System.Drawing.Size(147, 56);
-            this.button4.TabIndex = 5;
-            this.button4.Text = "Создать разницу замеров";
-            this.button4.UseVisualStyleBackColor = false;
-            this.button4.Click += new System.EventHandler(this.button4_Click);
+            this.buttonStart.BackColor = System.Drawing.Color.PeachPuff;
+            this.buttonStart.Dock = System.Windows.Forms.DockStyle.Top;
+            this.buttonStart.FlatStyle = System.Windows.Forms.FlatStyle.Popup;
+            this.buttonStart.Location = new System.Drawing.Point(3, 22);
+            this.buttonStart.Margin = new System.Windows.Forms.Padding(4, 5, 4, 5);
+            this.buttonStart.Name = "buttonStart";
+            this.buttonStart.Size = new System.Drawing.Size(186, 46);
+            this.buttonStart.TabIndex = 0;
+            this.buttonStart.Text = "Пуск замера";
+            this.buttonStart.UseVisualStyleBackColor = false;
+            this.buttonStart.Click += new System.EventHandler(this.buttonStart_Click);
             // 
             // groupBox2
             // 
@@ -945,6 +882,40 @@ namespace PS5000A
             this.radioButton1.Text = "без дефекта";
             this.radioButton1.UseVisualStyleBackColor = true;
             // 
+            // checkBox3
+            // 
+            this.checkBox3.AutoSize = true;
+            this.checkBox3.Checked = true;
+            this.checkBox3.CheckState = System.Windows.Forms.CheckState.Checked;
+            this.checkBox3.Location = new System.Drawing.Point(305, 135);
+            this.checkBox3.Name = "checkBox3";
+            this.checkBox3.Size = new System.Drawing.Size(163, 24);
+            this.checkBox3.TabIndex = 7;
+            this.checkBox3.Text = "Строить графики";
+            this.checkBox3.UseVisualStyleBackColor = true;
+            // 
+            // checkBox2
+            // 
+            this.checkBox2.AutoSize = true;
+            this.checkBox2.Location = new System.Drawing.Point(305, 165);
+            this.checkBox2.Name = "checkBox2";
+            this.checkBox2.Size = new System.Drawing.Size(275, 24);
+            this.checkBox2.TabIndex = 6;
+            this.checkBox2.Text = "Строить преобразование Фурье";
+            this.checkBox2.UseVisualStyleBackColor = true;
+            // 
+            // button4
+            // 
+            this.button4.BackColor = System.Drawing.Color.FromArgb(((int)(((byte)(192)))), ((int)(((byte)(255)))), ((int)(((byte)(255)))));
+            this.button4.FlatStyle = System.Windows.Forms.FlatStyle.Popup;
+            this.button4.Location = new System.Drawing.Point(459, 48);
+            this.button4.Name = "button4";
+            this.button4.Size = new System.Drawing.Size(147, 56);
+            this.button4.TabIndex = 5;
+            this.button4.Text = "Создать разницу замеров";
+            this.button4.UseVisualStyleBackColor = false;
+            this.button4.Click += new System.EventHandler(this.button4_Click);
+            // 
             // button2
             // 
             this.button2.Location = new System.Drawing.Point(596, 241);
@@ -974,20 +945,6 @@ namespace PS5000A
             this.label17.TabIndex = 1;
             this.label17.Text = "Директория с замерами:";
             // 
-            // buttonStart
-            // 
-            this.buttonStart.BackColor = System.Drawing.Color.PeachPuff;
-            this.buttonStart.Dock = System.Windows.Forms.DockStyle.Top;
-            this.buttonStart.FlatStyle = System.Windows.Forms.FlatStyle.Popup;
-            this.buttonStart.Location = new System.Drawing.Point(3, 22);
-            this.buttonStart.Margin = new System.Windows.Forms.Padding(4, 5, 4, 5);
-            this.buttonStart.Name = "buttonStart";
-            this.buttonStart.Size = new System.Drawing.Size(186, 46);
-            this.buttonStart.TabIndex = 0;
-            this.buttonStart.Text = "Пуск замера";
-            this.buttonStart.UseVisualStyleBackColor = false;
-            this.buttonStart.Click += new System.EventHandler(this.buttonStart_Click);
-            // 
             // tabAbout
             // 
             this.tabAbout.Controls.Add(this.label19);
@@ -1005,7 +962,7 @@ namespace PS5000A
             this.tabAbout.Padding = new System.Windows.Forms.Padding(4, 5, 4, 5);
             this.tabAbout.Size = new System.Drawing.Size(759, 339);
             this.tabAbout.TabIndex = 2;
-            this.tabAbout.Text = "Дополнительно";
+            this.tabAbout.Text = "Порты";
             this.tabAbout.UseVisualStyleBackColor = true;
             // 
             // label19
@@ -1128,31 +1085,75 @@ namespace PS5000A
             this.toolStripStatusLabel2.Size = new System.Drawing.Size(118, 17);
             this.toolStripStatusLabel2.Text = "toolStripStatusLabel2";
             // 
-            // groupBox3
+            // label6
             // 
-            this.groupBox3.Controls.Add(this.buttonStart);
-            this.groupBox3.Controls.Add(this.groupBox2);
-            this.groupBox3.Location = new System.Drawing.Point(52, 31);
-            this.groupBox3.Name = "groupBox3";
-            this.groupBox3.Size = new System.Drawing.Size(192, 172);
-            this.groupBox3.TabIndex = 8;
-            this.groupBox3.TabStop = false;
+            this.label6.AutoSize = true;
+            this.label6.Location = new System.Drawing.Point(82, 123);
+            this.label6.Margin = new System.Windows.Forms.Padding(4, 0, 4, 0);
+            this.label6.Name = "label6";
+            this.label6.Size = new System.Drawing.Size(14, 20);
+            this.label6.TabIndex = 51;
+            this.label6.Text = "(";
             // 
-            // button3
+            // label9
             // 
-            this.button3.BackColor = System.Drawing.Color.White;
-            this.button3.BackgroundImageLayout = System.Windows.Forms.ImageLayout.None;
-            this.button3.Font = new System.Drawing.Font("Microsoft Sans Serif", 12F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(204)));
-            this.button3.ForeColor = System.Drawing.Color.DarkViolet;
-            this.button3.Image = ((System.Drawing.Image)(resources.GetObject("button3.Image")));
-            this.button3.ImageAlign = System.Drawing.ContentAlignment.MiddleLeft;
-            this.button3.Location = new System.Drawing.Point(8, 176);
-            this.button3.Name = "button3";
-            this.button3.Size = new System.Drawing.Size(197, 142);
-            this.button3.TabIndex = 15;
-            this.button3.Text = "Алгоритм\r\nдействий";
-            this.button3.TextAlign = System.Drawing.ContentAlignment.MiddleRight;
-            this.button3.UseVisualStyleBackColor = false;
+            this.label9.AutoSize = true;
+            this.label9.Location = new System.Drawing.Point(83, 196);
+            this.label9.Margin = new System.Windows.Forms.Padding(4, 0, 4, 0);
+            this.label9.Name = "label9";
+            this.label9.Size = new System.Drawing.Size(14, 20);
+            this.label9.TabIndex = 52;
+            this.label9.Text = "(";
+            // 
+            // label12
+            // 
+            this.label12.AutoSize = true;
+            this.label12.Location = new System.Drawing.Point(83, 267);
+            this.label12.Margin = new System.Windows.Forms.Padding(4, 0, 4, 0);
+            this.label12.Name = "label12";
+            this.label12.Size = new System.Drawing.Size(14, 20);
+            this.label12.TabIndex = 53;
+            this.label12.Text = "(";
+            // 
+            // label22
+            // 
+            this.label22.AutoSize = true;
+            this.label22.Location = new System.Drawing.Point(471, 51);
+            this.label22.Margin = new System.Windows.Forms.Padding(4, 0, 4, 0);
+            this.label22.Name = "label22";
+            this.label22.Size = new System.Drawing.Size(14, 20);
+            this.label22.TabIndex = 54;
+            this.label22.Text = "(";
+            // 
+            // label26
+            // 
+            this.label26.AutoSize = true;
+            this.label26.Location = new System.Drawing.Point(471, 125);
+            this.label26.Margin = new System.Windows.Forms.Padding(4, 0, 4, 0);
+            this.label26.Name = "label26";
+            this.label26.Size = new System.Drawing.Size(14, 20);
+            this.label26.TabIndex = 55;
+            this.label26.Text = "(";
+            // 
+            // label29
+            // 
+            this.label29.AutoSize = true;
+            this.label29.Location = new System.Drawing.Point(471, 196);
+            this.label29.Margin = new System.Windows.Forms.Padding(4, 0, 4, 0);
+            this.label29.Name = "label29";
+            this.label29.Size = new System.Drawing.Size(14, 20);
+            this.label29.TabIndex = 56;
+            this.label29.Text = "(";
+            // 
+            // label32
+            // 
+            this.label32.AutoSize = true;
+            this.label32.Location = new System.Drawing.Point(471, 265);
+            this.label32.Margin = new System.Windows.Forms.Padding(4, 0, 4, 0);
+            this.label32.Name = "label32";
+            this.label32.Size = new System.Drawing.Size(14, 20);
+            this.label32.TabIndex = 57;
+            this.label32.Text = "(";
             // 
             // PS5000ABlockForm
             // 
@@ -1175,13 +1176,13 @@ namespace PS5000A
             this.groupBox1.PerformLayout();
             this.tabGetData.ResumeLayout(false);
             this.tabGetData.PerformLayout();
+            this.groupBox3.ResumeLayout(false);
             this.groupBox2.ResumeLayout(false);
             this.groupBox2.PerformLayout();
             this.tabAbout.ResumeLayout(false);
             this.tabAbout.PerformLayout();
             this.statusStrip1.ResumeLayout(false);
             this.statusStrip1.PerformLayout();
-            this.groupBox3.ResumeLayout(false);
             this.ResumeLayout(false);
             this.PerformLayout();
 
@@ -1201,17 +1202,14 @@ namespace PS5000A
         private System.Windows.Forms.TextBox textBox7;
         private System.Windows.Forms.Label label10;
         private System.Windows.Forms.Label label11;
-        private System.Windows.Forms.Label label12;
         private System.Windows.Forms.TextBox textBox8;
         private System.Windows.Forms.TextBox textBox5;
         private System.Windows.Forms.Label label7;
         private System.Windows.Forms.Label label8;
-        private System.Windows.Forms.Label label9;
         private System.Windows.Forms.TextBox textBox6;
         private System.Windows.Forms.TextBox textBox3;
         private System.Windows.Forms.Label label4;
         private System.Windows.Forms.Label label5;
-        private System.Windows.Forms.Label label6;
         private System.Windows.Forms.TextBox textBox4;
         private System.Windows.Forms.TextBox textBox2;
         private System.Windows.Forms.Label label3;
@@ -1261,27 +1259,30 @@ namespace PS5000A
         private System.Windows.Forms.Label label35;
         private System.Windows.Forms.Label label34;
         private System.Windows.Forms.TextBox textBox15;
-        private System.Windows.Forms.Label label22;
         private System.Windows.Forms.Label label23;
         private System.Windows.Forms.TextBox textBox16;
         private System.Windows.Forms.Label label24;
         private System.Windows.Forms.Label label25;
-        private System.Windows.Forms.Label label26;
         private System.Windows.Forms.Label label27;
         private System.Windows.Forms.TextBox textBox17;
         private System.Windows.Forms.TextBox textBox18;
         private System.Windows.Forms.TextBox textBox19;
         private System.Windows.Forms.TextBox textBox20;
         private System.Windows.Forms.Label label28;
-        private System.Windows.Forms.Label label29;
         private System.Windows.Forms.Label label30;
         private System.Windows.Forms.Label label31;
-        private System.Windows.Forms.Label label32;
         private System.Windows.Forms.Label label33;
         private System.Windows.Forms.TextBox textBox21;
         private System.Windows.Forms.TextBox textBox22;
         private System.Windows.Forms.GroupBox groupBox3;
         private System.Windows.Forms.Button button3;
+        private System.Windows.Forms.Label label32;
+        private System.Windows.Forms.Label label29;
+        private System.Windows.Forms.Label label26;
+        private System.Windows.Forms.Label label22;
+        private System.Windows.Forms.Label label12;
+        private System.Windows.Forms.Label label9;
+        private System.Windows.Forms.Label label6;
     }
 }
 

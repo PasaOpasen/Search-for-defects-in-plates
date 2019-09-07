@@ -904,6 +904,12 @@ namespace PS5000A
             toolStripStatusLabel1.Text = $"Все вычисления завершены";
             new System.Media.SoundPlayer(Properties.Resources.ВычисленияЗавершены).Play();
         }
+
+        private void button3_Click(object sender, EventArgs e)
+        {
+            new Библиотека_графики.PdfOpen("Алгоритм работы",Expendator.GetResource("algolIlusha.pdf", "PS5000ABlockCapture")).Show();
+        }
+
         /// <summary>
         /// Запускает преобразование Фурье
         /// </summary>

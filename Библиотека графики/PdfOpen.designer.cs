@@ -50,6 +50,7 @@
             this.Margin = new System.Windows.Forms.Padding(4, 5, 4, 5);
             this.Name = "PdfOpen";
             this.Text = "Справка";
+            this.TopMost = true;
             this.ResumeLayout(false);
 
         }

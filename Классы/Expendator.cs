@@ -855,6 +855,19 @@ namespace МатКлассы
             for (int i = 0; i < filenames.Length; i++)
                 File.Copy(Path.Combine(from, filenames[i]), Path.Combine(to, filenames[i]), true);
         }
+
+        /// <summary>
+        /// Возвращает полный адрес ресурса по его краткому имени и проекту
+        /// </summary>
+        /// <param name="name"></param>
+        /// <param name="projectname"></param>
+        /// <returns></returns>
+        public static string GetResource(string name,string projectname)
+        {
+            string s = Environment.CurrentDirectory;
+            s = s.Substring(0, s.IndexOf(projectname) + projectname.Length);
+            return Path.Combine(s, "Resources", name);
+        }
     }
 
 }
