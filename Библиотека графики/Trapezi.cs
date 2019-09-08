@@ -91,41 +91,49 @@ namespace Библиотека_графики
 
             }
 
-            if (gr.MeMode == JustGrafic.Mode.Time)
-                timer1.Tick += new EventHandler((object o, EventArgs e) =>
-                {
-                    if (NonEqu(textBox1.Text, trackBar1.Value))
-                        textBox1.BackColor = Color.Red;
-                    else
-                        textBox1.BackColor = Color.White;
-
-                    if (NonEqu(textBox2.Text, trackBar2.Value))
-                        textBox2.BackColor = Color.Red;
-                    else
-                        textBox2.BackColor = Color.White;
-
-                    if (NonEqu(textBox3.Text, trackBar3.Value))
-                        textBox3.BackColor = Color.Red;
-                    else
-                        textBox3.BackColor = Color.White;
-                });
-            timer1.Tick += new EventHandler((object o, EventArgs e) =>
+            void act(Func<string, int, bool> NQ)
             {
-                if (NonEqu2(textBox1.Text, trackBar1.Value))
+                void SetTL(TextBox t, string s) => toolTip1.SetToolTip(t, s);
+                string s1 = "Поле загорается красным, когда его содержание не соответствует значению на trackBar", s2 = "";
+
+                if (NQ(textBox1.Text, trackBar1.Value))
+                {
                     textBox1.BackColor = Color.Red;
+                    SetTL(textBox1, s1);
+                }
                 else
+                {
                     textBox1.BackColor = Color.White;
+                    SetTL(textBox1, s2);
+                }
 
-                if (NonEqu2(textBox2.Text, trackBar2.Value))
+                if (NQ(textBox2.Text, trackBar2.Value))
+                {
                     textBox2.BackColor = Color.Red;
+                    SetTL(textBox2, s1);
+                }
                 else
+                {
                     textBox2.BackColor = Color.White;
+                    SetTL(textBox2, s2);
+                }
 
-                if (NonEqu2(textBox3.Text, trackBar3.Value))
+                if (NQ(textBox3.Text, trackBar3.Value))
+                {
                     textBox3.BackColor = Color.Red;
+                    SetTL(textBox3, s1);
+                }
                 else
+                {
                     textBox3.BackColor = Color.White;
-            });
+                    SetTL(textBox3, s2);
+                }
+            }
+
+            if (gr.MeMode == JustGrafic.Mode.Time)
+                timer1.Tick += new EventHandler((object o, EventArgs e) => act(NonEqu));
+            else
+            timer1.Tick += new EventHandler((object o, EventArgs e) =>act(NonEqu2));
             timer1.Start();
         }
 
@@ -139,8 +147,8 @@ namespace Библиотека_графики
                 end = ss[2].ToInt32() / 100.0;
             }
         }
-        private void SetParamsInFile()=>Expendator.WriteStringInFile("TrapeziParams.txt", $"{trackBar1.Value} {trackBar2.Value} {trackBar3.Value}");
-        
+        private void SetParamsInFile() => Expendator.WriteStringInFile("TrapeziParams.txt", $"{trackBar1.Value} {trackBar2.Value} {trackBar3.Value}");
+
 
         void ReDraw()
         {
