@@ -13,7 +13,6 @@ using System.Windows.Media.Imaging;
 using System.Windows.Navigation;
 using System.Windows.Shapes;
 using МатКлассы;
-using TekVISANet;
 
 namespace Defect2019
 {
@@ -44,7 +43,6 @@ namespace Defect2019
 
         private void Button_Click_2(object sender, RoutedEventArgs e)
         {
-            //new Практика_с_фортрана.UGrafic().Show();
             Forms.UG = new Практика_с_фортрана.UGrafic();
             Forms.UG.Show();
         }

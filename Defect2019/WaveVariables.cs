@@ -95,6 +95,7 @@ public static class Functions
     #region Конструктор и константы
     static Functions()
     {
+        ReadParams();
         AfterChaigeData();
     }
     public static readonly
@@ -112,6 +113,7 @@ public static class Functions
 
         k2coef = ro / mu;
         k1coef = ro / ml2;
+        WriteParams();
         Expendator.WriteStringInFile("ClastersCount.txt", clastersCount.ToString());
 
         Bessel = new Func<Complex, double, double, Complex[]>(_Bessel);
@@ -152,6 +154,58 @@ public static class Functions
     public static double lamda = 51.0835913312694, mu = 26.3157894736842, ro = 2.7, h = 2.0, crosscoef = 0.2;
     public static double ml2, mu2, k1coef, k2coef;
     private static Complex im;
+    private static void WriteParams()
+    {
+        using(StreamWriter f=new StreamWriter("LastParamsConfig.txt"))
+        {
+            f.WriteLine($"lambda= {lamda.ToRString()}");
+            f.WriteLine($"mu= {mu.ToRString()}");
+            f.WriteLine($"ro= {ro.ToRString()}");
+            f.WriteLine($"h= {h.ToRString()}");
+            f.WriteLine($"steproot= {steproot.ToRString()}");
+            f.WriteLine($"polesBeg= {polesBeg.ToRString()}");
+            f.WriteLine($"polesEnd= {polesEnd.ToRString()}");
+            f.WriteLine($"epsjump= {epsjump.ToRString()}");
+            f.WriteLine($"epsroot= {epsroot.ToRString()}");
+            f.WriteLine($"countroot= {countroot}");
+            f.WriteLine($"wbeg= {wbeg.ToRString()}");
+            f.WriteLine($"wend= {wend.ToRString()}");
+            f.WriteLine($"wcount= {wcount}");
+            f.WriteLine($"wc= {wc}");
+            f.WriteLine($"animatime= {animatime}");
+            f.WriteLine($"clastersCount= {clastersCount}");
+            f.WriteLine($"animacycles= {animacycles}");
+        }
+    }
+    private static void ReadParams()
+    {
+        string filename = "LastParamsConfig.txt";
+        
+        if (File.Exists(filename))
+        using(StreamReader f=new StreamReader(filename))
+            {
+                int ToInt() => f.ReadLine().Split(' ')[1].ToInt32();
+                double ToDouble()=> f.ReadLine().Split(' ')[1].ToDouble();
+
+                lamda = ToDouble();
+                mu = ToDouble();
+                ro = ToDouble();
+                h = ToDouble();
+                steproot = ToDouble();
+                polesBeg = ToDouble();
+                polesEnd = ToDouble();
+                epsjump = ToDouble();
+                epsroot = ToDouble();
+                countroot = ToInt();
+                wbeg = ToDouble();
+                wend = ToDouble();
+                wcount = ToInt();
+                wc = ToDouble();
+                animatime = ToInt();
+                clastersCount = ToInt();
+                animacycles = ToInt();
+            }             
+    }
 
     #endregion
 
