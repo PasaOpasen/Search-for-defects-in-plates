@@ -299,9 +299,9 @@
             "41",
             "51",
             "61"});
-            this.listBox1.Location = new System.Drawing.Point(543, 90);
+            this.listBox1.Location = new System.Drawing.Point(533, 61);
             this.listBox1.Name = "listBox1";
-            this.listBox1.Size = new System.Drawing.Size(53, 61);
+            this.listBox1.Size = new System.Drawing.Size(30, 118);
             this.listBox1.TabIndex = 21;
             this.listBox1.ValueMember = "31";
             // 

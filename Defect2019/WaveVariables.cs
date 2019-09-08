@@ -319,34 +319,6 @@ public static class Functions
     #endregion
     //-----
     #region Матрица K
-    ///// <summary>
-    ///// Матрица Грина как функция альфы, частоты и координат
-    ///// </summary>
-    //public static Func<Complex, double, double, double, double, CSqMatrix> K = (Complex a,double x,double y, double z, double w) =>
-    //      {
-    //          var c = PRMSN_Memoized(a, z, w);
-    //          var b = Bessel(a, x, y);
-
-    //          Complex P = c[0], R = c[1], M = c[2], S = c[3], N = c[4];
-    //          Complex jx = b[0], jy = b[1], jxx = b[2], jxy = b[3], jyy = b[4];
-    //          Complex i = new Complex(0,1);
-    //          Complex
-    //          K11 =i*(M*jxx+N*jyy),
-    //          K12 =i*(M-N)*jxy,
-    //          K13 =-P*jx,
-    //          K21 = new Complex(K12),
-    //          K22 =i*(M*jyy+N*jxx),
-    //          K23 =-P*jy,
-    //          K31 =-i*S*jx,
-    //          K32 =-i*S*jy,
-    //          K33 =R;
-    //          //K22.Show();"".Show();
-    //          return new CSqMatrix(new Complex[,] {
-    //             {K11,K12, K13},
-    //         { K21,K22,K23},
-    //         { K31,K32,K33}
-    //          });
-    //      };
 
     /// <summary>
     /// Матрица Грина как функция альфы, частоты и координат
@@ -356,7 +328,6 @@ public static class Functions
        var c = PRMSN_Memoized(a, w);
        Complex ar = a * Math.Sqrt(x * x + y * y);
        Tuple<Complex, Complex> tup = new Tuple<Complex, Complex>(МатКлассы.SpecialFunctions.MyBessel(1, ar), МатКлассы.SpecialFunctions.MyBessel(0, ar));
-       //Tuple<Complex, Complex> tup = J(ar);
        return InK(a, c, tup, x, y);
    };
     /// <summary>
@@ -380,22 +351,11 @@ public static class Functions
        };
 
     /// <summary>
-    /// Матрица Грина как функция от функция альфы, частоты и координат (без знаменателя)
-    /// </summary>
-    public static Func<Complex, double, double, double, bool, CSqMatrix> KRes = (Complex a, double x, double y, double w, bool first) =>
-    {
-        var c = PRMSNUp(a, w, first);//c.Show();
-        Complex ar = a * Math.Sqrt(x * x + y * y);
-        Tuple<Complex, Complex> tup = new Tuple<Complex, Complex>(МатКлассы.SpecialFunctions.Hankel(1, ar.Re), МатКлассы.SpecialFunctions.Hankel(0, ar.Re));
-        return InK(a, c, tup, x, y);
-    };
-
-    /// <summary>
     /// Матрица Грина при наборе нормалей
     /// </summary>
     public static Func<double, double, double, Normal2D[], Func<Point, Vectors>, CVectors> KsumRes = (double x, double y, double w, Normal2D[] nd, Func<Point, Vectors> Q) =>
    {
-       var poles = PolesMasMemoized(w);//w.Show();
+       var poles = PolesMasMemoized(w);
        Complex[][] c1 = new Complex[poles.Deg][], c2 = new Complex[poles.Deg][];
        double ar, arsqrt;
        Tuple<Complex, Complex> tup;
@@ -414,10 +374,8 @@ public static class Functions
            pminus[k] = poles[k] - eps;
            c1[k] = PRMSN_Memoized(plus[k], w);
            c2[k] = PRMSN_Memoized(pminus[k], w);
-
        }
 
-       //CSqMatrix m1=new CSqMatrix(new Complex[3,3]);
        for (int i = 0; i < nd.Length; i++)
        {
            QQ = (Q(nd[i].n) * eps2);
@@ -428,60 +386,41 @@ public static class Functions
            for (int k = 0; k < poles.Deg; k++)
            {
                ar = poles[k] * Point.Eudistance(nd[i].Position, xy);
-               //arsqrt = Math.Sqrt(ar);
-               tup = HankelTuple(ar); //= new Tuple<Complex, Complex>(МатКлассы.SpecialFunctions.Hankel(1.0, ar)*arsqrt, МатКлассы.SpecialFunctions.Hankel(0.0, ar)*arsqrt);
+               tup = HankelTuple(ar);
 
                sum.FastAdd(KQmult(InKtwice(plus[k], pminus[k], c1[k], c2[k], tup, xp, yp), QQ));
-
-               // sum.FastAdd(InKtwice(plus[k], pminus[k], c1[k], c2[k], tup, xp, yp) * QQ);
-
-               //sum.FastAdd(InK(plus[k], c1[k], tup,xp , yp) * QQ);
-               //sum.FastLessen(InK(pminus[k], c2[k], tup, xp, yp) * QQ);
-
-               // m1.FastAdd(InK(poles[k] + eps, c1[k], tup, x - nd[i].Position.x, y - nd[i].Position.y));
-               // m1.FastLessen(InK(poles[k] - eps, c2[k], tup, x - nd[i].Position.x, y - nd[i].Position.y));
-
            }
-           //sum.FastAdd(m1 *(Q(nd[i].n) * 0.5 * eps));
-           //m1 = new CSqMatrix(new Complex[3, 3]);
        }
 
-       return sum * /*Math.PI **/ I2;
+       return sum * I2;
    };
 
     public static Func<Complex, Complex[], Tuple<Complex, Complex>, double, double, CSqMatrix> InK = (Complex a, Complex[] PRMSN_Memoized, Tuple<Complex, Complex> beshank, double x, double y) =>
          {
-
              double x2 = x * x, y2 = y * y, r2 = x2 + y2, r = Math.Sqrt(r2);
              Complex ar = a * r, a2 = a * a;
-             Complex j1ar = beshank.Item1/*МатКлассы.SpecialFunctions.MyBessel(1, ar)*/, j0ar = beshank.Item2/*МатКлассы.SpecialFunctions.MyBessel(0, ar)*/;
+             Complex j1ar = beshank.Item1, j0ar = beshank.Item2;
 
              Complex P = PRMSN_Memoized[0], R = PRMSN_Memoized[1], Mi = PRMSN_Memoized[2] * I, Si = PRMSN_Memoized[3] * I, Ni = PRMSN_Memoized[4] * I;
              Complex
                j1arr = j1ar / r,
                jx = -x * j1arr,
                jy = -y * j1arr,
-               //jxx =-(j0ar*a*x2+r*j1ar)/r2 , 
-               //jxy =-a/r2*x*y*j0ar , 
-               //jyy = -(j0ar * a * y2 + r * j1ar) / r2;
                j0ara = j0ar * a,
                jtmp = j1arr * (x2 - y2),
                jxx = -(j0ara * x2 - jtmp) / r2,
                jxy = -x * y / r2 * (j0ara - 2 * j1arr),
                jyy = -(j0ara * y2 + jtmp) / r2;
-             //Complex i = new Complex(0, 1);
 
              Complex
              K11 = (Mi * jxx + Ni * jyy),
              K12 = (Mi - Ni) * jxy,
              K13 = P * jx * a2,
-             // K21 = new Complex(K12),
              K22 = (Mi * jyy + Ni * jxx),
              K23 = P * jy * a2,
              K31 = Si * jx,
              K32 = Si * jy,
              K33 = R * j0ara;
-             //K22.Show();"".Show();
              return new CSqMatrix(new Complex[3, 3] {
                  {K11,K12, K13},
              { K12,K22,K23},
@@ -522,12 +461,6 @@ public static class Functions
                  ((Mi1 * jxx1 + Ni1 * jyy1)- (Mi2 * jxx2 + Ni2 * jyy2)) / r2,K12, P*jx, K12,
               ((Mi1 * jyy1 + Ni1 * jxx1)- (Mi2 * jyy2 + Ni2 * jxx2)) / r2,P * jy, Si * jx,Si * jy,R1 * j0ara1- R2 * j0ara2
   };
-
-          //return new CSqMatrix(new Complex[3, 3] {
-          //         {K11,K12, K13},
-          //     { K12,K22,K23},
-          //     { K31,K32,K33}
-          //      });
       };
     public static void InKtwiceFast(Complex a1, Complex a2, Complex[] PRMSN1, Complex[] PRMSN2, Tuple<Complex, Complex> beshank, double x, double y, ref Complex[] res)
     {
@@ -570,34 +503,6 @@ public static class Functions
 
     }
 
-    /// <summary>
-    /// Матрица Грина в чистом виде (в программе не нужна)
-    /// </summary>
-    public static Func<Complex, Complex, double, CSqMatrix> ClearK = (Complex a1, Complex a2, double w) =>
-      {
-          Complex a12 = a1 * a1, a22 = a2 * a2, a = a12 + a22, aa = a1 * a2;
-          var c = PRMSN_Memoized(Complex.Sqrt(a), w);
-
-          Complex P = c[0], R = c[1], M = c[2], S = c[3], N = c[4];
-          Complex i = new Complex(0, 1);
-
-          Complex
-          K11 = -i * (M * a12 + N * a22) / a,
-          K12 = -i * (M - N) * aa / a,
-          K13 = -i * P * a1,
-          K21 = new Complex(K12),
-          K22 = -i * (M * a22 + N * a12) / a,
-          K23 = -i * P * a2,
-          K31 = S * a1 / a,
-          K32 = S * a2 / 2,
-          K33 = R;
-          //K22.Show();"".Show();
-          return new CSqMatrix(new Complex[,] {
-                 {K11,K12, K13},
-             { K21,K22,K23},
-             { K31,K32,K33}
-              });
-      };
 
     /// <summary>
     /// Быстрое произведение нужных матриц и векторов с учётом их структуры
@@ -906,7 +811,6 @@ public static class Functions
 
         Complex left(int i) => it * Complex.Expi(-w[i] * t) * (1 - it * (1 - Complex.Expi(dw * t)) / dw);
         Complex right(int i) => it * Complex.Expi(-w[i] * t) * (-1 - it * (1 - Complex.Expi(-dw * t)) / dw);
-        //Complex sum(int i) => Complex.Exp(-Complex.I * w[i] * t) / t / t / dw * (1.0 - Complex.Ch(Complex.I * dw * t)) / 2;
         Complex sum(int i) => Complex.Expi(-w[i] * t) / t / t / dw * (2.0 - 2.0 * Math.Cos(t * dw));
 
         CVectors r = new CVectors(w.Length);

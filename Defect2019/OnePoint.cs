@@ -194,6 +194,11 @@ namespace Работа2019
 
         }
 
+        private void button2_Click(object sender, EventArgs e)
+        {
+            new ParametrsQu().ShowDialog();
+        }
+
         private void button5_Click(object sender, EventArgs e)
         {
             new Helper(textBox3.Text.ToDouble(), textBox4.Text.ToDouble(), numericUpDown1.Value.ToInt32()).Show();

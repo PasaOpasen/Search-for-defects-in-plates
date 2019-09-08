@@ -6,7 +6,6 @@ using System.Data;
 using System.Drawing;
 using System.Linq;
 using System.Text;
-//using System.Threading;
 using System.Threading.Tasks;
 using System.Windows.Forms;
 using System.Media;
@@ -60,8 +59,6 @@ namespace Практика_с_фортрана
             {
                 chart1.Series[i].IsVisibleInLegend = false;
             }
-            //label9.Hide();
-            //numericUpDown2.Hide();
             CircleOrNot();
 
             var uf = new Memoize<Tuple<double, double, double,  Normal2D[], Func<double, Complex>>, Complex[]>((Tuple<double,  double, double, Normal2D[], Func<double, Complex>> t)=>_ufw(t.Item1,t.Item2,t.Item3,t.Item4,t.Item5));
@@ -186,16 +183,11 @@ namespace Практика_с_фортрана
         public Func<double, double, double, Normal2D[], Complex[]> uj = (double x, double y,  double w, Normal2D[] normal) =>
        {
            Vectors poles = PolesMasMemoized(w);
-           double min = poles.Min * 0.5, max = poles.Max * 1.5;//min.Show();
+           double min = poles.Min * 0.5, max = poles.Max * 1.5;
 
             //подынтегральная функция
             FuncMethods.DefInteg.GaussKronrod.ComplexVectorFunc tmp = (Complex a, int n) =>
               {
-                   //CVectors S=new CVectors(3);
-                   //for(int i=0;i<normal.Length;i++)
-                   //{
-                   //    S+= K(a, x-normal[i].Position.x, y - normal[i].Position.y, z, w)*new CVectors(new Complex[] { normal[i].n.x, normal[i].n.y, 0 });//S.Show();
-                   //}
                    return (Ksum(a, x, y, w, normal, (Point t) => { return new CVectors(new Complex[] { t.x, t.y, 0 }); })).ComplexMas;
               };
 
@@ -203,45 +195,17 @@ namespace Практика_с_фортрана
             return FuncMethods.DefInteg.GaussKronrod.DINN5_GK(tmp, min, min, min, max, РабКонсоль.tm, РабКонсоль.tp, РабКонсоль.eps, РабКонсоль.pr, РабКонсоль.gr, 3, РабКонсоль.NodesCount).Div(2 * Math.PI);
        };
 
-        //public Func<double, double, double, double, Source,Tuple<Complex,Complex>> uj = (double x, double y, double z, double w, Normal2D[] normal) =>
-        //{
-        //    Vectors poles = PolesMasMemoized(w);
-        //    double min = poles.Min * 0.5, max = poles.Max * 1.5;//min.Show();
-        //    FuncMethods.DefInteg.GaussKronrod.ComplexVectorFunc tmp;
-        //    CVectors res =new CVectors(3);
-        //    double xx, yy;
 
-        //    //подынтегральная функция
-        //    for(int i = 0; i < normal.Length; i++)
-        //    {
-        //        xx = x - normal[i].Position.x;
-        //        yy = y - normal[i].Position.y;
-        //    tmp = (Complex a, int n) =>
-        //    {
-        //        return (K(a,xx , yy, z, w)*new CVectors(new Complex[] { normal[i].n.x, normal[i].n.y, 0 })).ComplexMas;
-        //    };
-        //        res += new CVectors(FuncMethods.DefInteg.GaussKronrod.DINN5_GK(tmp, min, min, min, max, РабКонсоль.tm, РабКонсоль.tp, РабКонсоль.eps, РабКонсоль.pr, РабКонсоль.gr, 3, РабКонсоль.NodesCount).Div(2 * Math.PI));
-        //    }
+        public Func<double, double, double, Normal2D[], Complex[]> _ujRes = (double x, double y,  double w, Normal2D[] s) =>KsumRes(x, y,  w, s, (Point t) => { return new Vectors( t.x, t.y, 0 ); }).ComplexMas;
 
-        //    //интеграл
-        //    return res.ComplexMas;
-        //};
-
-        public Func<double, double, double, Normal2D[], Complex[]> _ujRes = (double x, double y,  double w, Normal2D[] s) =>
-      {
-            return KsumRes(x, y,  w, s, (Point t) => { return new Vectors( t.x, t.y, 0 ); }).ComplexMas;
-      };
         /// <summary>
         /// Мемоизированная u(x,w) по вычетам. Её мемоизация не помогает на 3D-графиках, так как там уже нет повторных вычислений при меняющемся времени
         /// </summary>
         public Func<double, double,  double, Normal2D[],Complex[]> ujRes;
         public Func<double, double,  double, Normal2D[], Complex> vz = (double x, double y, double w, Normal2D[] nor) => w * Forms.UG.ujRes(x, y, w, nor)[2];
-        //public Func<double, double, double, double, Normal2D[], Complex> vz = (double x, double y, double z, double w, Normal2D[] nor) => w * Forms.UG.ujRes(x, y, z, w, nor)[2];
         #endregion
 
         #region u(x,t)
-
-       // public static double[] wmas = SeqWMemoized(wbeg, wend, wcount);
         public static bool wchange = false;
 
         public Func<double, double, double,  Normal2D[],Func<double,Complex>, Complex[]> _ufw = (double x, double y, double w, Normal2D[] normal,Func<double, Complex> f) => Expendator.Mult(Forms.UG.ujRes(x, y, w, normal), f(w));
@@ -253,11 +217,7 @@ namespace Практика_с_фортрана
         /// </summary>
         public Func<double, double, double,  Func<double, Complex>, Normal2D[], double[]> uxt = (double x, double y,  double t, Func<double, Complex> f, Normal2D[] normal) =>
           {
-            //  if (wchange)
-            //  {
-              double[] wmas= SeqWMemoized(wbeg, wend, wcount);
-                //  wchange = false;
-             // }
+              double[] wmas= РабКонсоль.wmas;
 
               CVectors[] c = new CVectors[wcount];
               Parallel.For(0,wcount,(int i)=>
@@ -275,7 +235,6 @@ namespace Практика_с_фортрана
             Complex[] fw = tuple.Item2;
 
             CVectors[] c = new CVectors[wcount];
-            //tex: ${\bar c}= f({\bar w}) \cdot u(x,y,z,{\bar w}) $ покомпонентно
             Parallel.For(0, wcount, (int i) =>
             {
                 c[i] = new CVectors(Expendator.Mult(Forms.UG.ujRes(x, y, w[i], normal), fw[i]));
@@ -600,10 +559,7 @@ namespace Практика_с_фортрана
                 chart1.Series[i].IsVisibleInLegend = false;
             }
 
-            //simpleSound.Stop();
             button3.Show();
-
-            //РабКонсоль.SetPolesDef();
 
             int k = Convert.ToInt32(numericUpDown1.Value);//k.Show();
             xval = new double[k]; uRval = new double[k]; uIval = new double[k]; umodval = new double[k];
@@ -622,10 +578,6 @@ namespace Практика_с_фортрана
             Waves.Normal2D[] norms = (radioButton3.Checked) ? circle.GetNormalsOnCircle(Convert.ToInt32(numericUpDown2.Value)) : dCircle.GetNormalsOnDCircle();
             Waves.Normal2D N = (radioButton3.Checked) ? circle.GetNormal(cor) : dCircle.BigCircle.GetNormal(cor);
             double w = textBox7.Text.ToDouble();
-
-            //массив нормалей
-            //int NN = Convert.ToInt32(numericUpDown2.Value);
-            //Point[] Nmas = Waves.Normal2D.NormalsToPoins(circle.GetNormalsOnCircle(NN));
 
             prbar = new int[k]; timer1.Enabled = true;
             int ind = listBox1.SelectedIndex;
