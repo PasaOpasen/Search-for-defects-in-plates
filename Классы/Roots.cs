@@ -139,8 +139,9 @@ namespace МатКлассы
         /// <param name="eps"></param>
         /// <param name="m">Метод</param>
         /// <param name="withMuller">Дополнять ли корни корнями метода парабол</param>
+        /// <param name="countpoles">Требуемое количество корней. Если это число заранее известно, его указание может сильно ускорить вычисление. Иначе надо взять большое число</param>
         /// <returns></returns>
-        public static Vectors OtherMethod(ComplexFunc f, double beg, double end, double step = 0.01, double eps = 1e-12, MethodRoot m = MethodRoot.Brent, bool withMuller = false,int countpoles=2)
+        public static Vectors OtherMethod(ComplexFunc f, double beg, double end, double step = 0.01, double eps = 1e-12, MethodRoot m = MethodRoot.Brent, bool withMuller = false, int countpoles = 2)
         {
             List<double> list = new List<double>();
             Func<double, double> func = (double c) => f(c).ReIm;
@@ -183,12 +184,12 @@ namespace МатКлассы
                         //Optimization.Muller(f, a, new Complex((a + b) / 2, 0), new Complex(b, 0)).Re.Show();
                         list.Add(Optimization.Muller(f, a, new Complex((a + b) / 2, 0.01), new Complex((a + b) / 2, -0.01)).Re);
                     }
-if (list.Count == countpoles) break;
+                    if (list.Count == countpoles) break;
 
                     a = b;
                     b += step;
                     fa = new Complex(fb);
-                    fb = f(b);              
+                    fb = f(b);
                 }
             else
                 while (a < end)

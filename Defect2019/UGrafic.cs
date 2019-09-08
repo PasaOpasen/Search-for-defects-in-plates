@@ -70,7 +70,7 @@ namespace Практика_с_фортрана
             var ur = new Memoize<Tuple<double, double,  double, Normal2D[]>,Complex[]>((Tuple<double, double,  double, Normal2D[]> t) => _ujRes(t.Item1, t.Item2, t.Item3, t.Item4));
             ujRes = (double x, double y, double w, Normal2D[] n) => ur.Value(new Tuple<double, double,  double, Normal2D[]>(x, y, w, n));
 
-            kGrafic.ModelRead();
+            kGrafic.ReadModelData();
         }
 
         public System.Threading.CancellationTokenSource source;

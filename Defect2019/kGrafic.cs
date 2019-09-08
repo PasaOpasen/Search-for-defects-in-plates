@@ -1,6 +1,5 @@
 ﻿using System;
 using System.IO;
-//using System.Windows.Media;
 using System.Diagnostics;
 using System.Collections.Generic;
 using System.ComponentModel;
@@ -11,10 +10,8 @@ using System.Text;
 using System.Threading.Tasks;
 using System.Windows.Forms;
 using МатКлассы;
-using МатКлассы;
 using static МатКлассы.Number;
 using static Functions;
-using MP = System.Tuple<double, double[]>;
 
 namespace Defect2019
 {
@@ -23,39 +20,75 @@ namespace Defect2019
         public kGrafic()
         {
             InitializeComponent();
+
             chart1.Series[0].IsVisibleInLegend = false;
-            button4.Hide();
             radioButton1_CheckedChanged(new object(), new EventArgs());
-            this.chart1.MouseWheel += new MouseEventHandler(cMouseWheel);
             this.chart1.MouseClick += new MouseEventHandler(chart1_MouseClick);
             toolTip1.AutoPopDelay = 4700;
 
             timer1.Interval = 500;
             timer1.Tick += new EventHandler(Timer1_Tick);
-            // Enable timer.  
-            //timer1.Enabled = true;
-            //Process.Start("Defect2019.r");
-            //new DINN5().Show();
+
             listBox1.SelectedIndex = 1;
             listBox2.SelectedIndex = 0;
-            ModelRead();
+
+            ReadModelData();
+            SetWData();
         }
+        public static Tuple<double, double[]>[] Model;
+        public static void ReadModelData()
+        {
+            StreamReader fs = new StreamReader("poles.dat");
+            List<Tuple<double, double[]>> list = new List<Tuple<double, double[]>>();
+
+            string s = fs.ReadLine();
+            s = fs.ReadLine();
+            while (s != null)
+            {
+                s = s.Replace("+0", "+").Replace("-0", "-").Replace('.', ',');
+                string[] st = s.Split(new char[] { ' ' }, StringSplitOptions.RemoveEmptyEntries);
+                list.Add(new Tuple<double, double[]>(st[0].ToDouble(), new double[] { st[2].ToDouble(), st[3].ToDouble(), st[4].ToDouble() }));
+                s = fs.ReadLine();
+            }
+            fs.Close();
+            Model = list.ToArray();
+        }
+        private void SetWData()
+        {
+            textBox4.Text = РабКонсоль.wbeg.ToRString();
+            textBox5.Text = РабКонсоль.wend.ToRString();
+            numericUpDown1.Value = РабКонсоль.wcount;
+        }
+
         int[] prbar;
         private void Timer1_Tick(object Sender, EventArgs e)
         {
             progressBar1.Value = (prbar.Sum().ToDouble() / prbar.Length * progressBar1.Maximum).ToInt();
         }
 
-        private void button2_Click(object sender, EventArgs e)
-        {
-            this.Close();
-        }
         double[] args;
+        Vectors[] mas, masN;
         Roots.MethodRoot method;
         bool half = false;
-        private void button1_Click(object sender, EventArgs e)
+
+        private async void button1_Click(object sender, EventArgs e)
         {
-            string met = (string)listBox1.SelectedItem;//met.Show();
+            SetMethodAndHalf();
+
+            if (radioButton1.Checked)
+            {
+                await rad1();
+                may = true;
+            }
+            else
+            {
+                await rad2();
+                may = false;
+            }
+        }
+        private void SetMethodAndHalf()
+        {
+            string met = (string)listBox1.SelectedItem;
             half = false;
             switch (met)
             {
@@ -84,46 +117,20 @@ namespace Defect2019
                     method = Roots.MethodRoot.Brent;
                     break;
             }
-
-            if (radioButton1.Checked) { rad1(); may = true; }
-            else
-            {
-                chart1.Series.Clear();
-                double wold = Convert.ToDouble(textBox13.Text);
-                double beg = Convert.ToDouble(textBox4.Text), end = Convert.ToDouble(textBox5.Text); int itcount = РабКонсоль.countroot, k = Convert.ToInt32(numericUpDown1.Value);
-                double h = (end - beg) / (k - 1);
-                double kt1 = k1(wold), kt2 = k2(wold);
-
-                ComplexFunc s1 = (Complex alp) => sigma(alp * alp, kt1);
-                ComplexFunc s2 = (Complex alp) => sigma(alp * alp, kt2);
-
-                if (radioButton5.Checked)
-                {
-                    othergraph("Δ",(Complex c)=> Deltass(c,wold), beg, k, h);
-                }
-                if (radioButton6.Checked) { othergraph("σ1", s1, beg, k, h); }
-                if (radioButton7.Checked) { othergraph("σ2", s2, beg, k, h); }
-                may = false;
-            }
-
-            //CopyPoint();
         }
-
-        Vectors[] mas, masN;
 
         private void SimpleBeginAboutChart()
         {
             int ind = listBox2.SelectedIndex;
             chart1.Series.Clear();
-            //string name1;
             switch (ind)
             {
                 case 0:
-                    chart1.Series.Add("α: Δ(α,ω)=ΔPRMS(α)=0");
+                    chart1.Series.Add("α: Δ(α,ω) = ΔPRMS(α) = 0");
                     chart1.Series[0].ChartType = System.Windows.Forms.DataVisualization.Charting.SeriesChartType.Point;
                     chart1.Series[0].MarkerStyle = System.Windows.Forms.DataVisualization.Charting.MarkerStyle.Circle;
                     chart1.Series[0].Color = Color.Blue;
-                    chart1.Series.Add("α: Δ(α,ω)=ΔN(α)=0");
+                    chart1.Series.Add("α: Δ(α,ω) = ΔN(α) = 0");
                     chart1.Series[1].ChartType = System.Windows.Forms.DataVisualization.Charting.SeriesChartType.Point;
                     chart1.Series[1].MarkerStyle = System.Windows.Forms.DataVisualization.Charting.MarkerStyle.Circle;
                     chart1.Series[1].Color = Color.Red;
@@ -133,7 +140,7 @@ namespace Defect2019
                     chart1.Series[0].ChartType = System.Windows.Forms.DataVisualization.Charting.SeriesChartType.Point;
                     chart1.Series[0].MarkerStyle = System.Windows.Forms.DataVisualization.Charting.MarkerStyle.Circle;
                     chart1.Series[0].Color = Color.Blue;
-                    chart1.Series.Add("α: Δ(α,ω)=ΔN(α)=0");
+                    chart1.Series.Add("α: Δ(α,ω) = ΔN(α) =0 ");
                     chart1.Series[1].ChartType = System.Windows.Forms.DataVisualization.Charting.SeriesChartType.Point;
                     chart1.Series[1].MarkerStyle = System.Windows.Forms.DataVisualization.Charting.MarkerStyle.Circle;
                     chart1.Series[1].Color = Color.Red;
@@ -151,13 +158,18 @@ namespace Defect2019
                     chart1.Series[0].Color = Color.Blue;
                     break;
             }
-            chart1.Series.Add("Эталон");
-            chart1.Series[2].ChartType = System.Windows.Forms.DataVisualization.Charting.SeriesChartType.Point;
-            chart1.Series[2].MarkerStyle = System.Windows.Forms.DataVisualization.Charting.MarkerStyle.Star5;
-            chart1.Series[2].Color = Color.FromArgb(100,Color.Green);
+            if (checkBox1.Checked)
+            {
+                chart1.Series.Add("Эталон");
+                chart1.Series[2].ChartType = System.Windows.Forms.DataVisualization.Charting.SeriesChartType.Point;
+                chart1.Series[2].MarkerStyle = System.Windows.Forms.DataVisualization.Charting.MarkerStyle.Star5;
+                chart1.Series[2].Color = Color.FromArgb(100, Color.Green);
+            }
+            if (radioButton3.Checked) chart1.Titles[0].Text = "График ζn(ω)";
+            if (radioButton4.Checked) chart1.Titles[0].Text = "График ζn(ω)/ω";
         }
 
-        private async void rad1()
+        private async Task rad1()
         {
             SimpleBeginAboutChart();
             progressBar1.Value = 0;
@@ -171,8 +183,8 @@ namespace Defect2019
             mas = new Vectors[k];
             masN = new Vectors[k];
             args = new double[k];
-            Vectors[] mass = new Vectors[k];
-            prbar = new int[k]; timer1.Enabled = true;
+            prbar = new int[k];
+            timer1.Enabled = true;
 
             int ind = listBox2.SelectedIndex;
 
@@ -180,11 +192,7 @@ namespace Defect2019
             {
                 Parallel.For(0, k, (int i) =>
                 {
-                    //for (int i = 0; i < k; i++)
-                    //{
-                        args[i] = beg + i * h;
-
-                    //double coef = Expendator.MaxApproxAbs((Complex a) => Deltass(a, args[i]),tmin,tmax,step);// *Math.Exp(-args[i].Sqr()*h);
+                    args[i] = beg + i * h;
                     ComplexFunc del;
 
                     switch (ind)
@@ -193,61 +201,74 @@ namespace Defect2019
                             del = (Complex a) => Deltass(a, args[i]);
                             break;
                         case 1:
-                            del = (Complex a) => K(a, 1, 0,  args[i])[2, 2].Reverse();
+                            del = (Complex a) => K(a, 1, 0, args[i])[2, 2].Reverse();
                             break;
                         case 2:
-                            del = (Complex a) => K(a, 1, 0,  args[i]).Track.Reverse();
+                            del = (Complex a) => K(a, 1, 0, args[i]).Track.Reverse();
                             break;
                         default:
-                            del = (Complex a) => K(a, 1, 0,  args[i]).Det.Reverse();
+                            del = (Complex a) => K(a, 1, 0, args[i]).Det.Reverse();
                             break;
                     }
 
-                    if (!half) mas[i] = Roots.OtherMethod(del, tmin, tmax, step, eps, method, checkBox4.Checked);//FuncMethods.Optimization.Halfc(del, tmin, tmax, step, eps, itcount);
-                    else mas[i] = FuncMethods.Optimization.Halfc(/*(Complex c)=>del(c).ReIm*/del, tmin, tmax, step, eps, itcount).DoubleMas.Where(n => del(n).Abs < eps).Distinct().ToArray();
-                    //mas[i] = new Vectors(0);
+                    if (!half)
+                        mas[i] = Roots.OtherMethod(del, tmin, tmax, step, eps, method, checkBox4.Checked,countpoles:2);
+                    else
+                        mas[i] = FuncMethods.Optimization.Halfc(del, tmin, tmax, step, eps, itcount).DoubleMas.Where(n => del(n).Abs < eps).Distinct().ToArray();
                     //использовать ли корни N
-
                     masN[i] = DeltassNPosRoots(args[i], tmin, tmax);
-                    //ComplexFunc delN = (Complex a) => DeltassN(a, args[i]);
-                    //mas[i].UnionWith(masN[i]/*FuncMethods.Optimization.Halfc(delN, tmin, tmax, step, eps, itcount)*/);
-                    //mas[i].Show(); 
-
-                    bool ch2 = checkBox2.Checked, ch3 = checkBox3.Checked;
-                    if (ind <= 1)
-                    {
-                        if (ch2 && ch3)
-                            mass[i] = new Vectors(Vectors.Union(mas[i], masN[i]));
-                        else if (ch2)
-                            mass[i] = new Vectors(mas[i]);
-                        else
-                            mass[i] = new Vectors(masN[i]);
-                    }
-                    else mass = mas;
-                    ////вывод корней
-                    //if (checkBox1.Checked)
-                    //{
-                    //    List<double> value = new List<double>();
-                    //    for (int j = 0; j < mass[i].n; j++)
-                    //        value.Add((Deltass(mass[i][j], args[i]) * DeltassN(mass[i][j], args[i])).Abs);
-                    //    Console.WriteLine($"ω ={args[i]}; {mass[i].ToString()} \t--> {(new Vectors(value.ToArray())).ToString()}"); "".Show();
-                    //}
 
                     prbar[i] = 1;
-                     //}
-               });
+                });
             });
 
             ReDraw();
+        }
+        private void ReDraw()
+        {
+            SimpleBeginAboutChart();
 
+            int k = args.Length;
 
-            if (radioButton3.Checked) chart1.Titles[0].Text = "График ζn(ω)";
-            if (radioButton4.Checked) chart1.Titles[0].Text = "График ζn(ω)/ω";
-            for (int i = 0; i < chart1.Series.Count; i++)
-                chart1.Series[i].ToolTip = $"X = #VALX, Y = #VALY";
-            //textBox13.Text = РабКонсоль.wold.ToString();
+            if (checkBox2.Checked)
+                for (int i = 0; i < k; i++)
+                {
+                    if (radioButton3.Checked) for (int j = 0; j < mas[i].n; j++) chart1.Series[0].Points.AddXY(args[i], mas[i][j]);
+                    if (radioButton4.Checked) for (int j = 0; j < mas[i].n; j++) chart1.Series[0].Points.AddXY(args[i], mas[i][j] / args[i]);
+                }
+            if (checkBox3.Checked)
+                for (int i = 0; i < k; i++)
+                {
+                    if (radioButton3.Checked) for (int j = 0; j < masN[i].n; j++) chart1.Series[1].Points.AddXY(args[i], masN[i][j]);
+                    if (radioButton4.Checked) for (int j = 0; j < masN[i].n; j++) chart1.Series[1].Points.AddXY(args[i], masN[i][j] / args[i]);
+                }
+            if (checkBox1.Checked)
+                for (int i = 0; i < Model.Length; i++)
+                {
+                    if (radioButton3.Checked) for (int j = 0; j < Model[i].Item2.Length; j++) chart1.Series[2].Points.AddXY(Model[i].Item1, Model[i].Item2[j]);
+                    if (radioButton4.Checked) for (int j = 0; j < Model[i].Item2.Length; j++) chart1.Series[2].Points.AddXY(Model[i].Item1, (new Vectors(Model[i].Item2) / Model[i].Item1).DoubleMas[j]);
+                }
 
-            //           if(radioButton2.Checked) CurvesShow(mas,args);
+            Библиотека_графики.ForChart.SetToolTips(ref chart1);
+        }
+        private async Task rad2()
+        {
+            chart1.Series.Clear();
+            double wold = Convert.ToDouble(textBox13.Text);
+            double beg = Convert.ToDouble(textBox4.Text), end = Convert.ToDouble(textBox5.Text);
+            int itcount = РабКонсоль.countroot, k = Convert.ToInt32(numericUpDown1.Value);
+            double h = (end - beg) / (k - 1);
+            double kt1 = k1(wold), kt2 = k2(wold);
+
+            ComplexFunc s1 = (Complex alp) => sigma(alp * alp, kt1);
+            ComplexFunc s2 = (Complex alp) => sigma(alp * alp, kt2);
+
+            if (radioButton5.Checked)
+            {
+                othergraph("Δ", (Complex c) => Deltass(c, wold), beg, k, h);
+            }
+            if (radioButton6.Checked) { othergraph("σ1", s1, beg, k, h); }
+            if (radioButton7.Checked) { othergraph("σ2", s2, beg, k, h); }
         }
         private void othergraph(string func, ComplexFunc f, double beg, int k, double hh)
         {
@@ -265,126 +286,13 @@ namespace Defect2019
             for (int i = 0; i < k; i++)
             {
                 double arg = beg + i * hh;
-                Number.Complex val = f(arg); val.Show();
+                Number.Complex val = f(arg); //val.Show();
                 chart1.Series[0].Points.AddXY(arg, val.Re);
                 chart1.Series[1].Points.AddXY(arg, val.Im);
                 chart1.Series[2].Points.AddXY(arg, val.Abs);
                 prbar[i] = 1;
             }
-
-        }
-
-
-        private void CurvesShow(Vectors[] m, double[] ar)
-        {
-            var list = new List<Vectors>(m);
-            var arg = new List<double>(ar);
-            int k = 0;
-            while (list.Count > 0)
-            {
-                for (int i = 0; i < list.Count; i++)
-                    if (list[i].n < 1)
-                    {
-                        list.RemoveAt(i);
-                        arg.RemoveAt(i);
-                        i--;
-                    }
-
-                for (int i = 1; i < list.Count; i++)
-                    if (list[i].n == 1 && list[i - 1].n == 1)
-                    {
-                        list.RemoveAt(i - 1);
-                        arg.RemoveAt(i - 1);
-                        i--;
-                    }
-                    else if (list[i].n < list[i - 1].n)
-                    {
-                        list.RemoveAt(i);
-                        arg.RemoveAt(i);
-                        i--;
-                    }
-                //for (int i = 1; i < list.Count; i++) list[i].Show();
-
-                chart1.Series.Add($"Дисперсионка {k + 1}");
-                chart1.Series[k].BorderWidth = 2;
-                chart1.Series[k].Color = Color.Blue;
-                chart1.Series[k].ChartType = System.Windows.Forms.DataVisualization.Charting.SeriesChartType.Line;
-
-                for (int i = 0; i < list.Count; i++)
-                {
-                    //list[i].Show();list[i].n.Show();
-                    chart1.Series[k].Points.Add(arg[i], list[i][list[i].n - 1]);
-                    list[i] = new Vectors(list[i], 0, list[i].n - 2);
-                }
-                k++;
-            }
-        }
-
-        private void button3_Click(object sender, EventArgs e)
-        {
-            //РабКонсоль.c = Convert.ToDouble(textBox1.Text);
-            //РабКонсоль.h = Convert.ToDouble(textBox2.Text);
-            //РабКонсоль.a = Convert.ToDouble(textBox3.Text);
-
-            double tmin = РабКонсоль.polesBeg, tmax = РабКонсоль.polesEnd, eps = РабКонсоль.epsroot, step = РабКонсоль.steproot;
-            double beg = Convert.ToDouble(textBox4.Text), end = Convert.ToDouble(textBox5.Text);
-
-            int itcount = РабКонсоль.countroot, k = Convert.ToInt32(numericUpDown1.Value);
-
-            string name = $"tmin={tmin} tmax={tmax} eps={eps} step={step} kcount={k}  ([{beg},{end}])";
-            SaveFileDialog savedialog = new SaveFileDialog();
-            savedialog.Title = "Сохранить рисунок как...";
-            savedialog.FileName = name;
-            savedialog.Filter = "Image files (*.png)|*.png|All files (*.*)|*.*";
-
-            savedialog.OverwritePrompt = true;
-            savedialog.CheckPathExists = true;
-            savedialog.ShowHelp = true;
-            if (savedialog.ShowDialog() == DialogResult.OK)
-            {
-                try
-                {
-                    chart1.SaveImage(savedialog.FileName.Substring(0,savedialog.FileName.IndexOf(".png"))+".emf", System.Windows.Forms.DataVisualization.Charting.ChartImageFormat.Emf);
-                    chart1.SaveImage(savedialog.FileName, System.Windows.Forms.DataVisualization.Charting.ChartImageFormat.Png);
-                }
-                catch (Exception ee)
-                {
-                    MessageBox.Show("Рисунок не сохранён", ee.Message,
-                    MessageBoxButtons.OK, MessageBoxIcon.Error);
-                }
-            }
-        }
-
-        private void button4_Click(object sender, EventArgs e)
-        {
-            chart1.Series.Clear();
-           double wold = Convert.ToDouble(textBox13.Text);
-            double beg = Convert.ToDouble(textBox4.Text), end = Convert.ToDouble(textBox5.Text); int itcount = РабКонсоль.countroot, k = Convert.ToInt32(numericUpDown1.Value);
-            double h = (end - beg) / (k - 1);
-            chart1.Series.Add("Re Δ"); chart1.Series[0].Color = Color.Red;
-            chart1.Series.Add("Im Δ"); chart1.Series[1].Color = Color.Green;
-            chart1.Series.Add("Abs Δ"); chart1.Series[2].Color = Color.Blue;
-            for (int i = 0; i < 3; i++)
-            {
-                chart1.Series[i].BorderWidth = 3;
-                chart1.Series[i].ChartType = System.Windows.Forms.DataVisualization.Charting.SeriesChartType.Line;
-                chart1.Series[i].MarkerStyle = System.Windows.Forms.DataVisualization.Charting.MarkerStyle.Circle;
-            }
-            for (int i = 0; i < k; i++)
-            {
-                double arg = beg + i * h;
-                Number.Complex val = Deltass(arg,wold); val.Show();
-                chart1.Series[0].Points.AddXY(arg, val.Re);
-                chart1.Series[1].Points.AddXY(arg, val.Im);
-                chart1.Series[2].Points.AddXY(arg, val.Abs);
-            }
-
-
-        }
-
-        private void button5_Click(object sender, EventArgs e)
-        {
-            new ParametrsQu().Show();
+            chart1.Titles[0].Text = $"График {func}(ω)";
         }
 
         private void radioButton1_CheckedChanged(object sender, EventArgs e)
@@ -399,8 +307,6 @@ namespace Defect2019
             groupBox3.Show();
         }
 
-        private MP[][] points;
-        private double XLen, YLen, x0, X, y0, Y;
 
         bool may = false;
         private void checkBox2_CheckedChanged(object sender, EventArgs e)
@@ -438,63 +344,49 @@ namespace Defect2019
             if (may) ReDraw();
         }
 
-        private void CopyPoint()
+        private void параметрыToolStripMenuItem_Click(object sender, EventArgs e)
         {
-            points = new MP[chart1.Series.Count][];
-            List<double> x = new List<double>(), y = new List<double>();
-            for (int i = 0; i < chart1.Series.Count; i++)
-            {
-                points[i] = new MP[chart1.Series[i].Points.Count];
-                for (int j = 0; j < points[i].Length; j++)
-                {
-                    points[i][j] = new Tuple<double, double[]>(chart1.Series[i].Points[j].XValue, chart1.Series[i].Points[j].YValues);
-                    x.Add(chart1.Series[i].Points[j].XValue);
-                    y.AddRange(chart1.Series[i].Points[j].YValues);
-                }
-            }
-            x0 = x.Min();
-            X = x.Max();
-            XLen = X - x0;
-            y0 = y.Min();
-            Y = y.Max();
-            YLen = Y - y0;
+            new ParametrsQu().ShowDialog();
+            SetWData();
         }
 
-        private void cMouseWheel(object sender, System.Windows.Forms.MouseEventArgs e)
+        private void сохранитьИзображениеToolStripMenuItem_Click(object sender, EventArgs e)
         {
-            e.Delta.Show();
-            double coef = 1 - e.Delta * 0.01;
-            double tx = X * coef, ty = Y * coef;
-            МатКлассы.Point loc;
+            double tmin = РабКонсоль.polesBeg, tmax = РабКонсоль.polesEnd, eps = РабКонсоль.epsroot, step = РабКонсоль.steproot;
+            double beg = Convert.ToDouble(textBox4.Text), end = Convert.ToDouble(textBox5.Text);
 
-            //if (e.Delta > 0)
-            //{
-            loc = new МатКлассы.Point(e.X, e.Y);
-            //}
-            //else
-            //{
+            int itcount = РабКонсоль.countroot, k = Convert.ToInt32(numericUpDown1.Value);
 
-            //}
-            double tx0 = loc.x - tx / 2, txX = loc.x + tx / 2;
-            double ty0 = loc.y - ty / 2, tyY = loc.y + ty / 2;
+            string name = $"tmin={tmin} tmax={tmax} eps={eps} step={step} kcount={k}  ([{beg},{end}])";
+            SaveFileDialog savedialog = new SaveFileDialog();
+            savedialog.Title = "Сохранить рисунок как...";
+            savedialog.FileName = name;
+            savedialog.Filter = "Image files (*.png)|*.png|All files (*.*)|*.*";
 
-            for (int i = 0; i < chart1.Series.Count; i++)
-                chart1.Series[i].Points.Clear();
-            for (int i = 0; i < chart1.Series.Count; i++)
+            savedialog.OverwritePrompt = true;
+            savedialog.CheckPathExists = true;
+            savedialog.ShowHelp = true;
+            if (savedialog.ShowDialog() == DialogResult.OK)
             {
-                for (int j = 0; j < points.GetLength(2); j++)
-                    if (points[i][j].Item1 >= tx0 && points[i][j].Item1 <= txX)
-                    {
-                        List<double> list = new List<double>();
-                        for (int k = 0; k < points[i][j].Item2.Length; k++)
-                            if (points[i][j].Item2[k] >= ty0 && points[i][j].Item2[k] <= tyY)
-                                list.Add(points[i][j].Item2[k]);
-                        if (list.Count > 0) chart1.Series[i].Points.AddXY(points[i][j].Item1, list);
-                    }
-
+                try
+                {
+                    chart1.SaveImage(savedialog.FileName.Substring(0, savedialog.FileName.IndexOf(".png")) + ".emf", System.Windows.Forms.DataVisualization.Charting.ChartImageFormat.Emf);
+                    chart1.SaveImage(savedialog.FileName, System.Windows.Forms.DataVisualization.Charting.ChartImageFormat.Png);
+                }
+                catch (Exception ee)
+                {
+                    MessageBox.Show("Рисунок не сохранён", ee.Message,
+                    MessageBoxButtons.OK, MessageBoxIcon.Error);
+                }
             }
+        }
 
-            chart1.Invalidate();
+        private void исправитьВнутренниеПараметрыНаЗаданныеToolStripMenuItem_Click(object sender, EventArgs e)
+        {
+            РабКонсоль.wbeg = textBox4.Text.ToDouble();
+            РабКонсоль.wend = textBox5.Text.ToDouble();
+            РабКонсоль.wcount = numericUpDown1.Value.ToInt32();
+            AfterChaigeData();
         }
 
         double xOne = 0;
@@ -514,83 +406,6 @@ namespace Defect2019
             }
             finally { }
         }
-
-
-        public static Tuple<double, double[]>[] Model;
-        public static void ModelRead()
-        {
-            StreamReader fs = new StreamReader("poles.dat");
-            List<Tuple<double, double[]>> list = new List<Tuple<double, double[]>>();
-
-            string s = fs.ReadLine();
-            s = fs.ReadLine();
-            while (s != null)
-            {
-                s = s.Replace("+0", "+").Replace("-0","-").Replace('.',',');
-                string[] st = s.Split(new char[] { ' ' }, StringSplitOptions.RemoveEmptyEntries);
-                list.Add(new Tuple<double, double[]>(st[0].ToDouble(),new double[] { st[2].ToDouble(),st[3].ToDouble(),st[4].ToDouble()}));
-                //Tuple<double, double[]> t = new Tuple<double, double[]>(list.Last().Item1,list.Last().Item2);
-                //$"{t.Item1} {t.Item2[0]} {t.Item2[1]} {t.Item2[2]}".Show();
-                s = fs.ReadLine();
-            }
-            Model = list.ToArray();
-
-            fs.Close();
-        }
-
-
-        private void ReDraw()
-        {
-            SimpleBeginAboutChart();
-
-            int k = args.Length;
-            Vectors[] mass = new Vectors[k];
-
-            for (int i = 0; i < k; i++)
-            {
-                bool ch2 = checkBox2.Checked, ch3 = checkBox3.Checked;
-                if (ch2 && ch3)
-                    mass[i] = new Vectors(Vectors.Union(mas[i], masN[i]));
-                else if (ch2)
-                    mass[i] = new Vectors(mas[i]);
-                else
-                    mass[i] = new Vectors(masN[i]);
-            }
-
-            //for (int i = 0; i < k; i++)
-            //{
-            //    if (radioButton3.Checked) for (int j = 0; j < mass[i].n; j++) chart1.Series[0].Points.AddXY(args[i], mass[i][j]);
-            //    if (radioButton4.Checked) for (int j = 0; j < mass[i].n; j++) chart1.Series[0].Points.AddXY(args[i], mass[i][j] / args[i]);
-            //}
-            if (checkBox2.Checked)
-            {
-                for (int i = 0; i < k; i++)
-                {
-                    if (radioButton3.Checked) for (int j = 0; j < mas[i].n; j++) chart1.Series[0].Points.AddXY(args[i], mas[i][j]);
-                    if (radioButton4.Checked) for (int j = 0; j < mas[i].n; j++) chart1.Series[0].Points.AddXY(args[i], mas[i][j] / args[i]);
-                }
-            }
-            if (checkBox3.Checked)
-            {
-                for (int i = 0; i < k; i++)
-                {
-                    if (radioButton3.Checked) for (int j = 0; j < masN[i].n; j++) chart1.Series[1].Points.AddXY(args[i], masN[i][j]);
-                    if (radioButton4.Checked) for (int j = 0; j < masN[i].n; j++) chart1.Series[1].Points.AddXY(args[i], masN[i][j] / args[i]);
-                }
-            }
-            if (checkBox1.Checked)
-            {
-                for (int i = 0; i < Model.Length; i++)
-                {
-                    if (radioButton3.Checked) for (int j = 0; j < Model[i].Item2.Length; j++) chart1.Series[2].Points.AddXY(Model[i].Item1, Model[i].Item2[j]);
-                    if (radioButton4.Checked) for (int j = 0; j < Model[i].Item2.Length; j++) chart1.Series[2].Points.AddXY(Model[i].Item1, (new Vectors( Model[i].Item2) / Model[i].Item1).DoubleMas[j]);
-                }
-            }
-
-            if (radioButton3.Checked) chart1.Titles[0].Text = "График ζn(ω)";
-            if (radioButton4.Checked) chart1.Titles[0].Text = "График ζn(ω)/ω";
-            for (int i = 0; i < chart1.Series.Count; i++)
-                chart1.Series[i].ToolTip = $"X = #VALX, Y = #VALY";
-        }
+     
     }
 }

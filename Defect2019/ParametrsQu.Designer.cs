@@ -112,6 +112,7 @@
             this.label11.Size = new System.Drawing.Size(36, 19);
             this.label11.TabIndex = 59;
             this.label11.Text = "h =";
+            this.toolTip1.SetToolTip(this.label11, "Толщина пластины");
             // 
             // textBox5
             // 
@@ -413,9 +414,9 @@
             this.groupBox4.Controls.Add(this.label15);
             this.groupBox4.Controls.Add(this.numericUpDown3);
             this.groupBox4.Controls.Add(this.label14);
-            this.groupBox4.Location = new System.Drawing.Point(347, 165);
+            this.groupBox4.Location = new System.Drawing.Point(345, 165);
             this.groupBox4.Name = "groupBox4";
-            this.groupBox4.Size = new System.Drawing.Size(319, 148);
+            this.groupBox4.Size = new System.Drawing.Size(321, 148);
             this.groupBox4.TabIndex = 80;
             this.groupBox4.TabStop = false;
             this.groupBox4.Text = "Анимация";
@@ -462,7 +463,7 @@
             0,
             0,
             0});
-            this.numericUpDown4.Location = new System.Drawing.Point(249, 57);
+            this.numericUpDown4.Location = new System.Drawing.Point(249, 62);
             this.numericUpDown4.Maximum = new decimal(new int[] {
             50,
             0,
@@ -486,11 +487,13 @@
             // label15
             // 
             this.label15.AutoSize = true;
-            this.label15.Location = new System.Drawing.Point(29, 59);
+            this.label15.Location = new System.Drawing.Point(33, 64);
             this.label15.Name = "label15";
             this.label15.Size = new System.Drawing.Size(198, 19);
             this.label15.TabIndex = 80;
             this.label15.Text = "Макс. циклов анимации";
+            this.toolTip1.SetToolTip(this.label15, "Число прокруток анимации, после которого форма закроется, если её не закроют рань" +
+        "ше");
             // 
             // numericUpDown3
             // 
@@ -528,6 +531,7 @@
             this.label14.Size = new System.Drawing.Size(243, 19);
             this.label14.TabIndex = 75;
             this.label14.Text = "Скорость смены кадров (мc)";
+            this.toolTip1.SetToolTip(this.label14, "Интервал между сменой картинок в анимации");
             // 
             // ParametrsQu
             // 
