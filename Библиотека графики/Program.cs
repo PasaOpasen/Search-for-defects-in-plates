@@ -212,5 +212,18 @@ namespace Библиотека_графики
             }
         }
         public static Color[] colors = new Color[] { Color.Blue, Color.Green, Color.Red, Color.Black };
+
+        private static Bitmap getControlScreenshot(Control c)
+        {
+            Bitmap res = new Bitmap(c.Width, c.Height);
+            c.DrawToBitmap(res, new Rectangle(Point.Empty, c.Size));
+            return res;
+        }
+        public static void MakeScreenShot(Control control,string name, System.Drawing.Imaging.ImageFormat format=null)
+        {
+            format = format ?? System.Drawing.Imaging.ImageFormat.Png;
+            Bitmap scr = getControlScreenshot(control);
+            scr.Save(name, format);
+        }
     }
 }
