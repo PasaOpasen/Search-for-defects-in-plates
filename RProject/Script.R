@@ -26,15 +26,15 @@ update(p[rep(1, prod(npanel))], layout = npanel,
 
 ######################################################делает форму
 
-x <- 1:100
-y <- 1:100
+x <- 0:20
+y <- 0:20
 z <- x %o% y
-z <- z*sin(z) + - .1 * z
+z <- exp(3-sin(z/20))
 
 library(rgl)
 mycut = function(x, breaks) as.numeric(cut(x = x, breaks = breaks)) # to combine different factors
 zcol2 = as.numeric(apply(z, 2, mycut, breaks = nbcol))
-persp3d(x, y, z, theta = 50, phi = 25,col="red")
+persp3d(x, y, z, theta = 50, phi = 25,col="red",zlab="zlabs")
 
 ###################################в браузер
 x <- seq(from = 0.2, to = 5, by = 0.2)
