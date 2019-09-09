@@ -3,6 +3,9 @@ data = data.frame(
     y = rep(c(1, 2, 3, 4, 5), 5)
 )
 
+
+
+
 data$z = runif(
     25,
     min = (sin (data$x) * sqrt( data$y) - 0.1 * (data$x * data$y)),
@@ -24,7 +27,7 @@ update(p[rep(1, prod(npanel))], layout = npanel,
                                            x = rotx[current.row()]))
     })
 
-######################################################делает форму
+######################################################Г¤ГҐГ«Г ГҐГІ ГґГ®Г°Г¬Гі
 
 x <- 0:20
 y <- 0:20
@@ -36,7 +39,7 @@ mycut = function(x, breaks) as.numeric(cut(x = x, breaks = breaks)) # to combine
 zcol2 = as.numeric(apply(z, 2, mycut, breaks = nbcol))
 persp3d(x, y, z, theta = 50, phi = 25,col="red",zlab="zlabs")
 
-###################################в браузер
+###################################Гў ГЎГ°Г ГіГ§ГҐГ°
 x <- seq(from = 0.2, to = 5, by = 0.2)
 y <- seq(from = 0.2, to = 5, by = 0.2)
 z <- x %o% y
@@ -46,7 +49,7 @@ library(plotly)
 plot_ly(x = x, y = y, z = z, type = "surface")
 #plot_ly(z = volcano, type = "surface")
 
-######################################тоже делает форму
+######################################ГІГ®Г¦ГҐ Г¤ГҐГ«Г ГҐГІ ГґГ®Г°Г¬Гі
 library(rgl);
 data(volcano)
 dim(volcano)
