@@ -2,6 +2,10 @@ data = data.frame(
     x = rep(c(0.1, 0.2, 0.3, 0.4, 0.5), each = 5),
     y = rep(c(1, 2, 3, 4, 5), 5)
 )
+
+
+
+
 data$z = runif(
     25,
     min = (sin (data$x) * sqrt( data$y) - 0.1 * (data$x * data$y)),
