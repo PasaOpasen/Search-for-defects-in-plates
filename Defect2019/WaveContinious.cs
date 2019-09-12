@@ -568,13 +568,19 @@ namespace Defect2019
             OtherMethods.PlaySound("ГенерацияДанных");
             timer2.Start();
             toolStripStatusLabel1.Text = "Выполняется генерация u(x,w) и f(w)";
-            await Task.Run(
-                () =>
-                Parallel.Invoke(
-                    () => OtherMethods.Saveuxw3(xmin, xmax, count, ymin, ymax, sourcesArray),
-                    () => IlushaMethod()
-                    )
-                );
+            //await Task.Run(
+            //    () =>
+            //    Parallel.Invoke(
+            //        () => OtherMethods.Saveuxw3(xmin, xmax, count, ymin, ymax, sourcesArray),
+            //        () => IlushaMethod()
+            //        )
+            //    );
+
+            Task tt = Task.Run(()=> OtherMethods.Saveuxw3(xmin, xmax, count, ymin, ymax, sourcesArray));
+            IlushaMethod();
+            //Task.WaitAll(tt);
+            await tt;
+
             Timer2_Tick(new object(), new EventArgs());
             timer2.Stop();
             toolStripStatusLabel2.Text = "";
@@ -604,10 +610,9 @@ namespace Defect2019
                 var form = new PS5000A.PS5000ABlockForm(РабКонсоль.wbeg, РабКонсоль.wend, РабКонсоль.wcount);
                 form.ShowDialog();
             }
-            else
-            {
-                OtherMethods.CorrectWhereDataFile();
-            }
+
+            OtherMethods.CorrectWhereDataFile();
+            
             OtherMethods.CopyFilesR();
         }
 

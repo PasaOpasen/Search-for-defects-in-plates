@@ -57,11 +57,12 @@ namespace PS5000A
             this.textBox9 = new System.Windows.Forms.TextBox();
             this.label13 = new System.Windows.Forms.Label();
             this.tabAbout = new System.Windows.Forms.TabPage();
-            this.label19 = new System.Windows.Forms.Label();
-            this.listBox2 = new System.Windows.Forms.ListBox();
+            this.groupBox4 = new System.Windows.Forms.GroupBox();
             this.listBox1 = new System.Windows.Forms.ListBox();
-            this.button7 = new System.Windows.Forms.Button();
+            this.label19 = new System.Windows.Forms.Label();
             this.button6 = new System.Windows.Forms.Button();
+            this.button7 = new System.Windows.Forms.Button();
+            this.listBox2 = new System.Windows.Forms.ListBox();
             this.label18 = new System.Windows.Forms.Label();
             this.button5 = new System.Windows.Forms.Button();
             this.button1 = new System.Windows.Forms.Button();
@@ -117,6 +118,8 @@ namespace PS5000A
             this.textBox6 = new System.Windows.Forms.TextBox();
             this.textBox3 = new System.Windows.Forms.TextBox();
             this.tabGetData = new System.Windows.Forms.TabPage();
+            this.groupBox5 = new System.Windows.Forms.GroupBox();
+            this.textBox12 = new System.Windows.Forms.TextBox();
             this.groupBox3 = new System.Windows.Forms.GroupBox();
             this.buttonStart = new System.Windows.Forms.Button();
             this.groupBox2 = new System.Windows.Forms.GroupBox();
@@ -126,26 +129,23 @@ namespace PS5000A
             this.checkBox2 = new System.Windows.Forms.CheckBox();
             this.button4 = new System.Windows.Forms.Button();
             this.button2 = new System.Windows.Forms.Button();
-            this.textBox12 = new System.Windows.Forms.TextBox();
             this.statusStrip1 = new System.Windows.Forms.StatusStrip();
             this.toolStripStatusLabel1 = new System.Windows.Forms.ToolStripStatusLabel();
             this.toolStripProgressBar1 = new System.Windows.Forms.ToolStripProgressBar();
             this.toolStripStatusLabel2 = new System.Windows.Forms.ToolStripStatusLabel();
             this.timer1 = new System.Windows.Forms.Timer(this.components);
             this.folderBrowserDialog1 = new System.Windows.Forms.FolderBrowserDialog();
-            this.groupBox4 = new System.Windows.Forms.GroupBox();
-            this.groupBox5 = new System.Windows.Forms.GroupBox();
             this.tabControl.SuspendLayout();
             this.tabUnit.SuspendLayout();
             this.tabAbout.SuspendLayout();
+            this.groupBox4.SuspendLayout();
             this.tabChannels.SuspendLayout();
             this.groupBox1.SuspendLayout();
             this.tabGetData.SuspendLayout();
+            this.groupBox5.SuspendLayout();
             this.groupBox3.SuspendLayout();
             this.groupBox2.SuspendLayout();
             this.statusStrip1.SuspendLayout();
-            this.groupBox4.SuspendLayout();
-            this.groupBox5.SuspendLayout();
             this.SuspendLayout();
             // 
             // buttonOpen
@@ -337,6 +337,28 @@ namespace PS5000A
             this.tabAbout.Text = "Порты";
             this.tabAbout.UseVisualStyleBackColor = true;
             // 
+            // groupBox4
+            // 
+            this.groupBox4.Controls.Add(this.listBox1);
+            this.groupBox4.Controls.Add(this.label19);
+            this.groupBox4.Controls.Add(this.button6);
+            this.groupBox4.Controls.Add(this.button7);
+            this.groupBox4.Location = new System.Drawing.Point(20, 154);
+            this.groupBox4.Name = "groupBox4";
+            this.groupBox4.Size = new System.Drawing.Size(258, 152);
+            this.groupBox4.TabIndex = 15;
+            this.groupBox4.TabStop = false;
+            this.groupBox4.Text = "Подключение";
+            // 
+            // listBox1
+            // 
+            this.listBox1.FormattingEnabled = true;
+            this.listBox1.ItemHeight = 20;
+            this.listBox1.Location = new System.Drawing.Point(176, 51);
+            this.listBox1.Name = "listBox1";
+            this.listBox1.Size = new System.Drawing.Size(76, 84);
+            this.listBox1.TabIndex = 12;
+            // 
             // label19
             // 
             this.label19.AutoSize = true;
@@ -347,23 +369,17 @@ namespace PS5000A
             this.label19.TabIndex = 14;
             this.label19.Text = "COM";
             // 
-            // listBox2
+            // button6
             // 
-            this.listBox2.FormattingEnabled = true;
-            this.listBox2.ItemHeight = 20;
-            this.listBox2.Location = new System.Drawing.Point(196, 54);
-            this.listBox2.Name = "listBox2";
-            this.listBox2.Size = new System.Drawing.Size(76, 84);
-            this.listBox2.TabIndex = 13;
-            // 
-            // listBox1
-            // 
-            this.listBox1.FormattingEnabled = true;
-            this.listBox1.ItemHeight = 20;
-            this.listBox1.Location = new System.Drawing.Point(176, 51);
-            this.listBox1.Name = "listBox1";
-            this.listBox1.Size = new System.Drawing.Size(76, 84);
-            this.listBox1.TabIndex = 12;
+            this.button6.BackColor = System.Drawing.Color.FromArgb(((int)(((byte)(255)))), ((int)(((byte)(255)))), ((int)(((byte)(128)))));
+            this.button6.FlatStyle = System.Windows.Forms.FlatStyle.Popup;
+            this.button6.Location = new System.Drawing.Point(6, 25);
+            this.button6.Name = "button6";
+            this.button6.Size = new System.Drawing.Size(128, 45);
+            this.button6.TabIndex = 8;
+            this.button6.Text = "Подключится";
+            this.button6.UseVisualStyleBackColor = false;
+            this.button6.Click += new System.EventHandler(this.button6_Click);
             // 
             // button7
             // 
@@ -377,17 +393,14 @@ namespace PS5000A
             this.button7.UseVisualStyleBackColor = false;
             this.button7.Click += new System.EventHandler(this.button7_Click);
             // 
-            // button6
+            // listBox2
             // 
-            this.button6.BackColor = System.Drawing.Color.FromArgb(((int)(((byte)(255)))), ((int)(((byte)(255)))), ((int)(((byte)(128)))));
-            this.button6.FlatStyle = System.Windows.Forms.FlatStyle.Popup;
-            this.button6.Location = new System.Drawing.Point(6, 25);
-            this.button6.Name = "button6";
-            this.button6.Size = new System.Drawing.Size(128, 45);
-            this.button6.TabIndex = 8;
-            this.button6.Text = "Подключится";
-            this.button6.UseVisualStyleBackColor = false;
-            this.button6.Click += new System.EventHandler(this.button6_Click);
+            this.listBox2.FormattingEnabled = true;
+            this.listBox2.ItemHeight = 20;
+            this.listBox2.Location = new System.Drawing.Point(196, 54);
+            this.listBox2.Name = "listBox2";
+            this.listBox2.Size = new System.Drawing.Size(76, 84);
+            this.listBox2.TabIndex = 13;
             // 
             // label18
             // 
@@ -422,11 +435,11 @@ namespace PS5000A
             // 
             // textBoxUnitInfo
             // 
-            this.textBoxUnitInfo.Location = new System.Drawing.Point(344, 0);
+            this.textBoxUnitInfo.Location = new System.Drawing.Point(304, 0);
             this.textBoxUnitInfo.Margin = new System.Windows.Forms.Padding(4, 5, 4, 5);
             this.textBoxUnitInfo.Multiline = true;
             this.textBoxUnitInfo.Name = "textBoxUnitInfo";
-            this.textBoxUnitInfo.Size = new System.Drawing.Size(362, 316);
+            this.textBoxUnitInfo.Size = new System.Drawing.Size(402, 316);
             this.textBoxUnitInfo.TabIndex = 3;
             // 
             // tabChannels
@@ -1005,6 +1018,27 @@ namespace PS5000A
             this.tabGetData.Text = "Получение информации";
             this.tabGetData.UseVisualStyleBackColor = true;
             // 
+            // groupBox5
+            // 
+            this.groupBox5.Controls.Add(this.textBox12);
+            this.groupBox5.Location = new System.Drawing.Point(38, 219);
+            this.groupBox5.Name = "groupBox5";
+            this.groupBox5.Size = new System.Drawing.Size(512, 90);
+            this.groupBox5.TabIndex = 9;
+            this.groupBox5.TabStop = false;
+            this.groupBox5.Text = "Директория с замерами";
+            // 
+            // textBox12
+            // 
+            this.textBox12.Dock = System.Windows.Forms.DockStyle.Fill;
+            this.textBox12.Font = new System.Drawing.Font("Microsoft Sans Serif", 12F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(204)));
+            this.textBox12.Location = new System.Drawing.Point(3, 22);
+            this.textBox12.Multiline = true;
+            this.textBox12.Name = "textBox12";
+            this.textBox12.Size = new System.Drawing.Size(506, 65);
+            this.textBox12.TabIndex = 2;
+            this.textBox12.TextAlign = System.Windows.Forms.HorizontalAlignment.Center;
+            // 
             // groupBox3
             // 
             this.groupBox3.Controls.Add(this.buttonStart);
@@ -1089,7 +1123,7 @@ namespace PS5000A
             // 
             this.button4.BackColor = System.Drawing.Color.FromArgb(((int)(((byte)(192)))), ((int)(((byte)(255)))), ((int)(((byte)(255)))));
             this.button4.FlatStyle = System.Windows.Forms.FlatStyle.Popup;
-            this.button4.Location = new System.Drawing.Point(459, 48);
+            this.button4.Location = new System.Drawing.Point(541, 53);
             this.button4.Name = "button4";
             this.button4.Size = new System.Drawing.Size(147, 56);
             this.button4.TabIndex = 5;
@@ -1106,17 +1140,6 @@ namespace PS5000A
             this.button2.Text = "Изменить";
             this.button2.UseVisualStyleBackColor = true;
             this.button2.Click += new System.EventHandler(this.button2_Click);
-            // 
-            // textBox12
-            // 
-            this.textBox12.Dock = System.Windows.Forms.DockStyle.Fill;
-            this.textBox12.Font = new System.Drawing.Font("Microsoft Sans Serif", 12F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(204)));
-            this.textBox12.Location = new System.Drawing.Point(3, 22);
-            this.textBox12.Multiline = true;
-            this.textBox12.Name = "textBox12";
-            this.textBox12.Size = new System.Drawing.Size(506, 65);
-            this.textBox12.TabIndex = 2;
-            this.textBox12.TextAlign = System.Windows.Forms.HorizontalAlignment.Center;
             // 
             // statusStrip1
             // 
@@ -1150,29 +1173,6 @@ namespace PS5000A
             this.toolStripStatusLabel2.Size = new System.Drawing.Size(118, 17);
             this.toolStripStatusLabel2.Text = "toolStripStatusLabel2";
             // 
-            // groupBox4
-            // 
-            this.groupBox4.Controls.Add(this.listBox1);
-            this.groupBox4.Controls.Add(this.label19);
-            this.groupBox4.Controls.Add(this.button6);
-            this.groupBox4.Controls.Add(this.button7);
-            this.groupBox4.Location = new System.Drawing.Point(20, 154);
-            this.groupBox4.Name = "groupBox4";
-            this.groupBox4.Size = new System.Drawing.Size(258, 152);
-            this.groupBox4.TabIndex = 15;
-            this.groupBox4.TabStop = false;
-            this.groupBox4.Text = "Подключение";
-            // 
-            // groupBox5
-            // 
-            this.groupBox5.Controls.Add(this.textBox12);
-            this.groupBox5.Location = new System.Drawing.Point(38, 219);
-            this.groupBox5.Name = "groupBox5";
-            this.groupBox5.Size = new System.Drawing.Size(512, 90);
-            this.groupBox5.TabIndex = 9;
-            this.groupBox5.TabStop = false;
-            this.groupBox5.Text = "Директория с замерами";
-            // 
             // PS5000ABlockForm
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(9F, 20F);
@@ -1191,20 +1191,20 @@ namespace PS5000A
             this.tabUnit.PerformLayout();
             this.tabAbout.ResumeLayout(false);
             this.tabAbout.PerformLayout();
+            this.groupBox4.ResumeLayout(false);
+            this.groupBox4.PerformLayout();
             this.tabChannels.ResumeLayout(false);
             this.groupBox1.ResumeLayout(false);
             this.groupBox1.PerformLayout();
             this.tabGetData.ResumeLayout(false);
             this.tabGetData.PerformLayout();
+            this.groupBox5.ResumeLayout(false);
+            this.groupBox5.PerformLayout();
             this.groupBox3.ResumeLayout(false);
             this.groupBox2.ResumeLayout(false);
             this.groupBox2.PerformLayout();
             this.statusStrip1.ResumeLayout(false);
             this.statusStrip1.PerformLayout();
-            this.groupBox4.ResumeLayout(false);
-            this.groupBox4.PerformLayout();
-            this.groupBox5.ResumeLayout(false);
-            this.groupBox5.PerformLayout();
             this.ResumeLayout(false);
             this.PerformLayout();
 

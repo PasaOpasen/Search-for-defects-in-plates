@@ -1299,6 +1299,7 @@ public static class OtherMethods
     }
     private static void ReadData(double x0, double X, int xcount, double y0, double Y, Source[] mas)
     {
+        if (mas.Length == 0) return;
         SaveCount = xcount * xcount * wcount * mas.Length;
         Saved = 0;
         int[] saves = new int[mas.Length];
@@ -1319,9 +1320,7 @@ public static class OtherMethods
                     st = s.ToDoubleMas();
 
                     Functions.ur.OnlyAdd(
-                        new Tuple<double, double, double, Source>(
-                                                 st[0], st[1], st[2], mas[i]
-                            ),
+                        new Tuple<double, double, double, Source>(st[0], st[1], st[2], mas[i]),
                         new Tuple<Complex, Complex>(new Complex(st[3], st[4]), new Complex(st[5], st[6])));
 
                     saves[i]++;

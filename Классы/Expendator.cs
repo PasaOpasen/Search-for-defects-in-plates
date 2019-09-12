@@ -792,6 +792,14 @@ namespace МатКлассы
         /// <param name="all"></param>
         /// <returns></returns>
         public static double GetProcent(double exist, double all) => exist / all * 100.0;
+        /// <summary>
+        /// Вернуть округлённый процент
+        /// </summary>
+        /// <param name="exist"></param>
+        /// <param name="all"></param>
+        /// <param name="mantis"></param>
+        /// <returns></returns>
+        public static double GetProcent(double exist, double all, int mantis) => Math.Round(GetProcent(exist, all), mantis);
 
         public static CVectors ToCVector(this Complex[] m) => new CVectors(m);
 

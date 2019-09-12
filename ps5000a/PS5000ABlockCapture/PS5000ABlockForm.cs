@@ -107,7 +107,6 @@ namespace PS5000A
 
             this.FormClosing += (object o, FormClosingEventArgs aa) =>
               {
-                  if (opened) buttonOpen_Click(new object(), new EventArgs());
                   GetParams();
               };
 
@@ -362,6 +361,10 @@ namespace PS5000A
 
             await FurierOrShowForm(i => fdiff[i], i => folderbase[i]);
             SygnalOfEndCalc();
+
+            await Task.Run(()=> Thread.Sleep(300));
+            
+            this.Close();
         }
         #endregion
 
@@ -703,7 +706,7 @@ namespace PS5000A
             int dsd = listBox1.SelectedIndex;
             Switch_.OpenPort(dsd);
 
-            System.Threading.Thread.Sleep(500);
+            Thread.Sleep(500);
             textBoxUnitInfo.AppendText(Switch_.GetAccepted() + "\n");
 
             groupBox3.Show();
@@ -740,16 +743,16 @@ namespace PS5000A
         private void button1_Click(object sender, EventArgs e)
         {
             textBoxUnitInfo.AppendText(Switch_.GetAccepted() + "\n");
-            // System.Threading.Thread.Sleep(500);
+            // Thread.Sleep(500);
             Switch_.SendCmd(0, listBox2.SelectedIndex);
-            //System.Threading.Thread.Sleep(500);
+            //Thread.Sleep(500);
             textBoxUnitInfo.AppendText(Switch_.GetAccepted() + "\n");
         }
 
         private void button5_Click(object sender, EventArgs e)
         {
             textBoxUnitInfo.AppendText(Switch_.GetAccepted() + "\n");
-            //System.Threading.Thread.Sleep(500);
+            //Thread.Sleep(500);
             Switch_.SendCmd(1, listBox2.SelectedIndex);
             textBoxUnitInfo.AppendText(Switch_.GetAccepted() + "\n");
         }
@@ -797,7 +800,7 @@ namespace PS5000A
             textBoxUnitInfo.AppendText(Switch_.GetAccepted() + "\n");
             Switch_.SendCmd(1, id);
             textBoxUnitInfo.AppendText(Switch_.GetAccepted() + "\n");
-            System.Threading.Thread.Sleep(500);
+            Thread.Sleep(2000);
 
 
             all = usred;
@@ -860,13 +863,13 @@ namespace PS5000A
                 textBoxUnitInfo.AppendText(Switch_.GetAccepted() + "\n");
                 Switch_.SendCmd(0, i);
                 textBoxUnitInfo.AppendText(Switch_.GetAccepted() + "\n");
-                System.Threading.Thread.Sleep(1000);
+                Thread.Sleep(2000);
 
                 for (int j = 0; j < sourcesCount; j++)
                     if (i != j)
                     {
                         await GetDataMiniAsync(j, Path.Combine(ItFolder(i), ArraysNames[j]));
-                        toolStripStatusLabel2.Text = $"Выполнено {++it} из {mx} ({Expendator.GetProcent(it, mx)}%)";
+                        toolStripStatusLabel2.Text = $"Выполнено {++it} из {mx} ({Expendator.GetProcent(it, mx,2)}%)";
                     }
                 toolStripStatusLabel2.Text = "";
 
