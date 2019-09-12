@@ -56,8 +56,25 @@ namespace PS5000A
             this.label14 = new System.Windows.Forms.Label();
             this.textBox9 = new System.Windows.Forms.TextBox();
             this.label13 = new System.Windows.Forms.Label();
+            this.tabAbout = new System.Windows.Forms.TabPage();
+            this.label19 = new System.Windows.Forms.Label();
+            this.listBox2 = new System.Windows.Forms.ListBox();
+            this.listBox1 = new System.Windows.Forms.ListBox();
+            this.button7 = new System.Windows.Forms.Button();
+            this.button6 = new System.Windows.Forms.Button();
+            this.label18 = new System.Windows.Forms.Label();
+            this.button5 = new System.Windows.Forms.Button();
+            this.button1 = new System.Windows.Forms.Button();
+            this.textBoxUnitInfo = new System.Windows.Forms.TextBox();
             this.tabChannels = new System.Windows.Forms.TabPage();
             this.groupBox1 = new System.Windows.Forms.GroupBox();
+            this.label32 = new System.Windows.Forms.Label();
+            this.label29 = new System.Windows.Forms.Label();
+            this.label26 = new System.Windows.Forms.Label();
+            this.label22 = new System.Windows.Forms.Label();
+            this.label12 = new System.Windows.Forms.Label();
+            this.label9 = new System.Windows.Forms.Label();
+            this.label6 = new System.Windows.Forms.Label();
             this.label41 = new System.Windows.Forms.Label();
             this.label40 = new System.Windows.Forms.Label();
             this.label39 = new System.Windows.Forms.Label();
@@ -111,37 +128,20 @@ namespace PS5000A
             this.button2 = new System.Windows.Forms.Button();
             this.textBox12 = new System.Windows.Forms.TextBox();
             this.label17 = new System.Windows.Forms.Label();
-            this.tabAbout = new System.Windows.Forms.TabPage();
-            this.label19 = new System.Windows.Forms.Label();
-            this.listBox2 = new System.Windows.Forms.ListBox();
-            this.listBox1 = new System.Windows.Forms.ListBox();
-            this.button7 = new System.Windows.Forms.Button();
-            this.button6 = new System.Windows.Forms.Button();
-            this.label18 = new System.Windows.Forms.Label();
-            this.button5 = new System.Windows.Forms.Button();
-            this.button1 = new System.Windows.Forms.Button();
-            this.textBoxUnitInfo = new System.Windows.Forms.TextBox();
             this.statusStrip1 = new System.Windows.Forms.StatusStrip();
             this.toolStripStatusLabel1 = new System.Windows.Forms.ToolStripStatusLabel();
             this.toolStripProgressBar1 = new System.Windows.Forms.ToolStripProgressBar();
             this.toolStripStatusLabel2 = new System.Windows.Forms.ToolStripStatusLabel();
             this.timer1 = new System.Windows.Forms.Timer(this.components);
             this.folderBrowserDialog1 = new System.Windows.Forms.FolderBrowserDialog();
-            this.label6 = new System.Windows.Forms.Label();
-            this.label9 = new System.Windows.Forms.Label();
-            this.label12 = new System.Windows.Forms.Label();
-            this.label22 = new System.Windows.Forms.Label();
-            this.label26 = new System.Windows.Forms.Label();
-            this.label29 = new System.Windows.Forms.Label();
-            this.label32 = new System.Windows.Forms.Label();
             this.tabControl.SuspendLayout();
             this.tabUnit.SuspendLayout();
+            this.tabAbout.SuspendLayout();
             this.tabChannels.SuspendLayout();
             this.groupBox1.SuspendLayout();
             this.tabGetData.SuspendLayout();
             this.groupBox3.SuspendLayout();
             this.groupBox2.SuspendLayout();
-            this.tabAbout.SuspendLayout();
             this.statusStrip1.SuspendLayout();
             this.SuspendLayout();
             // 
@@ -317,6 +317,114 @@ namespace PS5000A
             this.label13.TabIndex = 3;
             this.label13.Text = "timebase";
             // 
+            // tabAbout
+            // 
+            this.tabAbout.Controls.Add(this.label19);
+            this.tabAbout.Controls.Add(this.listBox2);
+            this.tabAbout.Controls.Add(this.listBox1);
+            this.tabAbout.Controls.Add(this.button7);
+            this.tabAbout.Controls.Add(this.button6);
+            this.tabAbout.Controls.Add(this.label18);
+            this.tabAbout.Controls.Add(this.button5);
+            this.tabAbout.Controls.Add(this.button1);
+            this.tabAbout.Controls.Add(this.textBoxUnitInfo);
+            this.tabAbout.Location = new System.Drawing.Point(4, 29);
+            this.tabAbout.Margin = new System.Windows.Forms.Padding(4, 5, 4, 5);
+            this.tabAbout.Name = "tabAbout";
+            this.tabAbout.Padding = new System.Windows.Forms.Padding(4, 5, 4, 5);
+            this.tabAbout.Size = new System.Drawing.Size(759, 339);
+            this.tabAbout.TabIndex = 2;
+            this.tabAbout.Text = "Порты";
+            this.tabAbout.UseVisualStyleBackColor = true;
+            // 
+            // label19
+            // 
+            this.label19.AutoSize = true;
+            this.label19.BackColor = System.Drawing.Color.FromArgb(((int)(((byte)(192)))), ((int)(((byte)(255)))), ((int)(((byte)(192)))));
+            this.label19.Location = new System.Drawing.Point(212, 169);
+            this.label19.Name = "label19";
+            this.label19.Size = new System.Drawing.Size(45, 20);
+            this.label19.TabIndex = 14;
+            this.label19.Text = "COM";
+            // 
+            // listBox2
+            // 
+            this.listBox2.FormattingEnabled = true;
+            this.listBox2.ItemHeight = 20;
+            this.listBox2.Location = new System.Drawing.Point(202, 45);
+            this.listBox2.Name = "listBox2";
+            this.listBox2.Size = new System.Drawing.Size(76, 84);
+            this.listBox2.TabIndex = 13;
+            // 
+            // listBox1
+            // 
+            this.listBox1.FormattingEnabled = true;
+            this.listBox1.ItemHeight = 20;
+            this.listBox1.Location = new System.Drawing.Point(197, 197);
+            this.listBox1.Name = "listBox1";
+            this.listBox1.Size = new System.Drawing.Size(76, 84);
+            this.listBox1.TabIndex = 12;
+            // 
+            // button7
+            // 
+            this.button7.Location = new System.Drawing.Point(12, 228);
+            this.button7.Name = "button7";
+            this.button7.Size = new System.Drawing.Size(128, 53);
+            this.button7.TabIndex = 9;
+            this.button7.Text = "Получить имена";
+            this.button7.UseVisualStyleBackColor = true;
+            this.button7.Click += new System.EventHandler(this.button7_Click);
+            // 
+            // button6
+            // 
+            this.button6.Location = new System.Drawing.Point(12, 169);
+            this.button6.Name = "button6";
+            this.button6.Size = new System.Drawing.Size(128, 45);
+            this.button6.TabIndex = 8;
+            this.button6.Text = "Подключится";
+            this.button6.UseVisualStyleBackColor = true;
+            this.button6.Click += new System.EventHandler(this.button6_Click);
+            // 
+            // label18
+            // 
+            this.label18.AutoSize = true;
+            this.label18.BackColor = System.Drawing.Color.FromArgb(((int)(((byte)(255)))), ((int)(((byte)(192)))), ((int)(((byte)(128)))));
+            this.label18.Location = new System.Drawing.Point(219, 17);
+            this.label18.Name = "label18";
+            this.label18.Size = new System.Drawing.Size(38, 20);
+            this.label18.TabIndex = 7;
+            this.label18.Text = "Port";
+            this.label18.Click += new System.EventHandler(this.label18_Click);
+            // 
+            // button5
+            // 
+            this.button5.Location = new System.Drawing.Point(12, 78);
+            this.button5.Name = "button5";
+            this.button5.Size = new System.Drawing.Size(128, 51);
+            this.button5.TabIndex = 6;
+            this.button5.Text = "подключить вход";
+            this.button5.UseVisualStyleBackColor = true;
+            this.button5.Click += new System.EventHandler(this.button5_Click);
+            // 
+            // button1
+            // 
+            this.button1.Location = new System.Drawing.Point(12, 17);
+            this.button1.Name = "button1";
+            this.button1.Size = new System.Drawing.Size(128, 55);
+            this.button1.TabIndex = 5;
+            this.button1.Text = "подключить выход";
+            this.button1.UseVisualStyleBackColor = true;
+            this.button1.Click += new System.EventHandler(this.button1_Click);
+            // 
+            // textBoxUnitInfo
+            // 
+            this.textBoxUnitInfo.Location = new System.Drawing.Point(344, 0);
+            this.textBoxUnitInfo.Margin = new System.Windows.Forms.Padding(4, 5, 4, 5);
+            this.textBoxUnitInfo.Multiline = true;
+            this.textBoxUnitInfo.Name = "textBoxUnitInfo";
+            this.textBoxUnitInfo.Size = new System.Drawing.Size(411, 316);
+            this.textBoxUnitInfo.TabIndex = 3;
+            // 
             // tabChannels
             // 
             this.tabChannels.Controls.Add(this.groupBox1);
@@ -386,6 +494,76 @@ namespace PS5000A
             this.groupBox1.TabIndex = 24;
             this.groupBox1.TabStop = false;
             this.groupBox1.Text = "Центры источников";
+            // 
+            // label32
+            // 
+            this.label32.AutoSize = true;
+            this.label32.Location = new System.Drawing.Point(471, 265);
+            this.label32.Margin = new System.Windows.Forms.Padding(4, 0, 4, 0);
+            this.label32.Name = "label32";
+            this.label32.Size = new System.Drawing.Size(14, 20);
+            this.label32.TabIndex = 57;
+            this.label32.Text = "(";
+            // 
+            // label29
+            // 
+            this.label29.AutoSize = true;
+            this.label29.Location = new System.Drawing.Point(471, 196);
+            this.label29.Margin = new System.Windows.Forms.Padding(4, 0, 4, 0);
+            this.label29.Name = "label29";
+            this.label29.Size = new System.Drawing.Size(14, 20);
+            this.label29.TabIndex = 56;
+            this.label29.Text = "(";
+            // 
+            // label26
+            // 
+            this.label26.AutoSize = true;
+            this.label26.Location = new System.Drawing.Point(471, 125);
+            this.label26.Margin = new System.Windows.Forms.Padding(4, 0, 4, 0);
+            this.label26.Name = "label26";
+            this.label26.Size = new System.Drawing.Size(14, 20);
+            this.label26.TabIndex = 55;
+            this.label26.Text = "(";
+            // 
+            // label22
+            // 
+            this.label22.AutoSize = true;
+            this.label22.Location = new System.Drawing.Point(471, 51);
+            this.label22.Margin = new System.Windows.Forms.Padding(4, 0, 4, 0);
+            this.label22.Name = "label22";
+            this.label22.Size = new System.Drawing.Size(14, 20);
+            this.label22.TabIndex = 54;
+            this.label22.Text = "(";
+            // 
+            // label12
+            // 
+            this.label12.AutoSize = true;
+            this.label12.Location = new System.Drawing.Point(83, 267);
+            this.label12.Margin = new System.Windows.Forms.Padding(4, 0, 4, 0);
+            this.label12.Name = "label12";
+            this.label12.Size = new System.Drawing.Size(14, 20);
+            this.label12.TabIndex = 53;
+            this.label12.Text = "(";
+            // 
+            // label9
+            // 
+            this.label9.AutoSize = true;
+            this.label9.Location = new System.Drawing.Point(83, 196);
+            this.label9.Margin = new System.Windows.Forms.Padding(4, 0, 4, 0);
+            this.label9.Name = "label9";
+            this.label9.Size = new System.Drawing.Size(14, 20);
+            this.label9.TabIndex = 52;
+            this.label9.Text = "(";
+            // 
+            // label6
+            // 
+            this.label6.AutoSize = true;
+            this.label6.Location = new System.Drawing.Point(82, 123);
+            this.label6.Margin = new System.Windows.Forms.Padding(4, 0, 4, 0);
+            this.label6.Name = "label6";
+            this.label6.Size = new System.Drawing.Size(14, 20);
+            this.label6.TabIndex = 51;
+            this.label6.Text = "(";
             // 
             // label41
             // 
@@ -945,114 +1123,6 @@ namespace PS5000A
             this.label17.TabIndex = 1;
             this.label17.Text = "Директория с замерами:";
             // 
-            // tabAbout
-            // 
-            this.tabAbout.Controls.Add(this.label19);
-            this.tabAbout.Controls.Add(this.listBox2);
-            this.tabAbout.Controls.Add(this.listBox1);
-            this.tabAbout.Controls.Add(this.button7);
-            this.tabAbout.Controls.Add(this.button6);
-            this.tabAbout.Controls.Add(this.label18);
-            this.tabAbout.Controls.Add(this.button5);
-            this.tabAbout.Controls.Add(this.button1);
-            this.tabAbout.Controls.Add(this.textBoxUnitInfo);
-            this.tabAbout.Location = new System.Drawing.Point(4, 29);
-            this.tabAbout.Margin = new System.Windows.Forms.Padding(4, 5, 4, 5);
-            this.tabAbout.Name = "tabAbout";
-            this.tabAbout.Padding = new System.Windows.Forms.Padding(4, 5, 4, 5);
-            this.tabAbout.Size = new System.Drawing.Size(759, 339);
-            this.tabAbout.TabIndex = 2;
-            this.tabAbout.Text = "Порты";
-            this.tabAbout.UseVisualStyleBackColor = true;
-            // 
-            // label19
-            // 
-            this.label19.AutoSize = true;
-            this.label19.BackColor = System.Drawing.Color.FromArgb(((int)(((byte)(192)))), ((int)(((byte)(255)))), ((int)(((byte)(192)))));
-            this.label19.Location = new System.Drawing.Point(212, 169);
-            this.label19.Name = "label19";
-            this.label19.Size = new System.Drawing.Size(45, 20);
-            this.label19.TabIndex = 14;
-            this.label19.Text = "COM";
-            // 
-            // listBox2
-            // 
-            this.listBox2.FormattingEnabled = true;
-            this.listBox2.ItemHeight = 20;
-            this.listBox2.Location = new System.Drawing.Point(202, 45);
-            this.listBox2.Name = "listBox2";
-            this.listBox2.Size = new System.Drawing.Size(76, 84);
-            this.listBox2.TabIndex = 13;
-            // 
-            // listBox1
-            // 
-            this.listBox1.FormattingEnabled = true;
-            this.listBox1.ItemHeight = 20;
-            this.listBox1.Location = new System.Drawing.Point(197, 197);
-            this.listBox1.Name = "listBox1";
-            this.listBox1.Size = new System.Drawing.Size(76, 84);
-            this.listBox1.TabIndex = 12;
-            // 
-            // button7
-            // 
-            this.button7.Location = new System.Drawing.Point(12, 228);
-            this.button7.Name = "button7";
-            this.button7.Size = new System.Drawing.Size(128, 53);
-            this.button7.TabIndex = 9;
-            this.button7.Text = "Получить имена";
-            this.button7.UseVisualStyleBackColor = true;
-            this.button7.Click += new System.EventHandler(this.button7_Click);
-            // 
-            // button6
-            // 
-            this.button6.Location = new System.Drawing.Point(12, 169);
-            this.button6.Name = "button6";
-            this.button6.Size = new System.Drawing.Size(128, 45);
-            this.button6.TabIndex = 8;
-            this.button6.Text = "Подключится";
-            this.button6.UseVisualStyleBackColor = true;
-            this.button6.Click += new System.EventHandler(this.button6_Click);
-            // 
-            // label18
-            // 
-            this.label18.AutoSize = true;
-            this.label18.BackColor = System.Drawing.Color.FromArgb(((int)(((byte)(255)))), ((int)(((byte)(192)))), ((int)(((byte)(128)))));
-            this.label18.Location = new System.Drawing.Point(219, 17);
-            this.label18.Name = "label18";
-            this.label18.Size = new System.Drawing.Size(38, 20);
-            this.label18.TabIndex = 7;
-            this.label18.Text = "Port";
-            this.label18.Click += new System.EventHandler(this.label18_Click);
-            // 
-            // button5
-            // 
-            this.button5.Location = new System.Drawing.Point(12, 78);
-            this.button5.Name = "button5";
-            this.button5.Size = new System.Drawing.Size(128, 51);
-            this.button5.TabIndex = 6;
-            this.button5.Text = "подключить вход";
-            this.button5.UseVisualStyleBackColor = true;
-            this.button5.Click += new System.EventHandler(this.button5_Click);
-            // 
-            // button1
-            // 
-            this.button1.Location = new System.Drawing.Point(12, 17);
-            this.button1.Name = "button1";
-            this.button1.Size = new System.Drawing.Size(128, 55);
-            this.button1.TabIndex = 5;
-            this.button1.Text = "подключить выход";
-            this.button1.UseVisualStyleBackColor = true;
-            this.button1.Click += new System.EventHandler(this.button1_Click);
-            // 
-            // textBoxUnitInfo
-            // 
-            this.textBoxUnitInfo.Location = new System.Drawing.Point(344, 0);
-            this.textBoxUnitInfo.Margin = new System.Windows.Forms.Padding(4, 5, 4, 5);
-            this.textBoxUnitInfo.Multiline = true;
-            this.textBoxUnitInfo.Name = "textBoxUnitInfo";
-            this.textBoxUnitInfo.Size = new System.Drawing.Size(411, 316);
-            this.textBoxUnitInfo.TabIndex = 3;
-            // 
             // statusStrip1
             // 
             this.statusStrip1.BackColor = System.Drawing.Color.FromArgb(((int)(((byte)(128)))), ((int)(((byte)(255)))), ((int)(((byte)(128)))));
@@ -1085,76 +1155,6 @@ namespace PS5000A
             this.toolStripStatusLabel2.Size = new System.Drawing.Size(118, 17);
             this.toolStripStatusLabel2.Text = "toolStripStatusLabel2";
             // 
-            // label6
-            // 
-            this.label6.AutoSize = true;
-            this.label6.Location = new System.Drawing.Point(82, 123);
-            this.label6.Margin = new System.Windows.Forms.Padding(4, 0, 4, 0);
-            this.label6.Name = "label6";
-            this.label6.Size = new System.Drawing.Size(14, 20);
-            this.label6.TabIndex = 51;
-            this.label6.Text = "(";
-            // 
-            // label9
-            // 
-            this.label9.AutoSize = true;
-            this.label9.Location = new System.Drawing.Point(83, 196);
-            this.label9.Margin = new System.Windows.Forms.Padding(4, 0, 4, 0);
-            this.label9.Name = "label9";
-            this.label9.Size = new System.Drawing.Size(14, 20);
-            this.label9.TabIndex = 52;
-            this.label9.Text = "(";
-            // 
-            // label12
-            // 
-            this.label12.AutoSize = true;
-            this.label12.Location = new System.Drawing.Point(83, 267);
-            this.label12.Margin = new System.Windows.Forms.Padding(4, 0, 4, 0);
-            this.label12.Name = "label12";
-            this.label12.Size = new System.Drawing.Size(14, 20);
-            this.label12.TabIndex = 53;
-            this.label12.Text = "(";
-            // 
-            // label22
-            // 
-            this.label22.AutoSize = true;
-            this.label22.Location = new System.Drawing.Point(471, 51);
-            this.label22.Margin = new System.Windows.Forms.Padding(4, 0, 4, 0);
-            this.label22.Name = "label22";
-            this.label22.Size = new System.Drawing.Size(14, 20);
-            this.label22.TabIndex = 54;
-            this.label22.Text = "(";
-            // 
-            // label26
-            // 
-            this.label26.AutoSize = true;
-            this.label26.Location = new System.Drawing.Point(471, 125);
-            this.label26.Margin = new System.Windows.Forms.Padding(4, 0, 4, 0);
-            this.label26.Name = "label26";
-            this.label26.Size = new System.Drawing.Size(14, 20);
-            this.label26.TabIndex = 55;
-            this.label26.Text = "(";
-            // 
-            // label29
-            // 
-            this.label29.AutoSize = true;
-            this.label29.Location = new System.Drawing.Point(471, 196);
-            this.label29.Margin = new System.Windows.Forms.Padding(4, 0, 4, 0);
-            this.label29.Name = "label29";
-            this.label29.Size = new System.Drawing.Size(14, 20);
-            this.label29.TabIndex = 56;
-            this.label29.Text = "(";
-            // 
-            // label32
-            // 
-            this.label32.AutoSize = true;
-            this.label32.Location = new System.Drawing.Point(471, 265);
-            this.label32.Margin = new System.Windows.Forms.Padding(4, 0, 4, 0);
-            this.label32.Name = "label32";
-            this.label32.Size = new System.Drawing.Size(14, 20);
-            this.label32.TabIndex = 57;
-            this.label32.Text = "(";
-            // 
             // PS5000ABlockForm
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(9F, 20F);
@@ -1171,6 +1171,8 @@ namespace PS5000A
             this.tabControl.ResumeLayout(false);
             this.tabUnit.ResumeLayout(false);
             this.tabUnit.PerformLayout();
+            this.tabAbout.ResumeLayout(false);
+            this.tabAbout.PerformLayout();
             this.tabChannels.ResumeLayout(false);
             this.groupBox1.ResumeLayout(false);
             this.groupBox1.PerformLayout();
@@ -1179,8 +1181,6 @@ namespace PS5000A
             this.groupBox3.ResumeLayout(false);
             this.groupBox2.ResumeLayout(false);
             this.groupBox2.PerformLayout();
-            this.tabAbout.ResumeLayout(false);
-            this.tabAbout.PerformLayout();
             this.statusStrip1.ResumeLayout(false);
             this.statusStrip1.PerformLayout();
             this.ResumeLayout(false);
