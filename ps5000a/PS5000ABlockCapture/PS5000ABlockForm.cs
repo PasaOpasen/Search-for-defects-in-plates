@@ -115,6 +115,8 @@ namespace PS5000A
             {
                 FurierTransformer.Dispose();                           
             });
+
+            Hides();
         }
 
         #region Димас писал
@@ -337,6 +339,15 @@ namespace PS5000A
             return true;
         }
 
+        private void Hides()
+        {
+            groupBox3.Hide();
+            groupBox4.Hide();
+            button6.Hide();
+            listBox1.Hide();
+            label19.Hide();
+        }
+
         private async void button4_Click(object sender, EventArgs e)
         {
             InitParams();
@@ -433,8 +444,6 @@ namespace PS5000A
         }
         private void buttonOpen_Click(object sender, EventArgs e)
         {
-            //  n = Convert.ToUInt32(textBox10.Text);
-            //    time_scale;
             InitParams();
 
             StringBuilder UnitInfo = new StringBuilder(80);
@@ -498,6 +507,9 @@ namespace PS5000A
                 }
             }
             opened = true;
+
+            buttonOpen.Text = "Запущено";
+            groupBox4.Show();
         }
 
         void start(uint sampleCountAfter = 50000, uint sampleCountBefore = 50000, int write_every = 100)
@@ -693,6 +705,10 @@ namespace PS5000A
 
             System.Threading.Thread.Sleep(500);
             textBoxUnitInfo.AppendText(Switch_.GetAccepted() + "\n");
+
+            groupBox3.Show();
+            checkBox2.Checked = false;
+            checkBox3.Checked = false;
         }
 
         string[] names_;
@@ -705,6 +721,10 @@ namespace PS5000A
 
             if (listBox1.Items.Count > 0)
                 listBox1.SelectedIndex = listBox1.Items.Count - 1;
+
+            listBox1.Show();
+            label19.Show();
+            button6.Show();
         }
 
         private void label19_Click(object sender, EventArgs e)
@@ -858,9 +878,7 @@ namespace PS5000A
         private async void buttonStart_Click(object sender, EventArgs e)
         {
             InitParams();
-            if (!opened)
-                buttonOpen_Click(sender, e);
-
+            CreateFurierTransform(w0, w1, wcount);
             if (!SetGlobalBase())
                 return;
 

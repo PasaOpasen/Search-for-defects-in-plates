@@ -233,12 +233,15 @@
             // 
             // button5
             // 
-            this.button5.Location = new System.Drawing.Point(194, 28);
+            this.button5.BackColor = System.Drawing.Color.FromArgb(((int)(((byte)(255)))), ((int)(((byte)(255)))), ((int)(((byte)(192)))));
+            this.button5.Dock = System.Windows.Forms.DockStyle.Right;
+            this.button5.FlatStyle = System.Windows.Forms.FlatStyle.Flat;
+            this.button5.Location = new System.Drawing.Point(197, 22);
             this.button5.Name = "button5";
-            this.button5.Size = new System.Drawing.Size(84, 80);
+            this.button5.Size = new System.Drawing.Size(84, 97);
             this.button5.TabIndex = 12;
             this.button5.Text = "Помощь";
-            this.button5.UseVisualStyleBackColor = true;
+            this.button5.UseVisualStyleBackColor = false;
             this.button5.Click += new System.EventHandler(this.button5_Click);
             // 
             // label8
@@ -431,10 +434,12 @@
             // 
             // button6
             // 
-            this.button6.BackColor = System.Drawing.Color.LightGray;
-            this.button6.Location = new System.Drawing.Point(6, 79);
+            this.button6.BackColor = System.Drawing.Color.FromArgb(((int)(((byte)(255)))), ((int)(((byte)(192)))), ((int)(((byte)(128)))));
+            this.button6.Dock = System.Windows.Forms.DockStyle.Bottom;
+            this.button6.FlatStyle = System.Windows.Forms.FlatStyle.Popup;
+            this.button6.Location = new System.Drawing.Point(3, 77);
             this.button6.Name = "button6";
-            this.button6.Size = new System.Drawing.Size(126, 34);
+            this.button6.Size = new System.Drawing.Size(132, 39);
             this.button6.TabIndex = 4;
             this.button6.Text = "Формулы";
             this.button6.UseVisualStyleBackColor = false;
