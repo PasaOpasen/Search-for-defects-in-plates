@@ -79,7 +79,7 @@ namespace МатКлассы
             for (int i = 2; i < c.Length; i++) max = Math.Max(max, c[i]);
             return max;
         }
-    
+
         /// <summary>
         /// Максимальное из кучи
         /// </summary>
@@ -245,13 +245,20 @@ namespace МатКлассы
         /// <typeparam name="T"></typeparam>
         /// <param name="c"></param>
         /// <returns></returns>
-        public static double[] ToIntMas<T>(this T[] c)
+        public static int[] ToIntMas<T>(this T[] c)
         {
-            double[] res = new double[c.Length];
+            int[] res = new int[c.Length];
             for (int i = 0; i < c.Length; i++)
                 res[i] = Convert.ToInt32(c[i]);
             return res;
         }
+
+        /// <summary>
+        /// Перевести строку с числами в набор чисел
+        /// </summary>
+        /// <param name="s"></param>
+        /// <returns></returns>
+        public static int[] ToIntMas(this string s) => s.Split(new char[] { ' ' }, StringSplitOptions.RemoveEmptyEntries).ToIntMas();
 
         /// <summary>
         /// Переводит произвольный массив в массив строк через конвертер
@@ -652,7 +659,7 @@ namespace МатКлассы
         /// <param name="i"></param>
         /// <param name="j"></param>
         /// <returns></returns>
-        public static T[] Slice<T>(this T[] mas,int i, int j) where T : Idup<T>
+        public static T[] Slice<T>(this T[] mas, int i, int j) where T : Idup<T>
         {
             T[] res = new T[j - 1 + 1];
             for (int s = 0; s < res.Length; s++)
@@ -676,7 +683,7 @@ namespace МатКлассы
             string[] st = s.Split(new char[] { ' ' }, StringSplitOptions.RemoveEmptyEntries);
             double[] res = new double[st.Length];
             for (int i = 0; i < res.Length; i++)
-                res[i] =Convert.ToDouble( st[i]);
+                res[i] = Convert.ToDouble(st[i]);
             st = null;
             return res;
         }
@@ -716,7 +723,7 @@ namespace МатКлассы
         /// <param name="mas"></param>
         /// <param name="func"></param>
         /// <returns></returns>
-        public static T1[] Map<T1,T2>(this T2[] mas,Func<T2,T1> func)
+        public static T1[] Map<T1, T2>(this T2[] mas, Func<T2, T1> func)
         {
             T1[] res = new T1[mas.Length];
             for (int i = 0; i < res.Length; i++)
@@ -730,9 +737,9 @@ namespace МатКлассы
         /// <param name="w"></param>
         /// <param name="el"></param>
         /// <returns></returns>
-        public static Tuple<int,int> BinarySearch(double[] w,double el)
+        public static Tuple<int, int> BinarySearch(double[] w, double el)
         {
-            int i = 0,j=w.Length-1,c;
+            int i = 0, j = w.Length - 1, c;
             if (el < w[0]) return new Tuple<int, int>(i, i);
             if (el > w[j]) return new Tuple<int, int>(j, j);
 
@@ -761,9 +768,9 @@ namespace МатКлассы
                 for (int i = 0; i < k; i++)
                 {
                     int s = 0;
-                    while (i + (k) * (s+1) < mas.Length)
+                    while (i + (k) * (s + 1) < mas.Length)
                     {
-                        if (!mas[i + k * s].Equals(mas[i + (k ) * (s+1)]))
+                        if (!mas[i + k * s].Equals(mas[i + (k) * (s + 1)]))
                         {
                             f = false;
                             goto z1;
@@ -793,7 +800,7 @@ namespace МатКлассы
         /// </summary>
         /// <param name="filename"></param>
         /// <param name="word"></param>
-        public static void WriteStringInFile(string filename,string word)
+        public static void WriteStringInFile(string filename, string word)
         {
             using (StreamWriter f = new StreamWriter(filename))
                 f.WriteLine(word);
@@ -803,10 +810,11 @@ namespace МатКлассы
         /// </summary>
         /// <param name="filename"></param>
         /// <param name="word"></param>
-        public static void WriteInFile(string filename, string[] word)
+        /// <param name="withoutfromend">Определяет, сколько строк с конца добавлять не нужно</param>
+        public static void WriteInFile(string filename, string[] word, int withoutfromend = 0)
         {
             using (StreamWriter f = new StreamWriter(filename))
-                for (int i = 0; i < word.Length; i++)
+                for (int i = 0; i < word.Length - withoutfromend; i++)
                     f.WriteLine(word[i]);
         }
 
@@ -814,8 +822,9 @@ namespace МатКлассы
         /// Прочесть все строки файла
         /// </summary>
         /// <param name="filename"></param>
+        /// <param name="withoutEmpty">Определяет, нужно ли считывать пустые строки</param>
         /// <returns></returns>
-        public static string[] GetStringArrayFromFile(string filename,bool withoutEmpty=false)
+        public static string[] GetStringArrayFromFile(string filename, bool withoutEmpty = false)
         {
             string[] st;
             using (StreamReader f = new StreamReader(filename))
@@ -838,7 +847,7 @@ namespace МатКлассы
         /// <param name="filename"></param>
         /// <param name="directory"></param>
         /// <returns></returns>
-        public static bool IfDirectoryExists(string filename,out string directory)
+        public static bool IfDirectoryExists(string filename, out string directory)
         {
             directory = GetWordFromFile(filename);
             return Directory.Exists(directory);
@@ -850,8 +859,8 @@ namespace МатКлассы
         /// <param name="from"></param>
         /// <param name="to"></param>
         /// <param name="filenames"></param>
-        public static void CopyFiles(string from,string to,params string[] filenames)
-        { 
+        public static void CopyFiles(string from, string to, params string[] filenames)
+        {
             for (int i = 0; i < filenames.Length; i++)
                 File.Copy(Path.Combine(from, filenames[i]), Path.Combine(to, filenames[i]), true);
         }
@@ -862,11 +871,82 @@ namespace МатКлассы
         /// <param name="name"></param>
         /// <param name="projectname"></param>
         /// <returns></returns>
-        public static string GetResource(string name,string projectname)
+        public static string GetResource(string name, string projectname)
         {
             string s = Environment.CurrentDirectory;
             s = s.Substring(0, s.IndexOf(projectname) + projectname.Length);
             return Path.Combine(s, "Resources", name);
+        }
+
+        /// <summary>
+        /// Переводит массив строк в одну строку
+        /// </summary>
+        /// <param name="array"></param>
+        /// <returns></returns>
+        public static string StringArrayToString(string[] array)
+        {
+            string res = "";
+            for (int i = 0; i < array.Length - 1; i++)
+                res += $"{array[i]}{Environment.NewLine}";
+            return res + array[array.Length - 1];
+        }
+
+        /// <summary>
+        /// Записать массив чисел в строку
+        /// </summary>
+        /// <param name="array"></param>
+        /// <returns></returns>
+        public static string ToStringFromExp(this int[] array)
+        {
+            string s = array[0].ToString();
+            for (int i = 1; i < array.Length; i++)
+                s += $" {array[i]}";
+            return s;
+        }
+
+        /// <summary>
+        /// Покомпонентный массив максимумов
+        /// </summary>
+        /// <param name="ar1"></param>
+        /// <param name="ar2"></param>
+        /// <returns></returns>
+        public static int[] Max(int[] ar1, int[] ar2)
+        {
+            int[] res = new int[Math.Max(ar1.Length, ar2.Length)];
+
+            if (ar1.Length == ar2.Length)
+                for (int i = 0; i < res.Length; i++)
+                    res[i] = Math.Max(ar1[i], ar2[i]);
+            else if (ar1.Length > ar2.Length)
+            {
+                for (int i = 0; i < ar2.Length; i++)
+                    res[i] = Math.Max(ar1[i], ar2[i]);
+                for (int i = ar2.Length; i < ar1.Length; i++)
+                    res[i] = ar1[i];
+            }
+            else
+            {
+                for (int i = 0; i < ar1.Length; i++)
+                    res[i] = Math.Max(ar1[i], ar2[i]);
+                for (int i = ar1.Length; i < ar2.Length; i++)
+                    res[i] = ar2[i];
+            }
+
+            return res;
+        }
+
+        /// <summary>
+        /// Повторить число count раз
+        /// </summary>
+        /// <param name="number"></param>
+        /// <param name="count"></param>
+        /// <returns></returns>
+        public static int[] Repeat(int number, int count)
+        {
+            int[] m = new int[count];
+            for (int i = 0; i < count; i++)
+                m[i] = number;
+            return m;
         }
     }
 
