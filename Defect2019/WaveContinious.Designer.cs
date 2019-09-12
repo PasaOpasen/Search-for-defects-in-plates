@@ -78,6 +78,7 @@
             this.толькоПросуммироватьToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.label9 = new System.Windows.Forms.Label();
             this.checkBox4 = new System.Windows.Forms.CheckBox();
+            this.openFileDialog1 = new System.Windows.Forms.OpenFileDialog();
             this.groupBox1.SuspendLayout();
             ((System.ComponentModel.ISupportInitialize)(this.numericUpDown1)).BeginInit();
             this.groupBox2.SuspendLayout();
@@ -590,6 +591,10 @@
             this.checkBox4.Text = "Производить замеры";
             this.checkBox4.UseVisualStyleBackColor = true;
             // 
+            // openFileDialog1
+            // 
+            this.openFileDialog1.FileName = "openFileDialog1";
+            // 
             // WaveContinious
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(9F, 19F);
@@ -684,5 +689,6 @@
         private System.Windows.Forms.ToolStripMenuItem даToolStripMenuItem;
         private System.Windows.Forms.ToolStripMenuItem нетToolStripMenuItem;
         private System.Windows.Forms.CheckBox checkBox4;
+        private System.Windows.Forms.OpenFileDialog openFileDialog1;
     }
 }

@@ -266,14 +266,14 @@ namespace Defect2019
                     pds.WriteLine($"3D ur, uz(title , {tit} ).pdf");
                     button2.Show();
 
-                    await Task.Run(() =>                   
+                    await Task.Run(() =>
                         МатКлассы.Waves.Circle.FieldToFile(filename, path,
                             (double x, double y) => Uxt(x, y, t, sources),
                             xmas, ymas, ref ur, ref uz,
                             token,
                             Filt,
                             tit,
-                            true)                                   
+                            true)
                     );
 
                     if (source.IsCancellationRequested)
@@ -572,7 +572,7 @@ namespace Defect2019
                 () =>
                 Parallel.Invoke(
                     () => OtherMethods.Saveuxw3(xmin, xmax, count, ymin, ymax, sourcesArray),
-                    () => { if (checkBox4.Checked) IlushaMethod(); }
+                    () => IlushaMethod()
                     )
                 );
             Timer2_Tick(new object(), new EventArgs());
@@ -599,8 +599,16 @@ namespace Defect2019
         /// </summary>
         public void IlushaMethod()
         {
-            var form = new PS5000A.PS5000ABlockForm(РабКонсоль.wbeg, РабКонсоль.wend, РабКонсоль.wcount);
-            form.ShowDialog();
+            if (checkBox4.Checked)
+            {
+                var form = new PS5000A.PS5000ABlockForm(РабКонсоль.wbeg, РабКонсоль.wend, РабКонсоль.wcount);
+                form.ShowDialog();
+            }
+            else
+            {
+                OtherMethods.CorrectWhereDataFile();
+            }
+            OtherMethods.CopyFilesR();
         }
 
         /// <summary>
@@ -810,7 +818,7 @@ namespace Defect2019
         }
 
         Func<double, double, double, Source[], Tuple<double, double>> Uxt = Functions.Uxt3;
-            
+
         private void WriteXY(string filename, string path, double[] xmas, double[] ymas)
         {
             string se = filename.Substring(0, filename.Length - 4);//-.txt
