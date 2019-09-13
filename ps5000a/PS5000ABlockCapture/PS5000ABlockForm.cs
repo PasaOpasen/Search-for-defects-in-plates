@@ -107,7 +107,6 @@ namespace PS5000A
 
             this.FormClosing += (object o, FormClosingEventArgs aa) =>
               {
-                  if (opened) buttonOpen_Click(new object(), new EventArgs());
                   GetParams();
               };
 
@@ -115,6 +114,8 @@ namespace PS5000A
             {
                 FurierTransformer.Dispose();                           
             });
+
+            Hides();
         }
 
         #region Димас писал
@@ -337,6 +338,15 @@ namespace PS5000A
             return true;
         }
 
+        private void Hides()
+        {
+            groupBox3.Hide();
+            groupBox4.Hide();
+            button6.Hide();
+            listBox1.Hide();
+            label19.Hide();
+        }
+
         private async void button4_Click(object sender, EventArgs e)
         {
             InitParams();
@@ -351,6 +361,10 @@ namespace PS5000A
 
             await FurierOrShowForm(i => fdiff[i], i => folderbase[i]);
             SygnalOfEndCalc();
+
+            await Task.Run(()=> Thread.Sleep(300));
+            
+            this.Close();
         }
         #endregion
 
@@ -433,8 +447,6 @@ namespace PS5000A
         }
         private void buttonOpen_Click(object sender, EventArgs e)
         {
-            //  n = Convert.ToUInt32(textBox10.Text);
-            //    time_scale;
             InitParams();
 
             StringBuilder UnitInfo = new StringBuilder(80);
@@ -498,6 +510,9 @@ namespace PS5000A
                 }
             }
             opened = true;
+
+            buttonOpen.Text = "Запущено";
+            groupBox4.Show();
         }
 
         void start(uint sampleCountAfter = 50000, uint sampleCountBefore = 50000, int write_every = 100)
@@ -691,8 +706,12 @@ namespace PS5000A
             int dsd = listBox1.SelectedIndex;
             Switch_.OpenPort(dsd);
 
-            System.Threading.Thread.Sleep(500);
+            Thread.Sleep(500);
             textBoxUnitInfo.AppendText(Switch_.GetAccepted() + "\n");
+
+            groupBox3.Show();
+            checkBox2.Checked = false;
+            checkBox3.Checked = false;
         }
 
         string[] names_;
@@ -705,6 +724,10 @@ namespace PS5000A
 
             if (listBox1.Items.Count > 0)
                 listBox1.SelectedIndex = listBox1.Items.Count - 1;
+
+            listBox1.Show();
+            label19.Show();
+            button6.Show();
         }
 
         private void label19_Click(object sender, EventArgs e)
@@ -720,16 +743,16 @@ namespace PS5000A
         private void button1_Click(object sender, EventArgs e)
         {
             textBoxUnitInfo.AppendText(Switch_.GetAccepted() + "\n");
-            // System.Threading.Thread.Sleep(500);
+            // Thread.Sleep(500);
             Switch_.SendCmd(0, listBox2.SelectedIndex);
-            //System.Threading.Thread.Sleep(500);
+            //Thread.Sleep(500);
             textBoxUnitInfo.AppendText(Switch_.GetAccepted() + "\n");
         }
 
         private void button5_Click(object sender, EventArgs e)
         {
             textBoxUnitInfo.AppendText(Switch_.GetAccepted() + "\n");
-            //System.Threading.Thread.Sleep(500);
+            //Thread.Sleep(500);
             Switch_.SendCmd(1, listBox2.SelectedIndex);
             textBoxUnitInfo.AppendText(Switch_.GetAccepted() + "\n");
         }
@@ -777,7 +800,7 @@ namespace PS5000A
             textBoxUnitInfo.AppendText(Switch_.GetAccepted() + "\n");
             Switch_.SendCmd(1, id);
             textBoxUnitInfo.AppendText(Switch_.GetAccepted() + "\n");
-            System.Threading.Thread.Sleep(500);
+            Thread.Sleep(2000);
 
 
             all = usred;
@@ -840,13 +863,13 @@ namespace PS5000A
                 textBoxUnitInfo.AppendText(Switch_.GetAccepted() + "\n");
                 Switch_.SendCmd(0, i);
                 textBoxUnitInfo.AppendText(Switch_.GetAccepted() + "\n");
-                System.Threading.Thread.Sleep(1000);
+                Thread.Sleep(2000);
 
                 for (int j = 0; j < sourcesCount; j++)
                     if (i != j)
                     {
                         await GetDataMiniAsync(j, Path.Combine(ItFolder(i), ArraysNames[j]));
-                        toolStripStatusLabel2.Text = $"Выполнено {++it} из {mx} ({Expendator.GetProcent(it, mx)}%)";
+                        toolStripStatusLabel2.Text = $"Выполнено {++it} из {mx} ({Expendator.GetProcent(it, mx,2)}%)";
                     }
                 toolStripStatusLabel2.Text = "";
 
@@ -858,9 +881,7 @@ namespace PS5000A
         private async void buttonStart_Click(object sender, EventArgs e)
         {
             InitParams();
-            if (!opened)
-                buttonOpen_Click(sender, e);
-
+            CreateFurierTransform(w0, w1, wcount);
             if (!SetGlobalBase())
                 return;
 

@@ -139,9 +139,7 @@ public static class Functions
         FiMemoized = (double t) => fs.Value(t);
 
         var cs = new Memoize<Tuple<Complex[], double>, CVectors>((Tuple<Complex[], double> t) => t.Item1 * FiMemoized(t.Item2));
-        Phif = (Complex[] fw, double t) => cs.Value(new Tuple<Complex[], double>(fw, t));
-
-        OtherMethods.CopyFilesR();
+        Phif = (Complex[] fw, double t) => cs.Value(new Tuple<Complex[], double>(fw, t));       
     }
     public static Memoize<Tuple<double, double, double, Source>, Tuple<Complex, Complex>> ur;
     public static Memoize<Tuple<double, double, Source>, Tuple<Complex, Complex>[]> cmas;
@@ -1301,6 +1299,7 @@ public static class OtherMethods
     }
     private static void ReadData(double x0, double X, int xcount, double y0, double Y, Source[] mas)
     {
+        if (mas.Length == 0) return;
         SaveCount = xcount * xcount * wcount * mas.Length;
         Saved = 0;
         int[] saves = new int[mas.Length];
@@ -1321,9 +1320,7 @@ public static class OtherMethods
                     st = s.ToDoubleMas();
 
                     Functions.ur.OnlyAdd(
-                        new Tuple<double, double, double, Source>(
-                                                 st[0], st[1], st[2], mas[i]
-                            ),
+                        new Tuple<double, double, double, Source>(st[0], st[1], st[2], mas[i]),
                         new Tuple<Complex, Complex>(new Complex(st[3], st[4]), new Complex(st[5], st[6])));
 
                     saves[i]++;
@@ -1478,4 +1475,40 @@ public static class OtherMethods
     public static string GetResource(string name) => Expendator.GetResource(name, "Defect2019");
 
     public static void PlaySound(string NameInResources) => new System.Media.SoundPlayer(OtherMethods.GetResource(NameInResources + ".wav")).Play();
+
+    /// <summary>
+    /// Определяет существование всех путей, указанных в файле
+    /// </summary>
+    /// <param name="filename"></param>
+    /// <returns></returns>
+    public static bool ExistAllDirectoriesFromFile(string filename)
+    {
+        var st = Expendator.GetStringArrayFromFile(filename, true);
+        foreach (var p in st)
+            if (!Directory.Exists(p))
+                return false;
+        return true;
+    }
+
+    public static void CorrectWhereDataFile()
+    {
+        if (!File.Exists("WhereData.txt") || !OtherMethods.ExistAllDirectoriesFromFile("WhereData.txt"))
+        {
+            MessageBox.Show("В рабочем каталоге отсутствует файл \"WhereData.txt\", либо среди указанных в нём директорий есть несуществующие. Требуется выбрать корректный файл", "Нет пути или папки",
+                MessageBoxButtons.OK, MessageBoxIcon.Error);
+            string s;
+            var openFileDialog1 = new OpenFileDialog();
+            while (true)
+            {
+                if (openFileDialog1.ShowDialog() == DialogResult.OK)
+                    s = openFileDialog1.FileName;
+                else continue;
+                if (OtherMethods.ExistAllDirectoriesFromFile(s))
+                {
+                    File.Copy(s, "WhereData.txt", true);
+                    break;
+                }
+            }
+        }
+    }
 }
