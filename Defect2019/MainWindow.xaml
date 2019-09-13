@@ -18,9 +18,9 @@
             </StackPanel.Background>
             <StackPanel HorizontalAlignment="Left" Height="326" Margin="874,100,0,0" Width="170" RenderTransformOrigin="0.503,0.509">
                 <Button x:Name="uxtButton" HorizontalAlignment="Left" Margin="5,5,0,5" VerticalAlignment="Top" Width="150" Height="49" RenderTransformOrigin="-3.263,-3.143" Click="Button_Click_3" Content="Волна от всех источников"/>
-                <Button x:Name="DispButton" HorizontalAlignment="Left" Margin="5,5,0,5" VerticalAlignment="Top" Width="99" Height="49" RenderTransformOrigin="-3.263,-3.143" Click="Button_Click_1" Content="Дисперсионки"/>
-                <Button x:Name="uriButton" HorizontalAlignment="Left" Margin="5,5,0,5" VerticalAlignment="Top" Width="99" Height="49" RenderTransformOrigin="-3.263,-3.143" Click="Button_Click_2" Content="Функции urj,uzj"/>
-                <Button x:Name="CloseButton" HorizontalAlignment="Left" Margin="5,5,0,5" VerticalAlignment="Top" Width="99" Height="49" RenderTransformOrigin="-3.263,-3.143" Click="Button_Click" Content="Закрыть"/>
+                <Button x:Name="DispButton" HorizontalAlignment="Left" Margin="5,5,0,5" VerticalAlignment="Top" Width="122" Height="49" RenderTransformOrigin="-3.263,-3.143" Click="Button_Click_1" Content="Дисперсионки"/>
+                <Button x:Name="uriButton" HorizontalAlignment="Left" Margin="5,5,0,5" VerticalAlignment="Top" Width="122" Height="49" RenderTransformOrigin="-3.263,-3.143" Click="Button_Click_2" Content="Анализ источника"/>
+                <Button x:Name="CloseButton" HorizontalAlignment="Left" Margin="5,5,0,5" VerticalAlignment="Top" Width="96" Height="49" RenderTransformOrigin="-3.263,-3.143" Click="Button_Click" Content="Закрыть"/>
             </StackPanel>
         </StackPanel>
 

@@ -33,6 +33,7 @@ namespace Практика_с_фортрана
         public UGrafic()
         {
             InitializeComponent();
+            SetSource();
 
             button6.Hide();
             button5.Hide();
@@ -71,6 +72,22 @@ namespace Практика_с_фортрана
         }
 
         public System.Threading.CancellationTokenSource source;
+
+        /// <summary>
+        /// Задать источник
+        /// </summary>
+        /// <param name="s"></param>
+        public void SetSource(Source s=null)
+        {
+            if (s == null)
+            {
+                var p = new Circle(1,1, 0.5);
+                var norms = p.GetNormalsOnCircle(40);
+                s = new Source(p, norms, GetFmas());
+            }
+            sourceIt = s.dup;
+            textBox8.Text = sourceIt.ToString();
+        }
 
         public void CircleOrNot()
         {
@@ -174,6 +191,8 @@ namespace Практика_с_фортрана
         /// Полумесяц
         /// </summary>
         public Waves.DCircle dCircle = new DCircle(new Point(1, 2));
+        public Source sourceIt;
+
         double[] xval = new double[0], uRval = new double[0], uIval = new double[0], umodval = new double[0];
         double[] xvalz = new double[0], uRz = new double[0], uIz = new double[0], uAz = new double[0];
         double[] uRvalRes = new double[0], uIvalRes = new double[0], umodvalRes = new double[0], uRzRes = new double[0], uIzRes = new double[0], uAzRes = new double[0];
@@ -535,6 +554,57 @@ namespace Практика_с_фортрана
 
         public Tuple<double, double, double, Normal2D[],Func<МатКлассы.Point, bool>> tuple;
 
+        private void наКругToolStripMenuItem_Click(object sender, EventArgs e)
+        {
+            new Sources(true).ShowDialog();
+        }
+
+        private void наПолумесяцToolStripMenuItem_Click(object sender, EventArgs e)
+        {
+            new DC().ShowDialog();
+        }
+
+        private void сохранитьИзображениеToolStripMenuItem_Click(object sender, EventArgs e)
+        {
+            string name = $"Функции ur,uz";
+            SaveFileDialog savedialog = new SaveFileDialog();
+            savedialog.Title = "Сохранить рисунок как...";
+            savedialog.FileName = name;
+            savedialog.Filter = "Image files (*.png)|*.png|All files (*.*)|*.*";
+
+            savedialog.OverwritePrompt = true;
+            savedialog.CheckPathExists = true;
+            savedialog.ShowHelp = true;
+            if (savedialog.ShowDialog() == DialogResult.OK)
+            {
+                try
+                {
+                    chart1.SaveImage(savedialog.FileName, System.Windows.Forms.DataVisualization.Charting.ChartImageFormat.Png);
+                    chart1.SaveImage(savedialog.FileName.Substring(0, savedialog.FileName.IndexOf(".png")) + ".emf", System.Windows.Forms.DataVisualization.Charting.ChartImageFormat.Emf);
+
+                    StreamWriter fs = new StreamWriter(savedialog.FileName.Substring(0, savedialog.FileName.IndexOf(".png")) + ".txt");
+                    for (int i = 0; i < xval.Length; i++)
+                        fs.WriteLine($"{xval[i]} {uRval[i]} {uIval[i]} {umodval[i]} {uRz[i]} {uIz[i]} {uAz[i]} {uRvalRes[i]} {uIvalRes[i]} {umodvalRes[i]} {uRzRes[i]} {uIzRes[i]} {uAzRes[i]}");
+
+                    fs.Close();
+                }
+                catch (Exception ee)
+                {
+                    MessageBox.Show("Рисунок не сохранён", ee.Message,
+                    MessageBoxButtons.OK, MessageBoxIcon.Error);
+                }
+            }
+        }
+
+        private void изменитьЦветФонаToolStripMenuItem_Click(object sender, EventArgs e)
+        {
+            if (colorDialog1.ShowDialog() == DialogResult.Cancel)
+                return;
+            // установка цвета формы
+            this.color = colorDialog1.Color;
+            chart1.BackColor = this.color;
+        }
+
         public void SetTuple()
         {
             double r = textBox5.Text.ToDouble();
@@ -558,8 +628,6 @@ namespace Практика_с_фортрана
                 chart1.Series[i].Points.Clear();
                 chart1.Series[i].IsVisibleInLegend = false;
             }
-
-            button3.Show();
 
             int k = Convert.ToInt32(numericUpDown1.Value);//k.Show();
             xval = new double[k]; uRval = new double[k]; uIval = new double[k]; umodval = new double[k];
@@ -771,52 +839,9 @@ namespace Практика_с_фортрана
 
         private void button5_Click(object sender, EventArgs e)
         {
-            new DINN5().Show();
+            new DINN5().ShowDialog();
         }
 
-        private void button3_Click(object sender, EventArgs e)
-        {
-            string name = $"Функции ur,uz";
-            SaveFileDialog savedialog = new SaveFileDialog();
-            savedialog.Title = "Сохранить рисунок как...";
-            savedialog.FileName = name;
-            savedialog.Filter = "Image files (*.png)|*.png|All files (*.*)|*.*";
-
-            savedialog.OverwritePrompt = true;
-            savedialog.CheckPathExists = true;
-            savedialog.ShowHelp = true;
-            if (savedialog.ShowDialog() == DialogResult.OK)
-            {
-                try
-                {
-                    chart1.SaveImage(savedialog.FileName, System.Windows.Forms.DataVisualization.Charting.ChartImageFormat.Png);
-                    chart1.SaveImage(savedialog.FileName.Substring(0, savedialog.FileName.IndexOf(".png")) + ".emf", System.Windows.Forms.DataVisualization.Charting.ChartImageFormat.Emf);
-
-                    StreamWriter fs = new StreamWriter(savedialog.FileName.Substring(0, savedialog.FileName.IndexOf(".png")) + ".txt");
-                    for (int i = 0; i < xval.Length; i++)
-                        fs.WriteLine($"{xval[i]} {uRval[i]} {uIval[i]} {umodval[i]} {uRz[i]} {uIz[i]} {uAz[i]} {uRvalRes[i]} {uIvalRes[i]} {umodvalRes[i]} {uRzRes[i]} {uIzRes[i]} {uAzRes[i]}");
-
-                    fs.Close();
-                }
-                catch (Exception ee)
-                {
-                    MessageBox.Show("Рисунок не сохранён", ee.Message,
-                    MessageBoxButtons.OK, MessageBoxIcon.Error);
-                }
-            }
-        }
-
-        private void button4_Click(object sender, EventArgs e)
-        {
-            if (colorDialog1.ShowDialog() == DialogResult.Cancel)
-                return;
-            // установка цвета формы
-            this.color = colorDialog1.Color;
-            chart1.BackColor = this.color;
-
-            //chart1.Series[0].Color = colorDialog1.Color;
-            //if (uRval != null) { chart1.Series[0].Points.Clear(); chart1.Series[0].Points.DataBindXY(xval, uRval); }
-        }
 
         SoundPlayer simpleSound = new SoundPlayer(@"1.wav");
 

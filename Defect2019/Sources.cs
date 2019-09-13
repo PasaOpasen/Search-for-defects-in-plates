@@ -16,10 +16,12 @@ namespace Defect2019
 {
     public partial class Sources : Form
     {
-        public Sources()
+        public Sources(bool getToUG=false)
         {
             InitializeComponent();
+            Get = getToUG;
         }
+        bool Get;
 
         private void button1_Click(object sender, EventArgs e)
         {
@@ -31,18 +33,15 @@ namespace Defect2019
             Waves.Circle c = new Waves.Circle(new МатКлассы.Point(x, y), r);
             Waves.Normal2D[] norm = c.GetNormalsOnCircle(n);
 
-            double[] w = SeqWMemoized(wbeg, wend, wcount);
-            var fw = w.Map((double d) => Functions.F1(d) + new Number.Complex(RandomNumbers.NextDouble2(0, 0.01), RandomNumbers.NextDouble2(0, 0.01)));
+            Source s = new Source(c, norm, GetFmas());
 
-            Source s = new Source(c.center, norm,
-                (МатКлассы.Point p)=>c.ContainPoint(p),
-                 fw,
-                Source.Type.Circle,
-                r);
-
+            if (Get)
+                Forms.UG.SetSource(s);
+            else
+            {
             Uxt.sources.Add(s);
             Uform.Recostract();
-
+            }
             this.Close();
         }
     }

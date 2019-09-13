@@ -76,6 +76,20 @@ public class Source : Idup<Source>
     private Source(Source s) : this(s.Center, s.Norms, s.Filter, s.Fmas, s.MeType, s.radius)
     {
     }
+    /// <summary>
+    /// Создать источник по окружности и нужным массивам
+    /// </summary>
+    /// <param name="circle"></param>
+    /// <param name="normals"></param>
+    /// <param name="fmas"></param>
+    public Source(Circle circle, Normal2D[] normals, Complex[] fmas) : this(circle.center,normals,p=>circle.ContainPoint(p),fmas, Type.Circle,circle.radius) { }
+    /// <summary>
+    /// Создать источник по полумесяцу и нужным массивам
+    /// </summary>
+    /// <param name="circle"></param>
+    /// <param name="normals"></param>
+    /// <param name="fmas"></param>
+    public Source(DCircle circle, Complex[] fmas) : this(circle.Center, circle.GetNormalsOnDCircle(), p => circle.ContainPoint(p), fmas, Type.DCircle, circle.BigCircle.radius) { }
 
     /// <summary>
     /// Массив приложений нормалей источника

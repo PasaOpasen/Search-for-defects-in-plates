@@ -231,6 +231,12 @@ public static class Functions
 
         return (perv(2 * Math.PI * N / wc) - perv(0)) / 8;
     };
+
+    /// <summary>
+    /// Получить тестовый массив f(w) по глобальным данным
+    /// </summary>
+    public static Func<Complex[]> GetFmas=()=> SeqWMemoized(wbeg, wend, wcount).Map((double d) => Functions.F1(d) + new Number.Complex(RandomNumbers.NextDouble2(0, 1e-7), RandomNumbers.NextDouble2(0, 1e-7)));
+
     #endregion
 
     #region Функции знаменателя, его производных и корней

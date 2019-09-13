@@ -121,6 +121,14 @@ namespace МатКлассы
             /// </summary>
             /// <param name="c"></param>
             public Circle(Circle c) : this(c.center, c.radius) { }
+            /// <summary>
+            /// Окружностб по координатам центра и радиусу
+            /// </summary>
+            /// <param name="x"></param>
+            /// <param name="y"></param>
+            /// <param name="radius"></param>
+            public Circle(double x,double y,double radius) : this(new Point(x,y),radius) { }
+
 
             /// <summary>
             /// Возврат нормали в точке по аргументу
