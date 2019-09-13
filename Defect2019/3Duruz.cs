@@ -68,13 +68,13 @@ namespace Defect2019
             tit.Show();
             all = yc * xc;
 
-            Normal2D[] norms = (radioButton3.Checked)?circle.GetNormalsOnCircle(Convert.ToInt32(numericUpDown3.Value)):Forms.UG.dCircle.GetNormalsOnDCircle();
+            Normal2D[] norms = Forms.UG.sourceIt.Norms;
 
             Func<МатКлассы.Point, bool> filter;
             if (radioButton3.Checked) filter = (МатКлассы.Point po) => circle.ContainPoint(po);
-            else filter = (МатКлассы.Point po) => Forms.UG.dCircle.ContainPoint(po);
+            else filter =  Forms.UG.sourceIt.Filter;
 
-            Circle fiCirc = (radioButton3.Checked) ? new Circle(circle) : new Circle(Forms.UG.dCircle.BigCircle); 
+            Circle fiCirc = (radioButton3.Checked) ? new Circle(circle) : new Circle(Forms.UG.sourceIt.GetCircle); 
 
             SaveFileDialog savedialog = new SaveFileDialog();
             savedialog.Title = "Сохранить рисунок как...";
@@ -93,7 +93,7 @@ namespace Defect2019
 
             Forms.UG.toolStripStatusLabel1.Text = "Вычисления запущены";
             time = DateTime.Now;
-            Forms.UG.stopshow();
+            Forms.UG.ShowCancelControls();
             //Forms.UG.timer1.Start(); Forms.UG.timer2.Start();
             Forms.UG.source = new System.Threading.CancellationTokenSource();
             System.Threading.CancellationToken token = Forms.UG.source.Token;
@@ -103,7 +103,7 @@ namespace Defect2019
                 МатКлассы.Waves.Circle.FieldToFileParallel(savedialog.FileName,
                     (double x, double y/*, МатКлассы.Point normal*/) =>
                     {
-                        var t = Forms.UG.ujRes(x, y, w, norms);
+                        var t = Forms.UG.UResMemoized(x, y, w, norms);
                         double cor = new Number.Complex(x - fiCirc.center.x, y - fiCirc.center.y).Arg;
                         return new Tuple<Number.Complex, Number.Complex>(/*Number.Complex.Sqrt(*/t[0]*Math.Cos(cor) + t[1]*Math.Sin(cor)/*)*/, t[2]);
                     },
@@ -139,7 +139,7 @@ namespace Defect2019
             TimeSpan ts = DateTime.Now - time;
             timer1.Stop();
 
-            Forms.UG.stophide();
+            Forms.UG.HideCancelControls();
 
             if (token.IsCancellationRequested)
             {

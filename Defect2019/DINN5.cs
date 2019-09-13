@@ -99,6 +99,8 @@ namespace Defect2019
                     РабКонсоль.NodesCount = МатКлассы.FuncMethods.DefInteg.GaussKronrod.NodesCount.GK61;
                     break;
             }
+
+            button1_Click(sender, e);
         }
     }
 }

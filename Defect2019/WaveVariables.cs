@@ -361,9 +361,8 @@ public static class Functions
    {
        var poles = PolesMasMemoized(w);
        Complex[][] c1 = new Complex[poles.Deg][], c2 = new Complex[poles.Deg][];
-       double ar, arsqrt;
-       Tuple<Complex, Complex> tup;
        CVectors sum = new CVectors(3);
+       Complex[] res = new Complex[9];
        Point xy = new Point(x, y);
        Vectors QQ;
 
@@ -382,20 +381,17 @@ public static class Functions
 
        for (int i = 0; i < nd.Length; i++)
        {
-           QQ = (Q(nd[i].n) * eps2);
+           QQ = Q(nd[i].n) * eps2;
 
            xp = x - nd[i].Position.x;
            yp = y - nd[i].Position.y;
 
            for (int k = 0; k < poles.Deg; k++)
            {
-               ar = poles[k] * Point.Eudistance(nd[i].Position, xy);
-               tup = HankelTuple(ar);
-
-               sum.FastAdd(KQmult(InKtwice(plus[k], pminus[k], c1[k], c2[k], tup, xp, yp), QQ));
+               InKtwiceFast(plus[k], pminus[k], c1[k], c2[k], HankelTuple(poles[k] * Point.Eudistance(nd[i].Position, xy)), xp, yp, ref res);
+               sum.FastAdd(KQmult(res, QQ));
            }
        }
-
        return sum * I2;
    };
 
@@ -441,7 +437,8 @@ public static class Functions
 
           Complex j1ar = beshank.Item1, j0ar = beshank.Item2;
 
-          Complex P = PRMSN1[0] * a21 - PRMSN2[0] * a22, R1 = PRMSN1[1], Mi1 = PRMSN1[2] * I, Si = (PRMSN1[3] - PRMSN2[3]) * I, Ni1 = PRMSN1[4] * I;
+          Complex P = PRMSN1[0] * a21 - PRMSN2[0] * a22, R1 = PRMSN1[1], 
+          Mi1 = PRMSN1[2] * I, Si = (PRMSN1[3] - PRMSN2[3]) * I, Ni1 = PRMSN1[4] * I;
           Complex R2 = PRMSN2[1], Mi2 = PRMSN2[2] * I, Ni2 = PRMSN2[4] * I;
 
           Complex
@@ -462,8 +459,9 @@ public static class Functions
           K12 = ((Mi1 - Ni1) * jxy1 - (Mi2 - Ni2) * jxy2) / r2;
 
           return new Complex[] {
-                 ((Mi1 * jxx1 + Ni1 * jyy1)- (Mi2 * jxx2 + Ni2 * jyy2)) / r2,K12, P*jx, K12,
-              ((Mi1 * jyy1 + Ni1 * jxx1)- (Mi2 * jyy2 + Ni2 * jxx2)) / r2,P * jy, Si * jx,Si * jy,R1 * j0ara1- R2 * j0ara2
+                 ((Mi1 * jxx1 + Ni1 * jyy1)- (Mi2 * jxx2 + Ni2 * jyy2)) / r2,K12, P*jx,
+              K12, ((Mi1 * jyy1 + Ni1 * jxx1)- (Mi2 * jyy2 + Ni2 * jxx2)) / r2,
+              P * jy, Si * jx,Si * jy,R1 * j0ara1- R2 * j0ara2
   };
       };
     public static void InKtwiceFast(Complex a1, Complex a2, Complex[] PRMSN1, Complex[] PRMSN2, Tuple<Complex, Complex> beshank, double x, double y, ref Complex[] res)
@@ -504,9 +502,7 @@ public static class Functions
         res[6] = Si * jx;
         res[7] = Si * jy;
         res[8] = R1 * j0ara1 - R2 * j0ara2;
-
     }
-
 
     /// <summary>
     /// Быстрое произведение нужных матриц и векторов с учётом их структуры
@@ -737,14 +733,6 @@ public static class Functions
     /// <param name="w"></param>
     /// <returns></returns>
     public static Func<Complex, double, Complex[]> PRMSN_Memoized;
-    /// <summary>
-    /// Возвращает компоненты PRMSN_Memoized, нужные для матрицы Грина (мемоизированная)
-    /// </summary>
-    /// <param name="al"></param>
-    /// <param name="z"></param>
-    /// <param name="w"></param>
-    /// <returns></returns>
-    public static Func<Complex, double, bool, Complex[]> PRMSNUp;
     public static Func<Complex, double, CSqMatrix> A = (Complex alp, double w) =>
         {
             double kt1 = k1(w), kt2 = k2(w);

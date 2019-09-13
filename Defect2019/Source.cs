@@ -40,6 +40,7 @@ public class Source : Idup<Source>
     public Complex[] Fmas;
 
     public enum Type { Circle, DCircle };
+    public Circle GetCircle => new Circle(Center, radius);
 
     /// <summary>
     /// Тип источника

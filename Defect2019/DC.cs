@@ -44,13 +44,7 @@ namespace Defect2019
             InitializeComponent();          
             DCircle es;
             if (!toS)
-            {
-                if (Forms.UG.dCircle != null)
-                    SetTextBoxesAndOtherData(out es, Forms.UG.dCircle);
-                else
                     es = DCircle.Example.dup;
-
-            }
             else              
                 SetTextBoxesAndOtherData(out es, DCircle.Example);
                
@@ -194,7 +188,6 @@ namespace Defect2019
 
             if (!tosource)
             {
-                Forms.UG.dCircle = new DCircle(c);
                 Forms.UG.SetSource(source);
             }             
             else
