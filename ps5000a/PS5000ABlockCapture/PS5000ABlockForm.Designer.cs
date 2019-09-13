@@ -152,12 +152,12 @@ namespace PS5000A
             this.buttonOpen.BackColor = System.Drawing.Color.FromArgb(((int)(((byte)(192)))), ((int)(((byte)(192)))), ((int)(((byte)(255)))));
             this.buttonOpen.FlatStyle = System.Windows.Forms.FlatStyle.Flat;
             this.buttonOpen.Font = new System.Drawing.Font("Microsoft Sans Serif", 15.75F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(204)));
-            this.buttonOpen.Location = new System.Drawing.Point(92, 58);
+            this.buttonOpen.Location = new System.Drawing.Point(78, 58);
             this.buttonOpen.Margin = new System.Windows.Forms.Padding(4, 5, 4, 5);
             this.buttonOpen.Name = "buttonOpen";
-            this.buttonOpen.Size = new System.Drawing.Size(173, 89);
+            this.buttonOpen.Size = new System.Drawing.Size(187, 89);
             this.buttonOpen.TabIndex = 0;
-            this.buttonOpen.Text = "Подключится к осциллографу";
+            this.buttonOpen.Text = "Подключиться к осциллографу";
             this.buttonOpen.UseVisualStyleBackColor = false;
             this.buttonOpen.Click += new System.EventHandler(this.buttonOpen_Click);
             // 
@@ -247,7 +247,7 @@ namespace PS5000A
             // label20
             // 
             this.label20.AutoSize = true;
-            this.label20.Location = new System.Drawing.Point(374, 127);
+            this.label20.Location = new System.Drawing.Point(374, 124);
             this.label20.Name = "label20";
             this.label20.Size = new System.Drawing.Size(132, 20);
             this.label20.TabIndex = 11;
@@ -313,7 +313,7 @@ namespace PS5000A
             // label13
             // 
             this.label13.AutoSize = true;
-            this.label13.Location = new System.Drawing.Point(432, 48);
+            this.label13.Location = new System.Drawing.Point(432, 51);
             this.label13.Name = "label13";
             this.label13.Size = new System.Drawing.Size(74, 20);
             this.label13.TabIndex = 3;
