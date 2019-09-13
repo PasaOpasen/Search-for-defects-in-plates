@@ -35,7 +35,6 @@ namespace PS5000A
         static bool avd_all = false;
         public static int n_ignore;
         static bool no_ignore = false;
-
         static double avg;
         static double[] f;
         static Complex[] F;
@@ -51,7 +50,6 @@ namespace PS5000A
                 f_[i] /= n * 2 + 1;
                 f[i] = f_[i];
             }
-
         }
 
         public static void LoadCfg(string filename)
@@ -259,28 +257,28 @@ namespace PS5000A
             });
         }
 
-        public static void SaveOut_old(string filename)
-        {
-            try
-            {
-                OutFile = filename;
-                using (StreamWriter sw = new StreamWriter(OutFile, false, System.Text.Encoding.Default))
-                {
-                    string line = "w Re(f(w)) Im(f(w))";
-                    sw.WriteLine(line);
-                    for (int i = 0; i < count_w; i++)
-                    {
-                        Complex w = dw * i + w_0;
-                        line = (w.Real / 2.0 / Math.PI).ToString() + " " + F[i].Real.ToString() + " " + F[i].Imaginary.ToString();
-                        sw.WriteLine(line);
-                    }
-                }
-            }
-            catch (Exception e)
-            {
-                Console.WriteLine(e.Message);
-            }
-        }
+        //public static void SaveOut_old(string filename)
+        //{
+        //    try
+        //    {
+        //        OutFile = filename;
+        //        using (StreamWriter sw = new StreamWriter(OutFile, false, System.Text.Encoding.Default))
+        //        {
+        //            string line = "w Re(f(w)) Im(f(w))";
+        //            sw.WriteLine(line);
+        //            for (int i = 0; i < count_w; i++)
+        //            {
+        //                Complex w = dw * i + w_0;
+        //                line = (w.Real / 2.0 / Math.PI).ToString() + " " + F[i].Real.ToString() + " " + F[i].Imaginary.ToString();
+        //                sw.WriteLine(line);
+        //            }
+        //        }
+        //    }
+        //    catch (Exception e)
+        //    {
+        //        Console.WriteLine(e.Message);
+        //    }
+        //}
         public static void SaveIn(string filename)
         {
             using (StreamWriter sw = new StreamWriter(filename))
@@ -298,27 +296,13 @@ namespace PS5000A
         }
         public static void SaveOutAbs(string filename)
         {
-            try
+            using (StreamWriter sw = new StreamWriter(filename))
             {
-                OutFile = filename;
-                using (StreamWriter sw = new StreamWriter(OutFile, false, System.Text.Encoding.Default))
-                {
-                    for (int i = 0; i < count_w; i++)
-                    {
-                        Complex w = dw * (Complex)i + w_0;
-                        string line = (w.Real / 2 / Math.PI).ToString() + " " + F[i].Magnitude.ToString();
-                        if ((i + 1) < count_w)
-                        { sw.WriteLine(line); }
-                        else { sw.Write(line); };
-                    }
-                }
-            }
-
-            catch (Exception e)
-            {
-                Console.WriteLine(e.Message);
-            }
-
+                sw.WriteLine("w Re(f(w)) Im(f(w))");
+                for (int i = 0; i < count_w-1; i++)
+                    sw.WriteLine(((dw * i + w_0) / 2.0 / Math.PI).ToString() + " " + (F[i].Magnitude).ToString());
+                sw.WriteLine(((dw * (count_w - 1) + w_0) / 2.0 / Math.PI).ToString() + " " + (F[count_w - 1].Magnitude).ToString());
+            } 
         }
 
 
@@ -400,7 +384,14 @@ namespace PS5000A
         public const int E_CONNECTION_LOST = 3;
         public const int E_TRANSMISSION_FAIL = 4;
         public SerialPort port;
-
+        public string Receive_str()
+        {
+            if (port.BytesToRead > 0)
+            {
+                return port.ReadLine();
+            }
+            else return "";
+        }
         public void OpenPort()
         {
 
@@ -431,13 +422,6 @@ namespace PS5000A
                 Console.WriteLine("ERROR: невозможно открыть порт:" + e.ToString());
                 return;
             }
-
-            //if (port.BytesToRead > 0)
-            //{ 
-            //    string ss = port.ReadLine();
-            //    Console.WriteLine(ss); 
-            // 
-            //} 
         }
         public void OpenPort(int num)
         {
@@ -462,24 +446,15 @@ namespace PS5000A
                 Console.WriteLine("ERROR: невозможно открыть порт:" + e.ToString());
                 return;
             }
-
-            //if (port.BytesToRead > 0)
-            //{ 
-            //    string ss = port.ReadLine();
-            //    Console.WriteLine(ss); 
-            // 
-            //}
-
         }
         public void SendCmd(int status /*старшая цифра - команда */, int addr /*младшая цифра - адресс */)
         {
             port.Write(status.ToString() + addr.ToString());
-
-            //if (port.BytesToRead > 0)
-            //{
-            //    string ss = port.ReadLine();
-            //    Console.WriteLine(ss);
-            //}
+        }
+        //отправка команды ввиде строки
+        public void SendCmd(string s)
+        {
+            port.Write(s);
         }
         public void SetOut(int addr)
         {
@@ -489,16 +464,11 @@ namespace PS5000A
         {
             SendCmd(1, addr);
         }
+        //отправка команды из консоли
         // старшая цифра - команда младшая цифра - адресс 
         public void SendCmd2()
         {
             port.Write(Console.ReadLine());
-
-            //if (port.BytesToRead > 0)
-            //{
-            //    string ss = port.ReadLine();
-            //    Console.WriteLine(ss);
-            //}
         }
         public void ClosePort_()
         {
