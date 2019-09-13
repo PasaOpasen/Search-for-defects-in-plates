@@ -340,9 +340,6 @@ namespace PS5000A
 
         private void Hides()
         {
-
-
-
             groupBox3.Hide();
             groupBox4.Hide();
             button6.Hide();
