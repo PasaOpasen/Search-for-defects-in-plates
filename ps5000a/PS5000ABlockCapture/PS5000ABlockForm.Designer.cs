@@ -59,7 +59,6 @@ namespace PS5000A
             this.tabAbout = new System.Windows.Forms.TabPage();
             this.groupBox4 = new System.Windows.Forms.GroupBox();
             this.listBox1 = new System.Windows.Forms.ListBox();
-            this.label19 = new System.Windows.Forms.Label();
             this.button6 = new System.Windows.Forms.Button();
             this.button7 = new System.Windows.Forms.Button();
             this.listBox2 = new System.Windows.Forms.ListBox();
@@ -340,7 +339,6 @@ namespace PS5000A
             // groupBox4
             // 
             this.groupBox4.Controls.Add(this.listBox1);
-            this.groupBox4.Controls.Add(this.label19);
             this.groupBox4.Controls.Add(this.button6);
             this.groupBox4.Controls.Add(this.button7);
             this.groupBox4.Location = new System.Drawing.Point(20, 154);
@@ -352,22 +350,13 @@ namespace PS5000A
             // 
             // listBox1
             // 
+            this.listBox1.Dock = System.Windows.Forms.DockStyle.Right;
             this.listBox1.FormattingEnabled = true;
             this.listBox1.ItemHeight = 20;
-            this.listBox1.Location = new System.Drawing.Point(176, 51);
+            this.listBox1.Location = new System.Drawing.Point(179, 22);
             this.listBox1.Name = "listBox1";
-            this.listBox1.Size = new System.Drawing.Size(76, 84);
+            this.listBox1.Size = new System.Drawing.Size(76, 127);
             this.listBox1.TabIndex = 12;
-            // 
-            // label19
-            // 
-            this.label19.AutoSize = true;
-            this.label19.BackColor = System.Drawing.Color.FromArgb(((int)(((byte)(192)))), ((int)(((byte)(255)))), ((int)(((byte)(192)))));
-            this.label19.Location = new System.Drawing.Point(191, 23);
-            this.label19.Name = "label19";
-            this.label19.Size = new System.Drawing.Size(45, 20);
-            this.label19.TabIndex = 14;
-            this.label19.Text = "COM";
             // 
             // button6
             // 
@@ -1197,7 +1186,6 @@ namespace PS5000A
             this.tabAbout.ResumeLayout(false);
             this.tabAbout.PerformLayout();
             this.groupBox4.ResumeLayout(false);
-            this.groupBox4.PerformLayout();
             this.tabChannels.ResumeLayout(false);
             this.groupBox1.ResumeLayout(false);
             this.groupBox1.PerformLayout();
@@ -1270,7 +1258,6 @@ namespace PS5000A
         private System.Windows.Forms.Button button7;
         private System.Windows.Forms.ListBox listBox1;
         private System.Windows.Forms.ListBox listBox2;
-        private System.Windows.Forms.Label label19;
         private System.Windows.Forms.TextBox textBox13;
         private System.Windows.Forms.Label label20;
         private System.Windows.Forms.TextBox textBox14;

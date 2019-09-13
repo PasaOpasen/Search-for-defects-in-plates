@@ -665,7 +665,7 @@ namespace Defect2019
 
         private void button5_Click(object sender, EventArgs e)
         {
-            new Helper(textBox5.Text.ToDouble(), textBox6.Text.ToDouble(), numericUpDown2.Value.ToInt32()).Show();
+            new Helper(textBox5, textBox6, numericUpDown2).Show();
         }
 
         private void button6_Click(object sender, EventArgs e) => new Библиотека_графики.PdfOpen("Варианты метрик", "formula.pdf").ShowDialog();

@@ -344,7 +344,6 @@ namespace PS5000A
             groupBox4.Hide();
             button6.Hide();
             listBox1.Hide();
-            label19.Hide();
         }
 
         private async void button4_Click(object sender, EventArgs e)
@@ -511,7 +510,7 @@ namespace PS5000A
             }
             opened = true;
 
-            buttonOpen.Text = "Запущено";
+            buttonOpen.Text = "Подключено";
             groupBox4.Show();
         }
 
@@ -726,7 +725,6 @@ namespace PS5000A
                 listBox1.SelectedIndex = listBox1.Items.Count - 1;
 
             listBox1.Show();
-            label19.Show();
             button6.Show();
         }
 
@@ -869,7 +867,7 @@ namespace PS5000A
                     if (i != j)
                     {
                         await GetDataMiniAsync(j, Path.Combine(ItFolder(i), ArraysNames[j]));
-                        toolStripStatusLabel2.Text = $"Выполнено {++it} из {mx} ({Expendator.GetProcent(it, mx/*,2*/)}%)";
+                        toolStripStatusLabel2.Text = $"Выполнено {++it} из {mx} ({Expendator.GetProcent(it, mx, 2)}%)";
                     }
                 toolStripStatusLabel2.Text = "";
 
