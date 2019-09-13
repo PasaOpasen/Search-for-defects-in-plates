@@ -61,7 +61,7 @@
             // label1
             // 
             this.label1.AutoSize = true;
-            this.label1.Location = new System.Drawing.Point(35, 22);
+            this.label1.Location = new System.Drawing.Point(18, 20);
             this.label1.Name = "label1";
             this.label1.Size = new System.Drawing.Size(180, 19);
             this.label1.TabIndex = 0;
@@ -70,7 +70,7 @@
             // label2
             // 
             this.label2.AutoSize = true;
-            this.label2.Location = new System.Drawing.Point(357, 22);
+            this.label2.Location = new System.Drawing.Point(340, 20);
             this.label2.Name = "label2";
             this.label2.Size = new System.Drawing.Size(18, 19);
             this.label2.TabIndex = 1;
@@ -79,7 +79,7 @@
             // label3
             // 
             this.label3.AutoSize = true;
-            this.label3.Location = new System.Drawing.Point(526, 22);
+            this.label3.Location = new System.Drawing.Point(509, 20);
             this.label3.Name = "label3";
             this.label3.Size = new System.Drawing.Size(18, 19);
             this.label3.TabIndex = 2;
@@ -88,16 +88,16 @@
             // label4
             // 
             this.label4.AutoSize = true;
-            this.label4.Location = new System.Drawing.Point(35, 64);
+            this.label4.Location = new System.Drawing.Point(18, 62);
             this.label4.Name = "label4";
-            this.label4.Size = new System.Drawing.Size(180, 19);
+            this.label4.Size = new System.Drawing.Size(171, 19);
             this.label4.TabIndex = 3;
-            this.label4.Text = "Максимальный шаг = ";
+            this.label4.Text = "Изначальный шаг = ";
             // 
             // label5
             // 
             this.label5.AutoSize = true;
-            this.label5.Location = new System.Drawing.Point(35, 107);
+            this.label5.Location = new System.Drawing.Point(18, 105);
             this.label5.Name = "label5";
             this.label5.Size = new System.Drawing.Size(315, 19);
             this.label5.TabIndex = 4;
@@ -106,7 +106,7 @@
             // label6
             // 
             this.label6.AutoSize = true;
-            this.label6.Location = new System.Drawing.Point(428, 107);
+            this.label6.Location = new System.Drawing.Point(411, 105);
             this.label6.Name = "label6";
             this.label6.Size = new System.Drawing.Size(54, 19);
             this.label6.TabIndex = 5;
@@ -118,7 +118,7 @@
             this.label8.BackColor = System.Drawing.Color.White;
             this.label8.Font = new System.Drawing.Font("Consolas", 12F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(204)));
             this.label8.ForeColor = System.Drawing.Color.DarkViolet;
-            this.label8.Location = new System.Drawing.Point(38, 214);
+            this.label8.Location = new System.Drawing.Point(21, 212);
             this.label8.Name = "label8";
             this.label8.Size = new System.Drawing.Size(63, 19);
             this.label8.TabIndex = 7;
@@ -136,7 +136,7 @@
             this.groupBox1.Controls.Add(this.label9);
             this.groupBox1.Controls.Add(this.label10);
             this.groupBox1.Controls.Add(this.label7);
-            this.groupBox1.Location = new System.Drawing.Point(488, 107);
+            this.groupBox1.Location = new System.Drawing.Point(471, 105);
             this.groupBox1.Name = "groupBox1";
             this.groupBox1.Size = new System.Drawing.Size(221, 126);
             this.groupBox1.TabIndex = 11;
@@ -240,7 +240,7 @@
             // groupBox2
             // 
             this.groupBox2.Controls.Add(this.textBox1);
-            this.groupBox2.Location = new System.Drawing.Point(39, 145);
+            this.groupBox2.Location = new System.Drawing.Point(22, 143);
             this.groupBox2.Name = "groupBox2";
             this.groupBox2.Size = new System.Drawing.Size(425, 54);
             this.groupBox2.TabIndex = 12;
@@ -263,7 +263,7 @@
             this.button1.BackColor = System.Drawing.Color.FromArgb(((int)(((byte)(128)))), ((int)(((byte)(255)))), ((int)(((byte)(128)))));
             this.button1.FlatStyle = System.Windows.Forms.FlatStyle.Popup;
             this.button1.Font = new System.Drawing.Font("Consolas", 14.25F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(204)));
-            this.button1.Location = new System.Drawing.Point(577, 19);
+            this.button1.Location = new System.Drawing.Point(537, 17);
             this.button1.Name = "button1";
             this.button1.Size = new System.Drawing.Size(155, 64);
             this.button1.TabIndex = 13;
@@ -273,7 +273,7 @@
             // 
             // textBox2
             // 
-            this.textBox2.Location = new System.Drawing.Point(221, 19);
+            this.textBox2.Location = new System.Drawing.Point(204, 17);
             this.textBox2.Name = "textBox2";
             this.textBox2.Size = new System.Drawing.Size(139, 26);
             this.textBox2.TabIndex = 15;
@@ -282,7 +282,7 @@
             // 
             // textBox3
             // 
-            this.textBox3.Location = new System.Drawing.Point(381, 19);
+            this.textBox3.Location = new System.Drawing.Point(364, 17);
             this.textBox3.Name = "textBox3";
             this.textBox3.Size = new System.Drawing.Size(139, 26);
             this.textBox3.TabIndex = 16;
@@ -291,7 +291,7 @@
             // 
             // textBox4
             // 
-            this.textBox4.Location = new System.Drawing.Point(211, 61);
+            this.textBox4.Location = new System.Drawing.Point(194, 59);
             this.textBox4.Name = "textBox4";
             this.textBox4.Size = new System.Drawing.Size(271, 26);
             this.textBox4.TabIndex = 17;
@@ -300,7 +300,7 @@
             // 
             // numericUpDown1
             // 
-            this.numericUpDown1.Location = new System.Drawing.Point(361, 105);
+            this.numericUpDown1.Location = new System.Drawing.Point(344, 103);
             this.numericUpDown1.Name = "numericUpDown1";
             this.numericUpDown1.Size = new System.Drawing.Size(64, 26);
             this.numericUpDown1.TabIndex = 18;
@@ -316,7 +316,7 @@
             this.AutoScaleDimensions = new System.Drawing.SizeF(9F, 19F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
             this.BackColor = System.Drawing.SystemColors.ButtonHighlight;
-            this.ClientSize = new System.Drawing.Size(753, 251);
+            this.ClientSize = new System.Drawing.Size(719, 251);
             this.Controls.Add(this.numericUpDown1);
             this.Controls.Add(this.textBox4);
             this.Controls.Add(this.textBox3);

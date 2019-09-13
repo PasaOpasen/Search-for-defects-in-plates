@@ -29,7 +29,7 @@ namespace Работа2019
             textBox4.Text = ((b - a) / (n - 1)).ToRString();
 
             SetDt(a, b, 1.2);
-
+            SetEvents();
             label8.Hide();
         }
         private void SetDt(double a, double b, double h)
@@ -41,6 +41,20 @@ namespace Работа2019
             textBox6.Text = d2.ToRString();
             textBox7.Text = ((d1 + d2) / 2).ToRString();
             textBox8.Text = Math.Abs((d1 - d2) / 2).ToRString();
+        }
+        private void SetEvents()
+        {
+            void SomeEvent() => label8.Hide();
+            var ev =new EventHandler( (object o, EventArgs e) => SomeEvent());
+            textBox1.TextChanged += ev;
+            textBox2.TextChanged += ev;
+            textBox3.TextChanged += ev;
+            textBox4.TextChanged += ev;
+            textBox5.TextChanged += ev;
+            textBox6.TextChanged += ev;
+            textBox7.TextChanged += ev;
+            textBox8.TextChanged += ev;
+            numericUpDown1.ValueChanged += ev;
         }
 
         public Helper(TextBox tminBox, TextBox tmaxBox, NumericUpDown tcountBox) : this(tminBox.Text.ToDouble(), tmaxBox.Text.ToDouble(), tcountBox.Value.ToInt32())
@@ -72,9 +86,12 @@ namespace Работа2019
         {
             Read();
             label8.Text = "Вычисляется...";
-            Search();
 
+            if (CheckDt())
+            {
+            Search();
             label8.Show();
+            }
         }
 
 
@@ -82,12 +99,12 @@ namespace Работа2019
         {
             tmin = textBox2.Text.ToDouble();
             tmax = textBox3.Text.ToDouble();
-            hmax = textBox4.Text.ToDouble();
-            c = (int)((tmax - tmin) / hmax - 1);
             count = numericUpDown1.Value.ToInt32();
-
             ReadDt();
 
+            hmax = Math.Min( textBox4.Text.ToDouble(),(dtmax-dtmin)/(count-1));          
+            c = (int)((tmax - tmin) / hmax - 1);
+            
             mas = textBox1.Text.Replace("\n", "").ToDoubleMas().Distinct().ToArray();
 
         }
@@ -106,6 +123,14 @@ namespace Работа2019
                 dtmin = d1 - d2;
                 dtmax = d2 + d1;
             }
+        }
+        private bool CheckDt()
+        {
+            //if (dtmin >= tmin && dtmax <= tmax)
+            if(!(dtmax<=tmin || dtmin>=tmax))
+                return true;
+            MessageBox.Show("Отрезок с указанными точками не имеет непрерывного пересечения с исходным отрезком. Перепроверьте данные", "Ошибка в данных", MessageBoxButtons.OK, MessageBoxIcon.Asterisk);
+            return false;
         }
 
         private void radioButton2_CheckedChanged(object sender, EventArgs e)
