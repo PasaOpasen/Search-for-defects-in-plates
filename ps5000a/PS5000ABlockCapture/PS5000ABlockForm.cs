@@ -869,7 +869,7 @@ namespace PS5000A
                     if (i != j)
                     {
                         await GetDataMiniAsync(j, Path.Combine(ItFolder(i), ArraysNames[j]));
-                        toolStripStatusLabel2.Text = $"Выполнено {++it} из {mx} ({Expendator.GetProcent(it, mx,2)}%)";
+                        toolStripStatusLabel2.Text = $"Выполнено {++it} из {mx} ({Expendator.GetProcent(it, mx/*,2*/)}%)";
                     }
                 toolStripStatusLabel2.Text = "";
 

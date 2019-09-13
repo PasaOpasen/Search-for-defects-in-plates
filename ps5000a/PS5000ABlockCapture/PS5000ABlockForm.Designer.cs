@@ -153,12 +153,12 @@ namespace PS5000A
             this.buttonOpen.BackColor = System.Drawing.Color.FromArgb(((int)(((byte)(192)))), ((int)(((byte)(192)))), ((int)(((byte)(255)))));
             this.buttonOpen.FlatStyle = System.Windows.Forms.FlatStyle.Flat;
             this.buttonOpen.Font = new System.Drawing.Font("Microsoft Sans Serif", 15.75F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(204)));
-            this.buttonOpen.Location = new System.Drawing.Point(86, 65);
+            this.buttonOpen.Location = new System.Drawing.Point(92, 58);
             this.buttonOpen.Margin = new System.Windows.Forms.Padding(4, 5, 4, 5);
             this.buttonOpen.Name = "buttonOpen";
-            this.buttonOpen.Size = new System.Drawing.Size(163, 82);
+            this.buttonOpen.Size = new System.Drawing.Size(173, 89);
             this.buttonOpen.TabIndex = 0;
-            this.buttonOpen.Text = "Запуск";
+            this.buttonOpen.Text = "Подключится к осциллографу";
             this.buttonOpen.UseVisualStyleBackColor = false;
             this.buttonOpen.Click += new System.EventHandler(this.buttonOpen_Click);
             // 
@@ -373,11 +373,12 @@ namespace PS5000A
             // 
             this.button6.BackColor = System.Drawing.Color.FromArgb(((int)(((byte)(255)))), ((int)(((byte)(255)))), ((int)(((byte)(128)))));
             this.button6.FlatStyle = System.Windows.Forms.FlatStyle.Popup;
+            this.button6.Font = new System.Drawing.Font("Microsoft Sans Serif", 14.25F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(204)));
             this.button6.Location = new System.Drawing.Point(6, 25);
             this.button6.Name = "button6";
-            this.button6.Size = new System.Drawing.Size(128, 45);
+            this.button6.Size = new System.Drawing.Size(164, 57);
             this.button6.TabIndex = 8;
-            this.button6.Text = "Подключится";
+            this.button6.Text = "Подключится к коммутатору";
             this.button6.UseVisualStyleBackColor = false;
             this.button6.Click += new System.EventHandler(this.button6_Click);
             // 
@@ -385,9 +386,10 @@ namespace PS5000A
             // 
             this.button7.BackColor = System.Drawing.Color.FromArgb(((int)(((byte)(128)))), ((int)(((byte)(255)))), ((int)(((byte)(128)))));
             this.button7.FlatStyle = System.Windows.Forms.FlatStyle.Popup;
+            this.button7.Font = new System.Drawing.Font("Microsoft Sans Serif", 14.25F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(204)));
             this.button7.Location = new System.Drawing.Point(6, 88);
             this.button7.Name = "button7";
-            this.button7.Size = new System.Drawing.Size(128, 53);
+            this.button7.Size = new System.Drawing.Size(164, 53);
             this.button7.TabIndex = 9;
             this.button7.Text = "Получить имена";
             this.button7.UseVisualStyleBackColor = false;
@@ -417,7 +419,7 @@ namespace PS5000A
             // 
             this.button5.Location = new System.Drawing.Point(26, 87);
             this.button5.Name = "button5";
-            this.button5.Size = new System.Drawing.Size(128, 51);
+            this.button5.Size = new System.Drawing.Size(164, 51);
             this.button5.TabIndex = 6;
             this.button5.Text = "подключить вход";
             this.button5.UseVisualStyleBackColor = true;
@@ -427,7 +429,7 @@ namespace PS5000A
             // 
             this.button1.Location = new System.Drawing.Point(26, 26);
             this.button1.Name = "button1";
-            this.button1.Size = new System.Drawing.Size(128, 55);
+            this.button1.Size = new System.Drawing.Size(164, 55);
             this.button1.TabIndex = 5;
             this.button1.Text = "подключить выход";
             this.button1.UseVisualStyleBackColor = true;
@@ -1054,6 +1056,7 @@ namespace PS5000A
             this.buttonStart.BackColor = System.Drawing.Color.PeachPuff;
             this.buttonStart.Dock = System.Windows.Forms.DockStyle.Top;
             this.buttonStart.FlatStyle = System.Windows.Forms.FlatStyle.Popup;
+            this.buttonStart.Font = new System.Drawing.Font("Microsoft Sans Serif", 14.25F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(204)));
             this.buttonStart.Location = new System.Drawing.Point(3, 22);
             this.buttonStart.Margin = new System.Windows.Forms.Padding(4, 5, 4, 5);
             this.buttonStart.Name = "buttonStart";
@@ -1123,6 +1126,7 @@ namespace PS5000A
             // 
             this.button4.BackColor = System.Drawing.Color.FromArgb(((int)(((byte)(192)))), ((int)(((byte)(255)))), ((int)(((byte)(255)))));
             this.button4.FlatStyle = System.Windows.Forms.FlatStyle.Popup;
+            this.button4.Font = new System.Drawing.Font("Microsoft Sans Serif", 14.25F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(204)));
             this.button4.Location = new System.Drawing.Point(541, 53);
             this.button4.Name = "button4";
             this.button4.Size = new System.Drawing.Size(147, 56);
@@ -1133,6 +1137,7 @@ namespace PS5000A
             // 
             // button2
             // 
+            this.button2.Font = new System.Drawing.Font("Microsoft Sans Serif", 14.25F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(204)));
             this.button2.Location = new System.Drawing.Point(573, 241);
             this.button2.Name = "button2";
             this.button2.Size = new System.Drawing.Size(115, 54);
