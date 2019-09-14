@@ -29,23 +29,19 @@ namespace Практика_с_фортрана
         {
 
         }
-        static double pi2 = 2 * Math.PI;
 
         public UGrafic()
         {
             InitializeComponent();
             SetSource();
-
-            button6.Hide();
-            button5.Hide();
-            button9.Hide();
+            HankelTuple = HankelTupleClear;
+            this.FormClosed += (object o, FormClosedEventArgs e) => HankelTuple = HankelTupleWith;
 
             label8.BackColor = Color.Transparent;
             button7.Hide();
 
             colorDialog1.FullOpen = true;
-            colorDialog1.Color = Color.Green;
-            ForChart.SetToolTips(ref chart1);
+            colorDialog1.Color = Color.Green;          
             listBox1.SelectedItem = "По лучу от центра окружности через точку";
 
             SetTimers();
@@ -55,6 +51,7 @@ namespace Практика_с_фортрана
             ClearSeries();
 
             SetMemoized();
+            SetArrays();
 
             kGrafic.ReadModelData();
         }
@@ -72,6 +69,7 @@ namespace Практика_с_фортрана
                   ur.Dispose();
               };
         }
+        private void SetArrays() => CreateArrays(0);
 
         public System.Threading.CancellationTokenSource source;
 
@@ -151,7 +149,7 @@ namespace Практика_с_фортрана
                     s = 61;
                     break;
             }
-            many = 13000 * s / 31;
+            many = 1300000 * s / 31;
             if (prmsnmem.Lenght >= many)
             {
                 errorProvider1.SetError(button8, "Достаточно много значений PMRSN");
@@ -178,7 +176,7 @@ namespace Практика_с_фортрана
            FuncMethods.DefInteg.GaussKronrod.ComplexVectorFunc tmp = (Complex a, int n) => Ksum(a, x, y, w, normal, (Point t) => { return new CVectors(new Complex[] { t.x, t.y, 0 }); }).ComplexMas;
 
            //интеграл
-           return FuncMethods.DefInteg.GaussKronrod.DINN5_GK(tmp, min, min, min, max, РабКонсоль.tm, РабКонсоль.tp, РабКонсоль.eps, РабКонсоль.pr, РабКонсоль.gr, 3, РабКонсоль.NodesCount).Div(pi2);
+           return FuncMethods.DefInteg.GaussKronrod.DINN5_GK(tmp, min, min, min, max, РабКонсоль.tm, РабКонсоль.tp, РабКонсоль.eps, РабКонсоль.pr, РабКонсоль.gr, 3, РабКонсоль.NodesCount).Div(pimult2);
        };
 
         public Func<double, double, double, Normal2D[], Complex[]> URes = (double x, double y, double w, Normal2D[] s) => (KsumRes(x, y, w, s, (Point t) => { return new Vectors(t.x, t.y, 0); })).ComplexMas;
@@ -285,61 +283,64 @@ namespace Практика_с_фортрана
 
         public void listBox1_SelectedIndexChanged(object sender, EventArgs e)
         {
-            int i = listBox1.SelectedIndex;
-            switch (i)
+            void TShow()
             {
-                case 0:
                     label5.Show();
                     textBox6.Show();
                     label3.Show();
                     textBox2.Show();
                     textBox3.Show();
+            }
+            void THide()
+            {
+                label5.Hide();
+                textBox6.Hide();
+                label3.Hide();
+                textBox2.Hide();
+                textBox3.Hide();
+            }
+            void Sdist()
+            {
+                    if (textBox2.Text.ToDouble() == 0) textBox2.Text = РабКонсоль.polesBeg.ToString();
+                    label7.Text = "dist =";
+            }
+            void Sw()
+            {
                     label7.Text = "w =";
                     textBox7.Text = "3";
+            }
+
+            switch (listBox1.SelectedIndex)
+            {
+                case 0:
+                    TShow();
+                    Sw();
                     CheckBoxesShowHide(true);
                     numericUpDown1.Value = 100;
                     break;
                 case 1:
-                    label5.Show();
-                    textBox6.Show();
-                    if (textBox2.Text.ToDouble() == 0) textBox2.Text = РабКонсоль.polesBeg.ToString();
-                    label3.Show();
-                    textBox2.Show();
-                    textBox3.Show();
-                    label7.Text = "dist =";
+                    TShow();
+                    Sdist();
                     textBox7.Text = "20";
                     CheckBoxesShowHide(true);
                     numericUpDown1.Value = 100;
                     break;
                 case 3:
-                    label5.Show();
-                    textBox6.Show();
-                    if (textBox2.Text.ToDouble() == 0) textBox2.Text = РабКонсоль.polesBeg.ToString();
-                    label3.Show();
-                    textBox2.Show(); textBox2.Text = "0,01";
-                    textBox3.Show(); textBox3.Text = "100";
-                    label7.Text = "dist =";
+                    TShow();
+                    textBox2.Text = "0,01";
+                    textBox3.Text = "100";
+                    Sdist();
                     textBox7.Text = "100";
                     CheckBoxesShowHide(false);
                     numericUpDown1.Value = 300;
                     break;
                 default:
-                    label5.Hide();
-                    textBox6.Hide();
-                    label3.Hide();
-                    textBox2.Hide();
-                    textBox3.Hide();
-                    label7.Text = "w =";
-                    textBox7.Text = "3";
+                    THide();
+                    Sw();
                     CheckBoxesShowHide(true);
                     numericUpDown1.Value = 100;
                     break;
             }
-        }
-
-        private void button6_Click(object sender, EventArgs e)
-        {
-            new ParametrsQu().ShowDialog();
         }
 
         private void checkBox6_CheckedChanged(object sender, EventArgs e)
@@ -363,12 +364,13 @@ namespace Практика_с_фортрана
             new _3Duruz().ShowDialog();
         }
 
+        private void label8_Click(object sender, EventArgs e)
+        {
         string message = "При неправильном выборе параметра tm или отрезка обхода полюсов интеграл может проходить через полюс (либо слишком близко), из-за чего происходят NaN от деления на 0 или бесконечности от суммирования больших чисел." + Environment.NewLine +
             "В этом случае метод интегрирования дробит шаг и начинает считать намного больше значений, в следствие этого значений PMRSN сохраняется слишком много. Из-за близости полюсов программа работает в разы дольше, а в конечных данных появляются выбросы." + Environment.NewLine +
             "В этом случае, опираясь на число PMRSN, следует прервать программу и изменить параметры интегрирования. Число значений PMRSN (при фикс. частоте и GK31) бывает: хорошее (3-4к), среднее (8-10к), плохое (>12к). Программу однозначно следует прерывать при числе PMRSN, большем 16к, если только не взята большая размерность. Если частота изменяется, указанные числа умножаются на количество разных частот, а при изменении GK - на соответсвующее отношение." + Environment.NewLine +
             "Этот способ поможет только 1 раз, так как сохранённые значения не удаляются (зачем?). Данные сотрутся автоматически при изменении условий задачи";
-        private void label8_Click(object sender, EventArgs e)
-        {
+
             MessageBox.Show(message, "Когда отменять асинхронную операцию?", MessageBoxButtons.OK, MessageBoxIcon.Question);
         }
 
@@ -404,25 +406,19 @@ namespace Практика_с_фортрана
             ReDraw();
         }
 
-        private void button9_Click(object sender, EventArgs e)
+        private void графикиPRMSNToolStripMenuItem_Click(object sender, EventArgs e)
         {
             new PRMSN_Memoized().Show();
         }
 
-
-        private void графикиPRMSNToolStripMenuItem_Click(object sender, EventArgs e)
-        {
-            button9_Click(new object(), new EventArgs());
-        }
-
         private void параметрыЗадачиToolStripMenuItem_Click(object sender, EventArgs e)
         {
-            button6_Click(new object(), new EventArgs());
+            new ParametrsQu().ShowDialog();
         }
 
         private void параметрыПодсчётаИнтегралаDINNToolStripMenuItem_Click(object sender, EventArgs e)
         {
-            button5_Click(new object(), new EventArgs());
+            new DINN5().ShowDialog();
         }
 
         private void распространениеВолныВПространствеToolStripMenuItem_Click(object sender, EventArgs e)
@@ -578,7 +574,7 @@ namespace Практика_с_фортрана
             double cor = GetCorner();
             beg = textBox2.Text.ToDouble();
             end = textBox3.Text.ToDouble();
-            Waves.Circle circle = new Waves.Circle(sourceIt.Center, sourceIt.radius);
+            Waves.Circle circle = sourceIt.GetCircle;
 
             double h = (end - beg) / (k - 1);
             Waves.Normal2D[] norms = sourceIt.Norms;
@@ -619,15 +615,14 @@ namespace Практика_с_фортрана
                         Parallel.For(0, k, (int i) =>
                         {
                             if (token.IsCancellationRequested) { toolStripStatusLabel1.Text = "Асинхронная операция была отменена"; return; }
-                            Complex[] tmp = new Complex[3];
                             Complex[] tmp2 = u(N.Position.x + N.n.x * w, N.Position.y + N.n.y * w, xval[i]/** ThU / SpU*/, norms).ToComplex();
-                            SetIElemForAll(i, tmp, tmp2, cor);
+                            SetIElemForAll(i, new Complex[3], tmp2, cor);
                         });
                         Setzlim(uRvalRes, uRzRes);
                         break;
                     default:
                         beg = 0;
-                        end = 2 * Math.PI;
+                        end = pimult2;
                         Parallel.For(0, k, (int i) =>
                         {
                             if (token.IsCancellationRequested) { toolStripStatusLabel1.Text = "Асинхронная операция была отменена"; return; }
@@ -669,11 +664,7 @@ namespace Практика_с_фортрана
 
         private void ReDraw()
         {
-            for (int i = 0; i < chart1.Series.Count; i++)
-            {
-                chart1.Series[i].Points.Clear();
-                chart1.Series[i].IsVisibleInLegend = false;
-            }
+            ClearSeries();
 
             var list = new List<double>();
             if (checkBox1.Checked) { chart1.Series[0].Points.DataBindXY(xval, uRval); chart1.Series[0].IsVisibleInLegend = true; list.AddRange(uRval); }
@@ -690,13 +681,8 @@ namespace Практика_с_фортрана
             if (checkBox11.Checked) { chart1.Series[10].Points.DataBindXY(xval, uIzRes); chart1.Series[10].IsVisibleInLegend = true; list.AddRange(uIzRes); }
             if (checkBox12.Checked) { chart1.Series[11].Points.DataBindXY(xval, uAzRes); chart1.Series[11].IsVisibleInLegend = true; list.AddRange(uAzRes); }
 
-            if (list.Count > 0)
-            {
-                double max = list.Max(), min = list.Min(), t = 0.05;
-                chart1.ChartAreas[0].AxisY.Minimum = (min > 0) ? min * (1 - t) : min * (1 + t);
-                chart1.ChartAreas[0].AxisY.Maximum = (max > 0) ? max * (1 + t) : max * (1 - t);
-            }
-
+            ForChart.SetAxisesY(ref chart1);
+            ForChart.SetToolTips(ref chart1);
         }
         private void SetIElemForAll(int i, Complex[] tmp, Complex[] tmp2, double phi = 0)
         {
@@ -757,12 +743,6 @@ namespace Практика_с_фортрана
             form.Lims();
 
             form.ShowDialog();
-        }
-
-
-        private void button5_Click(object sender, EventArgs e)
-        {
-            new DINN5().ShowDialog();
         }
 
         private void radio()

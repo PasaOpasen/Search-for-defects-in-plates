@@ -62,7 +62,7 @@ namespace Defect2019
         int counter = 0;
         private void SetTrack(int val = 17)
         {
-            argstep = 2 * Math.PI / (trackBar1.Maximum+1);
+            argstep = pimult2 / (trackBar1.Maximum+1);
             trackBar1.Value = val;
             textBox3.Text = (trackBar1.Value* argstep).ToString();
 

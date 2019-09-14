@@ -59,8 +59,8 @@ public static class РабКонсоль
     #endregion
 
     #region Параметры по частотам
-    public static double ThU = 1e-3, SpU = 1e3, wc = 0.6283185/*0.1 * 2 * Math.PI*/, _T;
-    public static double T => 2 * Math.PI / wc * ThU / SpU;
+    public static double ThU = 1e-3, SpU = 1e3, wc = 0.6283185/*0.1 * pimult2*/, _T;
+    public static double T => pimult2 / wc * ThU / SpU;
 
     public static double wbeg = 0.01256637061435917295385057353312, wend = 1.2566370614359172953850573533118;
     public static int wcount = 400;
@@ -103,7 +103,8 @@ public static class Functions
         I2 = new Complex(0, 0.5);
     public static readonly double
         sqrtfrac2pi = Math.Sqrt(2.0 / Math.PI),
-    fracpi4 = Math.PI / 4;
+    fracpi4 = Math.PI / 4,
+        pimult2=2*Math.PI;
 
     public static void AfterChaigeData()
     {
@@ -229,13 +230,48 @@ public static class Functions
         Complex ew(double t, double ww) => Complex.Exp(Complex.I * t * ww) / ww;
         Complex perv(double t) => ew(t, w1) + ew(t, w2) - ew(t, w3) - ew(t, w4) - 2 * (ew(t, w5) - ew(t, w6));
 
-        return (perv(2 * Math.PI * N / wc) - perv(0)) / 8;
+        return (perv(pimult2 * N / wc) - perv(0)) / 8;
     };
 
     /// <summary>
     /// Получить тестовый массив f(w) по глобальным данным
     /// </summary>
     public static Func<Complex[]> GetFmas=()=> SeqWMemoized(wbeg, wend, wcount).Map((double d) => Functions.F1(d) + new Number.Complex(RandomNumbers.NextDouble2(0, 1e-7), RandomNumbers.NextDouble2(0, 1e-7)));
+
+    #endregion
+
+    #region Функции Ханкеля
+    /// <summary>
+    /// Используемая функция Ханкеля
+    /// </summary>
+    public static Func<double, Tuple<Complex, Complex>> HankelTuple = HankelTupleWith;
+
+    /// <summary>
+    /// Функция Ханкеля с умножением на корень (этот корень сокращается со знаменателем)
+    /// </summary>
+    public static Func<double, Tuple<Complex, Complex>> HankelTupleWith = (double ar) =>
+    {
+        return new Tuple<Complex, Complex>(sqrtfrac2pi * Complex.Expi(ar + fracpi4), sqrtfrac2pi * Complex.Expi(ar - fracpi4));
+    };
+
+    /// <summary>
+    /// Функция Ханкеля без умножения на корень
+    /// </summary>
+    public static Func<double, Tuple<Complex, Complex>> HankelTupleClear = (double ar) =>
+    {
+        double arsqrt = Math.Sqrt(ar);
+        return new Tuple<Complex, Complex>(sqrtfrac2pi / arsqrt * Complex.Expi(ar + fracpi4), sqrtfrac2pi / arsqrt * Complex.Expi(ar - fracpi4));
+    };
+
+    /// <summary>
+    /// Функция Ханкеля с умножением на корень и срезом для ИЛЮШИ
+    /// </summary>
+    public static Func<double, Tuple<Complex, Complex>> HankelTupleИлюшаСюдаСмотри = (double ar) =>
+    {
+        var sd = SheringFunction.GetSheredFunction((double t) => 1.0, 0, 10, 0.4);
+        double tmp = sd(ar);
+        return new Tuple<Complex, Complex>(sqrtfrac2pi * tmp * Complex.Expi(ar + fracpi4), sqrtfrac2pi * tmp * Complex.Expi(ar - fracpi4));
+    };
 
     #endregion
 
@@ -762,36 +798,6 @@ public static class Functions
 
     #endregion
 
-    #region Функции Ханкеля
-    /// <summary>
-    /// Функция Ханкеля с умножением на корень (этот корень сокращается со знаменателем)
-    /// </summary>
-    public static Func<double, Tuple<Complex, Complex>> HankelTuple/*Old*/ = (double ar) =>
-    {
-        return new Tuple<Complex, Complex>(sqrtfrac2pi * Complex.Expi(ar + fracpi4), sqrtfrac2pi * Complex.Expi(ar - fracpi4));
-    };
-
-    /// <summary>
-    /// Функция Ханкеля без умножения на корень
-    /// </summary>
-    public static Func<double, Tuple<Complex, Complex>> HankelTupleClear = (double ar) =>
-    {
-        double arsqrt = Math.Sqrt(ar);
-        return new Tuple<Complex, Complex>(sqrtfrac2pi / arsqrt * Complex.Expi(ar + fracpi4), sqrtfrac2pi / arsqrt * Complex.Expi(ar - fracpi4));
-    };
-
-    /// <summary>
-    /// Функция Ханкеля с умножением на корень и срезом для ИЛЮШИ
-    /// </summary>
-    public static Func<double, Tuple<Complex, Complex>> HankelTupleИлюшаСюдаСмотри = (double ar) =>
-    {
-        var sd = SheringFunction.GetSheredFunction((double t) => 1.0, 0, 10, 0.4);
-        double tmp = sd(ar);
-        return new Tuple<Complex, Complex>(sqrtfrac2pi * tmp * Complex.Expi(ar + fracpi4), sqrtfrac2pi * tmp * Complex.Expi(ar - fracpi4));
-    };
-
-    #endregion
-
     #region Функции для uxt
     /// <summary>
     /// Возвращает вектор преобразований Фурье от шапочек
@@ -832,15 +838,12 @@ public static class Functions
     public static Func<double, double, Source, Tuple<Complex, Complex>[]> CMAS = (double x, double y, Source s) =>
    {
        Tuple<Complex, Complex>[] c = new Tuple<Complex, Complex>[wcount];
-      //tex: ${\bar c}= f({\bar w}) \cdot u(x,y,z,{\bar w}) $ покомпонентно
+      //tex: ${\bar c}= {\bar f}({\bar w}) \cdot {\bar u}(x,y,z,{\bar w}) $ покомпонентно
 
-      //Parallel.For(0, wcount, (int i) =>
       for (int i = 0; i < wcount; i++)
        {
            c[i] = Expendator.Mult(uxwMemoized(x, y, wmas[i], s), s.Fmas[i]);
        }
-      //);
-
       return c;
    };
 
@@ -894,6 +897,7 @@ public static class Functions
     {
        //return ((Integraluxt(x,y,t,tuple,normal)).Re / Math.PI).DoubleMas;
 
+        //tex: Скалярное произведение ${\bar c} \cdot {\bar \varphi({\bar t})}$
        return ((CMAS_Memoized(x, y, s) * FiMemoized(t)));//этот вариант почему-то самый быстрый
 
        //double[] w = tuple.Item1;

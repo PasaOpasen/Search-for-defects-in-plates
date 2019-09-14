@@ -66,8 +66,6 @@
             this.label4 = new System.Windows.Forms.Label();
             this.numericUpDown1 = new System.Windows.Forms.NumericUpDown();
             this.colorDialog1 = new System.Windows.Forms.ColorDialog();
-            this.button5 = new System.Windows.Forms.Button();
-            this.button6 = new System.Windows.Forms.Button();
             this.label5 = new System.Windows.Forms.Label();
             this.textBox6 = new System.Windows.Forms.TextBox();
             this.listBox1 = new System.Windows.Forms.ListBox();
@@ -86,7 +84,6 @@
             this.errorProvider1 = new System.Windows.Forms.ErrorProvider(this.components);
             this.radioButton1 = new System.Windows.Forms.RadioButton();
             this.radioButton2 = new System.Windows.Forms.RadioButton();
-            this.button9 = new System.Windows.Forms.Button();
             this.checkBox13 = new System.Windows.Forms.CheckBox();
             this.menuStrip1 = new System.Windows.Forms.MenuStrip();
             this.параметрыToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
@@ -229,7 +226,7 @@
             this.chart1.Series.Add(series22);
             this.chart1.Series.Add(series23);
             this.chart1.Series.Add(series24);
-            this.chart1.Size = new System.Drawing.Size(977, 773);
+            this.chart1.Size = new System.Drawing.Size(974, 773);
             this.chart1.TabIndex = 0;
             this.chart1.Text = "chart1";
             title2.Font = new System.Drawing.Font("Consolas", 12F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(204)));
@@ -499,28 +496,6 @@
             0,
             0});
             // 
-            // button5
-            // 
-            this.button5.FlatStyle = System.Windows.Forms.FlatStyle.Flat;
-            this.button5.Location = new System.Drawing.Point(393, 223);
-            this.button5.Name = "button5";
-            this.button5.Size = new System.Drawing.Size(226, 28);
-            this.button5.TabIndex = 25;
-            this.button5.Text = "Задать параметры DINN5";
-            this.button5.UseVisualStyleBackColor = true;
-            this.button5.Click += new System.EventHandler(this.button5_Click);
-            // 
-            // button6
-            // 
-            this.button6.FlatStyle = System.Windows.Forms.FlatStyle.Flat;
-            this.button6.Location = new System.Drawing.Point(571, 223);
-            this.button6.Name = "button6";
-            this.button6.Size = new System.Drawing.Size(226, 28);
-            this.button6.TabIndex = 54;
-            this.button6.Text = "Задать параметры задачи";
-            this.button6.UseVisualStyleBackColor = true;
-            this.button6.Click += new System.EventHandler(this.button6_Click);
-            // 
             // label5
             // 
             this.label5.AutoSize = true;
@@ -629,7 +604,7 @@
             this.pictureBox1.BackgroundImageLayout = System.Windows.Forms.ImageLayout.Stretch;
             this.pictureBox1.Location = new System.Drawing.Point(0, 0);
             this.pictureBox1.Name = "pictureBox1";
-            this.pictureBox1.Size = new System.Drawing.Size(977, 773);
+            this.pictureBox1.Size = new System.Drawing.Size(974, 773);
             this.pictureBox1.TabIndex = 69;
             this.pictureBox1.TabStop = false;
             // 
@@ -691,24 +666,13 @@
             this.radioButton2.UseVisualStyleBackColor = true;
             this.radioButton2.CheckedChanged += new System.EventHandler(this.radioButton2_CheckedChanged);
             // 
-            // button9
-            // 
-            this.button9.FlatStyle = System.Windows.Forms.FlatStyle.Flat;
-            this.button9.Location = new System.Drawing.Point(555, 279);
-            this.button9.Name = "button9";
-            this.button9.Size = new System.Drawing.Size(262, 35);
-            this.button9.TabIndex = 76;
-            this.button9.Text = "Посмотреть графики PRMSN_Memoized";
-            this.button9.UseVisualStyleBackColor = true;
-            this.button9.Click += new System.EventHandler(this.button9_Click);
-            // 
             // checkBox13
             // 
             this.checkBox13.AutoSize = true;
             this.checkBox13.BackColor = System.Drawing.Color.White;
             this.checkBox13.Checked = true;
             this.checkBox13.CheckState = System.Windows.Forms.CheckState.Checked;
-            this.checkBox13.Location = new System.Drawing.Point(1300, 359);
+            this.checkBox13.Location = new System.Drawing.Point(1300, 343);
             this.checkBox13.Name = "checkBox13";
             this.checkBox13.Size = new System.Drawing.Size(154, 23);
             this.checkBox13.TabIndex = 78;
@@ -741,14 +705,14 @@
             // параметрыЗадачиToolStripMenuItem
             // 
             this.параметрыЗадачиToolStripMenuItem.Name = "параметрыЗадачиToolStripMenuItem";
-            this.параметрыЗадачиToolStripMenuItem.Size = new System.Drawing.Size(178, 22);
+            this.параметрыЗадачиToolStripMenuItem.Size = new System.Drawing.Size(180, 22);
             this.параметрыЗадачиToolStripMenuItem.Text = "Параметры задачи";
             this.параметрыЗадачиToolStripMenuItem.Click += new System.EventHandler(this.параметрыЗадачиToolStripMenuItem_Click);
             // 
             // параметрыПодсчётаИнтегралаDINNToolStripMenuItem
             // 
             this.параметрыПодсчётаИнтегралаDINNToolStripMenuItem.Name = "параметрыПодсчётаИнтегралаDINNToolStripMenuItem";
-            this.параметрыПодсчётаИнтегралаDINNToolStripMenuItem.Size = new System.Drawing.Size(178, 22);
+            this.параметрыПодсчётаИнтегралаDINNToolStripMenuItem.Size = new System.Drawing.Size(180, 22);
             this.параметрыПодсчётаИнтегралаDINNToolStripMenuItem.Text = "Параметры DINN";
             this.параметрыПодсчётаИнтегралаDINNToolStripMenuItem.Click += new System.EventHandler(this.параметрыПодсчётаИнтегралаDINNToolStripMenuItem_Click);
             // 
@@ -867,7 +831,6 @@
             this.Controls.Add(this.pictureBox1);
             this.Controls.Add(this.chart1);
             this.Controls.Add(this.checkBox13);
-            this.Controls.Add(this.button9);
             this.Controls.Add(this.radioButton2);
             this.Controls.Add(this.radioButton1);
             this.Controls.Add(this.menuStrip1);
@@ -882,9 +845,7 @@
             this.Controls.Add(this.textBox6);
             this.Controls.Add(this.label5);
             this.Controls.Add(this.label3);
-            this.Controls.Add(this.button6);
             this.Controls.Add(this.textBox3);
-            this.Controls.Add(this.button5);
             this.Controls.Add(this.textBox2);
             this.Controls.Add(this.numericUpDown1);
             this.Controls.Add(this.label4);
@@ -895,7 +856,7 @@
             this.MainMenuStrip = this.menuStrip1;
             this.Margin = new System.Windows.Forms.Padding(4);
             this.Name = "UGrafic";
-            this.Text = "График функций ur, uz";
+            this.Text = "Анализ модели для одного источника";
             this.Load += new System.EventHandler(this.UGrafic_Load);
             ((System.ComponentModel.ISupportInitialize)(this.chart1)).EndInit();
             this.groupBox1.ResumeLayout(false);
@@ -929,8 +890,6 @@
         private System.Windows.Forms.NumericUpDown numericUpDown1;
         private System.Windows.Forms.ColorDialog colorDialog1;
         private System.Windows.Forms.CheckBox checkBox3;
-        private System.Windows.Forms.Button button5;
-        private System.Windows.Forms.Button button6;
         private System.Windows.Forms.CheckBox checkBox4;
         private System.Windows.Forms.CheckBox checkBox5;
         private System.Windows.Forms.CheckBox checkBox6;
@@ -957,7 +916,6 @@
         private System.Windows.Forms.CheckBox checkBox9;
         private System.Windows.Forms.CheckBox checkBox8;
         private System.Windows.Forms.CheckBox checkBox7;
-        private System.Windows.Forms.Button button9;
         private System.Windows.Forms.MenuStrip menuStrip1;
         private System.Windows.Forms.ToolStripMenuItem параметрыToolStripMenuItem;
         private System.Windows.Forms.ToolStripMenuItem параметрыЗадачиToolStripMenuItem;
