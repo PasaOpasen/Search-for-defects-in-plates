@@ -108,16 +108,9 @@ public static class Functions
 
     public static void AfterChaigeData()
     {
-        mu2 = 2 * mu;
-        ml2 = mu2 + lamda;
-        im = new Complex(0, mu);
-
-        k2coef = ro / mu;
-        k1coef = ro / ml2;
+        SetConstants();
         WriteParams();
         Expendator.WriteStringInFile("ClastersCount.txt", clastersCount.ToString());
-
-        Bessel = new Func<Complex, double, double, Complex[]>(_Bessel);
 
         prmsnmem = new Memoize<Tuple<Complex, double>, Complex[]>((Tuple<Complex, double> t) => PRMSN(t.Item1, t.Item2));
         var prmsn = prmsnmem.Value;
@@ -153,6 +146,14 @@ public static class Functions
     public static double lamda = 51.0835913312694, mu = 26.3157894736842, ro = 2.7, h = 2.0, crosscoef = 0.2;
     public static double ml2, mu2, k1coef, k2coef;
     private static Complex im;
+    private static void SetConstants()
+    {
+        mu2 = 2 * mu;
+        ml2 = mu2 + lamda;
+        im = new Complex(0, mu);
+        k2coef = ro / mu;
+        k1coef = ro / ml2;
+    }
     private static void WriteParams()
     {
         using(StreamWriter f=new StreamWriter("LastParamsConfig.txt"))
@@ -209,8 +210,11 @@ public static class Functions
     #endregion
 
     #region Простейшие функции
+    //tex: $\varkappa (\omega) = \dfrac{\rho \omega^2}{\mu}$
     public static RealFunc k1 = (double w) => w * w * k1coef;
+    //tex: $\varkappa (\omega) = \dfrac{\rho \omega^2}{2\mu+\lambda}$
     public static RealFunc k2 = (double w) => w * w * k2coef;
+    //tex: $\sigma_i (\alpha, \omega) = (\alpha-\varkappa_i(\omega))^\frac{1}{2}$
     public static Func<Complex, double, Complex> sigma = (Complex a, double kw) => Complex.Sqrt((a - kw)) * Math.Sign(a.Abs - kw);
 
     public static Func<double, Complex> F1 = (double w) =>
@@ -259,6 +263,7 @@ public static class Functions
     /// </summary>
     public static Func<double, Tuple<Complex, Complex>> HankelTupleClear = (double ar) =>
     {
+        //tex: $H(r)=\left(\dfrac{2}{ \pi r} \right)^\frac{1}{2} exp(i\cdot (r \pm \frac{\pi}{4}))$
         double arsqrt = Math.Sqrt(ar);
         return new Tuple<Complex, Complex>(sqrtfrac2pi / arsqrt * Complex.Expi(ar + fracpi4), sqrtfrac2pi / arsqrt * Complex.Expi(ar - fracpi4));
     };
@@ -279,6 +284,7 @@ public static class Functions
 
     public static double epsforder => РабКонсоль.eps;
 
+    //tex:$\Delta(\alpha,\omega)=det(A(\alpha,\omega))$
     /// <summary>
     /// Функция знаменателя, выраженная явно
     /// </summary>
@@ -339,25 +345,16 @@ public static class Functions
            ComplexFunc del = (Complex a) => Deltass(a, w);
            Vectors v1 = w < 0.1 ? Roots.OtherMethod(del, РабКонсоль.polesBeg, РабКонсоль.polesEnd, РабКонсоль.steproot / 200, 1e-12, Roots.MethodRoot.Brent, false) : Roots.OtherMethod(del, РабКонсоль.polesBeg, РабКонсоль.polesEnd, РабКонсоль.steproot, 1e-10, Roots.MethodRoot.Brent, false);
            Vectors v2 = DeltassNPosRoots(w, РабКонсоль.polesBeg, РабКонсоль.polesEnd);
-           // return new Vectors(Expendator.Distinct(v1.DoubleMas, v2.DoubleMas));
            v1.UnionWith(v2);
-           if (v1.Deg != 3) v1 = Getv(w);
            return v1;
        };
-
-    private static Vectors Getv(double w)
-    {
-        int i = 0;
-        while (kGrafic.Model[i].Item1 > w) i++;
-        return new Vectors(kGrafic.Model[i].Item2);
-    }
 
     /// <summary>
     /// Мемоизированная PolesMas
     /// </summary>
     public static Func<double, Vectors> PolesMasMemoized;
     #endregion
-    //-----
+    
     #region Матрица K
 
     /// <summary>
@@ -365,10 +362,9 @@ public static class Functions
     /// </summary>
     public static Func<Complex, double, double, double, CSqMatrix> K = (Complex a, double x, double y, double w) =>
    {
-       var c = PRMSN_Memoized(a, w);
        Complex ar = a * Math.Sqrt(x * x + y * y);
        Tuple<Complex, Complex> tup = new Tuple<Complex, Complex>(МатКлассы.SpecialFunctions.MyBessel(1, ar), МатКлассы.SpecialFunctions.MyBessel(0, ar));
-       return InK(a, c, tup, x, y);
+       return InK(a, PRMSN_Memoized(a, w), tup, x, y);
    };
     /// <summary>
     /// Матрица Грина при наборе нормалей
@@ -431,6 +427,9 @@ public static class Functions
        return sum * I2;
    };
 
+    /// <summary>
+    /// Матрица Грина, когда уже известны некоторые составляющие
+    /// </summary>
     public static Func<Complex, Complex[], Tuple<Complex, Complex>, double, double, CSqMatrix> InK = (Complex a, Complex[] PRMSN_Memoized, Tuple<Complex, Complex> beshank, double x, double y) =>
          {
              double x2 = x * x, y2 = y * y, r2 = x2 + y2, r = Math.Sqrt(r2);
@@ -463,7 +462,9 @@ public static class Functions
              { K31,K32,K33}
                  });
          };
-
+    /// <summary>
+    /// Разница двух матриц в окрестности полюса
+    /// </summary>
     public static Func<Complex, Complex, Complex[], Complex[], Tuple<Complex, Complex>, double, double, Complex[]> InKtwice = (Complex a1, Complex a2, Complex[] PRMSN1, Complex[] PRMSN2, Tuple<Complex, Complex> beshank, double x, double y) =>
       {
 
@@ -500,6 +501,17 @@ public static class Functions
               P * jy, Si * jx,Si * jy,R1 * j0ara1- R2 * j0ara2
   };
       };
+    /// <summary>
+    /// Ускоренная версия поиска разности (чтобы не выделять память под новый массив)
+    /// </summary>
+    /// <param name="a1"></param>
+    /// <param name="a2"></param>
+    /// <param name="PRMSN1"></param>
+    /// <param name="PRMSN2"></param>
+    /// <param name="beshank"></param>
+    /// <param name="x"></param>
+    /// <param name="y"></param>
+    /// <param name="res"></param>
     public static void InKtwiceFast(Complex a1, Complex a2, Complex[] PRMSN1, Complex[] PRMSN2, Tuple<Complex, Complex> beshank, double x, double y, ref Complex[] res)
     {
 
@@ -546,13 +558,6 @@ public static class Functions
     /// <param name="M"></param>
     /// <param name="v"></param>
     /// <returns></returns>
-    public static CVectors KQmult(CSqMatrix M, Vectors v)
-    {
-        CVectors r = new CVectors(3);
-        for (int k = 0; k < 3; k++)
-            r[k] = M[k, 0] * v[0] + M[k, 1] * v[1];
-        return r;
-    }
     public static CVectors KQmult(Complex[] M, Vectors v)
     {
         CVectors r = new CVectors(3);
@@ -571,30 +576,17 @@ public static class Functions
     public static CVectors KQmult(Complex[,] M, Vectors v) => new CVectors(new Complex[3] { M[0, 0] * v[0] + M[0, 1] * v[1], M[1, 0] * v[0] + M[1, 1] * v[1], M[2, 0] * v[0] + M[2, 1] * v[1] });
 
     #endregion
-
+    
     #region Функции для определения коэффициентов матрицы K
-    private static Complex[] _Bessel(Complex a, double x, double y)
+    /// <summary>
+    /// Возвращает первые и вторые производные функции J0(alpha,x,y)
+    /// </summary>
+    private static Complex[] Bessel(Complex a, double x, double y)
     {
-        //Complex jx, jy, jxx, jxy, jyy;
-        //double x2=x*x,y2=y*y, r = Math.Sqrt(x2 + y2);
-        //Complex ar = a * r,a_r=a/r,a_r2=a_r*a_r;
-        //Complex j1ar =/*LittleBessel1(ar) */МатКлассы.SpecialFunctions.MyBessel(1, ar),j2ar=/*LittleBessel2(ar)*/ МатКлассы.SpecialFunctions.MyBessel(2, ar);
-
-        ////(a).Show();
-
-        //jx = -j1ar * x *a_r;
-        //jy = -j1ar * y *a_r;
-        //jxx = j2ar * x2* a_r2 - j1ar * a_r;
-        //jyy= j2ar * y2 *a_r2 - j1ar *a_r;
-        //jxy = a_r*x*y/(x2+y2)*(ar*j2ar-j1ar*(1.0-a));
-        //$"{jx} {jy} {jxx} {jxy} {jyy}".Show();
-
         Complex jx, jy, jxx, jxy, jyy;
         double x2 = x * x, y2 = y * y, r = Math.Sqrt(x2 + y2), r2 = x2 + y2;
         Complex ar = a * r, a_r = a / r, a_r2 = a_r * a_r, a_rr = a_r / r;
         Complex j1ar = МатКлассы.SpecialFunctions.MyBessel(1, ar), j0ar = МатКлассы.SpecialFunctions.MyBessel(0, ar);
-
-        //(a).Show();
 
         jx = -j1ar * x * a_r;
         jy = -j1ar * y * a_r;
@@ -604,29 +596,20 @@ public static class Functions
 
         return new Complex[] { jx, jy, jxx, jxy, jyy };
     }
-    private static Complex[] _Hankel(Complex a, double x, double y)
+    private static Complex[] Hankel(Complex a, double x, double y)
     {
         Complex jx, jy, jxx, jxy, jyy;
         double x2 = x * x, y2 = y * y, r = Math.Sqrt(x2 + y2);
         Complex ar = a * r, ar3 = ar * r * r;
-        Complex j1ar =/*LittleBessel1(ar) */МатКлассы.SpecialFunctions.Hankel(1, ar.Re), j2ar =/*LittleBessel2(ar)*/ МатКлассы.SpecialFunctions.Hankel(2, ar.Re);
-
-        //(a).Show();
+        Complex j1ar =МатКлассы.SpecialFunctions.Hankel(1, ar.Re), j2ar = МатКлассы.SpecialFunctions.Hankel(2, ar.Re);
 
         jx = -j1ar * x / r;
         jy = -j1ar * y / r;
         jxx = j2ar * x2 / r / r - j1ar * (x2 + a * y2) / ar3;
         jyy = j2ar * y2 / r / r - j1ar * (y2 + a * x2) / ar3;
         jxy = j2ar * x * y / r / r + j1ar / ar3 * (a - 1);
-        //$"{jx} {jy} {jxx} {jxy} {jyy}".Show();
         return new Complex[] { jx, jy, jxx, jxy, jyy };
     }
-
-    /// <summary>
-    /// Возвращает первые и вторые производные функции J0(alpha,x,y), мемоизируется
-    /// </summary>
-    public static Func<Complex, double, double, Complex[]> Bessel;
-    public static Func<double, double, Complex> Hankel;
 
     /// <summary>
     /// Возвращает первые два столбца из обратной матрицы
@@ -635,91 +618,9 @@ public static class Functions
     /// <returns></returns>
     public static Tuple<CVectors, CVectors> Arev(Complex al, double w)
     {
-        //Complex alp = al * al,ima=Complex.I*mu*alp;
-        //Complex s1=sigma(alp,k1(w)),s2=sigma(alp,k2(w));
-        //Complex q = Complex.Exp(s1 * h),qv= Complex.Exp(-s1 * h), ww=Complex.Exp(s2*h) ,qp= Complex.Exp(s2 * h), qm=Complex.Exp(-s2*h)/*1.0/qp*/;
-        //Complex sh = (qp - qm) * 0.5, ch = (qp + qm) * 0.5;
-
-        //Complex a = (al - 0.5 * k2(w));
-        //Complex b = s1;
-        //Complex c = al * s2;
-        //Complex d = -a;
-        //Complex ad = a * d;
-        //Complex bc = b * c;
-        //Complex cc = -Complex.I * s2;
-        //Complex cq = cc *qv, dq = d *qv;
-
-        ////тут большие сомнения насчёт умножения на ima
-        //Complex[] m1 = new Complex[4], m2 = new Complex[4];
-        //m1[0] = d * (bc - q * (ad * sh + bc * ch));
-        //m2[0] = dq * (-bc * q + (bc * ch - ad * sh));
-        //m1[1] = cc * (ad - q * (ad * ch + bc * sh));//;*ima
-        //m2[1] = cq * (ad * q + (bc * sh - ad * ch));//; * ima
-        //m1[2] = d * (bc * q + ad * sh - bc * ch);
-        //m2[2] = dq * (-bc + q * (ad * sh + bc * ch));
-        //m1[3] = cc * (ad * q - ad * ch + bc * sh);//; * ima
-        //m2[3] = cq * (ad - q * (ad * ch + bc * sh));// ;* ima
-
-        //Complex a = (al - 0.5 * k2(w)), a2 = a * a;
-        //Complex g = s1 * s2 * al * Complex.I;
-        //Complex a2q = a2 * q, gq = g * q, c = -Complex.I * s2, cq = c / q, aq = a / q;
-        //m1[0] = -a * (a2q * sh - gq * ch + g);
-        //m2[0] = -aq * (a2 * sh + g * ch - gq);//*(-1);
-        //m1[1] = c * (-a2 + a2q * ch - gq * sh);//* (-1) ;
-        //m2[1] = cq * (a2 * ch + g * sh - a2q);
-        //m1[2] = -a * (-a2 * sh - g * ch + gq);
-        //m2[2] = -aq * (-a2q * sh + gq * ch - g);// * (-1);
-        //m1[3] = c * (a2 * ch + g * sh - a2q);//* (-1) ;
-        //m2[3] = cq * (a2q * ch - gq * sh - a2);
-
-
-        //---------------------------------------------------------------------------------------------------------
-        //Complex ia = Complex.I * al;
-        //Complex a = (al - 0.5 * k2(w));
-        //Complex b = s1 * ia;
-        //Complex c = al * s2;
-        //Complex d = -a * ia;
-        //Complex ad = a * d;
-        //Complex bc = b * c;
-        //Complex w2 = ww * ww, q2 = q * q;
-        //Complex pl = ad + bc, ml = ad - bc;
-
-        // Complex coef = -Complex.Exp(-h * (s1 + s2))/alp/alp;coef.Show();
-
-        //Complex[] m1 = new Complex[4], m2 = new Complex[4];
-        //m1[0] = d * q * (pl * w2 * q - q * ml - 2 * bc * ww);
-        //m2[0] = -c * q * (q * w2 * pl + q * ml - 2 * ad * ww);
-        //m1[1] = -d * (w2 * ml + 2 * bc * ww * q - pl);
-        //m2[1] = c * (w2 * ml + pl - 2 * ad * q * ww);
-        //m1[2] = b * ww * (pl * q2 * ww + ww * ml - 2 * ad * q);
-        //m2[2] = a * ww * (pl * q2 * ww - ww * ml - 2 * bc * q);
-        //m1[3] = -b * (ml * q2 - 2 * ad * ww * q + pl);
-        //m2[3] = -a * (q2 * ml + pl + 2 * bc * q * ww);
-
-        //return new Tuple<CVectors, CVectors>(new CVectors(m1), new CVectors(m2));
-
-        // CSqMatrix Mat = A(al, w).Invert();
         CSqMatrix Mat = A(al, w).InvertByMathNet();
-        //CSqMatrix S = A(al, w).InvertByMathNet();  $"{(A(al, w) * Mat - SqMatrix.E(4)).CubeNorm} {(A(al, w) * S - SqMatrix.E(4)).CubeNorm}".Show();
-        //CSqMatrix Mat2 = A(al, w).InvertSum;$"{(A(al, w) * Mat-SqMatrix.E(4)).CubeNorm} \t{(A(al, w) * Mat2 - SqMatrix.E(4)).CubeNorm}".Show();
 
-        return new Tuple<CVectors, CVectors>(Mat.GetColumn(0), Mat.GetColumn(1));
-        //CSqMatrix s = A(al, w);
-        //return new Tuple<CVectors, CVectors>(new CVectors(new Complex[] {s.GetMinMat(1,1).DetSarius, s.GetMinMat(1, 2).DetSarius , s.GetMinMat(1, 2).DetSarius , s.GetMinMat(1, 2).DetSarius }), new CVectors(new Complex[] { s.GetMinMat(2, 1).DetSarius, s.GetMinMat(2, 2).DetSarius, s.GetMinMat(2, 2).DetSarius, s.GetMinMat(2, 2).DetSarius }));
-
-    }
-    /// <summary>
-    /// Возвращает первые два столбца обратной матрицы без деления на определитель
-    /// </summary>
-    /// <param name="al"></param>
-    /// <param name="w"></param>
-    /// <returns></returns>
-    public static Tuple<CVectors, CVectors> ArevUp(Complex al, double w)
-    {
-        CSqMatrix Mat = A(al, w);
-        CVectors t1 = new CVectors(new Complex[] { Mat.GetMinMat(1, 1).Det, -Mat.GetMinMat(1, 2).Det, Mat.GetMinMat(1, 3).Det, -Mat.GetMinMat(1, 4).Det });
-        CVectors t2 = new CVectors(new Complex[] { -Mat.GetMinMat(2, 1).Det, Mat.GetMinMat(2, 2).Det, -Mat.GetMinMat(2, 3).Det, Mat.GetMinMat(2, 4).Det });
-        return new Tuple<CVectors, CVectors>(t1, t2);
+        return new Tuple<CVectors, CVectors>(Mat.GetColumn(0), Mat.GetColumn(1));    
     }
 
     /// <summary>
@@ -769,22 +670,19 @@ public static class Functions
     /// <param name="w"></param>
     /// <returns></returns>
     public static Func<Complex, double, Complex[]> PRMSN_Memoized;
+    /// <summary>
+    /// Матрица A, от которой строится решение
+    /// </summary>
     public static Func<Complex, double, CSqMatrix> A = (Complex alp, double w) =>
         {
             double kt1 = k1(w), kt2 = k2(w);
-            Complex al = alp * alp, ai =/*al**/Complex.I;
+            Complex al = alp * alp, ai =Complex.I;
             Complex s1 = sigma(al, kt1), s2 = sigma(al, kt2);
-            Complex a = (al - 0.5 * kt2);//*mu2;
-            Complex b = s1 * ai;// * mu2;// *();
-            Complex c = al * s2;// * mu2;
-            Complex d = -a * ai;// * (al * Complex.I);
-            //Complex q = Complex.Exp(s1 * h), ww = Complex.Exp(s2 * h);
+            Complex a = (al - 0.5 * kt2);
+            Complex b = s1 * ai;
+            Complex c = al * s2;
+            Complex d = -a * ai;
             Complex q = Complex.Exp(-s1 * h), ww = Complex.Exp(-s2 * h);
-            //$"{a} {b} {c} {d} {q} {ww}".Show();
-
-            //$"sigm {s1} {s2}".Show();
-            //$"exp {q} {ww}".Show();
-            //$"elem a= {a*mu2} b= {b * mu2} c= {c * mu2} d= {d * mu2}".Show();
 
             CSqMatrix res = new CSqMatrix(new Complex[,] {
                 {a,a*q,c,-c*ww },
@@ -792,7 +690,6 @@ public static class Functions
                 {a*q ,a,c*ww,-c },
                 {-b*q,b,d*ww, d}
             });
-            //res.ReversColumns(2, 3);
             return res;
         };
 
@@ -822,19 +719,29 @@ public static class Functions
     public static Func<double, CVectors> FiMemoized;
     public static Func<Complex[], double, CVectors> Phif;
 
+    /// <summary>
+    /// Преобразует {ux ; uy ; uz} в {ur ; uz}
+    /// </summary>
+    /// <param name="v"></param>
+    /// <param name="s"></param>
+    /// <param name="x"></param>
+    /// <param name="y"></param>
+    /// <returns></returns>
     private static Tuple<Complex, Complex> ToURUZ(CVectors v, Source s, double x, double y)
     {
         double cor = new Number.Complex(x - s.Center.x, y - s.Center.y).Arg;
         return new Tuple<Complex, Complex>(v[0] * Math.Cos(cor) + v[1] * Math.Sin(cor), v[2]);
     }
 
+    /// <summary>
+    /// Собственно функция u(x,w)
+    /// </summary>
     public static Func<double, double, double, Source, Tuple<Complex, Complex>> uxw = (double x, double y, double w, Source s) => ToURUZ(KsumRes(x, y, w, s.Norms, (Point t) => new Vectors(t.x, t.y, 0.0)), s, x, y);
 
+    //tex:${\bar u}_i({\bar x},\omega)$ с источника i
     public static Func<double, double, double, Source, Tuple<Complex, Complex>> uxwMemoized;
 
-    /// <summary>
-    /// tex: ${\bar c}= f({\bar w}) \cdot u(x,y,z,{\bar w}) $ покомпонентно
-    /// </summary>
+    //tex: ${\bar c}= f({\bar \omega}) \cdot u(x,y,z,{\bar \omega}) $ покомпонентно
     public static Func<double, double, Source, Tuple<Complex, Complex>[]> CMAS = (double x, double y, Source s) =>
    {
        Tuple<Complex, Complex>[] c = new Tuple<Complex, Complex>[wcount];
@@ -851,7 +758,7 @@ public static class Functions
     /// Мемоизированная функция вычисления коэффициентов
     /// </summary>
     public static Func<double, double, Source, Tuple<Complex, Complex>[]> CMAS_Memoized;
-
+    //tex: ${\bar c}= f({\bar \omega}) \cdot u(x,y,z,{\bar \omega}) \cdot \phi ({\bar\omega}) $ покомпонентно
     public static Func<double, double, double, Source, Tuple<Complex, Complex>> TripleMult = (double x, double y, double t, Source s) =>
          {
              Tuple<Complex, Complex> v;
@@ -870,9 +777,7 @@ public static class Functions
              return new Tuple<Complex, Complex>(tmp1, tmp2);
          };
 
-    /// <summary>
-    /// tex: ${\bar c}= f({\bar w}) \cdot u(x,y,z,{\bar w}) $ покомпонентно
-    /// </summary>
+    //tex: ${\bar c}= \cdot u(x,y,z,{\bar \omega}) \cdot \phi ({\bar\omega}) $ покомпонентно
     private static Func<double, double, double, Source, Tuple<Complex, Complex>> Integraluxt = (double x, double y, double t, Source s) =>
       {
           var p = Phif(s.Fmas, t);
@@ -963,7 +868,7 @@ public static class Functions
     /// <param name="r2"></param>
     /// <param name="r3"></param>
     /// <returns></returns>
-    public static Func<double, double, double, Source[], Tuple<double, double>> GetUxtFunc(RadioButton r1, RadioButton r2, RadioButton r3)
+    internal static Func<double, double, double, Source[], Tuple<double, double>> GetUxtFunc(RadioButton r1, RadioButton r2, RadioButton r3)
     {
         if (r1.Checked)
             return Uxt1;
