@@ -22,10 +22,7 @@ namespace Defect2019
             timer1.Interval = 1500;
             timer1.Tick += new EventHandler(Timer1_Tick);
 
-            //label10.Hide();
-            //numericUpDown3.Hide();
-
-            ChooseCircleOfNot();
+            TextCopy();
         }
         private void Timer1_Tick(object Sender, EventArgs e)
         {
@@ -41,101 +38,79 @@ namespace Defect2019
 
             Forms.UG.progressBar1.Value = (save.ToDouble() / all * Forms.UG.progressBar1.Maximum).ToInt();
         }
-
-        private void label4_Click(object sender, EventArgs e)
-        {
-
-        }
-
-        private void button2_Click(object sender, EventArgs e)
-        {
-            this.Close();
-        }
-
         private int all = 0, save = 0;
         private DateTime time;
 
         private async void button1_Click(object sender, EventArgs e)
         {
             this.Hide();
+            Circle fiCirc = Forms.UG.sourceIt.GetCircle;
 
-            Waves.Circle circle = new Waves.Circle(new МатКлассы.Point(textBox1.Text.ToDouble(), textBox2.Text.ToDouble()), textBox3.Text.ToDouble());
             double w = textBox4.Text.ToDouble();
-            double x0 = textBox5.Text.ToDouble(), X = textBox6.Text.ToDouble(), y0 = textBox7.Text.ToDouble(), Y = textBox8.Text.ToDouble();//X.Show();
+            double x0 = textBox5.Text.ToDouble(), X = textBox6.Text.ToDouble(), y0 = textBox7.Text.ToDouble(), Y = textBox8.Text.ToDouble();
             int xc = Convert.ToInt32(numericUpDown1.Value);
             int yc = Convert.ToInt32(numericUpDown2.Value);
-            string tit = $"{((radioButton3.Checked)?"circle":"dcircle")} = (({circle.center.x}; {circle.center.y}), r = {circle.radius}), {((radioButton1.Checked) ? "ω" : "t")} = {w}, (xmin, xmax, xcount, ymin, ymax, ycount) = ({x0}, {X}, {xc}, {y0}, {Y}, {yc})";
+            string tit = $"{Forms.UG.sourceIt.ToShortString()}, {((radioButton1.Checked) ? "ω" : "t")} = {w}, (xmin, xmax, xcount, ymin, ymax, ycount) = ({x0}, {X}, {xc}, {y0}, {Y}, {yc})";
             tit.Show();
             all = yc * xc;
 
             Normal2D[] norms = Forms.UG.sourceIt.Norms;
+            Func<МатКлассы.Point, bool> filter = Forms.UG.sourceIt.Filter;
 
-            Func<МатКлассы.Point, bool> filter;
-            if (radioButton3.Checked) filter = (МатКлассы.Point po) => circle.ContainPoint(po);
-            else filter =  Forms.UG.sourceIt.Filter;
 
-            Circle fiCirc = (radioButton3.Checked) ? new Circle(circle) : new Circle(Forms.UG.sourceIt.GetCircle); 
 
             SaveFileDialog savedialog = new SaveFileDialog();
             savedialog.Title = "Сохранить рисунок как...";
-            savedialog.FileName =/* Environment.CurrentDirectory + "\\*/"3D ur, uz.txt";
+            savedialog.FileName ="3D ur, uz.txt";
             savedialog.Filter = "Text files (*.txt)|*.txt|All files (*.*)|*.*";
 
             savedialog.OverwritePrompt = true;
             savedialog.CheckPathExists = true;
             savedialog.ShowHelp = true;
-            //if (savedialog.ShowDialog() == DialogResult.OK)
-            //{
-            //    try
-            //    {
+
             timer1.Start();
             IProgress<int> progress = new Progress<int>((p) => { save = p; });
 
             Forms.UG.toolStripStatusLabel1.Text = "Вычисления запущены";
             time = DateTime.Now;
             Forms.UG.ShowCancelControls();
-            //Forms.UG.timer1.Start(); Forms.UG.timer2.Start();
             Forms.UG.source = new System.Threading.CancellationTokenSource();
             System.Threading.CancellationToken token = Forms.UG.source.Token;
-            if(radioButton1.Checked)
-            await Task.Run(() =>
-            {
-                МатКлассы.Waves.Circle.FieldToFileParallel(savedialog.FileName,
-                    (double x, double y/*, МатКлассы.Point normal*/) =>
-                    {
-                        var t = Forms.UG.UResMemoized(x, y, w, norms);
-                        double cor = new Number.Complex(x - fiCirc.center.x, y - fiCirc.center.y).Arg;
-                        return new Tuple<Number.Complex, Number.Complex>(/*Number.Complex.Sqrt(*/t[0]*Math.Cos(cor) + t[1]*Math.Sin(cor)/*)*/, t[2]);
-                    },
-                    x0, X, xc, y0, Y, yc,
-                    //fiCirc,
-                    progress,//ref Forms.UG.prbar,
-                    token,
-                    filter,
-                    tit,
-                    Convert.ToInt32(numericUpDown3.Value)
-                            );
-            });
+            if (radioButton1.Checked)
+                await Task.Run(() =>
+                {
+                    МатКлассы.Waves.Circle.FieldToFileParallel(savedialog.FileName,
+                        (double x, double y) =>
+                        {
+                            var t = Forms.UG.UResMemoized(x, y, w, norms);
+                            double cor = new Number.Complex(x - fiCirc.center.x, y - fiCirc.center.y).Arg;
+                            return new Tuple<Number.Complex, Number.Complex>(t[0] * Math.Cos(cor) + t[1] * Math.Sin(cor), t[2]);
+                        },
+                        x0, X, xc, y0, Y, yc,
+                        progress,
+                        token,
+                        filter,
+                        tit
+                                );
+                });
             else
-            await Task.Run(() =>
-            {
-                МатКлассы.Waves.Circle.FieldToFileOLD(savedialog.FileName,"",
-                    (double x, double y/*, МатКлассы.Point normal*/) =>
-                    {
-                        var t = Forms.UG.u(x, y, w, norms);
-                        double cor = new Number.Complex(x - fiCirc.center.x, y - fiCirc.center.y).Arg;
-                        return new Tuple<double, double>(t[0] * Math.Cos(cor) + t[1] * Math.Sin(cor), t[2]);
-                    },
-                    x0, X, xc, y0, Y, yc,
-                    //fiCirc,
-                    progress,
-                    token,
-                    filter,
-                    tit,
-                    false
-                            );
-            });
-            //Forms.UG.timer1.Stop(); Forms.UG.timer2.Stop();
+                await Task.Run(() =>
+                {
+                    МатКлассы.Waves.Circle.FieldToFileOLD(savedialog.FileName, "",
+                        (double x, double y) =>
+                        {
+                            var t = Forms.UG.u(x, y, w, norms);
+                            double cor = new Number.Complex(x - fiCirc.center.x, y - fiCirc.center.y).Arg;
+                            return new Tuple<double, double>(t[0] * Math.Cos(cor) + t[1] * Math.Sin(cor), t[2]);
+                        },
+                        x0, X, xc, y0, Y, yc,
+                        progress,
+                        token,
+                        filter,
+                        tit,
+                        false
+                                );
+                });
             TimeSpan ts = DateTime.Now - time;
             timer1.Stop();
 
@@ -149,59 +124,29 @@ namespace Defect2019
             {
                 Forms.UG.toolStripStatusLabel1.Text = $"Вычисления выполнены и записаны в файл. Время вычислений: {ts}, среднее время вычилений 10-ти точек (sec.): {ts.Milliseconds.ToDouble() * 10 / xc / yc}. Вызван скрипт R";
 
+                await Task.Run(() =>
+                {
                 if (radioButton1.Checked) StartProcess("3Duruz.R");
                 else StartProcess("3Duxt.R");
-            }
+                });
 
-            //}
-            //catch (Exception ee)
-            //{
-            //    MessageBox.Show("Произошла ошибка", ee.Message,
-            //    MessageBoxButtons.OK, MessageBoxIcon.Error);
-            //}
-            //}          
-        }
-
-        private void button10_Click(object sender, EventArgs e)
-        {
-            new DC().Show();
-        }
-        private void ChooseCircleOfNot()
-        {
-            if (radioButton3.Checked)
+                var names = new string[]
             {
-                label1.Show();
-                textBox1.Show();
-                textBox2.Show();
-                label2.Show();
-                textBox3.Show();
-                label10.Show();
-                numericUpDown3.Show();
-
-                button10.Hide();
+                    "Все трёхмерные поверхности в pdf",
+                    "Abs(ur)",
+                    "Abs(uz)"
+            };
+                var st = new string[]
+                {
+                    "3D ur, uz.pdf",
+                    "urAbs.html",
+                    "uzAbs.html"
+                };
+                var form = new Библиотека_графики.ManyDocumentsShower("3D поверхности для одного источника", names, st);
+                form.StartPosition = FormStartPosition.CenterScreen;
+                form.Show();
             }
-            else
-            {
-                label1.Hide();
-                textBox1.Hide();
-                textBox2.Hide();
-                label2.Hide();
-                textBox3.Hide();
-                label10.Hide();
-                numericUpDown3.Hide();
-
-                button10.Show();
-            }
-        }
-
-        private void radioButton3_CheckedChanged(object sender, EventArgs e)
-        {
-            ChooseCircleOfNot();
-        }
-
-        private void radioButton4_CheckedChanged(object sender, EventArgs e)
-        {
-            ChooseCircleOfNot();
+            this.Close();
         }
 
         private void radioButton1_CheckedChanged(object sender, EventArgs e)
@@ -214,6 +159,22 @@ namespace Defect2019
             label3.Text = "t =";
         }
 
+        private void наКругToolStripMenuItem_Click(object sender, EventArgs e)
+        {
+            Forms.UG.наКругToolStripMenuItem_Click(sender, e);
+            TextCopy();
+        }
+
+        private void наПолумесяцToolStripMenuItem_Click(object sender, EventArgs e)
+        {
+            Forms.UG.наПолумесяцToolStripMenuItem_Click(sender, e);
+            TextCopy();
+        }
+        private void TextCopy()
+        {
+            textBox9.Text = Forms.UG.textBox8.Text;
+        }
+
         public void StartProcess(string fileName)
         {
             Process process = new Process();
@@ -222,14 +183,12 @@ namespace Defect2019
 
             process.Exited += (sender, e) =>
             {
-                Console.WriteLine($"Процесс завершен с кодом {process.ExitCode}");
-                Process.Start("3D ur, uz.pdf");
-                Process.Start("urAbs.html");
                 Forms.UG.toolStripStatusLabel1.Text = "Диалог с 3D закончен полностью";
                 this.Close();
             };
 
             process.Start();
+            process.WaitForExit();
         }
     }
 }

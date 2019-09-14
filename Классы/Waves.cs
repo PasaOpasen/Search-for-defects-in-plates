@@ -196,7 +196,7 @@ namespace МатКлассы
             /// <param name="y0">Начало отрезка по у</param>
             /// <param name="Y">Конец отрезка по у</param>
             /// <param name="ycount">Число точек по у</param>
-            public static void FieldToFileParallel(string filename, Func<double, double, Tuple<Complex, Complex>> F, double x0, double X, int xcount, double y0, double Y, int ycount, /*Circle circle,*/ IProgress<int> progress/*ref int[] k*/, System.Threading.CancellationToken token, Func<Point, bool> Filter, string title = "", int normalscount = 100)
+            public static void FieldToFileParallel(string filename, Func<double, double, Tuple<Complex, Complex>> F, double x0, double X, int xcount, double y0, double Y, int ycount, IProgress<int> progress, System.Threading.CancellationToken token, Func<Point, bool> Filter, string title = "")
             {
                 int[] k = new int[xcount * ycount];
                 double[] x = Expendator.Seq(x0, X, xcount);

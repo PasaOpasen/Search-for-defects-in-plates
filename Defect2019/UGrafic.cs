@@ -38,7 +38,6 @@ namespace Практика_с_фортрана
             this.FormClosed += (object o, FormClosedEventArgs e) => HankelTuple = HankelTupleWith;
 
             label8.BackColor = Color.Transparent;
-            button7.Hide();
 
             colorDialog1.FullOpen = true;
             colorDialog1.Color = Color.Green;          
@@ -358,11 +357,6 @@ namespace Практика_с_фортрана
             checkBox1_CheckedChanged(sender, e);
         }
 
-        private void button7_Click(object sender, EventArgs e)
-        {
-            toolStripStatusLabel1.Text = "Запущен диалог относительно 3D графика";
-            new _3Duruz().ShowDialog();
-        }
 
         private void label8_Click(object sender, EventArgs e)
         {
@@ -477,25 +471,16 @@ namespace Практика_с_фортрана
             ReDraw();
         }
 
-        private void radioButton1_CheckedChanged(object sender, EventArgs e)
-        {
-            radio();
-        }
-
-        private void radioButton2_CheckedChanged(object sender, EventArgs e)
-        {
-            radio();
-        }
         #endregion
 
         public Tuple<double, double, double, Normal2D[], Func<МатКлассы.Point, bool>> tuple;
 
-        private void наКругToolStripMenuItem_Click(object sender, EventArgs e)
+        internal void наКругToolStripMenuItem_Click(object sender, EventArgs e)
         {
             new Sources(true).ShowDialog();
         }
 
-        private void наПолумесяцToolStripMenuItem_Click(object sender, EventArgs e)
+        internal void наПолумесяцToolStripMenuItem_Click(object sender, EventArgs e)
         {
             new DC().ShowDialog();
         }
@@ -544,6 +529,12 @@ namespace Практика_с_фортрана
         public void SetTuple()
         {
             tuple = new Tuple<double, double, double, Normal2D[], Func<Point, bool>>(sourceIt.Center.x, sourceIt.Center.y, sourceIt.radius, sourceIt.Norms, sourceIt.Filter);
+        }
+
+        private void dГрафикКомпонентаВолныToolStripMenuItem_Click(object sender, EventArgs e)
+        {
+            toolStripStatusLabel1.Text = "Запущен диалог относительно 3D графика";
+            new _3Duruz().ShowDialog();
         }
 
         private void ClearSeries()
@@ -686,13 +677,14 @@ namespace Практика_с_фортрана
         }
         private void SetIElemForAll(int i, Complex[] tmp, Complex[] tmp2, double phi = 0)
         {
-            Complex ur = tmp[0] * Math.Cos(phi) + tmp[1] * Math.Sin(phi);
+            double sin=Math.Sin(phi), cos=Math.Cos(phi);
 
+            Complex ur = tmp[0] *cos  + tmp[1] *sin ;
             Complex uz = tmp[2];
             uRval[i] = ur.Re; uIval[i] = ur.Im; umodval[i] = ur.Abs;
             uRz[i] = uz.Re; uIz[i] = uz.Im; uAz[i] = uz.Abs;
 
-            ur = tmp2[0] * Math.Cos(phi) + tmp2[1] * Math.Sin(phi);
+            ur = tmp2[0] * cos + tmp2[1] * sin;
             uz = tmp2[2];
             uRvalRes[i] = ur.Re; uIvalRes[i] = ur.Im; umodvalRes[i] = ur.Abs;
             uRzRes[i] = uz.Re; uIzRes[i] = uz.Im; uAzRes[i] = uz.Abs;
@@ -745,37 +737,6 @@ namespace Практика_с_фортрана
             form.ShowDialog();
         }
 
-        private void radio()
-        {
-            if (radioButton1.Checked)
-            {
-                button7.Hide();
-                listBox1.Show();
-                label5.Show();
-                textBox6.Show();
-                label7.Show();
-                textBox7.Show();
-                label3.Show();
-                textBox2.Show();
-                textBox3.Show();
-                label4.Show();
-                numericUpDown1.Show();
-            }
-            else
-            {
-                button7.Show();
-                listBox1.Hide();
-                label5.Hide();
-                textBox6.Hide();
-                label7.Hide();
-                textBox7.Hide();
-                label3.Hide();
-                textBox2.Hide();
-                textBox3.Hide();
-                label4.Hide();
-                numericUpDown1.Hide();
-            }
-        }
 
         private void Setzlim(double[] rmas, double[] zmas)
         {

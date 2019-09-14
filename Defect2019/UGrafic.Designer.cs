@@ -29,21 +29,21 @@
         private void InitializeComponent()
         {
             this.components = new System.ComponentModel.Container();
-            System.Windows.Forms.DataVisualization.Charting.ChartArea chartArea2 = new System.Windows.Forms.DataVisualization.Charting.ChartArea();
-            System.Windows.Forms.DataVisualization.Charting.Legend legend2 = new System.Windows.Forms.DataVisualization.Charting.Legend();
-            System.Windows.Forms.DataVisualization.Charting.Series series13 = new System.Windows.Forms.DataVisualization.Charting.Series();
-            System.Windows.Forms.DataVisualization.Charting.Series series14 = new System.Windows.Forms.DataVisualization.Charting.Series();
-            System.Windows.Forms.DataVisualization.Charting.Series series15 = new System.Windows.Forms.DataVisualization.Charting.Series();
-            System.Windows.Forms.DataVisualization.Charting.Series series16 = new System.Windows.Forms.DataVisualization.Charting.Series();
-            System.Windows.Forms.DataVisualization.Charting.Series series17 = new System.Windows.Forms.DataVisualization.Charting.Series();
-            System.Windows.Forms.DataVisualization.Charting.Series series18 = new System.Windows.Forms.DataVisualization.Charting.Series();
-            System.Windows.Forms.DataVisualization.Charting.Series series19 = new System.Windows.Forms.DataVisualization.Charting.Series();
-            System.Windows.Forms.DataVisualization.Charting.Series series20 = new System.Windows.Forms.DataVisualization.Charting.Series();
-            System.Windows.Forms.DataVisualization.Charting.Series series21 = new System.Windows.Forms.DataVisualization.Charting.Series();
-            System.Windows.Forms.DataVisualization.Charting.Series series22 = new System.Windows.Forms.DataVisualization.Charting.Series();
-            System.Windows.Forms.DataVisualization.Charting.Series series23 = new System.Windows.Forms.DataVisualization.Charting.Series();
-            System.Windows.Forms.DataVisualization.Charting.Series series24 = new System.Windows.Forms.DataVisualization.Charting.Series();
-            System.Windows.Forms.DataVisualization.Charting.Title title2 = new System.Windows.Forms.DataVisualization.Charting.Title();
+            System.Windows.Forms.DataVisualization.Charting.ChartArea chartArea7 = new System.Windows.Forms.DataVisualization.Charting.ChartArea();
+            System.Windows.Forms.DataVisualization.Charting.Legend legend7 = new System.Windows.Forms.DataVisualization.Charting.Legend();
+            System.Windows.Forms.DataVisualization.Charting.Series series73 = new System.Windows.Forms.DataVisualization.Charting.Series();
+            System.Windows.Forms.DataVisualization.Charting.Series series74 = new System.Windows.Forms.DataVisualization.Charting.Series();
+            System.Windows.Forms.DataVisualization.Charting.Series series75 = new System.Windows.Forms.DataVisualization.Charting.Series();
+            System.Windows.Forms.DataVisualization.Charting.Series series76 = new System.Windows.Forms.DataVisualization.Charting.Series();
+            System.Windows.Forms.DataVisualization.Charting.Series series77 = new System.Windows.Forms.DataVisualization.Charting.Series();
+            System.Windows.Forms.DataVisualization.Charting.Series series78 = new System.Windows.Forms.DataVisualization.Charting.Series();
+            System.Windows.Forms.DataVisualization.Charting.Series series79 = new System.Windows.Forms.DataVisualization.Charting.Series();
+            System.Windows.Forms.DataVisualization.Charting.Series series80 = new System.Windows.Forms.DataVisualization.Charting.Series();
+            System.Windows.Forms.DataVisualization.Charting.Series series81 = new System.Windows.Forms.DataVisualization.Charting.Series();
+            System.Windows.Forms.DataVisualization.Charting.Series series82 = new System.Windows.Forms.DataVisualization.Charting.Series();
+            System.Windows.Forms.DataVisualization.Charting.Series series83 = new System.Windows.Forms.DataVisualization.Charting.Series();
+            System.Windows.Forms.DataVisualization.Charting.Series series84 = new System.Windows.Forms.DataVisualization.Charting.Series();
+            System.Windows.Forms.DataVisualization.Charting.Title title7 = new System.Windows.Forms.DataVisualization.Charting.Title();
             System.ComponentModel.ComponentResourceManager resources = new System.ComponentModel.ComponentResourceManager(typeof(UGrafic));
             this.chart1 = new System.Windows.Forms.DataVisualization.Charting.Chart();
             this.groupBox1 = new System.Windows.Forms.GroupBox();
@@ -69,7 +69,6 @@
             this.label5 = new System.Windows.Forms.Label();
             this.textBox6 = new System.Windows.Forms.TextBox();
             this.listBox1 = new System.Windows.Forms.ListBox();
-            this.label6 = new System.Windows.Forms.Label();
             this.label7 = new System.Windows.Forms.Label();
             this.textBox7 = new System.Windows.Forms.TextBox();
             this.timer1 = new System.Windows.Forms.Timer(this.components);
@@ -77,13 +76,10 @@
             this.statusStrip1 = new System.Windows.Forms.StatusStrip();
             this.toolStripStatusLabel1 = new System.Windows.Forms.ToolStripStatusLabel();
             this.timer2 = new System.Windows.Forms.Timer(this.components);
-            this.button7 = new System.Windows.Forms.Button();
             this.pictureBox1 = new System.Windows.Forms.PictureBox();
             this.label8 = new System.Windows.Forms.Label();
             this.button8 = new System.Windows.Forms.Button();
             this.errorProvider1 = new System.Windows.Forms.ErrorProvider(this.components);
-            this.radioButton1 = new System.Windows.Forms.RadioButton();
-            this.radioButton2 = new System.Windows.Forms.RadioButton();
             this.checkBox13 = new System.Windows.Forms.CheckBox();
             this.menuStrip1 = new System.Windows.Forms.MenuStrip();
             this.параметрыToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
@@ -102,6 +98,7 @@
             this.изменитьToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.наКругToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.наПолумесяцToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
+            this.dГрафикКомпонентаВолныToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             ((System.ComponentModel.ISupportInitialize)(this.chart1)).BeginInit();
             this.groupBox1.SuspendLayout();
             ((System.ComponentModel.ISupportInitialize)(this.numericUpDown1)).BeginInit();
@@ -118,120 +115,120 @@
             this.chart1.BackgroundImageLayout = System.Windows.Forms.ImageLayout.None;
             this.chart1.BackImageTransparentColor = System.Drawing.Color.Transparent;
             this.chart1.BackImageWrapMode = System.Windows.Forms.DataVisualization.Charting.ChartImageWrapMode.Scaled;
-            chartArea2.Name = "ChartArea1";
-            this.chart1.ChartAreas.Add(chartArea2);
-            legend2.Name = "Legend1";
-            this.chart1.Legends.Add(legend2);
+            chartArea7.Name = "ChartArea1";
+            this.chart1.ChartAreas.Add(chartArea7);
+            legend7.Name = "Legend1";
+            this.chart1.Legends.Add(legend7);
             this.chart1.Location = new System.Drawing.Point(0, 0);
             this.chart1.Name = "chart1";
-            series13.BorderWidth = 3;
-            series13.ChartArea = "ChartArea1";
-            series13.ChartType = System.Windows.Forms.DataVisualization.Charting.SeriesChartType.Line;
-            series13.Color = System.Drawing.Color.Blue;
-            series13.Legend = "Legend1";
-            series13.MarkerStyle = System.Windows.Forms.DataVisualization.Charting.MarkerStyle.Circle;
-            series13.Name = "Re ur";
-            series14.BorderWidth = 3;
-            series14.ChartArea = "ChartArea1";
-            series14.ChartType = System.Windows.Forms.DataVisualization.Charting.SeriesChartType.Line;
-            series14.Color = System.Drawing.Color.Lime;
-            series14.Legend = "Legend1";
-            series14.MarkerStyle = System.Windows.Forms.DataVisualization.Charting.MarkerStyle.Circle;
-            series14.Name = "Im ur";
-            series15.BorderWidth = 3;
-            series15.ChartArea = "ChartArea1";
-            series15.ChartType = System.Windows.Forms.DataVisualization.Charting.SeriesChartType.Line;
-            series15.Color = System.Drawing.Color.Red;
-            series15.Legend = "Legend1";
-            series15.MarkerStyle = System.Windows.Forms.DataVisualization.Charting.MarkerStyle.Circle;
-            series15.Name = "|ur|";
-            series16.BorderWidth = 3;
-            series16.ChartArea = "ChartArea1";
-            series16.ChartType = System.Windows.Forms.DataVisualization.Charting.SeriesChartType.Line;
-            series16.Color = System.Drawing.Color.Black;
-            series16.Legend = "Legend1";
-            series16.MarkerStyle = System.Windows.Forms.DataVisualization.Charting.MarkerStyle.Cross;
-            series16.Name = "Re uz";
-            series17.BorderWidth = 3;
-            series17.ChartArea = "ChartArea1";
-            series17.ChartType = System.Windows.Forms.DataVisualization.Charting.SeriesChartType.Line;
-            series17.Color = System.Drawing.Color.DarkOrange;
-            series17.Legend = "Legend1";
-            series17.MarkerStyle = System.Windows.Forms.DataVisualization.Charting.MarkerStyle.Cross;
-            series17.Name = "Im uz";
-            series18.BorderWidth = 3;
-            series18.ChartArea = "ChartArea1";
-            series18.ChartType = System.Windows.Forms.DataVisualization.Charting.SeriesChartType.Line;
-            series18.Color = System.Drawing.Color.FromArgb(((int)(((byte)(192)))), ((int)(((byte)(0)))), ((int)(((byte)(192)))));
-            series18.Legend = "Legend1";
-            series18.MarkerStyle = System.Windows.Forms.DataVisualization.Charting.MarkerStyle.Cross;
-            series18.Name = "|uz|";
-            series19.BorderDashStyle = System.Windows.Forms.DataVisualization.Charting.ChartDashStyle.Dash;
-            series19.BorderWidth = 3;
-            series19.ChartArea = "ChartArea1";
-            series19.ChartType = System.Windows.Forms.DataVisualization.Charting.SeriesChartType.Line;
-            series19.Legend = "Legend1";
-            series19.MarkerSize = 7;
-            series19.MarkerStyle = System.Windows.Forms.DataVisualization.Charting.MarkerStyle.Star5;
-            series19.Name = "Re urRes";
-            series20.BorderDashStyle = System.Windows.Forms.DataVisualization.Charting.ChartDashStyle.Dash;
-            series20.BorderWidth = 3;
-            series20.ChartArea = "ChartArea1";
-            series20.ChartType = System.Windows.Forms.DataVisualization.Charting.SeriesChartType.Line;
-            series20.Legend = "Legend1";
-            series20.MarkerSize = 7;
-            series20.MarkerStyle = System.Windows.Forms.DataVisualization.Charting.MarkerStyle.Star5;
-            series20.Name = "Im urRes";
-            series21.BorderDashStyle = System.Windows.Forms.DataVisualization.Charting.ChartDashStyle.Dash;
-            series21.BorderWidth = 3;
-            series21.ChartArea = "ChartArea1";
-            series21.ChartType = System.Windows.Forms.DataVisualization.Charting.SeriesChartType.Line;
-            series21.Legend = "Legend1";
-            series21.MarkerSize = 7;
-            series21.MarkerStyle = System.Windows.Forms.DataVisualization.Charting.MarkerStyle.Star5;
-            series21.Name = "|urRes|";
-            series22.BorderDashStyle = System.Windows.Forms.DataVisualization.Charting.ChartDashStyle.Dash;
-            series22.BorderWidth = 3;
-            series22.ChartArea = "ChartArea1";
-            series22.ChartType = System.Windows.Forms.DataVisualization.Charting.SeriesChartType.Line;
-            series22.Legend = "Legend1";
-            series22.MarkerSize = 7;
-            series22.MarkerStyle = System.Windows.Forms.DataVisualization.Charting.MarkerStyle.Star5;
-            series22.Name = "Re uzRes";
-            series23.BorderDashStyle = System.Windows.Forms.DataVisualization.Charting.ChartDashStyle.Dash;
-            series23.BorderWidth = 3;
-            series23.ChartArea = "ChartArea1";
-            series23.ChartType = System.Windows.Forms.DataVisualization.Charting.SeriesChartType.Line;
-            series23.Legend = "Legend1";
-            series23.MarkerSize = 7;
-            series23.MarkerStyle = System.Windows.Forms.DataVisualization.Charting.MarkerStyle.Star5;
-            series23.Name = "Im uzRes";
-            series24.BorderDashStyle = System.Windows.Forms.DataVisualization.Charting.ChartDashStyle.Dash;
-            series24.BorderWidth = 3;
-            series24.ChartArea = "ChartArea1";
-            series24.ChartType = System.Windows.Forms.DataVisualization.Charting.SeriesChartType.Line;
-            series24.Legend = "Legend1";
-            series24.MarkerSize = 7;
-            series24.MarkerStyle = System.Windows.Forms.DataVisualization.Charting.MarkerStyle.Star5;
-            series24.Name = "|uzRes|";
-            this.chart1.Series.Add(series13);
-            this.chart1.Series.Add(series14);
-            this.chart1.Series.Add(series15);
-            this.chart1.Series.Add(series16);
-            this.chart1.Series.Add(series17);
-            this.chart1.Series.Add(series18);
-            this.chart1.Series.Add(series19);
-            this.chart1.Series.Add(series20);
-            this.chart1.Series.Add(series21);
-            this.chart1.Series.Add(series22);
-            this.chart1.Series.Add(series23);
-            this.chart1.Series.Add(series24);
+            series73.BorderWidth = 3;
+            series73.ChartArea = "ChartArea1";
+            series73.ChartType = System.Windows.Forms.DataVisualization.Charting.SeriesChartType.Line;
+            series73.Color = System.Drawing.Color.Blue;
+            series73.Legend = "Legend1";
+            series73.MarkerStyle = System.Windows.Forms.DataVisualization.Charting.MarkerStyle.Circle;
+            series73.Name = "Re ur";
+            series74.BorderWidth = 3;
+            series74.ChartArea = "ChartArea1";
+            series74.ChartType = System.Windows.Forms.DataVisualization.Charting.SeriesChartType.Line;
+            series74.Color = System.Drawing.Color.Lime;
+            series74.Legend = "Legend1";
+            series74.MarkerStyle = System.Windows.Forms.DataVisualization.Charting.MarkerStyle.Circle;
+            series74.Name = "Im ur";
+            series75.BorderWidth = 3;
+            series75.ChartArea = "ChartArea1";
+            series75.ChartType = System.Windows.Forms.DataVisualization.Charting.SeriesChartType.Line;
+            series75.Color = System.Drawing.Color.Red;
+            series75.Legend = "Legend1";
+            series75.MarkerStyle = System.Windows.Forms.DataVisualization.Charting.MarkerStyle.Circle;
+            series75.Name = "|ur|";
+            series76.BorderWidth = 3;
+            series76.ChartArea = "ChartArea1";
+            series76.ChartType = System.Windows.Forms.DataVisualization.Charting.SeriesChartType.Line;
+            series76.Color = System.Drawing.Color.Black;
+            series76.Legend = "Legend1";
+            series76.MarkerStyle = System.Windows.Forms.DataVisualization.Charting.MarkerStyle.Cross;
+            series76.Name = "Re uz";
+            series77.BorderWidth = 3;
+            series77.ChartArea = "ChartArea1";
+            series77.ChartType = System.Windows.Forms.DataVisualization.Charting.SeriesChartType.Line;
+            series77.Color = System.Drawing.Color.DarkOrange;
+            series77.Legend = "Legend1";
+            series77.MarkerStyle = System.Windows.Forms.DataVisualization.Charting.MarkerStyle.Cross;
+            series77.Name = "Im uz";
+            series78.BorderWidth = 3;
+            series78.ChartArea = "ChartArea1";
+            series78.ChartType = System.Windows.Forms.DataVisualization.Charting.SeriesChartType.Line;
+            series78.Color = System.Drawing.Color.FromArgb(((int)(((byte)(192)))), ((int)(((byte)(0)))), ((int)(((byte)(192)))));
+            series78.Legend = "Legend1";
+            series78.MarkerStyle = System.Windows.Forms.DataVisualization.Charting.MarkerStyle.Cross;
+            series78.Name = "|uz|";
+            series79.BorderDashStyle = System.Windows.Forms.DataVisualization.Charting.ChartDashStyle.Dash;
+            series79.BorderWidth = 3;
+            series79.ChartArea = "ChartArea1";
+            series79.ChartType = System.Windows.Forms.DataVisualization.Charting.SeriesChartType.Line;
+            series79.Legend = "Legend1";
+            series79.MarkerSize = 7;
+            series79.MarkerStyle = System.Windows.Forms.DataVisualization.Charting.MarkerStyle.Star5;
+            series79.Name = "Re urRes";
+            series80.BorderDashStyle = System.Windows.Forms.DataVisualization.Charting.ChartDashStyle.Dash;
+            series80.BorderWidth = 3;
+            series80.ChartArea = "ChartArea1";
+            series80.ChartType = System.Windows.Forms.DataVisualization.Charting.SeriesChartType.Line;
+            series80.Legend = "Legend1";
+            series80.MarkerSize = 7;
+            series80.MarkerStyle = System.Windows.Forms.DataVisualization.Charting.MarkerStyle.Star5;
+            series80.Name = "Im urRes";
+            series81.BorderDashStyle = System.Windows.Forms.DataVisualization.Charting.ChartDashStyle.Dash;
+            series81.BorderWidth = 3;
+            series81.ChartArea = "ChartArea1";
+            series81.ChartType = System.Windows.Forms.DataVisualization.Charting.SeriesChartType.Line;
+            series81.Legend = "Legend1";
+            series81.MarkerSize = 7;
+            series81.MarkerStyle = System.Windows.Forms.DataVisualization.Charting.MarkerStyle.Star5;
+            series81.Name = "|urRes|";
+            series82.BorderDashStyle = System.Windows.Forms.DataVisualization.Charting.ChartDashStyle.Dash;
+            series82.BorderWidth = 3;
+            series82.ChartArea = "ChartArea1";
+            series82.ChartType = System.Windows.Forms.DataVisualization.Charting.SeriesChartType.Line;
+            series82.Legend = "Legend1";
+            series82.MarkerSize = 7;
+            series82.MarkerStyle = System.Windows.Forms.DataVisualization.Charting.MarkerStyle.Star5;
+            series82.Name = "Re uzRes";
+            series83.BorderDashStyle = System.Windows.Forms.DataVisualization.Charting.ChartDashStyle.Dash;
+            series83.BorderWidth = 3;
+            series83.ChartArea = "ChartArea1";
+            series83.ChartType = System.Windows.Forms.DataVisualization.Charting.SeriesChartType.Line;
+            series83.Legend = "Legend1";
+            series83.MarkerSize = 7;
+            series83.MarkerStyle = System.Windows.Forms.DataVisualization.Charting.MarkerStyle.Star5;
+            series83.Name = "Im uzRes";
+            series84.BorderDashStyle = System.Windows.Forms.DataVisualization.Charting.ChartDashStyle.Dash;
+            series84.BorderWidth = 3;
+            series84.ChartArea = "ChartArea1";
+            series84.ChartType = System.Windows.Forms.DataVisualization.Charting.SeriesChartType.Line;
+            series84.Legend = "Legend1";
+            series84.MarkerSize = 7;
+            series84.MarkerStyle = System.Windows.Forms.DataVisualization.Charting.MarkerStyle.Star5;
+            series84.Name = "|uzRes|";
+            this.chart1.Series.Add(series73);
+            this.chart1.Series.Add(series74);
+            this.chart1.Series.Add(series75);
+            this.chart1.Series.Add(series76);
+            this.chart1.Series.Add(series77);
+            this.chart1.Series.Add(series78);
+            this.chart1.Series.Add(series79);
+            this.chart1.Series.Add(series80);
+            this.chart1.Series.Add(series81);
+            this.chart1.Series.Add(series82);
+            this.chart1.Series.Add(series83);
+            this.chart1.Series.Add(series84);
             this.chart1.Size = new System.Drawing.Size(974, 773);
             this.chart1.TabIndex = 0;
             this.chart1.Text = "chart1";
-            title2.Font = new System.Drawing.Font("Consolas", 12F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(204)));
-            title2.Name = "Title1";
-            this.chart1.Titles.Add(title2);
+            title7.Font = new System.Drawing.Font("Consolas", 12F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(204)));
+            title7.Name = "Title1";
+            this.chart1.Titles.Add(title7);
             // 
             // groupBox1
             // 
@@ -419,7 +416,7 @@
             // 
             this.label3.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Right)));
             this.label3.AutoSize = true;
-            this.label3.Location = new System.Drawing.Point(1034, 482);
+            this.label3.Location = new System.Drawing.Point(1034, 453);
             this.label3.Name = "label3";
             this.label3.Size = new System.Drawing.Size(171, 19);
             this.label3.TabIndex = 7;
@@ -428,7 +425,7 @@
             // textBox3
             // 
             this.textBox3.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Right)));
-            this.textBox3.Location = new System.Drawing.Point(1324, 482);
+            this.textBox3.Location = new System.Drawing.Point(1324, 453);
             this.textBox3.Name = "textBox3";
             this.textBox3.Size = new System.Drawing.Size(100, 26);
             this.textBox3.TabIndex = 6;
@@ -438,7 +435,7 @@
             // textBox2
             // 
             this.textBox2.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Right)));
-            this.textBox2.Location = new System.Drawing.Point(1217, 482);
+            this.textBox2.Location = new System.Drawing.Point(1217, 453);
             this.textBox2.Name = "textBox2";
             this.textBox2.Size = new System.Drawing.Size(100, 26);
             this.textBox2.TabIndex = 5;
@@ -449,7 +446,7 @@
             // 
             this.button1.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Bottom | System.Windows.Forms.AnchorStyles.Right)));
             this.button1.Font = new System.Drawing.Font("Consolas", 27.75F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(204)));
-            this.button1.Location = new System.Drawing.Point(1013, 637);
+            this.button1.Location = new System.Drawing.Point(1013, 605);
             this.button1.Name = "button1";
             this.button1.Size = new System.Drawing.Size(444, 60);
             this.button1.TabIndex = 3;
@@ -461,7 +458,7 @@
             // 
             this.label4.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Bottom | System.Windows.Forms.AnchorStyles.Right)));
             this.label4.AutoSize = true;
-            this.label4.Location = new System.Drawing.Point(1092, 527);
+            this.label4.Location = new System.Drawing.Point(1094, 498);
             this.label4.Name = "label4";
             this.label4.Size = new System.Drawing.Size(198, 19);
             this.label4.TabIndex = 5;
@@ -475,7 +472,7 @@
             0,
             0,
             0});
-            this.numericUpDown1.Location = new System.Drawing.Point(1296, 525);
+            this.numericUpDown1.Location = new System.Drawing.Point(1298, 496);
             this.numericUpDown1.Maximum = new decimal(new int[] {
             10000,
             0,
@@ -499,7 +496,7 @@
             // label5
             // 
             this.label5.AutoSize = true;
-            this.label5.Location = new System.Drawing.Point(1007, 410);
+            this.label5.Location = new System.Drawing.Point(1007, 381);
             this.label5.Name = "label5";
             this.label5.Size = new System.Drawing.Size(180, 57);
             this.label5.TabIndex = 57;
@@ -508,7 +505,7 @@
             // 
             // textBox6
             // 
-            this.textBox6.Location = new System.Drawing.Point(1193, 426);
+            this.textBox6.Location = new System.Drawing.Point(1193, 397);
             this.textBox6.Name = "textBox6";
             this.textBox6.Size = new System.Drawing.Size(99, 26);
             this.textBox6.TabIndex = 61;
@@ -524,25 +521,16 @@
             "В точке при меняющейся частоте",
             "По всей окружности",
             "В точке при меняющемся времени"});
-            this.listBox1.Location = new System.Drawing.Point(998, 316);
+            this.listBox1.Location = new System.Drawing.Point(995, 286);
             this.listBox1.Name = "listBox1";
             this.listBox1.Size = new System.Drawing.Size(471, 80);
             this.listBox1.TabIndex = 62;
             this.listBox1.SelectedIndexChanged += new System.EventHandler(this.listBox1_SelectedIndexChanged);
             // 
-            // label6
-            // 
-            this.label6.AutoSize = true;
-            this.label6.Location = new System.Drawing.Point(1101, 287);
-            this.label6.Name = "label6";
-            this.label6.Size = new System.Drawing.Size(117, 19);
-            this.label6.TabIndex = 63;
-            this.label6.Text = "Тип графика:";
-            // 
             // label7
             // 
             this.label7.AutoSize = true;
-            this.label7.Location = new System.Drawing.Point(1328, 429);
+            this.label7.Location = new System.Drawing.Point(1328, 400);
             this.label7.Name = "label7";
             this.label7.Size = new System.Drawing.Size(36, 19);
             this.label7.TabIndex = 64;
@@ -550,7 +538,7 @@
             // 
             // textBox7
             // 
-            this.textBox7.Location = new System.Drawing.Point(1377, 426);
+            this.textBox7.Location = new System.Drawing.Point(1377, 397);
             this.textBox7.Name = "textBox7";
             this.textBox7.Size = new System.Drawing.Size(57, 26);
             this.textBox7.TabIndex = 65;
@@ -560,7 +548,7 @@
             // progressBar1
             // 
             this.progressBar1.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Bottom | System.Windows.Forms.AnchorStyles.Right)));
-            this.progressBar1.Location = new System.Drawing.Point(1013, 703);
+            this.progressBar1.Location = new System.Drawing.Point(1013, 671);
             this.progressBar1.MarqueeAnimationSpeed = 10;
             this.progressBar1.Maximum = 1000;
             this.progressBar1.Name = "progressBar1";
@@ -573,7 +561,7 @@
             this.statusStrip1.BackColor = System.Drawing.Color.FromArgb(((int)(((byte)(192)))), ((int)(((byte)(255)))), ((int)(((byte)(192)))));
             this.statusStrip1.Items.AddRange(new System.Windows.Forms.ToolStripItem[] {
             this.toolStripStatusLabel1});
-            this.statusStrip1.Location = new System.Drawing.Point(0, 763);
+            this.statusStrip1.Location = new System.Drawing.Point(0, 723);
             this.statusStrip1.Name = "statusStrip1";
             this.statusStrip1.Size = new System.Drawing.Size(1476, 22);
             this.statusStrip1.SizingGrip = false;
@@ -585,18 +573,6 @@
             this.toolStripStatusLabel1.Name = "toolStripStatusLabel1";
             this.toolStripStatusLabel1.Size = new System.Drawing.Size(118, 17);
             this.toolStripStatusLabel1.Text = "toolStripStatusLabel1";
-            // 
-            // button7
-            // 
-            this.button7.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Bottom | System.Windows.Forms.AnchorStyles.Right)));
-            this.button7.Font = new System.Drawing.Font("Consolas", 18F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(204)));
-            this.button7.Location = new System.Drawing.Point(1013, 637);
-            this.button7.Name = "button7";
-            this.button7.Size = new System.Drawing.Size(444, 58);
-            this.button7.TabIndex = 68;
-            this.button7.Text = "задание 3D графика";
-            this.button7.UseVisualStyleBackColor = true;
-            this.button7.Click += new System.EventHandler(this.button7_Click);
             // 
             // pictureBox1
             // 
@@ -616,7 +592,7 @@
             this.label8.Font = new System.Drawing.Font("Consolas", 12.75F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(204)));
             this.label8.ForeColor = System.Drawing.Color.LawnGreen;
             this.label8.ImageAlign = System.Drawing.ContentAlignment.TopRight;
-            this.label8.Location = new System.Drawing.Point(1256, 585);
+            this.label8.Location = new System.Drawing.Point(1256, 553);
             this.label8.Name = "label8";
             this.label8.Size = new System.Drawing.Size(180, 20);
             this.label8.TabIndex = 70;
@@ -630,7 +606,7 @@
             this.button8.BackColor = System.Drawing.Color.LightSalmon;
             this.button8.FlatStyle = System.Windows.Forms.FlatStyle.Flat;
             this.button8.Font = new System.Drawing.Font("Consolas", 14.25F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(204)));
-            this.button8.Location = new System.Drawing.Point(1013, 569);
+            this.button8.Location = new System.Drawing.Point(1013, 537);
             this.button8.Name = "button8";
             this.button8.Size = new System.Drawing.Size(205, 53);
             this.button8.TabIndex = 71;
@@ -642,37 +618,13 @@
             // 
             this.errorProvider1.ContainerControl = this;
             // 
-            // radioButton1
-            // 
-            this.radioButton1.AutoSize = true;
-            this.radioButton1.Checked = true;
-            this.radioButton1.Location = new System.Drawing.Point(1228, 287);
-            this.radioButton1.Name = "radioButton1";
-            this.radioButton1.Size = new System.Drawing.Size(45, 23);
-            this.radioButton1.TabIndex = 72;
-            this.radioButton1.TabStop = true;
-            this.radioButton1.Text = "2D";
-            this.radioButton1.UseVisualStyleBackColor = true;
-            this.radioButton1.CheckedChanged += new System.EventHandler(this.radioButton1_CheckedChanged);
-            // 
-            // radioButton2
-            // 
-            this.radioButton2.AutoSize = true;
-            this.radioButton2.Location = new System.Drawing.Point(1283, 287);
-            this.radioButton2.Name = "radioButton2";
-            this.radioButton2.Size = new System.Drawing.Size(45, 23);
-            this.radioButton2.TabIndex = 73;
-            this.radioButton2.Text = "3D";
-            this.radioButton2.UseVisualStyleBackColor = true;
-            this.radioButton2.CheckedChanged += new System.EventHandler(this.radioButton2_CheckedChanged);
-            // 
             // checkBox13
             // 
             this.checkBox13.AutoSize = true;
             this.checkBox13.BackColor = System.Drawing.Color.White;
             this.checkBox13.Checked = true;
             this.checkBox13.CheckState = System.Windows.Forms.CheckState.Checked;
-            this.checkBox13.Location = new System.Drawing.Point(1300, 343);
+            this.checkBox13.Location = new System.Drawing.Point(1303, 313);
             this.checkBox13.Name = "checkBox13";
             this.checkBox13.Size = new System.Drawing.Size(154, 23);
             this.checkBox13.TabIndex = 78;
@@ -705,14 +657,14 @@
             // параметрыЗадачиToolStripMenuItem
             // 
             this.параметрыЗадачиToolStripMenuItem.Name = "параметрыЗадачиToolStripMenuItem";
-            this.параметрыЗадачиToolStripMenuItem.Size = new System.Drawing.Size(180, 22);
+            this.параметрыЗадачиToolStripMenuItem.Size = new System.Drawing.Size(178, 22);
             this.параметрыЗадачиToolStripMenuItem.Text = "Параметры задачи";
             this.параметрыЗадачиToolStripMenuItem.Click += new System.EventHandler(this.параметрыЗадачиToolStripMenuItem_Click);
             // 
             // параметрыПодсчётаИнтегралаDINNToolStripMenuItem
             // 
             this.параметрыПодсчётаИнтегралаDINNToolStripMenuItem.Name = "параметрыПодсчётаИнтегралаDINNToolStripMenuItem";
-            this.параметрыПодсчётаИнтегралаDINNToolStripMenuItem.Size = new System.Drawing.Size(180, 22);
+            this.параметрыПодсчётаИнтегралаDINNToolStripMenuItem.Size = new System.Drawing.Size(178, 22);
             this.параметрыПодсчётаИнтегралаDINNToolStripMenuItem.Text = "Параметры DINN";
             this.параметрыПодсчётаИнтегралаDINNToolStripMenuItem.Click += new System.EventHandler(this.параметрыПодсчётаИнтегралаDINNToolStripMenuItem_Click);
             // 
@@ -720,7 +672,8 @@
             // 
             this.другиеГрафикиToolStripMenuItem.DropDownItems.AddRange(new System.Windows.Forms.ToolStripItem[] {
             this.графикиPRMSNToolStripMenuItem,
-            this.распространениеВолныВПространствеToolStripMenuItem});
+            this.распространениеВолныВПространствеToolStripMenuItem,
+            this.dГрафикКомпонентаВолныToolStripMenuItem});
             this.другиеГрафикиToolStripMenuItem.Name = "другиеГрафикиToolStripMenuItem";
             this.другиеГрафикиToolStripMenuItem.Size = new System.Drawing.Size(108, 20);
             this.другиеГрафикиToolStripMenuItem.Text = "Другие графики";
@@ -729,7 +682,7 @@
             // 
             this.графикиPRMSNToolStripMenuItem.Name = "графикиPRMSNToolStripMenuItem";
             this.графикиPRMSNToolStripMenuItem.Size = new System.Drawing.Size(297, 22);
-            this.графикиPRMSNToolStripMenuItem.Text = "Графики PRMSN_Memoized";
+            this.графикиPRMSNToolStripMenuItem.Text = "Графики PRMSN";
             this.графикиPRMSNToolStripMenuItem.Click += new System.EventHandler(this.графикиPRMSNToolStripMenuItem_Click);
             // 
             // распространениеВолныВПространствеToolStripMenuItem
@@ -809,38 +762,41 @@
             // наКругToolStripMenuItem
             // 
             this.наКругToolStripMenuItem.Name = "наКругToolStripMenuItem";
-            this.наКругToolStripMenuItem.Size = new System.Drawing.Size(153, 22);
+            this.наКругToolStripMenuItem.Size = new System.Drawing.Size(180, 22);
             this.наКругToolStripMenuItem.Text = "На круг";
             this.наКругToolStripMenuItem.Click += new System.EventHandler(this.наКругToolStripMenuItem_Click);
             // 
             // наПолумесяцToolStripMenuItem
             // 
             this.наПолумесяцToolStripMenuItem.Name = "наПолумесяцToolStripMenuItem";
-            this.наПолумесяцToolStripMenuItem.Size = new System.Drawing.Size(153, 22);
+            this.наПолумесяцToolStripMenuItem.Size = new System.Drawing.Size(180, 22);
             this.наПолумесяцToolStripMenuItem.Text = "На полумесяц";
             this.наПолумесяцToolStripMenuItem.Click += new System.EventHandler(this.наПолумесяцToolStripMenuItem_Click);
+            // 
+            // dГрафикКомпонентаВолныToolStripMenuItem
+            // 
+            this.dГрафикКомпонентаВолныToolStripMenuItem.Name = "dГрафикКомпонентаВолныToolStripMenuItem";
+            this.dГрафикКомпонентаВолныToolStripMenuItem.Size = new System.Drawing.Size(297, 22);
+            this.dГрафикКомпонентаВолныToolStripMenuItem.Text = "3D график компонента волны";
+            this.dГрафикКомпонентаВолныToolStripMenuItem.Click += new System.EventHandler(this.dГрафикКомпонентаВолныToolStripMenuItem_Click);
             // 
             // UGrafic
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(9F, 19F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
             this.BackColor = System.Drawing.Color.MediumSlateBlue;
-            this.ClientSize = new System.Drawing.Size(1476, 785);
+            this.ClientSize = new System.Drawing.Size(1476, 745);
             this.Controls.Add(this.groupBox3);
             this.Controls.Add(this.statusStrip1);
             this.Controls.Add(this.pictureBox1);
             this.Controls.Add(this.chart1);
             this.Controls.Add(this.checkBox13);
-            this.Controls.Add(this.radioButton2);
-            this.Controls.Add(this.radioButton1);
             this.Controls.Add(this.menuStrip1);
             this.Controls.Add(this.button8);
             this.Controls.Add(this.label8);
-            this.Controls.Add(this.button7);
             this.Controls.Add(this.progressBar1);
             this.Controls.Add(this.textBox7);
             this.Controls.Add(this.label7);
-            this.Controls.Add(this.label6);
             this.Controls.Add(this.listBox1);
             this.Controls.Add(this.textBox6);
             this.Controls.Add(this.label5);
@@ -895,10 +851,8 @@
         private System.Windows.Forms.CheckBox checkBox6;
         private System.Windows.Forms.Label label5;
         private System.Windows.Forms.TextBox textBox6;
-        private System.Windows.Forms.Label label6;
         private System.Windows.Forms.Label label7;
         private System.Windows.Forms.TextBox textBox7;
-        private System.Windows.Forms.Button button7;
         public System.Windows.Forms.Timer timer1;
         public System.Windows.Forms.StatusStrip statusStrip1;
         public System.Windows.Forms.Timer timer2;
@@ -908,8 +862,6 @@
         private System.Windows.Forms.Label label8;
         private System.Windows.Forms.Button button8;
         private System.Windows.Forms.ErrorProvider errorProvider1;
-        private System.Windows.Forms.RadioButton radioButton2;
-        private System.Windows.Forms.RadioButton radioButton1;
         private System.Windows.Forms.CheckBox checkBox12;
         private System.Windows.Forms.CheckBox checkBox11;
         private System.Windows.Forms.CheckBox checkBox10;
@@ -930,10 +882,11 @@
         private System.Windows.Forms.ToolStripMenuItem изменитьЦветФонаToolStripMenuItem;
         private System.Windows.Forms.ToolStripMenuItem сохранитьИзображениеToolStripMenuItem;
         private System.Windows.Forms.GroupBox groupBox3;
-        private System.Windows.Forms.TextBox textBox8;
         private System.Windows.Forms.ContextMenuStrip contextMenuStrip1;
         private System.Windows.Forms.ToolStripMenuItem изменитьToolStripMenuItem;
         private System.Windows.Forms.ToolStripMenuItem наКругToolStripMenuItem;
         private System.Windows.Forms.ToolStripMenuItem наПолумесяцToolStripMenuItem;
+        internal System.Windows.Forms.TextBox textBox8;
+        private System.Windows.Forms.ToolStripMenuItem dГрафикКомпонентаВолныToolStripMenuItem;
     }
 }
