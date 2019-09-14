@@ -25,76 +25,59 @@ namespace Defect2019
             Hides();
         }
 
-        private void button2_Click(object sender, EventArgs e)
-        {
-            this.Close();
-        }
-
-
+        Complex[] arg;
         Complex[] P, R, M, S, N;
 
-        bool flag = false;
-
+        private void Draws()
+        {
+                ReDraw();
+        }
         private void radioButton2_CheckedChanged(object sender, EventArgs e)
         {
-            if (flag)
-                ReDraw();
+            Draws();
         }
 
         private void radioButton3_CheckedChanged(object sender, EventArgs e)
         {
-            if (flag)
-                ReDraw();
-        }
-
-        private void button3_Click(object sender, EventArgs e)
-        {
-            Библиотека_графики.ForChart.SaveImageFromChart(chart1, "PRMSN_Memoized");
+            Draws();
         }
 
         private void button5_Click(object sender, EventArgs e)
         {
-            new DINN5().Show();
+            new DINN5().ShowDialog();
         }
 
         private void radioButton1_CheckedChanged(object sender, EventArgs e)
         {
-            if (flag)
-                ReDraw();
+            Draws();
         }
 
         private void checkBox4_CheckedChanged(object sender, EventArgs e)
         {
-            if (flag)
-                ReDraw();
+            Draws();
         }
 
         private void checkBox1_CheckedChanged(object sender, EventArgs e)
         {
-            if (flag)
-                ReDraw();
+            Draws();
         }
 
         private void checkBox2_CheckedChanged(object sender, EventArgs e)
         {
-            if (flag)
-                ReDraw();
+            Draws();
         }
 
         private void checkBox3_CheckedChanged(object sender, EventArgs e)
         {
-            if (flag)
-                ReDraw();
+            Draws();
         }
 
         private void checkBox5_CheckedChanged(object sender, EventArgs e)
         {
-            if (flag)
-                ReDraw();
+            Draws();
         }
 
-        Complex[] arg;
-
+        
         private void button1_Click(object sender, EventArgs e)
         {
             int c = Convert.ToInt32(numericUpDown1.Value);
@@ -129,7 +112,7 @@ namespace Defect2019
                 tit = $"[{0}; {min}] --- проход по R до спуска" + Environment.NewLine + $"[{min}; {min + РабКонсоль.tm}] --- спуск" + Environment.NewLine + $"[{min + РабКонсоль.tm}; {max + РабКонсоль.tm}] --- проход под R" + Environment.NewLine + $"[{max + РабКонсоль.tm}; {max + 2 * РабКонсоль.tm}] --- подъём" + Environment.NewLine + $"[{max + 2 * РабКонсоль.tm}; {end + 2 * РабКонсоль.tm}] --- остаток по R";
 
 
-                int k = (int)(min / h);//chart1.Annotations[0].SetAnchor(new System.Windows.Forms.DataVisualization.Charting.DataPoint(2, 0)); chart1.Annotations[0].BringToFront();
+                int k = (int)(min / h);
                 if (k <= c)
                     for (int i = 0; i < k; i++)
                     {
@@ -171,17 +154,15 @@ namespace Defect2019
 
             }
 
-
             for (int i = 0; i < 5; i++)
                 chart1.Series[i].ChartType = System.Windows.Forms.DataVisualization.Charting.SeriesChartType.Line;
 
-            flag = true;
-            ReDraw();
+            Draws();
         }
         private void WritePRMSN(int i, Complex c, double w)
         {
             var v = Functions.PRMSN_Memoized(c, w);
-            P[i] = v[0];//$"P[{i}] = {P[i]} ".Show();
+            P[i] = v[0];
             R[i] = v[1];
             M[i] = v[2];
             S[i] = v[3];
@@ -194,8 +175,7 @@ namespace Defect2019
             obr = !obr;
             chart1.Series[5].IsVisibleInLegend = obr;
 
-            if (flag)
-                ReDraw();
+            Draws();
         }
 
         string tit = "";
@@ -215,7 +195,6 @@ namespace Defect2019
             for (int i = 0; i < chart1.Series.Count; i++)
                 chart1.Series[i].Points.Clear();
             chart1.Titles[1].Text = tit;
-
 
             if (radioButton1.Checked)
             {
@@ -295,7 +274,12 @@ namespace Defect2019
             Библиотека_графики.ForChart.SetAxisesY(ref chart1);
         }
 
-        private async void button4_Click(object sender, EventArgs e)
+        private void сохранитьИзображениеToolStripMenuItem_Click(object sender, EventArgs e)
+        {
+            Библиотека_графики.ForChart.SaveImageFromChart(chart1, "PRMSN_Memoized");
+        }
+
+        private async void нарисоватьВСравненииСОбразцомToolStripMenuItem_Click(object sender, EventArgs e)
         {
             int c = Args.Length;
             P = new Complex[c];
@@ -304,15 +288,15 @@ namespace Defect2019
             S = new Complex[c];
             N = new Complex[c];
             arg = new Complex[c];
-            await Task.Run(()=> { 
-            Parallel.For(0, c, (int i) => { 
-
-                WritePRMSN(i, Args[i], 1);
-                arg[i] = Model[i].Item1;
-            
-});
+            await Task.Run(() =>
+            {
+                Parallel.For(0, c, (int i) =>
+                {
+                    WritePRMSN(i, Args[i], 1);
+                    arg[i] = Model[i].Item1;
+                });
             });
-            checkBox6.Checked=true;
+            checkBox6.Checked = true;
             for (int i = 0; i < 5; i++)
                 chart1.Series[i].ChartType = System.Windows.Forms.DataVisualization.Charting.SeriesChartType.Point;
             ReDraw();
@@ -330,7 +314,7 @@ namespace Defect2019
             s = fs.ReadLine();
             while (s != null)
             {
-                s = s.Replace('.', ',');//s.Show();
+                s = s.Replace('.', ',');
                 string[] st = s.Split(new char[] { ' ' }, StringSplitOptions.RemoveEmptyEntries);
 
                 Ar = new Complex(st[0].ToDouble(), st[1].ToDouble());
@@ -340,15 +324,9 @@ namespace Defect2019
                 S = new Complex(st[8].ToDouble(), st[9].ToDouble());
                 N = new Complex(st[10].ToDouble(), st[11].ToDouble());
 
-                //$"{Ar} {P} {R} {M} {S} {N}".Show();"".Show();
-                //$"{Ar} {Ar.Im.Abs()}".Show(); "".Show();
-
                 list.Add(new Complex[] { Ar, P, R, M, S, N });
-                //Tuple<double, double[]> t = new Tuple<double, double[]>(list.Last().Item1,list.Last().Item2);
-                //$"{t.Item1} {t.Item2[0]} {t.Item2[1]} {t.Item2[2]}".Show();
                 s = fs.ReadLine();
             }
-
 
             var l2 = new List<Tuple<double, Complex[]>>();
             int k = 0;
