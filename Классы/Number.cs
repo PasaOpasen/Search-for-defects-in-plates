@@ -279,21 +279,13 @@ namespace МатКлассы
         public struct Complex : IComparable, Idup<Complex>
         {
             static double _2PI;
+
             static Complex()
             {
                 I = new Complex(0, 1);
+                _2I = 2 * I;
                 _2PI = 2 * Math.PI;
             }
-            //координаты
-            /// <summary>
-            /// Первая координата точки
-            /// </summary>
-            private double x;
-            /// <summary>
-            /// Вторая координата точки
-            /// </summary>
-            private double y;
-
             public Complex dup => new Complex(this);
 
 
@@ -301,85 +293,42 @@ namespace МатКлассы
             /// По действительному числу составить комплексное
             /// </summary>
             /// <param name="a"></param>
-            public Complex(double a) { x = a; y = 0; }//по действительному числу
-                                                      /// <summary>
-                                                      /// Составить комплексное число по паре действительных чисел
-                                                      /// </summary>
-                                                      /// <param name="a"></param>
-                                                      /// <param name="b"></param>
-            public Complex(double a, double b) { x = a; y = b; }
+            public Complex(double a) { Re = a; Im = 0; }
+            /// <summary>
+            /// Составить комплексное число по паре действительных чисел
+            /// </summary>
+            /// <param name="a"></param>
+            /// <param name="b"></param>
+            public Complex(double a, double b) { Re = a; Im = b; }
             /// <summary>
             /// Конструктор копирования
             /// </summary>
             /// <param name="p"></param>
-            public Complex(Complex p) { x = p.Re; y = p.Im; }
+            public Complex(Complex p) { Re = p.Re; Im = p.Im; }
 
-            //свойства
+            #region Свойства
             /// <summary>
             /// Действительная часть
             /// </summary>
-            public double Re
-            {
-                get { return x; }
-                set { x = value; }
-            }
+            public double Re { get; set; }
             /// <summary>
             /// Мнимая часть
             /// </summary>
-            public double Im
-            {
-                get { return y; }
-                set { y = value; }
-            }
+            public double Im { get; set; }
             /// <summary>
             /// Модуль
             /// </summary>
-            public double Abs
-            {
-                get
-                {
-                    Complex o = new Complex();
-                    Complex t = new Complex(this.Re, this.Im);
-                    return Point.Eudistance((Point)t, (Point)o);
-                }
-            }
+            public double Abs => Math.Sqrt(Re * Re + Im * Im);
             /// <summary>
             /// Аргумент
             /// </summary>
-            public double Arg
-            {
-                get
-                {
-                    System.Numerics.Complex r = new System.Numerics.Complex(this.x, this.y);
-                    return r.Phase;
+            public double Arg => new System.Numerics.Complex(this.Re, this.Im).Phase;
 
-                    double argument;
-                    Point d = new Point();
-                    d.x = (this.x < 1e-13) ? 0 : this.x;
-                    d.y = (this.y < 1e-13) ? 0 : this.y;
-
-                    if (d.x == 0)
-                    {
-                        argument = Math.PI / 2 * Math.Sign((sbyte)d.y);
-                    }
-                    else
-                    {
-                        if (d.y == 0)
-                        {
-                            argument = Math.PI * Math.Sign(Math.Sign((sbyte)d.x) - 1);
-                        }
-                        else
-                        {
-                            argument = Math.Atan(d.y / d.x) + Math.Sign((sbyte)Math.Abs(d.x) - d.x) * Math.Sign((sbyte)d.y) * Math.PI;
-                        }
-                    }
-                    return argument;
-                }
-            }
             /// <summary>
             /// Мнимая единица
             /// </summary>
             public static Complex I;
+            public static Complex _2I;
 
             /// <summary>
             /// Мнимая часть комплексного числа
@@ -422,7 +371,9 @@ namespace МатКлассы
 
                 return res;
             }
+            #endregion
 
+            #region Преобразования
             /// <summary>
             /// Неявное преобразование действительного числа в комплексное
             /// </summary>
@@ -440,64 +391,32 @@ namespace МатКлассы
             public static explicit operator double(Complex c) => c.Re;
 
             public static implicit operator Complex(System.Numerics.Complex c) => new Complex(c.Real, c.Imaginary);
+            public static implicit operator System.Numerics.Complex(Complex c) => new Complex(c.Re, c.Im);
 
-            //Перегруженные операторы сложения
-            /// <summary>
-            /// Сумма комплексных чисел
-            /// </summary>
-            /// <param name="c1"></param>
-            /// <param name="c2"></param>
-            /// <returns></returns>
-            public static Complex operator +(Complex c1, Complex c2)
-            {
-                try { return new Complex(c1.Re + c2.Re, c1.Im + c2.Im); }
-                catch (Exception e) { throw new Exception(e.Message); }
-            }
+            public static implicit operator Complex(Point p) => new Complex(p.x, p.y);
+            #endregion
 
-            public static Complex operator +(Complex c1, double c2)
-            {
-                return new Complex(c1.Re + c2, c1.Im);
-            }
+            #region Операторы
+            public static Complex operator +(Complex c1, Complex c2) => new Complex(c1.Re + c2.Re, c1.Im + c2.Im);
 
-            public static Complex operator +(double c1, Complex c2)
-            {
-                return new Complex(c1 + c2.Re, c2.Im);
-            }
+            public static Complex operator +(Complex c1, double c2) => new Complex(c1.Re + c2, c1.Im);
 
-            //Перегруженные операторы вычитания
-            public static Complex operator -(Complex c1, Complex c2)
-            {
-                return new Complex(c1.Re - c2.Re, c1.Im - c2.Im);
-            }
-            public static Complex operator -(Complex z) { return new Complex(-z.Re, -z.Im); }
+            public static Complex operator +(double c1, Complex c2) => new Complex(c1 + c2.Re, c2.Im);
 
-            public static Complex operator -(Complex c1, double c2)
-            {
-                return new Complex(c1.Re - c2, c1.Im);
-            }
+            public static Complex operator -(Complex c1, Complex c2) => new Complex(c1.Re - c2.Re, c1.Im - c2.Im);
 
-            public static Complex operator -(double c1, Complex c2)
-            {
-                return new Complex(c1 - c2.Re, -c2.Im);
-            }
+            public static Complex operator -(Complex z) => new Complex(-z.Re, -z.Im);
 
-            //Перегруженные операторы умножения
-            public static Complex operator *(Complex c1, Complex c2)
-            {
-                return new Complex(c1.Re * c2.Re - c1.Im * c2.Im, c1.Re * c2.Im + c1.Im * c2.Re);
-            }
+            public static Complex operator -(Complex c1, double c2) => new Complex(c1.Re - c2, c1.Im);
 
-            public static Complex operator *(Complex c1, double c2)
-            {
-                return new Complex(c1.Re * c2, c1.Im * c2);
-            }
+            public static Complex operator -(double c1, Complex c2) => new Complex(c1 - c2.Re, -c2.Im);
 
-            public static Complex operator *(double c1, Complex c2)
-            {
-                return new Complex(c1 * c2.Re, c1 * c2.Im);
-            }
+            public static Complex operator *(Complex c1, Complex c2) => new Complex(c1.Re * c2.Re - c1.Im * c2.Im, c1.Re * c2.Im + c1.Im * c2.Re);
 
-            //Перегруженные операторы деления
+            public static Complex operator *(Complex c1, double c2) => new Complex(c1.Re * c2, c1.Im * c2);
+
+            public static Complex operator *(double c1, Complex c2) => new Complex(c1 * c2.Re, c1 * c2.Im);
+
             public static Complex operator /(Complex c1, Complex c2)
             {
                 double Denominator = c2.Re * c2.Re + c2.Im * c2.Im;
@@ -505,10 +424,7 @@ namespace МатКлассы
                     (c2.Re * c1.Im - c2.Im * c1.Re) / Denominator);
             }
 
-            public static Complex operator /(Complex c1, double c2)
-            {
-                return new Complex(c1.Re / c2, c1.Im / c2);
-            }
+            public static Complex operator /(Complex c1, double c2) => new Complex(c1.Re / c2, c1.Im / c2);
 
             public static Complex operator /(double c1, Complex c2)
             {
@@ -516,17 +432,26 @@ namespace МатКлассы
                 return new Complex((c1 * c2.Re) / Denominator, (-c2.Im * c1) / Denominator);
             }
 
-            //логические операторы
-            public static bool operator ==(Complex c1, Complex c2)
-            {
-                return c1.Re == c2.Re && c1.Im == c2.Im;
-            }
+            public static bool operator ==(Complex c1, Complex c2) => c1.Re == c2.Re && c1.Im == c2.Im;
 
-            public static bool operator !=(Complex c1, Complex c2)
-            {
-                return c1.Re != c2.Re || c1.Im != c2.Im;
-            }
+            public static bool operator !=(Complex c1, Complex c2) => c1.Re != c2.Re || c1.Im != c2.Im;
 
+
+            /// <summary>
+            /// Совпадение комплексных чисел
+            /// </summary>
+            /// <param name="obj"></param>
+            /// <returns></returns>
+            public override bool Equals(object obj) => Equals((Complex)obj);
+
+            public bool Equals(Complex c) => this == c;
+            public override int GetHashCode()
+            {
+                return this.Re.GetHashCode() + this.Im.GetHashCode();
+            }
+            #endregion
+
+            #region Операции с массивами
             public static Complex[] Minus(Complex[] r)
             {
                 Complex[] res = new Complex[r.Length];
@@ -534,22 +459,6 @@ namespace МатКлассы
                     res[i] = -r[i];
                 return res;
             }
-
-            /// <summary>
-            /// Совпадение комплексных чисел
-            /// </summary>
-            /// <param name="obj"></param>
-            /// <returns></returns>
-            public override bool Equals(object obj)
-            {
-                return this == (Complex)obj;
-            }
-
-            public override int GetHashCode()
-            {
-                return this.Re.GetHashCode() + this.Im.GetHashCode();
-            }
-
             /// <summary>
             /// Сумма комплексного вектора с постоянным комклексным числом(покомпонентное сложение)
             /// </summary>
@@ -614,8 +523,20 @@ namespace МатКлассы
                     c[i] = x[i];
                 return c;
             }
+            /// <summary>
+            /// Сумма модулей массива
+            /// </summary>
+            /// <param name="p"></param>
+            /// <returns></returns>
+            public static double VectorNorm(Complex[] p)
+            {
+                double sum = 0;
+                for (int i = 0; i < p.Length; i++) sum += p[i].Abs;
+                return sum;
+            }
+            #endregion
 
-
+            #region Функции комплексного переменного
             /// <summary>
             /// expi(x) = cos(x) + i sin(x)
             /// </summary>
@@ -628,21 +549,15 @@ namespace МатКлассы
             /// </summary>
             /// <param name="z"></param>
             /// <returns></returns>
-            public static Complex Exp(Complex z)
-            {/* z.Arg.Show(); */
-                //z = new Complex(z.Re, z.Im.ToPeriod(_2PI));
-                return Math.Exp(z.Re) * new Complex(Math.Cos(z.Im), Math.Sin(z.Im));
-            }
+            public static Complex Exp(Complex z) => Math.Exp(z.Re) * new Complex(Math.Cos(z.Im), Math.Sin(z.Im));
+            
             /// <summary>
             /// Комплексный синус
             /// </summary>
             /// <param name="z"></param>
             /// <returns></returns>
-            public static Complex Sin(Complex z)
-            {
-                //z = new Complex(z.Re.ToPeriod(_2PI), z.Im);
-                return (Exp(I * z) - Exp(-I * z)) / 2 / I;
-            }
+            public static Complex Sin(Complex z)=>(Exp(I * z) - Exp(-I * z)) / _2I;
+
             /// <summary>
             /// Комплексный косинус
             /// </summary>
@@ -650,7 +565,6 @@ namespace МатКлассы
             /// <returns></returns>
             public static Complex Cos(Complex z)
             {
-                //z = new Complex(z.Re.ToPeriod(_2PI), z.Im);
                 return (Exp(I * z) + Exp(-I * z)) / 2;
             }
 
@@ -665,7 +579,7 @@ namespace МатКлассы
                 Complex[] r = new Complex[k];
                 double mod = Math.Pow(z.Abs, 1.0 / k);
                 for (int i = 0; i < k; i++)
-                    r[i] = mod * Exp(I * (z.Arg + 2 * Math.PI * i) / k);
+                    r[i] = mod * Exp(I * (z.Arg + _2PI * i) / k);
                 return r;
 
             }
@@ -675,17 +589,14 @@ namespace МатКлассы
             /// <param name="z"></param>
             /// <param name="k"></param>
             /// <returns></returns>
-            public static Complex Radicalk(Complex z, int k)
-            {
-                return Math.Pow(z.Abs, 1.0 / k) * Exp(I * z.Arg / k);
-                // return Radical(z, k).Where(c => c.Re*c.Im==0).ToArray()[0];
-            }
+            public static Complex Radicalk(Complex z, int k)=>Math.Pow(z.Abs, 1.0 / k) * Exp(I * z.Arg / k);
+
             /// <summary>
             /// Главное значение квадратного корня
             /// </summary>
             /// <param name="z"></param>
             /// <returns></returns>
-            public static Complex Sqrt(Complex z) => Math.Sqrt(z.Abs) * Exp(I * (z.Arg / 2.0))/*System.Numerics.Complex.Sqrt(new System.Numerics.Complex(z.Re, z.Im))*/;
+            public static Complex Sqrt(Complex z) => Math.Sqrt(z.Abs) * Exp(I * (z.Arg / 2.0));
             /// <summary>
             /// Главное значение квадратного корня, умноженное на sign(Im)
             /// </summary>
@@ -696,9 +607,9 @@ namespace МатКлассы
             /// <summary>
             /// Поменять мнимую и действительную часть местами, выведя результат
             /// </summary>
-            public Complex Swap => new Complex(this.y, this.x);
+            public Complex Swap => new Complex(this.Im, this.Re);
 
-            public static Complex Sqrt1(Complex z) => new Complex(Math.Sqrt(z.Abs), 0); //Sqrt(z);//
+            public static Complex Sqrt1(Complex z) => new Complex(Math.Sqrt(z.Abs), 0);
             public static Complex Sqrt2(Complex z) => -I * Sqrt1(z);
             public static Complex SqrtNew(Complex z)
             {
@@ -727,22 +638,14 @@ namespace МатКлассы
             /// </summary>
             /// <param name="z"></param>
             /// <returns></returns>
-            public static Complex Sh(Complex z)
-            {
-                //z = new Complex(z.Re, z.Im.ToPeriod(_2PI));
-                return 0.5 * (Exp(z) - Exp(-z));
-            }
+            public static Complex Sh(Complex z)=>0.5 * (Exp(z) - Exp(-z));
             /// <summary>
             /// Гиперболический косинус
             /// </summary>
             /// <param name="z"></param>
             /// <returns></returns>
-            public static Complex Ch(Complex z)
-            {
-                //z.Show();
-                //z = new Complex(z.Re, z.Im.ToPeriod(_2PI));
-                return 0.5 * (Exp(z) + Exp(-z));
-            }
+            public static Complex Ch(Complex z)=>0.5 * (Exp(z) + Exp(-z));
+
             /// <summary>
             /// Гиперболический котангенс
             /// </summary>
@@ -755,15 +658,8 @@ namespace МатКлассы
                 Complex e = Exp(z);
                 return (e + tmp) / (e - tmp);
             }
-
-            public static double VectorNorm(Complex[] p)
-            {
-                double sum = 0;
-                for (int i = 0; i < p.Length; i++) sum += p[i].Abs;
-                return sum;
-            }
-
-            public static explicit operator Complex(Point p) => new Complex(p.x, p.y);
+            #endregion
+     
             public int CompareTo(object obj)
             {
                 Complex c = (Complex)obj;
