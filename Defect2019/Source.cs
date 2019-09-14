@@ -235,9 +235,17 @@ public struct Source : Idup<Source>
     /// </summary>
     /// <param name="directory"></param>
     /// <returns></returns>
-    public static Source[] GetSourcesWithReadFw(string directory,Source[] sourcesArray)
+    public static Source[] GetSourcesWithReadFw(string directory,Source[] sourcesArray,bool makeCopies=false)
     {
         var s = Source.GetSourcesWithFw(sourcesArray, directory);
+        if(s.Length>0 && makeCopies)
+            for(int i = 0; i < s.Length; i++)
+            {
+                string ss = $"f(w) from {s[i].Center}.txt";
+                File.Copy(Path.Combine(directory, ss), Path.Combine(Environment.CurrentDirectory, ss), true);
+            }
+                
+
         FilesToSources(s, directory);
         return s;
     }
@@ -245,7 +253,7 @@ public struct Source : Idup<Source>
     /// <summary>
     /// Считать файлы и записать f(w) в имеющиеся источники
     /// </summary>
-    private static void FilesToSources(Source[] sources, string path)
+    public static void FilesToSources(Source[] sources, string path)
     {
         try
         {
@@ -265,6 +273,19 @@ public struct Source : Idup<Source>
         using (StreamReader r = new StreamReader(filename))
             t = r.ReadLine().Replace("\r\n", "");
         Parallel.For(0, sources.Length, (int i) => sources[i].FmasToFile(t));
+    }
+
+    /// <summary>
+    /// Возвращает массив строк с координатами центров источников
+    /// </summary>
+    /// <param name="arr"></param>
+    /// <returns></returns>
+    internal static string[] GetCenters(Source[] arr)
+    {
+        var st = new string[arr.Length];
+        for(int i=0;i<st.Length;i++)
+            st[i]= $"({arr[i].Center.x} , {arr[i].Center.y})";
+        return st;
     }
 
     public static double GetMaxRadius(Source[] s)
