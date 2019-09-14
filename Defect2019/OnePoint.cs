@@ -21,6 +21,8 @@ namespace Работа2019
 
         private async void button1_Click(object sender, EventArgs e)
         {
+            var UXT = Functions.GetUxtFunc(radioButton7,radioButton8,radioButton9);
+
             statusStrip1.Show();
             toolStripStatusLabel1.Text = "Готов к работе";
 
@@ -198,6 +200,8 @@ namespace Работа2019
         {
             new ParametrsQu().ShowDialog();
         }
+
+        private void button6_Click(object sender, EventArgs e) => new Библиотека_графики.PdfOpen("Варианты метрик", "formula.pdf").ShowDialog();
 
         private void button5_Click(object sender, EventArgs e)
         {

@@ -800,15 +800,9 @@ namespace Defect2019
         /// <param name="path"></param>
         private void Metrics(string path)
         {
-            MetricSet("max", path);
-            if (!radioButton9.Checked)
-            {
-                MetricSet("sum", path);
-                if (radioButton7.Checked)
-                    Uxt = Functions.Uxt1;
-                if (radioButton8.Checked)
-                    Uxt = Functions.Uxt2;
-            }
+            Uxt = Functions.GetUxtFunc(radioButton7, radioButton8, radioButton9);
+
+            MetricSet(radioButton9.Checked?"max":"sum", path);  
         }
         /// <summary>
         /// Задать параметры метрики в файл

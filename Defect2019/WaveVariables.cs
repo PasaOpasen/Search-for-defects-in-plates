@@ -956,7 +956,22 @@ public static class Functions
         return new Tuple<double, double>((d1 / Math.PI).Sqr(), (d2 / Math.PI).Sqr());
     };
 
+    /// <summary>
+    /// Определяет функцию по трём radiobutton
+    /// </summary>
+    /// <param name="r1"></param>
+    /// <param name="r2"></param>
+    /// <param name="r3"></param>
+    /// <returns></returns>
+    public static Func<double, double, double, Source[], Tuple<double, double>> GetUxtFunc(RadioButton r1, RadioButton r2, RadioButton r3)
+    {
+        if (r1.Checked)
+            return Uxt1;
+        if (r2.Checked)
+            return Uxt2;
 
+            return Uxt3;
+    }
 
     #endregion
 }
