@@ -12,7 +12,7 @@ using System.Windows.Forms;
 /// <summary>
 /// Источник с дополнительными свойствами
 /// </summary>
-public class Source : Idup<Source>
+public struct Source : Idup<Source>
 {
     /// <summary>
     /// Центр источника
@@ -119,11 +119,14 @@ public class Source : Idup<Source>
     /// </summary>
     /// <param name="obj"></param>
     /// <returns></returns>
-    public override bool Equals(object obj)
-    {
-        Point p = (obj as Source).Center;
-        return (Center).Equals(p);
-    }
+    public override bool Equals(object obj)=> Equals((Source)(obj));
+    
+    /// <summary>
+    /// Эквивалентность по центрам
+    /// </summary>
+    /// <param name="obj"></param>
+    /// <returns></returns>
+    public bool Equals(Source s) => Center.Equals(s.Center);
 
     public override int GetHashCode()
     {

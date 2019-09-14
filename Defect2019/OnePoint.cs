@@ -205,7 +205,7 @@ namespace Работа2019
 
         private void button5_Click(object sender, EventArgs e)
         {
-            new Helper(textBox3.Text.ToDouble(), textBox4.Text.ToDouble(), numericUpDown1.Value.ToInt32()).Show();
+            new Helper(textBox3, textBox4, numericUpDown1).Show();
         }
 
         /// <summary>

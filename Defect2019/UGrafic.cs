@@ -76,7 +76,7 @@ namespace Практика_с_фортрана
         /// Задать источник
         /// </summary>
         /// <param name="s"></param>
-        public void SetSource(Source s = null)
+        public void SetSource(Source? s = null)
         {
             if (s == null)
             {
@@ -84,7 +84,7 @@ namespace Практика_с_фортрана
                 var norms = p.GetNormalsOnCircle(40);
                 s = new Source(p, norms, GetFmas());
             }
-            sourceIt = s.dup;
+            sourceIt = ((Source)(s)).dup;
             textBox8.Text = sourceIt.ToString();
         }
         public void SetTimers()

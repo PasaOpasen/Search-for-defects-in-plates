@@ -373,9 +373,6 @@
         private System.Windows.Forms.Label label5;
         private System.Windows.Forms.TextBox textBox1;
         private System.Windows.Forms.TextBox textBox2;
-        private System.Windows.Forms.TextBox textBox3;
-        private System.Windows.Forms.TextBox textBox4;
-        private System.Windows.Forms.NumericUpDown numericUpDown1;
         private System.Windows.Forms.CheckBox checkBox1;
         private System.Windows.Forms.Button button1;
         private System.Windows.Forms.Label label6;
@@ -390,5 +387,8 @@
         public System.Windows.Forms.RadioButton radioButton9;
         public System.Windows.Forms.RadioButton radioButton8;
         public System.Windows.Forms.RadioButton radioButton7;
+        public System.Windows.Forms.TextBox textBox3;
+        public System.Windows.Forms.TextBox textBox4;
+        public System.Windows.Forms.NumericUpDown numericUpDown1;
     }
 }

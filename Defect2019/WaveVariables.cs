@@ -1357,7 +1357,7 @@ public static class OtherMethods
         int which(Source f)
         {
             for (int i = 1; i < mas.Length; i++)
-                if (f == mas[i])
+                if (f.Equals( mas[i]))
                 {
                     return i;
                 }
