@@ -576,7 +576,7 @@ namespace Defect2019
             //        )
             //    );
 
-            Task tt = Task.Run(()=> OtherMethods.Saveuxw3(xmin, xmax, count, ymin, ymax, sourcesArray));
+            Task tt = Task.Run(() => OtherMethods.Saveuxw3(xmin, xmax, count, ymin, ymax, sourcesArray));
             IlushaMethod();
             //Task.WaitAll(tt);
             await tt;
@@ -612,7 +612,7 @@ namespace Defect2019
             }
 
             OtherMethods.CorrectWhereDataFile();
-            
+
             OtherMethods.CopyFilesR();
         }
 
@@ -802,7 +802,7 @@ namespace Defect2019
         {
             Uxt = Functions.GetUxtFunc(radioButton7, radioButton8, radioButton9);
 
-            MetricSet(radioButton9.Checked?"max":"sum", path);  
+            MetricSet(radioButton9.Checked ? "max" : "sum", path);
         }
         /// <summary>
         /// Задать параметры метрики в файл

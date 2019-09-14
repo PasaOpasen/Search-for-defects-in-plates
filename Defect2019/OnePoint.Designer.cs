@@ -57,6 +57,8 @@
             this.textBox5 = new System.Windows.Forms.TextBox();
             this.button3 = new System.Windows.Forms.Button();
             this.folderBrowserDialog1 = new System.Windows.Forms.FolderBrowserDialog();
+            this.toolStripProgressBar1 = new System.Windows.Forms.ToolStripProgressBar();
+            this.timer1 = new System.Windows.Forms.Timer(this.components);
             ((System.ComponentModel.ISupportInitialize)(this.numericUpDown1)).BeginInit();
             this.statusStrip1.SuspendLayout();
             this.groupBox6.SuspendLayout();
@@ -186,7 +188,7 @@
             // 
             this.checkBox1.Anchor = System.Windows.Forms.AnchorStyles.Top;
             this.checkBox1.AutoSize = true;
-            this.checkBox1.Location = new System.Drawing.Point(184, 204);
+            this.checkBox1.Location = new System.Drawing.Point(22, 205);
             this.checkBox1.Name = "checkBox1";
             this.checkBox1.Size = new System.Drawing.Size(235, 23);
             this.checkBox1.TabIndex = 11;
@@ -234,7 +236,8 @@
             this.statusStrip1.BackColor = System.Drawing.Color.GreenYellow;
             this.statusStrip1.Dock = System.Windows.Forms.DockStyle.Top;
             this.statusStrip1.Items.AddRange(new System.Windows.Forms.ToolStripItem[] {
-            this.toolStripStatusLabel1});
+            this.toolStripStatusLabel1,
+            this.toolStripProgressBar1});
             this.statusStrip1.Location = new System.Drawing.Point(0, 0);
             this.statusStrip1.Name = "statusStrip1";
             this.statusStrip1.Size = new System.Drawing.Size(431, 22);
@@ -250,13 +253,15 @@
             // button5
             // 
             this.button5.Anchor = System.Windows.Forms.AnchorStyles.Top;
+            this.button5.BackColor = System.Drawing.Color.FromArgb(((int)(((byte)(192)))), ((int)(((byte)(255)))), ((int)(((byte)(255)))));
+            this.button5.FlatStyle = System.Windows.Forms.FlatStyle.Popup;
             this.button5.Font = new System.Drawing.Font("Consolas", 14.25F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(204)));
             this.button5.Location = new System.Drawing.Point(313, 105);
             this.button5.Name = "button5";
             this.button5.Size = new System.Drawing.Size(106, 56);
             this.button5.TabIndex = 16;
             this.button5.Text = "Помощь";
-            this.button5.UseVisualStyleBackColor = true;
+            this.button5.UseVisualStyleBackColor = false;
             this.button5.Click += new System.EventHandler(this.button5_Click);
             // 
             // button2
@@ -279,7 +284,7 @@
             this.groupBox6.Controls.Add(this.radioButton9);
             this.groupBox6.Controls.Add(this.radioButton8);
             this.groupBox6.Controls.Add(this.radioButton7);
-            this.groupBox6.Location = new System.Drawing.Point(19, 159);
+            this.groupBox6.Location = new System.Drawing.Point(281, 167);
             this.groupBox6.Name = "groupBox6";
             this.groupBox6.Size = new System.Drawing.Size(138, 94);
             this.groupBox6.TabIndex = 18;
@@ -356,7 +361,7 @@
             // button3
             // 
             this.button3.Anchor = System.Windows.Forms.AnchorStyles.Top;
-            this.button3.BackColor = System.Drawing.Color.WhiteSmoke;
+            this.button3.BackColor = System.Drawing.Color.FromArgb(((int)(((byte)(255)))), ((int)(((byte)(192)))), ((int)(((byte)(192)))));
             this.button3.FlatStyle = System.Windows.Forms.FlatStyle.Popup;
             this.button3.Location = new System.Drawing.Point(313, 290);
             this.button3.Name = "button3";
@@ -365,6 +370,12 @@
             this.button3.Text = "Изменить";
             this.button3.UseVisualStyleBackColor = false;
             this.button3.Click += new System.EventHandler(this.button3_Click);
+            // 
+            // toolStripProgressBar1
+            // 
+            this.toolStripProgressBar1.Maximum = 1000;
+            this.toolStripProgressBar1.Name = "toolStripProgressBar1";
+            this.toolStripProgressBar1.Size = new System.Drawing.Size(100, 16);
             // 
             // OnePoint
             // 
@@ -440,5 +451,7 @@
         private System.Windows.Forms.TextBox textBox5;
         private System.Windows.Forms.Button button3;
         private System.Windows.Forms.FolderBrowserDialog folderBrowserDialog1;
+        private System.Windows.Forms.ToolStripProgressBar toolStripProgressBar1;
+        private System.Windows.Forms.Timer timer1;
     }
 }

@@ -21,6 +21,7 @@ namespace Работа2019
     {
         double x, y, tmin, tmax, th, wh;
         int tcount;
+        int save = 0, all = 1;
 
         double[] ur, uz;
         double[,] urs, uzs;
@@ -60,14 +61,16 @@ namespace Работа2019
 
         private async void button1_Click(object sender, EventArgs e)
         {
-            //var UXT = Functions.GetUxtFunc(radioButton7, radioButton8, radioButton9);
-
             await ReadFws();
             ReadData();
 
             toolStripStatusLabel1.Text = "Вычисляет u(x,t)";
 
+            timer1.Start();
             await CaltUxt();
+            toolStripProgressBar1.Value = toolStripProgressBar1.Maximum;
+            timer1.Stop();
+
             var s = WriteUxt();
 
             toolStripStatusLabel1.Text = "Вычисляет u(x,w)";
@@ -88,8 +91,8 @@ namespace Работа2019
             });
 
             toolStripStatusLabel1.Text = "Запускает скрипт";
-            OtherMethods.StartProcess2("OnePoint.r");
-
+            await Task.Run(() => OtherMethods.StartProcess2("OnePoint.r"));
+            OtherMethods.PlaySound("ВычисленияЗавершены");
 
             string wtf = "center = " + files[listBox1.SelectedIndex] + "; " + s + ".pdf";
             wtf = File.Exists(wtf) ? wtf : "center = " + files2[0] + "; " + s + ".pdf";
@@ -99,6 +102,10 @@ namespace Работа2019
         }
         private async Task CaltUxt()
         {
+            all = tcount;
+            save = 0;
+            int[] sum = new int[all];
+
             if (radioButton7.Checked)
                 await Task.Run(() =>
                 {
@@ -120,6 +127,8 @@ namespace Работа2019
                             ur[i] += urt * urt;
                             uz[i] += uzt * uzt;
                         }
+                        sum[i] = 1;
+                        save = sum.Sum();
                     });
                 });
             if (radioButton8.Checked)
@@ -143,6 +152,8 @@ namespace Работа2019
                             ur[i] += urt.Abs;
                             uz[i] += uzt.Abs;
                         }
+                        sum[i] = 1;
+                        save = sum.Sum();
                     });
                 });
             if (radioButton9.Checked)
@@ -166,6 +177,8 @@ namespace Работа2019
                             ur[i] += urt;
                             uz[i] += uzt;
                         }
+                        sum[i] = 1;
+                        save = sum.Sum();
                     });
                 });
         }
@@ -211,6 +224,13 @@ namespace Работа2019
 
             SetToolTip();
             FillListAndFileArrays();
+
+            timer1.Interval = 250;
+            timer1.Tick += (object o, EventArgs e) =>
+             {
+                 toolStripProgressBar1.Value = (Expendator.GetProcent(save, all) / 100 * toolStripProgressBar1.Maximum).ToInt();
+                 this.Refresh();
+             };
         }
         private void SetToolTip()
         {
