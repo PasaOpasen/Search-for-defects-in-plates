@@ -957,6 +957,7 @@ public static class Functions
     };
 
 
+
     #endregion
 }
 
@@ -1380,8 +1381,6 @@ public static class OtherMethods
 
         if (!File.Exists("Space.txt"))
             return false;
-
-        string s;
 
         using (StreamReader f = new StreamReader("Space.txt"))
         {

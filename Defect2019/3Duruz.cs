@@ -57,17 +57,6 @@ namespace Defect2019
             Normal2D[] norms = Forms.UG.sourceIt.Norms;
             Func<МатКлассы.Point, bool> filter = Forms.UG.sourceIt.Filter;
 
-
-
-            SaveFileDialog savedialog = new SaveFileDialog();
-            savedialog.Title = "Сохранить рисунок как...";
-            savedialog.FileName ="3D ur, uz.txt";
-            savedialog.Filter = "Text files (*.txt)|*.txt|All files (*.*)|*.*";
-
-            savedialog.OverwritePrompt = true;
-            savedialog.CheckPathExists = true;
-            savedialog.ShowHelp = true;
-
             timer1.Start();
             IProgress<int> progress = new Progress<int>((p) => { save = p; });
 
@@ -79,13 +68,8 @@ namespace Defect2019
             if (radioButton1.Checked)
                 await Task.Run(() =>
                 {
-                    МатКлассы.Waves.Circle.FieldToFileParallel(savedialog.FileName,
-                        (double x, double y) =>
-                        {
-                            var t = Forms.UG.UResMemoized(x, y, w, norms);
-                            double cor = new Number.Complex(x - fiCirc.center.x, y - fiCirc.center.y).Arg;
-                            return new Tuple<Number.Complex, Number.Complex>(t[0] * Math.Cos(cor) + t[1] * Math.Sin(cor), t[2]);
-                        },
+                    МатКлассы.Waves.Circle.FieldToFileParallel("3D ur, uz.txt",
+                        (double x, double y) => uxwMemoized(x, y, w, Forms.UG.sourceIt),
                         x0, X, xc, y0, Y, yc,
                         progress,
                         token,
@@ -96,7 +80,7 @@ namespace Defect2019
             else
                 await Task.Run(() =>
                 {
-                    МатКлассы.Waves.Circle.FieldToFileOLD(savedialog.FileName, "",
+                    МатКлассы.Waves.Circle.FieldToFileOLD("3D ur, uz.txt", "",
                         (double x, double y) =>
                         {
                             var t = Forms.UG.u(x, y, w, norms);
@@ -126,25 +110,33 @@ namespace Defect2019
 
                 await Task.Run(() =>
                 {
-                if (radioButton1.Checked) StartProcess("3Duruz.R");
-                else StartProcess("3Duxt.R");
+                    if (radioButton1.Checked) StartProcess("3Duruz.R");
+                    else StartProcess("3Duxt.R");
                 });
 
-                var names = new string[]
-            {
+                if (radioButton1.Checked)
+                {
+                    var names = new string[]
+                     {
                     "Все трёхмерные поверхности в pdf",
                     "Abs(ur)",
                     "Abs(uz)"
-            };
-                var st = new string[]
-                {
+                     };
+                    var st = new string[]
+                    {
                     "3D ur, uz.pdf",
                     "urAbs.html",
                     "uzAbs.html"
-                };
-                var form = new Библиотека_графики.ManyDocumentsShower("3D поверхности для одного источника", names, st);
-                form.StartPosition = FormStartPosition.CenterScreen;
-                form.Show();
+                    };
+                    var form = new Библиотека_графики.ManyDocumentsShower("3D поверхности для одного источника", names, st);
+                    form.StartPosition = FormStartPosition.CenterScreen;
+                    form.Show();
+                }
+                else
+                {
+                    new Библиотека_графики.PdfOpen($"Найденные поверхности при t = {w}", "3D ur, uz(title , " + tit + " ).pdf").Show();
+                }
+
             }
             this.Close();
         }

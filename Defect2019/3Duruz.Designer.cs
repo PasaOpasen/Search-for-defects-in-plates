@@ -65,18 +65,19 @@
             // 
             // button1
             // 
+            this.button1.BackColor = System.Drawing.Color.FromArgb(((int)(((byte)(255)))), ((int)(((byte)(192)))), ((int)(((byte)(128)))));
             this.button1.FlatStyle = System.Windows.Forms.FlatStyle.Popup;
-            this.button1.Location = new System.Drawing.Point(109, 335);
+            this.button1.Location = new System.Drawing.Point(266, 142);
             this.button1.Name = "button1";
-            this.button1.Size = new System.Drawing.Size(298, 59);
+            this.button1.Size = new System.Drawing.Size(231, 76);
             this.button1.TabIndex = 0;
             this.button1.Text = "Запустить и закрыть";
-            this.button1.UseVisualStyleBackColor = true;
+            this.button1.UseVisualStyleBackColor = false;
             this.button1.Click += new System.EventHandler(this.button1_Click);
             // 
             // textBox4
             // 
-            this.textBox4.Location = new System.Drawing.Point(372, 140);
+            this.textBox4.Location = new System.Drawing.Point(104, 195);
             this.textBox4.Name = "textBox4";
             this.textBox4.Size = new System.Drawing.Size(100, 26);
             this.textBox4.TabIndex = 5;
@@ -122,7 +123,7 @@
             // label3
             // 
             this.label3.AutoSize = true;
-            this.label3.Location = new System.Drawing.Point(335, 143);
+            this.label3.Location = new System.Drawing.Point(67, 198);
             this.label3.Name = "label3";
             this.label3.Size = new System.Drawing.Size(31, 20);
             this.label3.TabIndex = 12;
@@ -196,7 +197,7 @@
             this.groupBox1.Controls.Add(this.label7);
             this.groupBox1.Controls.Add(this.textBox5);
             this.groupBox1.Controls.Add(this.label6);
-            this.groupBox1.Location = new System.Drawing.Point(19, 196);
+            this.groupBox1.Location = new System.Drawing.Point(14, 237);
             this.groupBox1.Name = "groupBox1";
             this.groupBox1.Size = new System.Drawing.Size(483, 121);
             this.groupBox1.TabIndex = 19;
@@ -265,7 +266,7 @@
             this.groupBox3.Controls.Add(this.radioButton1);
             this.groupBox3.Location = new System.Drawing.Point(17, 117);
             this.groupBox3.Name = "groupBox3";
-            this.groupBox3.Size = new System.Drawing.Size(278, 61);
+            this.groupBox3.Size = new System.Drawing.Size(233, 61);
             this.groupBox3.TabIndex = 24;
             this.groupBox3.TabStop = false;
             this.groupBox3.Text = "Переменная * из u(x,*)";
@@ -314,6 +315,7 @@
             this.textBox9.Name = "textBox9";
             this.textBox9.Size = new System.Drawing.Size(477, 67);
             this.textBox9.TabIndex = 0;
+            this.textBox9.TextAlign = System.Windows.Forms.HorizontalAlignment.Center;
             // 
             // contextMenuStrip1
             // 
@@ -328,20 +330,20 @@
             this.наКругToolStripMenuItem,
             this.наПолумесяцToolStripMenuItem});
             this.изменитьToolStripMenuItem.Name = "изменитьToolStripMenuItem";
-            this.изменитьToolStripMenuItem.Size = new System.Drawing.Size(180, 22);
+            this.изменитьToolStripMenuItem.Size = new System.Drawing.Size(128, 22);
             this.изменитьToolStripMenuItem.Text = "Изменить";
             // 
             // наКругToolStripMenuItem
             // 
             this.наКругToolStripMenuItem.Name = "наКругToolStripMenuItem";
-            this.наКругToolStripMenuItem.Size = new System.Drawing.Size(180, 22);
+            this.наКругToolStripMenuItem.Size = new System.Drawing.Size(153, 22);
             this.наКругToolStripMenuItem.Text = "На круг";
             this.наКругToolStripMenuItem.Click += new System.EventHandler(this.наКругToolStripMenuItem_Click);
             // 
             // наПолумесяцToolStripMenuItem
             // 
             this.наПолумесяцToolStripMenuItem.Name = "наПолумесяцToolStripMenuItem";
-            this.наПолумесяцToolStripMenuItem.Size = new System.Drawing.Size(180, 22);
+            this.наПолумесяцToolStripMenuItem.Size = new System.Drawing.Size(153, 22);
             this.наПолумесяцToolStripMenuItem.Text = "На полумесяц";
             this.наПолумесяцToolStripMenuItem.Click += new System.EventHandler(this.наПолумесяцToolStripMenuItem_Click);
             // 
@@ -350,7 +352,7 @@
             this.AutoScaleDimensions = new System.Drawing.SizeF(9F, 20F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
             this.BackColor = System.Drawing.Color.White;
-            this.ClientSize = new System.Drawing.Size(519, 414);
+            this.ClientSize = new System.Drawing.Size(519, 371);
             this.Controls.Add(this.groupBox4);
             this.Controls.Add(this.groupBox3);
             this.Controls.Add(this.groupBox1);
