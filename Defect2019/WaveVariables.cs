@@ -144,7 +144,7 @@ public static class Functions
 
 
     public static double lamda = 51.0835913312694, mu = 26.3157894736842, ro = 2.7, h = 2.0, crosscoef = 0.2;
-    public static double ml2, mu2, k1coef, k2coef;
+    private static double ml2, mu2, k1coef, k2coef;
     private static Complex im;
     private static void SetConstants()
     {
@@ -240,8 +240,7 @@ public static class Functions
     /// <summary>
     /// Получить тестовый массив f(w) по глобальным данным
     /// </summary>
-    public static Func<Complex[]> GetFmas=()=> SeqWMemoized(wbeg, wend, wcount).Map((double d) => Functions.F1(d) + new Number.Complex(RandomNumbers.NextDouble2(0, 1e-7), RandomNumbers.NextDouble2(0, 1e-7)));
-
+    public static Func<Complex[]> GetFmas = () => SeqWMemoized(wbeg, wend, wcount).Select((double d) => Functions.F1(d) + new Number.Complex(RandomNumbers.NextDouble2(0, 1e-7), RandomNumbers.NextDouble2(0, 1e-7))).ToArray();
     #endregion
 
     #region Функции Ханкеля

@@ -278,7 +278,18 @@ namespace МатКлассы
         /// </summary>
         public struct Complex : IComparable, Idup<Complex>
         {
-            static double _2PI;
+            /// <summary>
+            /// 2 * pi
+            /// </summary>
+            static readonly double _2PI;
+            /// <summary>
+            /// Мнимая единица
+            /// </summary>
+            public readonly static Complex I;
+            /// <summary>
+            /// Две мнимые единицы
+            /// </summary>
+            public readonly static Complex _2I;
 
             static Complex()
             {
@@ -286,6 +297,9 @@ namespace МатКлассы
                 _2I = 2 * I;
                 _2PI = 2 * Math.PI;
             }
+            /// <summary>
+            /// Дубликат комплексного числа (нужен, чтобы делать дубликаты массивов)
+            /// </summary>
             public Complex dup => new Complex(this);
 
 
@@ -325,13 +339,7 @@ namespace МатКлассы
             public double Arg => new System.Numerics.Complex(this.Re, this.Im).Phase;
 
             /// <summary>
-            /// Мнимая единица
-            /// </summary>
-            public static Complex I;
-            public static Complex _2I;
-
-            /// <summary>
-            /// Мнимая часть комплексного числа
+            /// Мнимая часть комплексного числа (нужно для интегрирования, портированного с Fortran)
             /// </summary>
             /// <param name="t"></param>
             /// <returns></returns>
@@ -363,9 +371,9 @@ namespace МатКлассы
                     {
                         if (this.Im > 0)
                         {
-                            res += "+ " + this.Im.ToString() + "i"; ;
+                            res += $"+ {this.Im}i";
                         }
-                        else res += "- " + this.Im.Abs().ToString() + "i";
+                        else res +=$"- {-this.Im}i";
                     }
                 }
 
@@ -394,6 +402,7 @@ namespace МатКлассы
             public static implicit operator System.Numerics.Complex(Complex c) => new Complex(c.Re, c.Im);
 
             public static implicit operator Complex(Point p) => new Complex(p.x, p.y);
+            public static implicit operator Point(Complex p) => new Point(p.Re, p.Im);
             #endregion
 
             #region Операторы
@@ -659,14 +668,13 @@ namespace МатКлассы
                 return (e + tmp) / (e - tmp);
             }
             #endregion
-     
-            public int CompareTo(object obj)
+
+            public int CompareTo(object obj) => CompareTo((Complex)obj);
+            public int CompareTo(Complex c)
             {
-                Complex c = (Complex)obj;
-                Point a = new Point(this.Re, this.Im);
-                Point b = new Point(c.Re, c.Im);
+                Point a = this;
+                Point b = c;
                 return a.CompareTo(b);
-                throw new NotImplementedException();
             }
 
             /// <summary>
