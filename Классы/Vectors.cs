@@ -808,7 +808,7 @@ namespace МатКлассы
                 newlines[lines.Length] = new Vectors(lines[0].n + 1);
 
                 //Записать новую строку
-                for (int j = 0; j < lines[0].n; j++) newlines[lines.Length - 1].vector[j] = -(/*lines[tmp].vector[j] - (int)lines[tmp].vector[j]*/Number.Rational.ToRational(lines[tmp].vector[j]).FracPart.ToDouble());
+                for (int j = 0; j < lines[0].n; j++) newlines[lines.Length - 1].vector[j] = -(double)Number.Rational.ToRational(lines[tmp].vector[j]).FracPart;
                 newlines[lines.Length - 1].vector[lines[0].n] = 1;
                 //Переписать строку функции с изменением знака
                 for (int j = 0; j < lines[0].n; j++) newlines[lines.Length].vector[j] = -lines[lines.Length - 1].vector[j];
@@ -872,7 +872,7 @@ namespace МатКлассы
                 if (Number.Rational.ToRational(l[i].vector[0]).IsFract())
                 {
                     an = true;
-                    t = Number.Rational.ToRational(l[i].vector[0]).FracPart.ToDouble();
+                    t = Number.Rational.ToRational(l[i].vector[0]).FracPart;
                     if (t > max) { max = t; k = i; }
                 }
             if (an) return k;
@@ -1127,7 +1127,7 @@ namespace МатКлассы
                 newlines[lines.Length] = new Vectors(lines[0].n + 1);
 
                 //Записать новую строку
-                for (int j = 0; j < lines[0].n; j++) newlines[lines.Length - 1].vector[j] = -(/*lines[tmp].vector[j] - (int)lines[tmp].vector[j]*/Number.Rational.ToRational(lines[tmp].vector[j]).FracPart.ToDouble());
+                for (int j = 0; j < lines[0].n; j++) newlines[lines.Length - 1].vector[j] = -(double)Number.Rational.ToRational(lines[tmp].vector[j]).FracPart;
                 newlines[lines.Length - 1].vector[lines[0].n] = 1;
                 //Переписать строку функции с изменением знака, если итерация первая (и без изменения знака в противном случае)
                 for (int j = 0; j < lines[0].n; j++)

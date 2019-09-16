@@ -16,47 +16,70 @@ namespace МатКлассы
             public Rational dup => new Rational(this);
 
             /// <summary>
-            /// Делимое и делитель в числе
+            /// Делимое
             /// </summary>
-            /// <remarks>long нужен для того, чтобы переводить в рациональные числа действительные числа с длинной мантиссой</remarks>
-            long m, n;
+            public long Numerator { get; }
+            /// <summary>
+            /// Делитель
+            /// </summary>
+            public long Denominator { get; }
+            /// <summary>
+            /// Сообщает, равен н
+            /// </summary>
+            public bool IsNan => Denominator == 0;
+
             /// <summary>
             /// Ноль и единица во множестве рациональных чисел
             /// </summary>
             public static readonly Rational ZERO, ONE;
 
-            /// <summary>
-            /// Рациональное число по целому числу
-            /// </summary>
-            /// <param name="a"></param>
-            public Rational(long a) { this.m = a; this.n = 1; }
-            /// <summary>
-            /// Несократимая дробь, эквивалентная частному аргументов
-            /// </summary>
-            /// <param name="a"></param>
-            /// <param name="b"></param>
-            public Rational(long a, long b)//несократимой дробью
-            {
-                if (b < 0) { b = -b; a = -a; }
-                long d = Nod(a, b); d = Math.Abs(d);
-                m = a / d; n = b / d;
-            }
-            /// <summary>
-            /// Конструктор копирования
-            /// </summary>
-            /// <param name="a"></param>
-            public Rational(Rational a) { this.n = a.n; this.m = a.m; }
-            /// <summary>
-            /// Рациональное число по "действительному" числу
-            /// </summary>
-            /// <param name="x"></param>
-            public Rational(double x) { Rational a = new Rational(ToRational(x)); this.n = a.n; this.m = a.m; }
+            #region Конструкторы
             static Rational()
             {
                 ZERO = new Rational(0, 1);
                 ONE = new Rational(1, 1);
             }
 
+            /// <summary>
+            /// Рациональное число по целому числу
+            /// </summary>
+            /// <param name="a"></param>
+            public Rational(long a) { this.Numerator = a; this.Denominator = 1; }
+            /// <summary>
+            /// Несократимая дробь, эквивалентная частному аргументов
+            /// </summary>
+            /// <param name="a"></param>
+            /// <param name="b"></param>
+            public Rational(long a, long b)
+            {
+                if (b == 0)
+                {
+                    Numerator = 0;
+                    Denominator = 0;
+                    return;
+                }
+                if (b < 0) { b = -b; a = -a; }
+                long d = Nod(a, b); d = Math.Abs(d);
+                Numerator = a / d; Denominator = b / d;
+            }
+            /// <summary>
+            /// Конструктор копирования
+            /// </summary>
+            /// <param name="a"></param>
+            public Rational(Rational a) { this.Denominator = a.Denominator; this.Numerator = a.Numerator; }
+            /// <summary>
+            /// Рациональное число по "действительному" числу
+            /// </summary>
+            /// <param name="x"></param>
+            public Rational(double x)
+            {
+                Numerator = 0;
+                Denominator = 0;
+                ToRational(x);
+            }
+            #endregion
+
+            #region Вспомогательные методы
             /// <summary>
             /// Наибольший общий делитель
             /// </summary>
@@ -66,14 +89,13 @@ namespace МатКлассы
             public static long Nod(long c, long d)
             {
                 long p = 0;
-                long a = c, b = d;
-                if (a < 0) a = -a;//a = Math.Abs(c);
-                if (b < 0) b = -b;//b = Math.Abs(d);
+                if (c < 0) c = -c;
+                if (d < 0) d = -d;
                 do
                 {
-                    p = a % b; a = b; b = p;
-                } while (b != 0);
-                return a;
+                    p = c % d; c = d; d = p;
+                } while (d != 0);
+                return c;
             }
 
             /// <summary>
@@ -82,8 +104,8 @@ namespace МатКлассы
             /// <returns></returns>
             public override string ToString()
             {
-                if (this.n == 1) return this.m.ToString();
-                return m + "/" + n;
+                if (this.Denominator == 1) return this.Numerator.ToString();
+                return $"{Numerator}/{Denominator}";
             }
             /// <summary>
             /// Привести число в строку, где оно имеет вид смешанной дроби
@@ -92,24 +114,16 @@ namespace МатКлассы
             public string ToStringMixed()
             {
                 string s;
-                long k = this.m / this.n;
-                Rational r = new Rational(this.m - this.n * k, this.n);
+                long k = this.Numerator / this.Denominator;
+                Rational r = new Rational(this.Numerator - this.Denominator * k, this.Denominator);
                 s = String.Format("{0} + {1}", k, r.ToString());
                 return s;
             }
             /// <summary>
-            /// Вывести на консоль неправильную дробь
-            /// </summary>
-            public void ShowWrong() { Console.WriteLine(this.ToString()); }
-            /// <summary>
             /// Вывести смешанную дробь
             /// </summary>
             public void ShowMixed() { Console.WriteLine(this.ToStringMixed()); }
-            /// <summary>
-            /// Перевод рационального числа в тип double
-            /// </summary>
-            /// <returns></returns>
-            public double ToDouble() { return ((double)this.m / this.n); }
+
             /// <summary>
             /// Перевод десятичного числа в несократимую дробь
             /// </summary>
@@ -117,27 +131,22 @@ namespace МатКлассы
             /// <returns></returns>
             public static Rational ToRational(double x)
             {
+                if( Math.Truncate(x)==x) return new Rational((long)x);//если целое
                 if (Math.Abs(x) <= 1e-15) return Rational.ZERO;
-
+             
                 string s = Math.Abs(x).ToString();
-                //string s = Convert.ToString(Math.Abs(x));
-                int i = 0, n = 0;
-                while ((s[i] != ',') && (i < s.Length - 1)) i++;
-                if (i == s.Length - 1) return new Rational((long)x);
-                while (i + n < s.Length) n++;
+                int i = s.IndexOf(',');
+                int n = s.Length - i;
 
                 //если период возможен
                 if (n >= 8)
                 {
                     //---------Проверка на периодичность (полную)
                     Rational u = Rational.ToRational((long)x);
-                    long f = u.IntPart;
-                    Rational z = new Rational(f);//отделить целую часть
+                    Rational z = new Rational(u.IntPart);//отделить целую часть
 
-                    //string mant = s.Substring(i, s.Length - 1/*-i*/);//отделить цифры, стоящие после запятой
-                    //mant = mant.Substring(1, mant.Length - 1/*-1*/);
-                    string mant = s.Substring(i + 1, n - 1);//Console.WriteLine(mant);
-                                                            //Console.WriteLine(mant);
+                    string mant = s.Substring(i + 1, n - 1);
+                                                       
                     for (int beg = 0; beg <= n - 6; beg++)//если периоды проверять не с первого символа
                     {
                         int idx = 0;//индекс
@@ -193,9 +202,9 @@ namespace МатКлассы
             /// <returns></returns>
             public static long IntegerPart(Rational t)
             {
-                if (t.m >= 0) return t.m / t.n;
-                if (t.n == 1) return t.m;
-                return t.m / t.n - 1;
+                if (t.Denominator == 1) return t.Numerator;
+                if (t.Numerator >= 0) return t.Numerator / t.Denominator;               
+                return t.Numerator / t.Denominator - 1;
             }
             /// <summary>
             /// Дробная часть числа
@@ -234,43 +243,46 @@ namespace МатКлассы
             /// <param name="a"></param>
             public static void Show(Complex a) { Console.WriteLine("(" + ToRational(a.Re).ToStringMixed() + ") + (" + ToRational(a.Im).ToStringMixed() + ")i"); }
 
-            public override bool Equals(object obj)
-            {
-                var rational = (Rational)obj;
-                return this.Equals(rational);
-            }
+            public override bool Equals(object obj) => Equals((Rational)obj);
+
             public bool Equals(Rational rational)
             {
-                return rational != null &&
-                       m == rational.m &&
-                       n == rational.n &&
-                       IntPart == rational.IntPart &&
-                       EqualityComparer<Rational>.Default.Equals(FracPart, rational.FracPart);
+                return 
+                       Numerator == rational.Numerator &&
+                       Denominator == rational.Denominator;
             }
 
             public override int GetHashCode()
             {
                 var hashCode = 893539880;
-                hashCode = hashCode * -1521134295 + m.GetHashCode();
-                hashCode = hashCode * -1521134295 + n.GetHashCode();
+                hashCode = hashCode * -1521134295 + Numerator.GetHashCode();
+                hashCode = hashCode * -1521134295 + Denominator.GetHashCode();
                 hashCode = hashCode * -1521134295 + IntPart.GetHashCode();
                 hashCode = hashCode * -1521134295 + EqualityComparer<Rational>.Default.GetHashCode(FracPart);
                 return hashCode;
             }
+            #endregion
 
-            public static Rational operator +(Rational a, Rational b) { return new Rational((a.m * b.n + a.n * b.m), (a.n * b.n)); }
-            public static Rational operator -(Rational a) { return new Rational(-a.m, a.n); }
+            #region Операторы
+            public static Rational operator +(Rational a, Rational b) { return new Rational((a.Numerator * b.Denominator + a.Denominator * b.Numerator), (a.Denominator * b.Denominator)); }
+            public static Rational operator -(Rational a) { return new Rational(-a.Numerator, a.Denominator); }
             public static Rational operator -(Rational a, Rational b) { return a + (-b); }
-            public static Rational operator -(Rational a, long b)
-            {
-                Rational c = new Rational(b);
-                return a - c;
-            }
-            public static Rational operator *(Rational a, Rational b) { return new Rational(a.m * b.m, a.n * b.n); }
-            public static Rational operator /(Rational a, Rational b) { return new Rational(a.m * b.n, a.n * b.m); }
-            public static bool operator ==(Rational a, Rational b) { return (a.m == b.m) && (a.n == b.n); }
+            public static Rational operator -(Rational a, long b)=> a - new Rational(b);    
+            public static Rational operator *(Rational a, Rational b) { return new Rational(a.Numerator * b.Numerator, a.Denominator * b.Denominator); }
+            public static Rational operator /(Rational a, Rational b) { return new Rational(a.Numerator * b.Denominator, a.Denominator * b.Numerator); }
+            public static bool operator ==(Rational a, Rational b) { return (a.Numerator == b.Numerator) && (a.Denominator == b.Denominator); }
             public static bool operator !=(Rational a, Rational b) { return !(a == b); }
 
+            public static implicit operator double(Rational r) => ((double)r.Numerator) / r.Denominator;
+            public static implicit operator Rational(long r) => new Rational(r);
+            public static explicit operator int(Rational r)
+            {
+                if (r.Numerator == 0 && r.Denominator != 0) return 0;
+                if (Math.Abs(r.Numerator) < r.Denominator) throw new Exception("Не конвертируется в int: числитель меньше знаменателя");
+                if (Math.Abs(r.Numerator) % r.Denominator != 0) throw new Exception("Не конвертируется в int: числитель не делится на знаменатель нацело");
+                return (int)(r.Numerator / r.Denominator);
+            }
+            #endregion
         }
 
         /// <summary>
