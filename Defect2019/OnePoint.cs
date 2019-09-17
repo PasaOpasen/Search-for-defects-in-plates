@@ -94,12 +94,17 @@ namespace Работа2019
             await Task.Run(() => OtherMethods.StartProcess2("OnePoint.r"));
             OtherMethods.PlaySound("ВычисленияЗавершены");
 
-            string wtf = "center = " + files[listBox1.SelectedIndex] + "; " + s + ".pdf";
-            wtf = File.Exists(wtf) ? wtf : "center = " + files2[0] + "; " + s + ".pdf";
-            new UxtInfo(tmin, th, ur, uz, wtf, s + ".pdf").Show();
-
+            GetUxtInfo(s);
             this.Close();
         }
+        private void GetUxtInfo(string s)
+        {
+            var names = Enumerable.Range(0, Sarray.Length).Select(n => Sarray[n].Center.ToString()).ToArray();
+            var filenames = Enumerable.Range(0, names.Length).Select(n =>Path.Combine(Environment.CurrentDirectory, "center = " + names[n] + "; " + s + ".pdf")).ToArray();
+
+            new UxtInfo(tmin, th, ur, uz, names,filenames, s + ".pdf").Show();
+        }
+
         private async Task CaltUxt()
         {
             all = tcount;
@@ -242,18 +247,15 @@ namespace Работа2019
         }
         private void FillListAndFileArrays()
         {
-            listBox1.Items.Clear();
-            string s;
+            string s,f;
             for (int i = 0; i < sources.Length; i++)
             {
                 s = $"({sources[i].Center.x} , {sources[i].Center.y})";
-                listBox1.Items.Add(s);
                 files[i] = s;
+                f = $"f(w) from {s}.txt";
+                if (File.Exists(f))
+                    File.Delete(f);
             }
-            if (sources.Length > 1)
-                listBox1.SelectedIndex = 1;
-            else
-                listBox1.SelectedIndex = 0;
         }
 
         private void checkBox1_CheckedChanged(object sender, EventArgs e)
