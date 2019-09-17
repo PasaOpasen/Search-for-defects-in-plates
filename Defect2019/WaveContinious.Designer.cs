@@ -673,9 +673,6 @@
         private System.Windows.Forms.CheckBox checkBox3;
         private System.Windows.Forms.Button button5;
         private System.Windows.Forms.GroupBox groupBox6;
-        private System.Windows.Forms.RadioButton radioButton9;
-        private System.Windows.Forms.RadioButton radioButton8;
-        private System.Windows.Forms.RadioButton radioButton7;
         private System.Windows.Forms.Button button6;
         private System.Windows.Forms.MenuStrip menuStrip1;
         private System.Windows.Forms.ToolStripMenuItem другиеПараметрыToolStripMenuItem;
@@ -690,5 +687,8 @@
         private System.Windows.Forms.ToolStripMenuItem нетToolStripMenuItem;
         private System.Windows.Forms.CheckBox checkBox4;
         private System.Windows.Forms.OpenFileDialog openFileDialog1;
+        public System.Windows.Forms.RadioButton radioButton9;
+        public System.Windows.Forms.RadioButton radioButton8;
+        public System.Windows.Forms.RadioButton radioButton7;
     }
 }

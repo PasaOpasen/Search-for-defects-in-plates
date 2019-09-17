@@ -12,7 +12,7 @@ using System.Windows.Forms;
 /// <summary>
 /// Источник с дополнительными свойствами
 /// </summary>
-public class Source : Idup<Source>
+public struct Source : Idup<Source>
 {
     /// <summary>
     /// Центр источника
@@ -40,6 +40,7 @@ public class Source : Idup<Source>
     public Complex[] Fmas;
 
     public enum Type { Circle, DCircle };
+    public Circle GetCircle => new Circle(Center, radius);
 
     /// <summary>
     /// Тип источника
@@ -76,6 +77,20 @@ public class Source : Idup<Source>
     private Source(Source s) : this(s.Center, s.Norms, s.Filter, s.Fmas, s.MeType, s.radius)
     {
     }
+    /// <summary>
+    /// Создать источник по окружности и нужным массивам
+    /// </summary>
+    /// <param name="circle"></param>
+    /// <param name="normals"></param>
+    /// <param name="fmas"></param>
+    public Source(Circle circle, Normal2D[] normals, Complex[] fmas) : this(circle.center,normals,p=>circle.ContainPoint(p),fmas, Type.Circle,circle.radius) { }
+    /// <summary>
+    /// Создать источник по полумесяцу и нужным массивам
+    /// </summary>
+    /// <param name="circle"></param>
+    /// <param name="normals"></param>
+    /// <param name="fmas"></param>
+    public Source(DCircle circle, Complex[] fmas) : this(circle.Center, circle.GetNormalsOnDCircle(), p => circle.ContainPoint(p), fmas, Type.DCircle, circle.BigCircle.radius) { }
 
     /// <summary>
     /// Массив приложений нормалей источника
@@ -104,11 +119,14 @@ public class Source : Idup<Source>
     /// </summary>
     /// <param name="obj"></param>
     /// <returns></returns>
-    public override bool Equals(object obj)
-    {
-        Point p = (obj as Source).Center;
-        return (Center).Equals(p);
-    }
+    public override bool Equals(object obj)=> Equals((Source)(obj));
+    
+    /// <summary>
+    /// Эквивалентность по центрам
+    /// </summary>
+    /// <param name="obj"></param>
+    /// <returns></returns>
+    public bool Equals(Source s) => Center.Equals(s.Center);
 
     public override int GetHashCode()
     {
@@ -217,9 +235,17 @@ public class Source : Idup<Source>
     /// </summary>
     /// <param name="directory"></param>
     /// <returns></returns>
-    public static Source[] GetSourcesWithReadFw(string directory,Source[] sourcesArray)
+    public static Source[] GetSourcesWithReadFw(string directory,Source[] sourcesArray,bool makeCopies=false)
     {
         var s = Source.GetSourcesWithFw(sourcesArray, directory);
+        if(s.Length>0 && makeCopies)
+            for(int i = 0; i < s.Length; i++)
+            {
+                string ss = $"f(w) from {s[i].Center}.txt";
+                File.Copy(Path.Combine(directory, ss), Path.Combine(Environment.CurrentDirectory, ss), true);
+            }
+                
+
         FilesToSources(s, directory);
         return s;
     }
@@ -227,7 +253,7 @@ public class Source : Idup<Source>
     /// <summary>
     /// Считать файлы и записать f(w) в имеющиеся источники
     /// </summary>
-    private static void FilesToSources(Source[] sources, string path)
+    public static void FilesToSources(Source[] sources, string path)
     {
         try
         {
@@ -247,6 +273,19 @@ public class Source : Idup<Source>
         using (StreamReader r = new StreamReader(filename))
             t = r.ReadLine().Replace("\r\n", "");
         Parallel.For(0, sources.Length, (int i) => sources[i].FmasToFile(t));
+    }
+
+    /// <summary>
+    /// Возвращает массив строк с координатами центров источников
+    /// </summary>
+    /// <param name="arr"></param>
+    /// <returns></returns>
+    internal static string[] GetCenters(Source[] arr)
+    {
+        var st = new string[arr.Length];
+        for(int i=0;i<st.Length;i++)
+            st[i]= $"({arr[i].Center.x} , {arr[i].Center.y})";
+        return st;
     }
 
     public static double GetMaxRadius(Source[] s)

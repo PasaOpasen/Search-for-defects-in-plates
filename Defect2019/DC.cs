@@ -44,13 +44,7 @@ namespace Defect2019
             InitializeComponent();          
             DCircle es;
             if (!toS)
-            {
-                if (Forms.UG.dCircle != null)
-                    SetTextBoxesAndOtherData(out es, Forms.UG.dCircle);
-                else
                     es = DCircle.Example.dup;
-
-            }
             else              
                 SetTextBoxesAndOtherData(out es, DCircle.Example);
                
@@ -68,7 +62,7 @@ namespace Defect2019
         int counter = 0;
         private void SetTrack(int val = 17)
         {
-            argstep = 2 * Math.PI / (trackBar1.Maximum+1);
+            argstep = pimult2 / (trackBar1.Maximum+1);
             trackBar1.Value = val;
             textBox3.Text = (trackBar1.Value* argstep).ToString();
 
@@ -189,21 +183,16 @@ namespace Defect2019
         {
             Waves.DCircle c = new Waves.DCircle(new Point(textBox4.Text.ToDouble(), textBox5.Text.ToDouble()), textBox1.Text.ToDouble(), textBox2.Text.ToDouble(), textBox3.Text.ToDouble(),
             Convert.ToInt32(numericUpDown1.Value), Convert.ToInt32(numericUpDown2.Value));
+            var fw = GetFmas();
+            Source source = new Source(c, fw);
 
             if (!tosource)
-                Forms.UG.dCircle = new DCircle(c);
-            else
             {
-                double[] w = SeqWMemoized(wbeg, wend, wcount);
-                var fw = w.Map((double d) => Functions.F1(d) + new Number.Complex(RandomNumbers.NextDouble2(0, 0.01), RandomNumbers.NextDouble2(0, 0.01)));
-
-                Uxt.sources.Add(new Source(c.Center,
-                    c.GetNormalsOnDCircle(),
-                    (Point p) => c.ContainPoint(p),
-                      fw,
-                    Source.Type.DCircle,
-                    c.BigCircle.radius));
-
+                Forms.UG.SetSource(source);
+            }             
+            else
+            {              
+                Uxt.sources.Add(source);
                 Uform.Recostract();
             }
 

@@ -29,6 +29,7 @@ namespace МатКлассы
             Zero = new Point(0, 0);
         }
 
+        #region Конструкторы и свойства
         /// <summary>
         /// Точка с одинаковыми координатами
         /// </summary>
@@ -62,6 +63,9 @@ namespace МатКлассы
         /// Точка с переставленными координатами
         /// </summary>
         public Point Swap => new Point(this.y, this.x);
+        #endregion
+
+        #region Простые методы
         /// <summary>
         /// Добавить число к обеим координатам точки
         /// </summary>
@@ -116,7 +120,6 @@ namespace МатКлассы
             return dist / mas.Length;
         }
 
-
         /// <summary>
         /// Евклидово расстояние между точками
         /// </summary>
@@ -141,7 +144,7 @@ namespace МатКлассы
             double r = Point.Eudistance(this, z);
             return Math.Log(1.0 / r) * r * r;
         }
-
+        
 
         /// <summary>
         /// Возвращает координаты нижнего левого и верхнего правого угла прямоугольника, содержащего все точки массива
@@ -193,9 +196,9 @@ namespace МатКлассы
 
             return p;
         }
+        #endregion
 
-        public static implicit operator Point(Number.Complex e) => new Point(e.Re, e.Im);
-
+        #region Операторы
         public static Point operator -(Point p) => new Point(-p.x, -p.y);
 
         public static bool operator !=(Point a, Point b) => !(a == b);
@@ -228,7 +231,7 @@ namespace МатКлассы
             }
         }
 
-        public static bool operator ==(Point a, Point b) { /*if (a == null || b == null) return false;bool tmp = false; try { tmp=(a.x == b.x) && (a.y == b.y); } catch(NullReferenceException e){ }return tmp;*/  return (a.x == b.x) && (a.y == b.y); }
+        public static bool operator ==(Point a, Point b) => (a.x == b.x) && (a.y == b.y); 
 
         /// <summary>
         /// Сравнение точек по установленной по умолчанию упорядоченности
@@ -240,7 +243,9 @@ namespace МатКлассы
         {
             return (b < a);
         }
+        #endregion
 
+        #region Методы, связанные с рисованием графиков функций
         /// <summary>
         /// Набор n+1 точек на графике функции f, разбитых равномерно на отрезке от a до b
         /// </summary>
@@ -419,6 +424,8 @@ namespace МатКлассы
 
             return y;
         }
+        #endregion
+
         /// <summary>
         /// Показать массив точек на консоли
         /// </summary>
@@ -435,13 +442,12 @@ namespace МатКлассы
 
         public object Clone()
         {
-            //throw new NotImplementedException();
             return (object)new Point(this);
         }
 
-        public int CompareTo(object obj)
+        public int CompareTo(object obj) => CompareTo((Point)obj);
+        public int CompareTo(Point p)
         {
-            Point p = (Point)obj;
             if (this.x < p.x)
             {
                 return -1;
@@ -460,7 +466,6 @@ namespace МатКлассы
                 }
             }
             return 1;
-            //return x.CompareTo(obj);
         }
 
         public override bool Equals(object obj) => Equals((Point)obj);

@@ -53,8 +53,8 @@ namespace Defect2019
 
 
             wc = textBox11.Text.ToDouble();
-            wbeg = textBox4.Text.ToDouble() * 2 * Math.PI * 1e-6;
-            wend = textBox10.Text.ToDouble() * 2 * Math.PI * 1e-6;
+            wbeg = textBox4.Text.ToDouble() * pimult2 * 1e-6;
+            wend = textBox10.Text.ToDouble() * pimult2 * 1e-6;
             wcount = Convert.ToInt32(numericUpDown2.Value);
             UGrafic.wchange = true;
 

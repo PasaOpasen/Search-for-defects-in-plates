@@ -344,7 +344,6 @@ namespace PS5000A
             groupBox4.Hide();
             button6.Hide();
             listBox1.Hide();
-            label19.Hide();
         }
 
         private async void button4_Click(object sender, EventArgs e)
@@ -444,6 +443,8 @@ namespace PS5000A
             countBefore = Convert.ToInt32(textBox13.Text);
             usred = Convert.ToInt32(textBox11.Text);
             dt = (_timebase - 3) / 62500000.0; // 16 bit
+
+            CreateFurierTransform(w0, w1, wcount);
         }
         private void buttonOpen_Click(object sender, EventArgs e)
         {
@@ -511,7 +512,7 @@ namespace PS5000A
             }
             opened = true;
 
-            buttonOpen.Text = "Запущено";
+            buttonOpen.Text = "Подключено";
             groupBox4.Show();
         }
 
@@ -703,8 +704,7 @@ namespace PS5000A
         private void button6_Click(object sender, EventArgs e)
         {
             Switch_ = new CSwitchInterface();
-            int dsd = listBox1.SelectedIndex;
-            Switch_.OpenPort(dsd);
+            Switch_.OpenPort(listBox1.SelectedIndex);
 
             Thread.Sleep(500);
             textBoxUnitInfo.AppendText(Switch_.GetAccepted() + "\n");
@@ -719,14 +719,12 @@ namespace PS5000A
         {
             names_ = SerialPort.GetPortNames();
             listBox1.Items.Clear();
-            for (int i = 0; i < names_.Length; i++)
-                listBox1.Items.Add(names_[i]);
+            listBox1.Items.AddRange(names_);
 
             if (listBox1.Items.Count > 0)
                 listBox1.SelectedIndex = listBox1.Items.Count - 1;
 
             listBox1.Show();
-            label19.Show();
             button6.Show();
         }
 
@@ -869,7 +867,7 @@ namespace PS5000A
                     if (i != j)
                     {
                         await GetDataMiniAsync(j, Path.Combine(ItFolder(i), ArraysNames[j]));
-                        toolStripStatusLabel2.Text = $"Выполнено {++it} из {mx} ({Expendator.GetProcent(it, mx/*,2*/)}%)";
+                        toolStripStatusLabel2.Text = $"Выполнено {++it} из {mx} ({Expendator.GetProcent(it, mx, 2)}%)";
                     }
                 toolStripStatusLabel2.Text = "";
 
@@ -881,7 +879,7 @@ namespace PS5000A
         private async void buttonStart_Click(object sender, EventArgs e)
         {
             InitParams();
-            CreateFurierTransform(w0, w1, wcount);
+            
             if (!SetGlobalBase())
                 return;
 
@@ -903,7 +901,7 @@ namespace PS5000A
         /// <returns></returns>
         private async Task FurierOrShowForm(Func<int, string> from, Func<int, string> to)
         {
-            CreateFurierTransform(w0, w1, wcount);
+            //CreateFurierTransform(w0, w1, wcount);
 
             for (int i = 0; i < sourcesCount; i++)
                 await FurierOrShowIteration(from(i), to(i), i);

@@ -66,16 +66,8 @@ namespace Defect2019
                 {
                     Waves.Circle c = new Waves.Circle(new МатКлассы.Point(Centers[i]), r);
                     Waves.Normal2D[] norm = c.GetNormalsOnCircle(n);
-
-                    double[] w = SeqWMemoized(wbeg, wend, wcount);
-                    var fw = w.Map((double d) => Functions.F1(d) + new Number.Complex(RandomNumbers.NextDouble2(0, 1e-7), RandomNumbers.NextDouble2(0, 1e-7)));
-
-                    Source s = new Source(c.center, norm,
-                        (МатКлассы.Point p) => c.ContainPoint(p),
-                         fw,
-                        Source.Type.Circle,
-                        r);
-                    expls.Add(s);
+                    var fw = GetFmas();
+                    expls.Add(new Source(c, norm, fw));
                 }
             }
 

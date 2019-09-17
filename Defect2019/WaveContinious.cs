@@ -576,7 +576,7 @@ namespace Defect2019
             //        )
             //    );
 
-            Task tt = Task.Run(()=> OtherMethods.Saveuxw3(xmin, xmax, count, ymin, ymax, sourcesArray));
+            Task tt = Task.Run(() => OtherMethods.Saveuxw3(xmin, xmax, count, ymin, ymax, sourcesArray));
             IlushaMethod();
             //Task.WaitAll(tt);
             await tt;
@@ -612,7 +612,7 @@ namespace Defect2019
             }
 
             OtherMethods.CorrectWhereDataFile();
-            
+
             OtherMethods.CopyFilesR();
         }
 
@@ -665,7 +665,7 @@ namespace Defect2019
 
         private void button5_Click(object sender, EventArgs e)
         {
-            new Helper(textBox5.Text.ToDouble(), textBox6.Text.ToDouble(), numericUpDown2.Value.ToInt32()).Show();
+            new Helper(textBox5, textBox6, numericUpDown2).Show();
         }
 
         private void button6_Click(object sender, EventArgs e) => new Библиотека_графики.PdfOpen("Варианты метрик", "formula.pdf").ShowDialog();
@@ -800,15 +800,9 @@ namespace Defect2019
         /// <param name="path"></param>
         private void Metrics(string path)
         {
-            MetricSet("max", path);
-            if (!radioButton9.Checked)
-            {
-                MetricSet("sum", path);
-                if (radioButton7.Checked)
-                    Uxt = Functions.Uxt1;
-                if (radioButton8.Checked)
-                    Uxt = Functions.Uxt2;
-            }
+            Uxt = Functions.GetUxtFunc(radioButton7, radioButton8, radioButton9);
+
+            MetricSet(radioButton9.Checked ? "max" : "sum", path);
         }
         /// <summary>
         /// Задать параметры метрики в файл
