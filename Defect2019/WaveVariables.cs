@@ -211,9 +211,9 @@ public static class Functions
 
     #region Простейшие функции
     //tex: $\varkappa (\omega) = \dfrac{\rho \omega^2}{\mu}$
-    public static RealFunc k1 = (double w) => w * w * k1coef;
+    public static Func<double,double> k1 = (double w) => w * w * k1coef;
     //tex: $\varkappa (\omega) = \dfrac{\rho \omega^2}{2\mu+\lambda}$
-    public static RealFunc k2 = (double w) => w * w * k2coef;
+    public static Func<double,double> k2 = (double w) => w * w * k2coef;
     //tex: $\sigma_i (\alpha, \omega) = (\alpha-\varkappa_i(\omega))^\frac{1}{2}$
     public static Func<Complex, double, Complex> sigma = (Complex a, double kw) => Complex.Sqrt((a - kw)) * Math.Sign(a.Abs - kw);
 
@@ -252,10 +252,7 @@ public static class Functions
     /// <summary>
     /// Функция Ханкеля с умножением на корень (этот корень сокращается со знаменателем)
     /// </summary>
-    public static Func<double, Tuple<Complex, Complex>> HankelTupleWith = (double ar) =>
-    {
-        return new Tuple<Complex, Complex>(sqrtfrac2pi * Complex.Expi(ar + fracpi4), sqrtfrac2pi * Complex.Expi(ar - fracpi4));
-    };
+    public static Func<double, Tuple<Complex, Complex>> HankelTupleWith = (double ar) =>new Tuple<Complex, Complex>(sqrtfrac2pi * Complex.Expi(ar + fracpi4), sqrtfrac2pi * Complex.Expi(ar - fracpi4));
 
     /// <summary>
     /// Функция Ханкеля без умножения на корень
@@ -740,18 +737,8 @@ public static class Functions
     //tex:${\bar u}_i({\bar x},\omega)$ с источника i
     public static Func<double, double, double, Source, Tuple<Complex, Complex>> uxwMemoized;
 
-    //tex: ${\bar c}= f({\bar \omega}) \cdot u(x,y,z,{\bar \omega}) $ покомпонентно
-    public static Func<double, double, Source, Tuple<Complex, Complex>[]> CMAS = (double x, double y, Source s) =>
-   {
-       Tuple<Complex, Complex>[] c = new Tuple<Complex, Complex>[wcount];
-      //tex: ${\bar c}= {\bar f}({\bar w}) \cdot {\bar u}(x,y,z,{\bar w}) $ покомпонентно
-
-      for (int i = 0; i < wcount; i++)
-       {
-           c[i] = Expendator.Mult(uxwMemoized(x, y, wmas[i], s), s.Fmas[i]);
-       }
-      return c;
-   };
+    //tex: ${\bar c}= {\bar f}({\bar \omega}) \cdot {\bar u}(x,y,z,{\bar \omega}) $ покомпонентно
+    public static Func<double, double, Source, Tuple<Complex, Complex>[]> CMAS = (double x, double y, Source s) => Enumerable.Range(0, wcount).Select(i => Expendator.Mult(uxwMemoized(x, y, wmas[i], s), s.Fmas[i])).ToArray();
 
     /// <summary>
     /// Мемоизированная функция вычисления коэффициентов
@@ -917,7 +904,6 @@ public static class OtherMethods
             for (int j = 0; j < ycount; j++)
                 for (int s = 0; s < smas.Length; s++)
                 {
-                    //Parallel.For(0, wcount, (int k) => ur.OnlyAdd(new Tuple<double, double, double, Normal2D[]>(x[i],y[j],w[k],smas[s].Norms) ,uxw(x[i], y[j], w[k], smas[s].Norms)));
                     Parallel.For(0, wcount, (int k) => uxwMemoized(x[i], y[j], w[k], smas[s]));
                     Saved++;
                 }
@@ -936,33 +922,23 @@ public static class OtherMethods
     /// <param name="smas"></param>
     public static void Saveuxw3(double x0, double X, int xcount, double y0, double Y, Source[] smas)
     {
-        bool rs = !EqualConfigs(x0, X, xcount, y0, Y, smas, out Source[] arr);
+        bool notEqualConfig = !EqualConfigs(x0, X, xcount, y0, Y, smas, out Source[] arr);
 
-        if (rs)
+        if (notEqualConfig)
         {
             var w = wmas;
 
             info = "Происходит запись вспомогательных файлов";
-            Debug.WriteLine(info);
 
             Centers(smas);
-            //Parallel.Invoke(
-            //() => 
             Space(x0, X, xcount, y0, Y, smas);
-            //,
-            //() => Poles(w),
-            //() => Normals(smas)
-            // );
 
             info = "Файлы записаны";
-            Debug.WriteLine(info);
             info = null;
             CalcD(x0, X, xcount, y0, Y, smas);
             info = "Происходит сохранение результата, чтобы в другой раз избежать повторных вычислений";
-            Debug.WriteLine(info);
             WriteData(smas);
             info = "Результат записан";
-            Debug.WriteLine(info);
         }
         else
         {
@@ -971,17 +947,13 @@ public static class OtherMethods
                 info = "Создание недостающих файлов";
                 CalcD(x0, X, xcount, y0, Y, arr);
                 info = "Происходит сохранение результата, чтобы в другой раз избежать повторных вычислений";
-                Debug.WriteLine(info);
                 WriteData(arr);
                 info = "Результат записан";
-                Debug.WriteLine(info);
             }
 
             info = "Считываются данные с сохранённых источников";
-            Debug.WriteLine(info);
             ReadData(x0, X, xcount, y0, Y, smas.Where(p => !arr.Contains(p)).ToArray());
             info = "Данные считаны";
-            Debug.WriteLine(info);
         }
         info = null;
     }
@@ -1070,7 +1042,6 @@ public static class OtherMethods
                 {
                     QQs = QQ[snumber][ii][i];
 
-                    //res = InKtwice(plus[ii][k], pminus[ii][k], c1[ii][k], c2[ii][k], HankelTuple(poles[ii][k] * ros[i]), xp[i], yp[i]);
                     InKtwiceFast(plus[ii][k], pminus[ii][k], c1[ii][k], c2[ii][k], HankelTuple(poles[ii][k] * ros[i]), xp[i], yp[i], ref res);
                     s1 += res[0] * QQs.x + res[1] * QQs.y;
                     s2 += res[3] * QQs.x + res[4] * QQs.y;

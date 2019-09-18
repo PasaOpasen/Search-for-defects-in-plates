@@ -67,7 +67,7 @@ namespace Работа2019
             toolStripStatusLabel1.Text = "Вычисляет u(x,t)";
 
             timer1.Start();
-            await CaltUxt();
+            await CalcUxt();
             toolStripProgressBar1.Value = toolStripProgressBar1.Maximum;
             timer1.Stop();
 
@@ -75,20 +75,7 @@ namespace Работа2019
 
             toolStripStatusLabel1.Text = "Вычисляет u(x,w)";
 
-            Parallel.For(0, Sarray.Length, (int k) =>
-            {
-                using (StreamWriter f = new StreamWriter($"OnePoint(w{k + 1}).txt"))
-                {
-                    Tuple<Number.Complex, Number.Complex>[] mas = new Tuple<Number.Complex, Number.Complex>[РабКонсоль.wcount];
-                    for (int i = 0; i < РабКонсоль.wcount; i++)
-                    {
-                        mas[i] = Functions.uxwMemoized(x, y, РабКонсоль.wbeg + i * wh, Sarray[k]);
-                    }
-                    f.WriteLine("w urRe urIm uzRe uzIm");
-                    for (int i = 0; i < РабКонсоль.wcount; i++)
-                        f.WriteLine($"{РабКонсоль.wbeg + i * wh} {mas[i].Item1.Re} {mas[i].Item1.Im} {mas[i].Item2.Re} {mas[i].Item2.Im}");
-                }
-            });
+            await CalcUxw();
 
             toolStripStatusLabel1.Text = "Запускает скрипт";
             await Task.Run(() => OtherMethods.StartProcess2("OnePoint.r"));
@@ -99,13 +86,14 @@ namespace Работа2019
         }
         private void GetUxtInfo(string s)
         {
-            var names = Enumerable.Range(0, Sarray.Length).Select(n => Sarray[n].Center.ToString()).ToArray();
-            var filenames = Enumerable.Range(0, names.Length).Select(n =>Path.Combine(Environment.CurrentDirectory, "center = " + names[n] + "; " + s + ".pdf")).ToArray();
+            var range = Enumerable.Range(0, Sarray.Length);
+            var names = range.Select(n => Sarray[n].Center.ToString()).ToArray();
+            var filenames = range.Select(n => Path.Combine(Environment.CurrentDirectory, "center = " + names[n] + "; " + s + ".pdf")).ToArray();
 
-            new UxtInfo(tmin, th, ur, uz, names,filenames, s + ".pdf").Show();
+            new UxtInfo(tmin, th, ur, uz, names, filenames, s + ".pdf").Show();
         }
 
-        private async Task CaltUxt()
+        private async Task CalcUxt()
         {
             all = tcount;
             save = 0;
@@ -187,6 +175,25 @@ namespace Работа2019
                     });
                 });
         }
+
+        private async Task CalcUxw()
+        {
+            await Task.Run(() =>
+            {
+                Parallel.For(0, Sarray.Length, (int k) =>
+                {
+                    using (StreamWriter f = new StreamWriter($"OnePoint(w{k + 1}).txt"))
+                    {
+                        var mas = Enumerable.Range(0, РабКонсоль.wcount).Select(i => Functions.uxwMemoized(x, y, РабКонсоль.wbeg + i * wh, Sarray[k])).ToArray();
+
+                        f.WriteLine("w urRe urIm uzRe uzIm");
+                        for (int i = 0; i < РабКонсоль.wcount; i++)
+                            f.WriteLine($"{РабКонсоль.wbeg + i * wh} {mas[i].Item1.Re} {mas[i].Item1.Im} {mas[i].Item2.Re} {mas[i].Item2.Im}");
+                    }
+                });
+            });
+        }
+
         private string WriteUxt()
         {
             using (StreamWriter f = new StreamWriter("OnePoint.txt"))
@@ -247,7 +254,7 @@ namespace Работа2019
         }
         private void FillListAndFileArrays()
         {
-            string s,f;
+            string s, f;
             for (int i = 0; i < sources.Length; i++)
             {
                 s = $"({sources[i].Center.x} , {sources[i].Center.y})";
