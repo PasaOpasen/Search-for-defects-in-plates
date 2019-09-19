@@ -25,7 +25,20 @@ namespace Defect2019
         {
             App app = new App();
             MainWindow window = new MainWindow();
+            SetExeptions();
             app.Run(window);
+        }
+
+        private static void SetExeptions()
+        {
+            AppDomain.CurrentDomain.UnhandledException += (object sender, UnhandledExceptionEventArgs args) =>
+            {
+                var ex = (args.ExceptionObject as Exception);
+                MessageBox.Show($"Произошло исключение \" {ex.Message} \", которое не было перехвачено. Программа будет закрыта, стек исключения находится в файле Exeptions.txt", "Неперехваченное исключение", MessageBoxButton.OK, MessageBoxImage.Exclamation);
+
+                 МатКлассы.Expendator.WriteStringInFile("Exeptions.txt" ,(ex.StackTrace));
+                 Environment.Exit(1);
+            };
         }
     }
 }

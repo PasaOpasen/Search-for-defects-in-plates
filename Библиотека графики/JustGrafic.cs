@@ -134,17 +134,10 @@ namespace Библиотека_графики
         {
             Parallel.For(0, fnames.Length, (int i) =>
             {
-                string p;
                 List<double> l = new List<double>();
-                using (StreamReader f = new StreamReader(fnames[i]))
-                {
-                    p = f.ReadLine();
-                    while (p != null && p.Length > 0)
-                    {
-                        l.Add(Convert.ToDouble(p));
-                        p = f.ReadLine();
-                    }
-                }
+
+                foreach(var p in File.ReadLines(fnames[i]))
+                    l.Add(Convert.ToDouble(p));
 
                 arr[i] = l.ToArray();
                 arr2[i] = l.ToArray();
