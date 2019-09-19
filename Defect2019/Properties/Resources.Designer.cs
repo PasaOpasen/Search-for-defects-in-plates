@@ -152,5 +152,14 @@ namespace Работа2019.Properties {
                 return ResourceManager.GetStream("ПоверхностиПостроены", resourceCulture);
             }
         }
+        
+        /// <summary>
+        ///   Поиск локализованного ресурса типа System.IO.UnmanagedMemoryStream, аналогичного System.IO.MemoryStream.
+        /// </summary>
+        public static System.IO.UnmanagedMemoryStream СохранениеДанных {
+            get {
+                return ResourceManager.GetStream("СохранениеДанных", resourceCulture);
+            }
+        }
     }
 }

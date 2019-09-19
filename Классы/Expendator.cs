@@ -678,15 +678,7 @@ namespace МатКлассы
         /// </summary>
         /// <param name="s"></param>
         /// <returns></returns>
-        public static double[] ToDoubleMas(this string s)
-        {
-            string[] st = s.Split(new char[] { ' ' }, StringSplitOptions.RemoveEmptyEntries);
-            double[] res = new double[st.Length];
-            for (int i = 0; i < res.Length; i++)
-                res[i] = Convert.ToDouble(st[i]);
-            st = null;
-            return res;
-        }
+        public static double[] ToDoubleMas(this string s)=>s.Split(new char[] { ' ' }, StringSplitOptions.RemoveEmptyEntries).Select(st=>Convert.ToDouble(st)).ToArray();
         /// <summary>
         /// Преобразовать число в строку, из которой его можно воспроизвести
         /// </summary>

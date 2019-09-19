@@ -104,7 +104,7 @@ public static class Functions
     public static readonly double
         sqrtfrac2pi = Math.Sqrt(2.0 / Math.PI),
     fracpi4 = Math.PI / 4,
-        pimult2=2*Math.PI;
+        pimult2 = 2 * Math.PI;
 
     public static void AfterChaigeData()
     {
@@ -133,7 +133,7 @@ public static class Functions
         FiMemoized = (double t) => fs.Value(t);
 
         var cs = new Memoize<Tuple<Complex[], double>, CVectors>((Tuple<Complex[], double> t) => t.Item1 * FiMemoized(t.Item2));
-        Phif = (Complex[] fw, double t) => cs.Value(new Tuple<Complex[], double>(fw, t));       
+        Phif = (Complex[] fw, double t) => cs.Value(new Tuple<Complex[], double>(fw, t));
     }
     public static Memoize<Tuple<double, double, double, Source>, Tuple<Complex, Complex>> ur;
     public static Memoize<Tuple<double, double, Source>, Tuple<Complex, Complex>[]> cmas;
@@ -156,7 +156,7 @@ public static class Functions
     }
     private static void WriteParams()
     {
-        using(StreamWriter f=new StreamWriter("LastParamsConfig.txt"))
+        using (StreamWriter f = new StreamWriter("LastParamsConfig.txt"))
         {
             f.WriteLine($"lambda= {lamda.ToRString()}");
             f.WriteLine($"mu= {mu.ToRString()}");
@@ -180,12 +180,12 @@ public static class Functions
     private static void ReadParams()
     {
         string filename = "LastParamsConfig.txt";
-        
+
         if (File.Exists(filename))
-        using(StreamReader f=new StreamReader(filename))
+            using (StreamReader f = new StreamReader(filename))
             {
                 int ToInt() => f.ReadLine().Split(' ')[1].ToInt32();
-                double ToDouble()=> f.ReadLine().Split(' ')[1].ToDouble();
+                double ToDouble() => f.ReadLine().Split(' ')[1].ToDouble();
 
                 lamda = ToDouble();
                 mu = ToDouble();
@@ -204,16 +204,16 @@ public static class Functions
                 animatime = ToInt();
                 clastersCount = ToInt();
                 animacycles = ToInt();
-            }             
+            }
     }
 
     #endregion
 
     #region Простейшие функции
     //tex: $\varkappa (\omega) = \dfrac{\rho \omega^2}{\mu}$
-    public static Func<double,double> k1 = (double w) => w * w * k1coef;
+    public static Func<double, double> k1 = (double w) => w * w * k1coef;
     //tex: $\varkappa (\omega) = \dfrac{\rho \omega^2}{2\mu+\lambda}$
-    public static Func<double,double> k2 = (double w) => w * w * k2coef;
+    public static Func<double, double> k2 = (double w) => w * w * k2coef;
     //tex: $\sigma_i (\alpha, \omega) = (\alpha-\varkappa_i(\omega))^\frac{1}{2}$
     public static Func<Complex, double, Complex> sigma = (Complex a, double kw) => Complex.Sqrt((a - kw)) * Math.Sign(a.Abs - kw);
 
@@ -244,15 +244,11 @@ public static class Functions
     #endregion
 
     #region Функции Ханкеля
-    /// <summary>
-    /// Используемая функция Ханкеля
-    /// </summary>
-    public static Func<double, Tuple<Complex, Complex>> HankelTuple = HankelTupleWith;
 
     /// <summary>
     /// Функция Ханкеля с умножением на корень (этот корень сокращается со знаменателем)
     /// </summary>
-    public static Func<double, Tuple<Complex, Complex>> HankelTupleWith = (double ar) =>new Tuple<Complex, Complex>(sqrtfrac2pi * Complex.Expi(ar + fracpi4), sqrtfrac2pi * Complex.Expi(ar - fracpi4));
+    public static Func<double, Tuple<Complex, Complex>> HankelTupleWith = (double ar) => new Tuple<Complex, Complex>(sqrtfrac2pi * Complex.Expi(ar + fracpi4), sqrtfrac2pi * Complex.Expi(ar - fracpi4));
 
     /// <summary>
     /// Функция Ханкеля без умножения на корень
@@ -273,6 +269,11 @@ public static class Functions
         double tmp = sd(ar);
         return new Tuple<Complex, Complex>(sqrtfrac2pi * tmp * Complex.Expi(ar + fracpi4), sqrtfrac2pi * tmp * Complex.Expi(ar - fracpi4));
     };
+
+    /// <summary>
+    /// Используемая функция Ханкеля
+    /// </summary>
+    public static Func<double, Tuple<Complex, Complex>> HankelTuple = HankelTupleWith;
 
     #endregion
 
@@ -350,7 +351,7 @@ public static class Functions
     /// </summary>
     public static Func<double, Vectors> PolesMasMemoized;
     #endregion
-    
+
     #region Матрица K
 
     /// <summary>
@@ -470,7 +471,7 @@ public static class Functions
 
           Complex j1ar = beshank.Item1, j0ar = beshank.Item2;
 
-          Complex P = PRMSN1[0] * a21 - PRMSN2[0] * a22, R1 = PRMSN1[1], 
+          Complex P = PRMSN1[0] * a21 - PRMSN2[0] * a22, R1 = PRMSN1[1],
           Mi1 = PRMSN1[2] * I, Si = (PRMSN1[3] - PRMSN2[3]) * I, Ni1 = PRMSN1[4] * I;
           Complex R2 = PRMSN2[1], Mi2 = PRMSN2[2] * I, Ni2 = PRMSN2[4] * I;
 
@@ -572,7 +573,7 @@ public static class Functions
     public static CVectors KQmult(Complex[,] M, Vectors v) => new CVectors(new Complex[3] { M[0, 0] * v[0] + M[0, 1] * v[1], M[1, 0] * v[0] + M[1, 1] * v[1], M[2, 0] * v[0] + M[2, 1] * v[1] });
 
     #endregion
-    
+
     #region Функции для определения коэффициентов матрицы K
     /// <summary>
     /// Возвращает первые и вторые производные функции J0(alpha,x,y)
@@ -597,7 +598,7 @@ public static class Functions
         Complex jx, jy, jxx, jxy, jyy;
         double x2 = x * x, y2 = y * y, r = Math.Sqrt(x2 + y2);
         Complex ar = a * r, ar3 = ar * r * r;
-        Complex j1ar =МатКлассы.SpecialFunctions.Hankel(1, ar.Re), j2ar = МатКлассы.SpecialFunctions.Hankel(2, ar.Re);
+        Complex j1ar = МатКлассы.SpecialFunctions.Hankel(1, ar.Re), j2ar = МатКлассы.SpecialFunctions.Hankel(2, ar.Re);
 
         jx = -j1ar * x / r;
         jy = -j1ar * y / r;
@@ -616,7 +617,7 @@ public static class Functions
     {
         CSqMatrix Mat = A(al, w).InvertByMathNet();
 
-        return new Tuple<CVectors, CVectors>(Mat.GetColumn(0), Mat.GetColumn(1));    
+        return new Tuple<CVectors, CVectors>(Mat.GetColumn(0), Mat.GetColumn(1));
     }
 
     /// <summary>
@@ -672,7 +673,7 @@ public static class Functions
     public static Func<Complex, double, CSqMatrix> A = (Complex alp, double w) =>
         {
             double kt1 = k1(w), kt2 = k2(w);
-            Complex al = alp * alp, ai =Complex.I;
+            Complex al = alp * alp, ai = Complex.I;
             Complex s1 = sigma(al, kt1), s2 = sigma(al, kt2);
             Complex a = (al - 0.5 * kt2);
             Complex b = s1 * ai;
@@ -786,16 +787,16 @@ public static class Functions
     /// </summary>
     public static Func<double, double, double, Source, Tuple<Complex, Complex>> UxtOne = (double x, double y, double t, Source s) =>
     {
-       //return ((Integraluxt(x,y,t,tuple,normal)).Re / Math.PI).DoubleMas;
+        //return ((Integraluxt(x,y,t,tuple,normal)).Re / Math.PI).DoubleMas;
 
         //tex: Скалярное произведение ${\bar c} \cdot {\bar \varphi({\bar t})}$
-       return ((CMAS_Memoized(x, y, s) * FiMemoized(t)));//этот вариант почему-то самый быстрый
+        return ((CMAS_Memoized(x, y, s) * FiMemoized(t)));//этот вариант почему-то самый быстрый
 
-       //double[] w = tuple.Item1;
-       //return ((CMAS_Memoized(x, y, tuple, normal) * Fi(w, t)).Re / Math.PI).DoubleMas;
+        //double[] w = tuple.Item1;
+        //return ((CMAS_Memoized(x, y, tuple, normal) * Fi(w, t)).Re / Math.PI).DoubleMas;
 
-       // return ((TripleMult(x,y,t,tuple,normal)).Re / Math.PI).DoubleMas;
-   };
+        // return ((TripleMult(x,y,t,tuple,normal)).Re / Math.PI).DoubleMas;
+    };
 
     /// <summary>
     /// Функция u(x,t) по массиву источников
@@ -861,7 +862,7 @@ public static class Functions
         if (r2.Checked)
             return Uxt2;
 
-            return Uxt3;
+        return Uxt3;
     }
 
     #endregion
@@ -1227,12 +1228,14 @@ public static class OtherMethods
     /// <param name="mas"></param>
     private static void WriteData(Source[] mas)
     {
+        PlaySound("СохранениеДанных");
+
         SaveCount = ur.dic.Count;
         Saved = 0;
         int which(Source f)
         {
             for (int i = 1; i < mas.Length; i++)
-                if (f.Equals( mas[i]))
+                if (f.Equals(mas[i]))
                 {
                     return i;
                 }
@@ -1251,7 +1254,6 @@ public static class OtherMethods
             writers[which(p.Key.Item4)].WriteLine($"{p.Key.Item1.ToRString()} {p.Key.Item2.ToRString()} {p.Key.Item3.ToRString()} {p.Value.Item1.Re.ToRString()} {p.Value.Item1.Im.ToRString()} {p.Value.Item2.Re.ToRString()} {p.Value.Item2.Im.ToRString()}");
             Saved++;
         }
-
 
         for (int i = 0; i < mas.Length; i++)
             writers[i].Close();
