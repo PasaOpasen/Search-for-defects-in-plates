@@ -17,7 +17,7 @@ namespace Библиотека_графики
     public partial class JustGrafic : Form
     {
         public int step;
-        public enum Mode { Time, Tick };
+        public enum Mode : byte { Time, Tick };
         internal Mode MeMode = Mode.Tick;
 
         public JustGrafic(string title = "График")
@@ -134,13 +134,10 @@ namespace Библиотека_графики
         {
             Parallel.For(0, fnames.Length, (int i) =>
             {
-                List<double> l = new List<double>();
+                var collection = File.ReadLines(fnames[i]).Select(p => Convert.ToDouble(p));
 
-                foreach(var p in File.ReadLines(fnames[i]))
-                    l.Add(Convert.ToDouble(p));
-
-                arr[i] = l.ToArray();
-                arr2[i] = l.ToArray();
+                arr[i] = collection.ToArray();
+                arr2[i] = collection.ToArray();
             });
         }
 

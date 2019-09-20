@@ -9,6 +9,8 @@ using System.Diagnostics;
 using System.Threading.Tasks;
 using System.Windows.Forms;
 
+public enum Type : byte { Circle, DCircle };
+
 /// <summary>
 /// Источник с дополнительными свойствами
 /// </summary>
@@ -38,8 +40,7 @@ public struct Source : Idup<Source>
     /// Массив f(w)
     /// </summary>
     public Complex[] Fmas;
-
-    public enum Type { Circle, DCircle };
+   
     public Circle GetCircle => new Circle(Center, radius);
 
     /// <summary>

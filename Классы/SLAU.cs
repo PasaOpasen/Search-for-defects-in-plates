@@ -975,7 +975,7 @@ namespace МатКлассы
         /// <summary>
         /// Перечисление методов решения системы
         /// </summary>
-        public enum Method
+        public enum Method : byte
         {
             Gauss,
             Holets,

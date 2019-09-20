@@ -116,7 +116,7 @@ namespace МатКлассы
         /// <summary>
         /// Метод локального поиска корня
         /// </summary>
-        public enum MethodRoot
+        public enum MethodRoot : byte
         {
             Brent,
             Broyden,

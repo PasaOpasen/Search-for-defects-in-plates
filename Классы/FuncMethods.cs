@@ -552,7 +552,7 @@ namespace МатКлассы
         /// </summary>
         public static class ODU
         {
-            public enum Method
+            public enum Method:byte
             {
                 /// <summary>
                 /// Метод Эйлера
@@ -1278,7 +1278,7 @@ namespace МатКлассы
             /// <summary>
             /// Методы подсчёта интеграда
             /// </summary>
-            public enum Method
+            public enum Method : byte
             {
                 /// <summary>
                 /// Метод средних прямоугольников
@@ -1325,7 +1325,7 @@ namespace МатКлассы
             /// <summary>
             /// Критерии подсчёта интеграла
             /// </summary>
-            public enum Criterion
+            public enum Criterion : byte
             {
                 /// <summary>
                 /// Число шагов (узлов)
@@ -1527,7 +1527,7 @@ namespace МатКлассы
                 /// <summary>
                 /// Количество узлов при интегрировании
                 /// </summary>
-                public enum NodesCount
+                public enum NodesCount : byte
                 {
                     GK15, GK21, GK31, GK41, GK51, GK61
                 }
@@ -3272,7 +3272,7 @@ Parallel.For(0, n, (int i) => {
             /// <summary>
             /// Вариация метода Монте-Карло
             /// </summary>
-            public enum MonteKarloEnum
+            public enum MonteKarloEnum : byte
             {
                 /// <summary>
                 /// Обычный
@@ -4237,7 +4237,7 @@ Parallel.For(0, n, (int i) => {
             /// <summary>
             /// Контроль над тем, модифицируется функция в методе или нет
             /// </summary>
-            public enum ModifyFunction
+            public enum ModifyFunction : byte
             {
                 /// <summary>
                 /// Да, модифицировать функцию
@@ -4532,7 +4532,7 @@ Parallel.For(0, n, (int i) => {
             /// <summary>
             /// Вариация метода
             /// </summary>
-            public enum Variety
+            public enum Variety : byte
             {
                 /// <summary>
                 /// Простейшая вариация метода
@@ -4684,7 +4684,7 @@ Parallel.For(0, n, (int i) => {
             /// <summary>
             /// Методы поиска минимума
             /// </summary>
-            public enum MinimumVar
+            public enum MinimumVar : byte
             {
                 /// <summary>
                 /// Метод золотого сечения
@@ -4809,7 +4809,7 @@ Parallel.For(0, n, (int i) => {
             /// <summary>
             /// Ключевая точка
             /// </summary>
-            public enum CriticalPoint
+            public enum CriticalPoint : byte
             {
                 /// <summary>
                 /// Корень
@@ -4824,7 +4824,7 @@ Parallel.For(0, n, (int i) => {
             /// <summary>
             /// Методы поиска корня
             /// </summary>
-            public enum RootSearchMethod
+            public enum RootSearchMethod : byte
             {
                 /// <summary>
                 /// Метод бисекции

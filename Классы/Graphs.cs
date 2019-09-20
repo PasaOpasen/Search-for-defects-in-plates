@@ -14,11 +14,11 @@ namespace МатКлассы
         /// <summary>
         /// Тип графа
         /// </summary>
-        public enum Type { Full, Zero };
+        public enum Type : byte { Full, Zero };
         /// <summary>
         /// Перечисление цветов
         /// </summary>
-        private enum Color { White, Gray, Black };
+        private enum Color : byte { White, Gray, Black };
 
         private class ML
         {

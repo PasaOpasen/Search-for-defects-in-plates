@@ -24,7 +24,7 @@ namespace МатКлассы
         /// <summary>
         /// Тип прямой
         /// </summary>
-        public enum Type { ParallelOx, ParallelOy, Other }
+        public enum Type : byte { ParallelOx, ParallelOy, Other }
         /// <summary>
         /// Тип прямой
         /// </summary>
@@ -40,11 +40,11 @@ namespace МатКлассы
         /// <summary>
         /// Тип взаимного отношения прямых
         /// </summary>
-        public enum Mode { Parallel, Perpendicular }
+        public enum Mode : byte { Parallel, Perpendicular }
         /// <summary>
         /// Тип уравнения прямой
         /// </summary>
-        public enum EquType { Normal, Other }
+        public enum EquType : byte { Normal, Other }
         /// <summary>
         /// Тангенс угла наклона
         /// </summary>

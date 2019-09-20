@@ -1930,19 +1930,6 @@ namespace МатКлассы
             Vectors res;
             using (StreamReader f = new StreamReader(filename))
                 res= Vectors.CreateFast( f.ReadToEnd().Replace('.', ',').Replace("NA","NaN").ToDoubleMas());
-
-            //List<double> p = new List<double>();
-            //string s;
-            //using (StreamReader f = new StreamReader(filename))
-            //{
-            //    s = f.ReadLine();
-            //    while(s!= null && s.Length > 0)
-            //    {
-            //        p.Add(Convert.ToDouble( s.Replace('.', ',').Replace("NA", "NaN")));
-            //        s = f.ReadLine();
-            //    }
-            //}
-
                 return res;
           }
 

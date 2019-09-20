@@ -48,7 +48,7 @@ namespace МатКлассы
         /// <summary>
         /// Перечисление доступных вейвлетов
         /// </summary>
-        public enum Wavelets
+        public enum Wavelets : byte
         {
             /// <summary>
             /// Гауссов вейвлет первого порядка

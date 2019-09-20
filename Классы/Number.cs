@@ -692,7 +692,7 @@ namespace МатКлассы
             /// <summary>
             /// Способ отображения комплексного числа в действительное
             /// </summary>
-            public enum ComplMode
+            public enum ComplMode : byte
             {
                 Re,
                 Im,

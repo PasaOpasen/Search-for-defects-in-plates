@@ -135,11 +135,11 @@ namespace МатКлассы
     /// <summary>
     /// Перечисление "род": для криволинейных интегралов, полиномов Чебышёва и т.д.
     /// </summary>
-    public enum Kind { FirstKind, SecondKind };
+    public enum Kind : byte { FirstKind, SecondKind };
     /// <summary>
     /// Ортогональные функции, ортонормированные, неортогональные
     /// </summary>
-    public enum SequenceFuncKind { Orthogonal, Orthonormal, Other };
+    public enum SequenceFuncKind : byte { Orthogonal, Orthonormal, Other };
 
 #endregion
 
@@ -371,7 +371,7 @@ namespace МатКлассы
             /// <summary>
             /// Тип распределения (нормальное, равномерное, пуассоновское, экспоненциальное и т. д.)
             /// </summary>
-            public enum BasisDistribution { Normal, Uniform, Puasson, Exp, Other };
+            public enum BasisDistribution : byte { Normal, Uniform, Puasson, Exp, Other };
 
             /// <summary>
             /// Вспомогательная функция
