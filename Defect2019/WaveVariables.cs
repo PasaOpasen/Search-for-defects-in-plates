@@ -700,7 +700,7 @@ public static class Functions
     /// <summary>
     /// Возвращает вектор преобразований Фурье от шапочек
     /// </summary>
-    public static Func<double[], double, CVectors> Fi = (double[] w, double t) =>
+    public static readonly Func<double[], double, CVectors> Fi = (double[] w, double t) =>
     {
         double dw = w[1] - w[0];
         Complex it = Complex.I / t;
@@ -737,13 +737,13 @@ public static class Functions
     /// <summary>
     /// Собственно функция u(x,w)
     /// </summary>
-    public static Func<double, double, double, Source, Tuple<Complex, Complex>> uxw = (double x, double y, double w, Source s) => ToURUZ(KsumRes(x, y, w, s.Norms, (Point t) => new Vectors(t.x, t.y, 0.0)), s, x, y);
+    public static readonly Func<double, double, double, Source, Tuple<Complex, Complex>> uxw = (double x, double y, double w, Source s) => ToURUZ(KsumRes(x, y, w, s.Norms, (Point t) => new Vectors(t.x, t.y, 0.0)), s, x, y);
 
     //tex:${\bar u}_i({\bar x},\omega)$ с источника i
     public static Func<double, double, double, Source, Tuple<Complex, Complex>> uxwMemoized;
 
     //tex: ${\bar c}= {\bar f}({\bar \omega}) \cdot {\bar u}(x,y,z,{\bar \omega}) $ покомпонентно
-    public static Func<double, double, Source, Tuple<Complex, Complex>[]> CMAS = (double x, double y, Source s) => Enumerable.Range(0, wcount).Select(i => Expendator.Mult(uxwMemoized(x, y, wmas[i], s), s.Fmas[i])).ToArray();
+    public static readonly Func<double, double, Source, Tuple<Complex, Complex>[]> CMAS = (double x, double y, Source s) => Enumerable.Range(0, wcount).Select(i => Expendator.Mult(uxwMemoized(x, y, wmas[i], s), s.Fmas[i])).ToArray();
 
     /// <summary>
     /// Мемоизированная функция вычисления коэффициентов
@@ -769,7 +769,7 @@ public static class Functions
          };
 
     //tex: ${\bar c}= \cdot u(x,y,z,{\bar \omega}) \cdot \phi ({\bar\omega}) $ покомпонентно
-    private static Func<double, double, double, Source, Tuple<Complex, Complex>> Integraluxt = (double x, double y, double t, Source s) =>
+    private static readonly Func<double, double, double, Source, Tuple<Complex, Complex>> Integraluxt = (double x, double y, double t, Source s) =>
       {
           var p = Phif(s.Fmas, t);
           Complex t1 = 0, t2 = 0;
@@ -789,7 +789,7 @@ public static class Functions
     /// <summary>
     /// Итоговая функция (через вычисленные массивы w и f(w)) для одного источника
     /// </summary>
-    public static Func<double, double, double, Source, Tuple<Complex, Complex>> UxtOne = (double x, double y, double t, Source s) =>
+    public static readonly Func<double, double, double, Source, Tuple<Complex, Complex>> UxtOne = (double x, double y, double t, Source s) =>
     {
         //return ((Integraluxt(x,y,t,tuple,normal)).Re / Math.PI).DoubleMas;
 
@@ -1272,10 +1272,10 @@ public static class OtherMethods
     {
         List<Source> list = new List<Source>();
         List<string> names = new List<string>();
-        for (int i = 0; i < smas.Length; i++)
+        foreach(var s in smas)
         {
-            list.Add(smas[i].dup);
-            names.Add($"uxw {smas[i].ToShortString()}.txt");
+            list.Add(s.dup);
+            names.Add($"uxw {s.ToShortString()}.txt");
         }
         emptymas = list.ToArray();
 
@@ -1300,7 +1300,7 @@ public static class OtherMethods
 
 
         System.IO.FileInfo file2 = new System.IO.FileInfo("Space.txt");
-        System.IO.FileInfo file1;// = new System.IO.FileInfo("uxw.txt");
+        System.IO.FileInfo file1;
         for (int i = 0; i < names.Count; i++)
         {
             file1 = new System.IO.FileInfo(names[i]);

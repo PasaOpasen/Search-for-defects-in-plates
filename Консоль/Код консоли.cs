@@ -1,4 +1,5 @@
-﻿using System;
+﻿using NUnit.Framework;
+using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
@@ -8,10 +9,8 @@ using МатКлассы;
 using static МатКлассы.Number;
 using static МатКлассы.FuncMethods.DefInteg;
 using static МатКлассы.FuncMethods.Optimization;
-using МатКлассы;
 using VectorNetFunc = System.Collections.Generic.List<System.Tuple<double, МатКлассы.Vectors>>;
 using System.Collections;
-using static FSlib.testforbook;
 using MathNet.Numerics.LinearAlgebra;
 using MathNet.Numerics.LinearAlgebra.Double;
 using MathNet.Numerics.LinearAlgebra.Complex;

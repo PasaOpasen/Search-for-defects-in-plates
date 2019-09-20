@@ -14,7 +14,7 @@ public enum Type : byte { Circle, DCircle };
 /// <summary>
 /// Источник с дополнительными свойствами
 /// </summary>
-public struct Source : Idup<Source>
+public struct Source : Idup<Source>,IEquatable<Source>
 {
     /// <summary>
     /// Центр источника
