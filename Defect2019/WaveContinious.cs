@@ -545,6 +545,7 @@ namespace Defect2019
             toolStripStatusLabel1.Text = "Начинается построение";
             OtherMethods.PlaySound("Uxt");
             другиеПараметрыToolStripMenuItem.Visible = false;
+
             await UxtCalcAsync();
 
             AfterGenerate();
@@ -556,7 +557,9 @@ namespace Defect2019
             button2.Hide();
             button4.Hide();
             checkBox4.Hide();
+
             GetFields();
+            Functions.RecreateBigCollections(count, tcount, sourcesArray.Length - 1);
 
             if (checkBox3.Checked)
                 FilesFromSources(sourcesArray);

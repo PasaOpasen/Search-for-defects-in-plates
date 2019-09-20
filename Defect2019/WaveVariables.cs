@@ -116,28 +116,32 @@ public static class Functions
         var prmsn = prmsnmem.Value;
         PRMSN_Memoized = (Complex a, double w) => prmsn(new Tuple<Complex, double>(a, w));
 
-        var pol = new Memoize<double, Vectors>((double t) => PolesMas(t)).Value;
+        var pol = new Memoize<double, Vectors>((double t) => PolesMas(t),wcount).Value;
         PolesMasMemoized = (double x) => pol(x);
 
         var seq = new Memoize<Tuple<double, double, int>, double[]>((Tuple<double, double, int> t) => SeqW(t.Item1, t.Item2, t.Item3));
         SeqWMemoized = (double a, double b, int c) => seq.Value(new Tuple<double, double, int>(a, b, c));
 
-        ur = new Memoize<Tuple<double, double, double, Source>, Tuple<Complex, Complex>>((Tuple<double, double, double, Source> t) => uxw(t.Item1, t.Item2, t.Item3, t.Item4));
-        uxwMemoized = (double x, double y, double w, Source n) => ur.Value(new Tuple<double, double, double, Source>(x, y, w, n));
-
-        cmas = new Memoize<Tuple<double, double, Source>, Tuple<Complex, Complex>[]>((Tuple<double, double, Source> t) => CMAS(t.Item1, t.Item2, t.Item3));
-        CMAS_Memoized = (double x, double y, Source s) => cmas.Value(new Tuple<double, double, Source>(x, y, s));
-
-        wmas = SeqWMemoized(РабКонсоль.wbeg, РабКонсоль.wend, РабКонсоль.wcount);
-        var fs = new Memoize<double, CVectors>((double t) => Fi(wmas, t));
-        FiMemoized = (double t) => fs.Value(t);
-
-        var cs = new Memoize<Tuple<Complex[], double>, CVectors>((Tuple<Complex[], double> t) => t.Item1 * FiMemoized(t.Item2));
-        Phif = (Complex[] fw, double t) => cs.Value(new Tuple<Complex[], double>(fw, t));
+        RecreateBigCollections();
     }
     public static Memoize<Tuple<double, double, double, Source>, Tuple<Complex, Complex>> ur;
     public static Memoize<Tuple<double, double, Source>, Tuple<Complex, Complex>[]> cmas;
     public static Memoize<Tuple<Complex, double>, Complex[]> prmsnmem;
+    public static void RecreateBigCollections(int spaceCount=0,int timeCount=0,int sourceCount=0)
+    {
+        ur = new Memoize<Tuple<double, double, double, Source>, Tuple<Complex, Complex>>((Tuple<double, double, double, Source> t) => uxw(t.Item1, t.Item2, t.Item3, t.Item4),spaceCount*spaceCount*wcount*sourceCount);
+        uxwMemoized = (double x, double y, double w, Source n) => ur.Value(new Tuple<double, double, double, Source>(x, y, w, n));
+
+        cmas = new Memoize<Tuple<double, double, Source>, Tuple<Complex, Complex>[]>((Tuple<double, double, Source> t) => CMAS(t.Item1, t.Item2, t.Item3), spaceCount * spaceCount * sourceCount);
+        CMAS_Memoized = (double x, double y, Source s) => cmas.Value(new Tuple<double, double, Source>(x, y, s));
+
+        wmas = SeqWMemoized(РабКонсоль.wbeg, РабКонсоль.wend, РабКонсоль.wcount);
+        var fs = new Memoize<double, CVectors>((double t) => Fi(wmas, t),timeCount);
+        FiMemoized = (double t) => fs.Value(t);
+
+        var cs = new Memoize<Tuple<Complex[], double>, CVectors>((Tuple<Complex[], double> t) => t.Item1 * FiMemoized(t.Item2),timeCount*sourceCount);
+        Phif = (Complex[] fw, double t) => cs.Value(new Tuple<Complex[], double>(fw, t));
+    }
 
     public static Func<double, double, int, double[]> SeqW = (double wbeg, double wend, int count) => Expendator.Seq(wbeg, wend, count);
     public static Func<double, double, int, double[]> SeqWMemoized;
@@ -973,10 +977,11 @@ public static class OtherMethods
         Saved = 0;
         SaveCount = xcount * xcount * smas.Length;
         var w = wmas;
+        byte scount = (byte)smas.Length;
+        int numberofs;
 
         double x, y;
         double xh = (X - x0) / (xcount - 1), yh = (Y - y0) / (xcount - 1);
-        sbyte scount = (sbyte)(smas.Length);
 
         bool b;
         Point xy;
@@ -1063,32 +1068,35 @@ public static class OtherMethods
 
                 //проверить принадлежность точки к какому-либо из источников
                 b = false;
-                for (int c = 0; c < scount; c++)
-                    if (Point.Eudistance(xy, smas[c].Center) <= smas[c].radius * 2.0)
+
+                    foreach(var c in smas)
+                    if (Point.Eudistance(xy, c.Center) <= c.radius * 2.0)
                     {
                         b = true;
                         break;
                     }
 
+                numberofs = 0;
                 if (!b)
-                    for (sbyte s = 0; s < scount; s++)
+                    foreach(var s in smas)
                     {
-                        cor = new Number.Complex(x - smas[s].Center.x, y - smas[s].Center.y).Arg;
+                        cor = new Number.Complex(x - s.Center.x, y - s.Center.y).Arg;
                         sin = Math.Sin(cor);
                         cos = Math.Cos(cor);
 
                         //заполнить массив расстояний, уникальный для источника и точки, но одинаковый при любых нормалях
-                        xp = new double[smas[s].Norms.Length];
-                        yp = new double[smas[s].Norms.Length];
-                        ros = new double[smas[s].Norms.Length];
-                        for (int ii = 0; ii < smas[s].Norms.Length; ii++)
+                        xp = new double[s.Norms.Length];
+                        yp = new double[s.Norms.Length];
+                        ros = new double[s.Norms.Length];
+                        for (int ii = 0; ii < s.Norms.Length; ii++)
                         {
-                            xp[ii] = x - smas[s].Norms[ii].Position.x;
-                            yp[ii] = y - smas[s].Norms[ii].Position.y;
-                            ros[ii] = Point.Eudistance(smas[s].Norms[ii].Position, xy);
+                            xp[ii] = x - s.Norms[ii].Position.x;
+                            yp[ii] = y - s.Norms[ii].Position.y;
+                            ros[ii] = Point.Eudistance(s.Norms[ii].Position, xy);
                         }
 
-                        Parallel.For(0, wcount, (int k) => ur.OnlyAdd(new Tuple<double, double, double, Source>(x, y, w[k], smas[s]), CALC(smas[s], s, k)));
+                        Parallel.For(0, wcount, (int k) => ur.OnlyAdd(new Tuple<double, double, double, Source>(x, y, w[k], s), CALC(s, numberofs, k)));
+                        numberofs++;
                         Saved++;
                     }
                 else
