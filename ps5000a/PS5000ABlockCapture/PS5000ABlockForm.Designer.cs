@@ -289,7 +289,6 @@ namespace PS5000A
             this.textBox10.TabIndex = 6;
             this.textBox10.Text = "130000";
             this.textBox10.TextAlign = System.Windows.Forms.HorizontalAlignment.Center;
-            this.textBox10.TextChanged += new System.EventHandler(this.textBox10_TextChanged);
             // 
             // label14
             // 
@@ -308,7 +307,6 @@ namespace PS5000A
             this.textBox9.TabIndex = 4;
             this.textBox9.Text = "4";
             this.textBox9.TextAlign = System.Windows.Forms.HorizontalAlignment.Center;
-            this.textBox9.TextChanged += new System.EventHandler(this.textBox9_TextChanged);
             // 
             // label13
             // 
@@ -402,7 +400,6 @@ namespace PS5000A
             this.label18.Size = new System.Drawing.Size(38, 20);
             this.label18.TabIndex = 7;
             this.label18.Text = "Port";
-            this.label18.Click += new System.EventHandler(this.label18_Click);
             // 
             // button5
             // 
@@ -900,7 +897,6 @@ namespace PS5000A
             this.textBox8.TabIndex = 19;
             this.textBox8.Text = "600";
             this.textBox8.TextAlign = System.Windows.Forms.HorizontalAlignment.Center;
-            this.textBox8.TextChanged += new System.EventHandler(this.textBox8_TextChanged);
             // 
             // textBox2
             // 

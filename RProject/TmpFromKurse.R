@@ -18,3 +18,53 @@ for (i in 1:135) {
 }
 
 print(moving_average)
+
+
+descriptions_stat = aggregate(cbind(hp, disp) ~ am, mtcars, sd)
+print(descriptions_stat)
+
+
+
+qv = subset(airquality,Month %in% c(7, 8, 9))
+
+result = aggregate(Ozone ~ Month, qv, FUN = length)
+print(result)
+
+
+library(psych)
+tmp = describeBy(airquality[, c(1, 2, 3, 4)], group = airquality$Month)
+print(tmp)
+
+str(iris)
+print(describeBy(iris,group = iris$Species)$virginica)
+
+
+my_vector <- rnorm(17)
+my_vector[sample(1:17, 10)] <- NA # на десять случайных позиций поместим NA
+
+m = mean(my_vector, na.rm = T)
+fixed_vector = my_vector
+fixed_vector[is.na(fixed_vector)] = m
+print(my_vector)
+print(fixed_vector)
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+

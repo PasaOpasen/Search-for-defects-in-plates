@@ -271,7 +271,7 @@ namespace PS5000A
             Dictionary = new Memoize<Tuple<int, int>, Complex>((Tuple<int, int> t) => Fury(t.Item1, t.Item2));
             FuryMemoized = (int i, int j) => Dictionary.Value(new Tuple<int, int>(i, j));
 
-            DictionaryA = new Memoize<int, double>(i => AA(i));
+            DictionaryA = new Memoize<int, double>(i => AA(i),count_w);
             AAMemoized = DictionaryA.Value;
 
             argj = new double[count_t - n_ignore];
