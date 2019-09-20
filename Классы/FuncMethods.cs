@@ -2151,6 +2151,34 @@ namespace МатКлассы
                     return DINN5_GK(ff, t1, t2, t3, t4, tm, tp, eps, pr, gr, 1, nodesCount)[0];
                 }
                 /// <summary>
+                /// Подсчёт несобственного комплексного интеграла от 0 до inf с учётом полюсов
+                /// </summary>
+                /// <param name="f">Функция комплексного переменного</param>
+                /// <param name="t1"></param>
+                /// <param name="t2"></param>
+                /// <param name="t3"></param>
+                /// <param name="t4"></param>
+                /// <param name="tm">Величина отклонения контура вниз</param>
+                /// <param name="tp">Величина отклонения контура вверх</param>
+                /// <param name="eps">Погрешность</param>
+                /// <param name="pr">Начальный шаг</param>
+                /// <param name="gr">Верхний предел</param>
+                /// <remarks>
+                /// ВЗЯТО С ДОКУМЕНТАЦИИ ОТ ФОРТРАНА
+                /// ! [t1,t2],[t3,t4] - участки отклонения контура вниз (real8)
+                ///!         [t2, t3] - участок отклонения контура вверх(real8)
+                ///! tm,tp > 0 - величины отклонения контура вниз и вверх(real8)
+                ///! (если нет обратной волны, то следует положить t2 = t3 = t1, tp = 0 
+                ///!  обход полюсов при этом будет только снизу на участке[t1, t4]
+                ///!  с отклонением на tm)
+                /// </remarks>
+                /// <returns></returns>
+                public static Complex DINN_GK(Func<Complex,Complex> f, double t1, double t2, double t3, double t4, double tm, double tp = 0, double eps = 1e-4, double pr = 1e-2, double gr = 1e4, NodesCount nodesCount = NodesCount.GK15)
+                {
+                    ComplexVectorFunc ff = (Complex x, int n) => new Complex[] { f(x) };
+                    return DINN5_GK(ff, t1, t2, t3, t4, tm, tp, eps, pr, gr, 1, nodesCount)[0];
+                }
+                /// <summary>
                 /// Несобственный интеграл с нулевыми параметрами (если не надо делать обход контура)
                 /// </summary>
                 /// <param name="f"></param>

@@ -100,7 +100,7 @@ public static class Functions
     }
     public static readonly
         Complex I = Complex.I,
-        I2 = new Complex(0, 0.5);
+        I2 = Complex.fracI2;
     public static readonly double
         sqrtfrac2pi = Math.Sqrt(2.0 / Math.PI),
     fracpi4 = Math.PI / 4,

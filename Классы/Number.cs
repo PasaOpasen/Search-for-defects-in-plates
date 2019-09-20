@@ -302,6 +302,10 @@ namespace МатКлассы
             /// Две мнимые единицы
             /// </summary>
             public readonly static Complex _2I;
+            /// <summary>
+            /// I/2
+            /// </summary>
+            public static readonly Complex fracI2 = new Complex(0, 0.5);
 
             static Complex()
             {

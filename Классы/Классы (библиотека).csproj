@@ -58,6 +58,7 @@
   </ItemGroup>
   <ItemGroup>
     <Compile Include="BeeHiveAlgorithm.cs" />
+    <Compile Include="Create3DGrafics.cs" />
     <Compile Include="Coding.cs" />
     <Compile Include="Combinatorik.cs" />
     <Compile Include="CSLAU.cs" />

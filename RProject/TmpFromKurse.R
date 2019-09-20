@@ -49,12 +49,26 @@ print(my_vector)
 print(fixed_vector)
 
 
+dimnames(HairEyeColor)
+tmp = HairEyeColor[,, 1]
+red_men <- prop.table(tmp,2)[3,2]
+
+print(red_men)
+
+ch = sum(HairEyeColor[, "Green", 2])
+print(ch)
 
 
 
 
+library("ggplot2")
+mydata <- as.data.frame(HairEyeColor[,,"Female"])
+print(mydata)
 
-
+obj <- ggplot(data = mydata, aes(x = Hair, y = Freq, fill = Eye)) +
+    geom_bar(stat = "identity", position = position_dodge()) +
+    scale_fill_manual(values = c("Brown", "Blue", "Darkgrey", "Darkgreen"))
+obj
 
 
 

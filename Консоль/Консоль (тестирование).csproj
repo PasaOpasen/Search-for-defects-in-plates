@@ -192,6 +192,7 @@
     </Reference>
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="WaveletTest.cs" />
     <Compile Include="Код консоли.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="Форма консоли.cs">
