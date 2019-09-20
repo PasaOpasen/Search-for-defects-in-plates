@@ -360,9 +360,7 @@ namespace PS5000A
 
             await FurierOrShowForm(i => fdiff[i], i => folderbase[i]);
             SygnalOfEndCalc();
-
-            await Task.Run(()=> Thread.Sleep(300));
-            
+         
             this.Close();
         }
         #endregion
@@ -921,7 +919,7 @@ namespace PS5000A
         private void SygnalOfEndCalc()
         {
             toolStripStatusLabel1.Text = $"Все вычисления завершены";
-            new System.Media.SoundPlayer(Properties.Resources.ВычисленияЗавершены).Play();
+            new System.Media.SoundPlayer(Properties.Resources.ВычисленияЗавершены).PlaySync();
         }
 
         private void button3_Click(object sender, EventArgs e)
