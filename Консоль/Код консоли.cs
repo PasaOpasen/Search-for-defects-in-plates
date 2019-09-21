@@ -23,8 +23,8 @@ namespace Консоль
         [STAThread]
         static void Main(string[] args)
         {
-            //WaveletCreate();
-            Create3DGrafic();
+            WaveletCreate();
+            //Create3DGrafic();
         }
 
         static void WaveletCreate()
@@ -37,7 +37,17 @@ namespace Консоль
             double omega = 2;
             FuncMethods.DefInteg.GaussKronrod.NodesCount nodesCount = GaussKronrod.NodesCount.GK61;
 
-            WaveletTest.Start(func, a, b, wavelets, k, omega, nodesCount);
+            double xmin=1;
+            double xmax=2;
+            double ymin=4;
+            double ymax=5;
+            int spaceCount=45;
+
+            double tmin=-3;
+            double tmax=3;
+            double tcount=70;
+
+            WaveletTest.Start(func, a, b, wavelets, k, omega, nodesCount,xmin,xmax,ymin,ymax,spaceCount,tmin,tmax,tcount);
         }
         static void Create3DGrafic()
         {
