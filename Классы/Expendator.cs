@@ -948,6 +948,29 @@ namespace МатКлассы
                 m[i] = number;
             return m;
         }
+
+
+
+        public static void StartProcessOnly(string fileName, bool global = false, string path = null)
+        {
+            path = path ?? Environment.CurrentDirectory;
+
+            Process process = new Process();
+            process.StartInfo.FileName = Path.Combine(path, fileName);
+            process.StartInfo.WorkingDirectory = path;
+
+            if (!global)
+            {
+                process.StartInfo.UseShellExecute = true;
+                process.StartInfo.CreateNoWindow = true;
+                process.StartInfo.WindowStyle = ProcessWindowStyle.Hidden;
+            }
+
+            process.Start();
+
+            process.WaitForExit();
+
+        }
     }
 
 }

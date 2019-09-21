@@ -379,7 +379,7 @@ namespace Defect2019
             if (checkBox2.Checked)
             {
                 toolStripStatusLabel1.Text = $"Построены u-surface. Создаётся массив кадров";
-                await Task.Run(() => OtherMethods.StartProcessOnly("ReDraw3Duxt2.r", true, path));
+                await Task.Run(() => Expendator.StartProcessOnly("ReDraw3Duxt2.r", true, path));
 
                 if (source.IsCancellationRequested) return;
                 //new Anima(filenames).ShowDialog();
@@ -448,7 +448,7 @@ namespace Defect2019
             if (MessageBox.Show("Создавать анимацию? (может занять до 15 минут)", "Анимация", MessageBoxButtons.YesNo, MessageBoxIcon.Question) == System.Windows.Forms.DialogResult.Yes)
             {
                 toolStripStatusLabel1.Text = $"Построены u-surface. Создаётся массив кадров";
-                await Task.Run(() => OtherMethods.StartProcessOnly("ReDraw3Duxt2.r", true));
+                await Task.Run(() => Expendator.StartProcessOnly("ReDraw3Duxt2.r", true));
 
                 if (source.IsCancellationRequested) return;
                 OtherMethods.PlaySound("АнимацияГотова");

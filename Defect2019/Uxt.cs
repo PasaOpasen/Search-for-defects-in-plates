@@ -238,7 +238,7 @@ namespace Defect2019
             string mess = "Требуется подключение к Интернету. Будут загружены все пакеты R, необходимые программе. Загрузка может занимать несколько минут, по окончанию загрузки консоль закроется. Уже установленные пакеты могут загрузиться заново либо обновиться. Выполнить действие?";
 
             if (MessageBox.Show(mess, "Требуется подтверждение", MessageBoxButtons.YesNo, MessageBoxIcon.Question) == DialogResult.Yes)
-                await Task.Run(() => OtherMethods.StartProcessOnly(OtherMethods.GetResource("InstallPackages.r"), true));
+                await Task.Run(() => Expendator.StartProcessOnly(OtherMethods.GetResource("InstallPackages.r"), true));
         }
 
         private void текущиеИсточникиToolStripMenuItem_Click(object sender, EventArgs e)

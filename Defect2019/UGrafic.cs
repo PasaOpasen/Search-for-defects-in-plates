@@ -438,7 +438,7 @@ namespace Практика_с_фортрана
 
                     if (FilesUrUzExist(st) && MessageBox.Show($"Поскольку все нужные текстовые файлы в наличии, изображения можно восстановить. Создать анимацию? (может занять около 15 минут)", "Перерисовка", MessageBoxButtons.YesNo, MessageBoxIcon.Question) == System.Windows.Forms.DialogResult.Yes)
                     {
-                        await Task.Run(() => OtherMethods.StartProcessOnly("ReDraw3Duxt2.r", true));
+                        await Task.Run(() => Expendator.StartProcessOnly("ReDraw3Duxt2.r", true));
                         break;
                     }
                     else
