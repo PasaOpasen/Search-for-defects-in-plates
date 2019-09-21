@@ -6,7 +6,7 @@ using System.Threading.Tasks;
 using МатКлассы;
 using System.IO;
 
-namespace Классы
+namespace МатКлассы
 {
     /// <summary>
     /// Класс с методами для создания 3D графиков
@@ -14,9 +14,9 @@ namespace Классы
     public static class Create3DGrafics
     {
 
-        private static async Task GetDataToFile(string shortname, string path, Func<double, double, double> F, double[] x, double[] y, IProgress<int> progress, System.Threading.CancellationToken token, string title = "", string xlab = "x", string ylab = "y", string zlab = "z", bool parallel = true)
+        private static async Task GetDataToFile(string shortname, Func<double, double, double> F, double[] x, double[] y, IProgress<int> progress, System.Threading.CancellationToken token, string title = "", string xlab = "x", string ylab = "y", string zlab = "z", bool parallel = true)
         {
-            int len = xlab.Length;
+            int len = x.Length;
             int[] k = new int[len * len];
             double[,] ur = new double[len, len];
 
@@ -31,32 +31,31 @@ namespace Классы
                 progress.Report(k.Sum());
             }
 
-            await Task.Run(() => 
-            { 
-            //нахождение массивов
-            if (parallel)
-                Parallel.For(0, len, (int i) =>
-                {
-                    InnerLoop(i);
-                });
-            else
-                for (int i = 0; i < len; i++)
-                {
-                    InnerLoop(i);
-                }
+            await Task.Run(() =>
+            {
+                //нахождение массивов
+                if (parallel)
+                    Parallel.For(0, len, (int i) =>
+                    {
+                        InnerLoop(i);
+                    });
+                else
+                    for (int i = 0; i < len; i++)
+                    {
+                        InnerLoop(i);
+                    }
             });
 
 
             var filenames = new string[]
             {
-               Path.Combine(path, shortname + "(x).txt"),
-               Path.Combine(path, shortname + "(y).txt"),
-               Path.Combine(path, shortname + "(z).txt"),
-               Path.Combine(path, shortname + "(info).txt")
+                shortname + "(args).txt",
+                shortname + "(vals).txt",
+                shortname + "(info).txt"
             };
             Expendator.WriteInFile("3D Grafics Data Adress.txt", filenames);
 
-            Expendator.WriteInFile(filenames[3], new string[] 
+            Expendator.WriteInFile(filenames[2], new string[]
             {
                 shortname,
                 title,
@@ -64,35 +63,31 @@ namespace Классы
             });
 
             //запись в файлы            
-            StreamWriter xs = new StreamWriter(filenames[0]);
-            StreamWriter ys = new StreamWriter(filenames[1]);
-            StreamWriter ts = new StreamWriter(filenames[2]);
-
-            xs.WriteLine("x");
-            ys.WriteLine("y");
-            for (int i = 0; i < len; i++)
+            using (StreamWriter xs = new StreamWriter(filenames[0]))
             {
-                xs.WriteLine(x[i]);
-                ys.WriteLine(y[i]);
-            }
-            xs.Close();
-            ys.Close();
 
-            ts.WriteLine("z");
-            for (int i = 0; i < len; i++)
-                for (int j = 0; j < len; j++)
-                    if (Double.IsNaN(ur[i, j]))
-                        ts.WriteLine("NA");
-                    else
-                        ts.WriteLine($"{ur[i, j]}");
-            ts.Close();
+                xs.WriteLine("x y");
+                for (int i = 0; i < len; i++)
+                    xs.WriteLine($"{x[i]} {y[i]}");
+            }
+
+            using (StreamWriter ts = new StreamWriter(filenames[1]))
+            {
+                ts.WriteLine("vals");
+                for (int i = 0; i < len; i++)
+                    for (int j = 0; j < len; j++)
+                        if (Double.IsNaN(ur[i, j]))
+                            ts.WriteLine("NA");
+                        else
+                            ts.WriteLine($"{ur[i, j]}");
+            }
         }
 
-        private static async Task GetDataToFile(string shortname, string path, Func<double, double, double> F, double xmin,double xmax,double ymin,double ymax,int count, IProgress<int> progress, System.Threading.CancellationToken token, string title = "", string xlab = "x", string ylab = "y", string zlab = "z", bool parallel = true)
+        private static async Task GetDataToFile(string shortname,  Func<double, double, double> F, double xmin, double xmax, double ymin, double ymax, int count, IProgress<int> progress, System.Threading.CancellationToken token, string title = "", string xlab = "x", string ylab = "y", string zlab = "z", bool parallel = true)
         {
             var x = Expendator.Seq(xmin, xmax, count);
             var y = Expendator.Seq(ymin, ymax, count);
-           await GetDataToFile(shortname, path, F, x, y,  progress, token, title, xlab, ylab, zlab, parallel);
+            await GetDataToFile(shortname, F, x, y, progress, token, title, xlab, ylab, zlab, parallel);
         }
 
         /// <summary>
@@ -141,18 +136,18 @@ namespace Классы
         /// <param name="ylab">Название оси Y</param>
         /// <param name="zlab">Название оси Z</param>
         /// <param name="parallel">Выполнять ли вычисления параллельно</param>
-        public static async Task MakeGrafic( GraficType graficType,string shortname, string path, Func<double, double, double> F, double xmin, double xmax, double ymin, double ymax, int count, IProgress<int> progress, System.Threading.CancellationToken token, string title = "", string xlab = "x", string ylab = "y", string zlab = "z", bool parallel = true)
+        public static async Task MakeGrafic(GraficType graficType, string shortname, Func<double, double, double> F, double xmin, double xmax, double ymin, double ymax, int count, IProgress<int> progress, System.Threading.CancellationToken token, string title = "", string xlab = "x", string ylab = "y", string zlab = "z", bool parallel = true)
         {
-            await GetDataToFile(shortname, path, F, xmin, xmax, ymin, ymax, count, progress, token,title,xlab,ylab,zlab, parallel);
+            await GetDataToFile(shortname, F, xmin, xmax, ymin, ymax, count, progress, token, title, xlab, ylab, zlab, parallel);
 
-            if(graficType == GraficType.Window)
+            if (graficType == GraficType.Window)
             {
 
             }
             else
             {
                 GraficTypeToFile(graficType);
-                await Task.Run(() =>Expendator.StartProcessOnly("Magic3DScript.R"));
+              //  await Task.Run(() => Expendator.StartProcessOnly("Magic3DScript.R"));
             }
         }
 

@@ -22,7 +22,8 @@ namespace Консоль
         [STAThread]
         static void Main(string[] args)
         {
-            WaveletCreate();
+            //WaveletCreate();
+            Create3DGrafic().GetAwaiter().GetResult();
         }
 
         static void WaveletCreate()
@@ -37,6 +38,25 @@ namespace Консоль
 
             WaveletTest.Start(func, a, b, wavelets, k, omega, nodesCount);
         }
+        static async Task Create3DGrafic()
+        {
+            double xmin = -1;
+            double xmax = 2;
+            double ymin = 1;
+            double ymax = 2;
+            int count = 50;
+
+            string xlab = "xx";
+            string ylab = "yy";
+            string zlab = "zz";
+            string title = "title";
+
+            Func<double, double, double> func = (double x, double y) => Math.Sin(x*x + y*y)+Math.Cos(x+y)+Math.Sin(y)*y;
+            Create3DGrafics.GraficType type = Create3DGrafics.GraficType.PdfPngHtml;
+
+            await Create3DGrafics.MakeGrafic(type, "0superG", func, xmin, xmax, ymin, ymax, count, new Progress<int>(), new System.Threading.CancellationToken(), title, xlab, ylab, zlab, true);
+        } 
+
         // Point p_ = new Point(0,1);
         // Point p0 = new Point(2,7);
         // Point p1 = new Point(-1, -2);
