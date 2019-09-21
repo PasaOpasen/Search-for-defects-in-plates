@@ -14,6 +14,7 @@ using System.Collections;
 using MathNet.Numerics.LinearAlgebra;
 using MathNet.Numerics.LinearAlgebra.Double;
 using MathNet.Numerics.LinearAlgebra.Complex;
+using Библиотека_графики;
 
 namespace Консоль
 {
@@ -23,7 +24,7 @@ namespace Консоль
         static void Main(string[] args)
         {
             //WaveletCreate();
-            Create3DGrafic().GetAwaiter().GetResult();
+            Create3DGrafic();
         }
 
         static void WaveletCreate()
@@ -38,7 +39,7 @@ namespace Консоль
 
             WaveletTest.Start(func, a, b, wavelets, k, omega, nodesCount);
         }
-        static async Task Create3DGrafic()
+        static void Create3DGrafic()
         {
             double xmin = -1;
             double xmax = 2;
@@ -53,8 +54,9 @@ namespace Консоль
 
             Func<double, double, double> func = (double x, double y) => Math.Sin(x*x + y*y)+Math.Cos(x+y)+Math.Sin(y)*y;
             Create3DGrafics.GraficType type = Create3DGrafics.GraficType.PdfPngHtml;
+            string name = "0superG";
 
-            await Create3DGrafics.MakeGrafic(type, "0superG", func, xmin, xmax, ymin, ymax, count, new Progress<int>(), new System.Threading.CancellationToken(), title, xlab, ylab, zlab, true);
+            Create3DGrafics.MakeGrafic(type,name , func, xmin, xmax, ymin, ymax, count, new Progress<int>(), new System.Threading.CancellationToken(), title, xlab, ylab, zlab, true);
         } 
 
         // Point p_ = new Point(0,1);

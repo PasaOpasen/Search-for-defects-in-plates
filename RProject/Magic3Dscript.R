@@ -66,7 +66,7 @@ if (pn) {
 
     png(filename = paste0(dt[[1]], ".png"))
     options(scipen = 4)
-    ggplot(urt, aes(x, y, fill = vals)) +
+  p= ggplot(urt, aes(x, y, fill = vals)) +
     #scale_x_continuous(breaks = seq(min(x), max(x), length.out = 7)) +
     #scale_y_continuous(breaks = seq(max(y), min(y), length.out = 7))+
     geom_raster(interpolate = TRUE) +
@@ -76,7 +76,7 @@ if (pn) {
     ggtitle(dt[[2]]) +
     xlab(dt[[3]]) +
     ylab(dt[[4]]) 
-    
+    p
 
     dev.off()
 }

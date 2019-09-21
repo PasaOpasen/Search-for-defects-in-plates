@@ -6,7 +6,7 @@ using System.Threading.Tasks;
 using МатКлассы;
 using System.IO;
 
-namespace МатКлассы
+namespace Библиотека_графики
 {
     /// <summary>
     /// Класс с методами для создания 3D графиков
@@ -136,9 +136,9 @@ namespace МатКлассы
         /// <param name="ylab">Название оси Y</param>
         /// <param name="zlab">Название оси Z</param>
         /// <param name="parallel">Выполнять ли вычисления параллельно</param>
-        public static async Task MakeGrafic(GraficType graficType, string shortname, Func<double, double, double> F, double xmin, double xmax, double ymin, double ymax, int count, IProgress<int> progress, System.Threading.CancellationToken token, string title = "", string xlab = "x", string ylab = "y", string zlab = "z", bool parallel = true)
+        public static void MakeGrafic(GraficType graficType, string shortname, Func<double, double, double> F, double xmin, double xmax, double ymin, double ymax, int count, IProgress<int> progress, System.Threading.CancellationToken token, string title = "", string xlab = "x", string ylab = "y", string zlab = "z", bool parallel = true)
         {
-            await GetDataToFile(shortname, F, xmin, xmax, ymin, ymax, count, progress, token, title, xlab, ylab, zlab, parallel);
+            GetDataToFile(shortname, F, xmin, xmax, ymin, ymax, count, progress, token, title, xlab, ylab, zlab, parallel).GetAwaiter().GetResult();
 
             if (graficType == GraficType.Window)
             {
@@ -147,7 +147,8 @@ namespace МатКлассы
             else
             {
                 GraficTypeToFile(graficType);
-              //  await Task.Run(() => Expendator.StartProcessOnly("Magic3DScript.R"));
+                 Expendator.StartProcessOnly("Magic3Dscript.R");
+                GetForm(shortname);
             }
         }
 
@@ -170,6 +171,25 @@ namespace МатКлассы
                     break;
             }
             Expendator.WriteStringInFile("GraficType.txt", s);
+        }
+        public static void GetForm(string shortname)
+        {
+            List<string> names=new List<string>(new string[] { "pdf","png","html"});
+            List<string> paths = new List<string>(new string[] 
+            {
+                shortname+".pdf",
+                shortname+".png",
+                shortname+".html"
+            });
+
+            for(int i=0;i<paths.Count;i++)
+                if(!File.Exists(paths[i]) ||new FileInfo(paths[i]).Length < 6000)
+                {
+                    names.RemoveAt(i);
+                    paths.RemoveAt(i);
+                    i--;
+                }
+           new ManyDocumentsShower("3D grafics", names.ToArray(), paths.ToArray()).ShowDialog();
         }
     }
 }
