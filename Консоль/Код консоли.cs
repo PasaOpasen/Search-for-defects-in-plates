@@ -54,7 +54,7 @@ namespace Консоль
 
             Func<double, double, double> func = (double x, double y) => Math.Sin(x*x + y*y)+Math.Cos(x+y)+Math.Sin(y)*y;
             Create3DGrafics.GraficType type = Create3DGrafics.GraficType.PdfPngHtml;
-            string name = "0superG";
+            string name = "TestGrafic";
 
             Create3DGrafics.MakeGrafic(type,name , func, xmin, xmax, ymin, ymax, count, new Progress<int>(), new System.Threading.CancellationToken(), title, xlab, ylab, zlab, true);
         } 

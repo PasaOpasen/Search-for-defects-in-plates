@@ -5,6 +5,8 @@ using System.Text;
 using System.Threading.Tasks;
 using МатКлассы;
 using System.IO;
+using nzy3d_winformsDemo;
+using System.Windows.Forms;
 
 namespace Библиотека_графики
 {
@@ -83,7 +85,7 @@ namespace Библиотека_графики
             }
         }
 
-        private static async Task GetDataToFile(string shortname,  Func<double, double, double> F, double xmin, double xmax, double ymin, double ymax, int count, IProgress<int> progress, System.Threading.CancellationToken token, string title = "", string xlab = "x", string ylab = "y", string zlab = "z", bool parallel = true)
+        private static async Task GetDataToFile(string shortname, Func<double, double, double> F, double xmin, double xmax, double ymin, double ymax, int count, IProgress<int> progress, System.Threading.CancellationToken token, string title = "", string xlab = "x", string ylab = "y", string zlab = "z", bool parallel = true)
         {
             var x = Expendator.Seq(xmin, xmax, count);
             var y = Expendator.Seq(ymin, ymax, count);
@@ -138,16 +140,16 @@ namespace Библиотека_графики
         /// <param name="parallel">Выполнять ли вычисления параллельно</param>
         public static void MakeGrafic(GraficType graficType, string shortname, Func<double, double, double> F, double xmin, double xmax, double ymin, double ymax, int count, IProgress<int> progress, System.Threading.CancellationToken token, string title = "", string xlab = "x", string ylab = "y", string zlab = "z", bool parallel = true)
         {
-            GetDataToFile(shortname, F, xmin, xmax, ymin, ymax, count, progress, token, title, xlab, ylab, zlab, parallel).GetAwaiter().GetResult();
-
             if (graficType == GraficType.Window)
             {
-
+                new nzy3d_winformsDemo.Form1(title, xmin, xmax, count, ymin, ymax, count, F).ShowDialog();
             }
             else
             {
+                GetDataToFile(shortname, F, xmin, xmax, ymin, ymax, count, progress, token, title, xlab, ylab, zlab, parallel).GetAwaiter().GetResult();
                 GraficTypeToFile(graficType);
-                 Expendator.StartProcessOnly("Magic3Dscript.R");
+                RemoveOlds(shortname);
+                Expendator.StartProcessOnly("Magic3Dscript.R");
                 GetForm(shortname);
             }
         }
@@ -172,24 +174,39 @@ namespace Библиотека_графики
             }
             Expendator.WriteStringInFile("GraficType.txt", s);
         }
-        public static void GetForm(string shortname)
+        private static List<string> GetPaths(string shortname)
         {
-            List<string> names=new List<string>(new string[] { "pdf","png","html"});
-            List<string> paths = new List<string>(new string[] 
+            return new List<string>(new string[]
             {
                 shortname+".pdf",
                 shortname+".png",
                 shortname+".html"
             });
+        }
+        private static void RemoveOlds(string name)
+        {
+            var p = GetPaths(name);
+            foreach (var s in p)
+                if (File.Exists(s))
+                    File.Delete(s);
+        }
+        public static void GetForm(string shortname)
+        {
+            List<string> names = new List<string>(new string[] { "pdf", "png", "html" });
+            List<string> paths = GetPaths(shortname);
 
-            for(int i=0;i<paths.Count;i++)
-                if(!File.Exists(paths[i]) ||new FileInfo(paths[i]).Length < 6000)
+            for (int i = 0; i < paths.Count; i++)
+                if (!File.Exists(paths[i]) || new FileInfo(paths[i]).Length < 6000)
                 {
                     names.RemoveAt(i);
                     paths.RemoveAt(i);
                     i--;
                 }
-           new ManyDocumentsShower("3D grafics", names.ToArray(), paths.ToArray()).ShowDialog();
+
+            if (paths.Count > 0)
+                new ManyDocumentsShower("3D grafics", names.ToArray(), paths.ToArray()).ShowDialog();
+            else
+                MessageBox.Show("Ни одного файла не получилось", "Ошибочка", MessageBoxButtons.OK, MessageBoxIcon.Error);
         }
     }
 }

@@ -64,9 +64,9 @@ if (pn) {
     len = length(x)
     urt = data.frame(vals = z, x = rep(x, len), y = rep(y, each = len))
 
-    png(filename = paste0(dt[[1]], ".png"))
+    png(filename = paste0(dt[[1]], ".png"),900,800)
     options(scipen = 4)
-  p= ggplot(urt, aes(x, y, fill = vals)) +
+    ggplot(urt, aes(x, y, fill = vals)) +
     #scale_x_continuous(breaks = seq(min(x), max(x), length.out = 7)) +
     #scale_y_continuous(breaks = seq(max(y), min(y), length.out = 7))+
     geom_raster(interpolate = TRUE) +
@@ -76,8 +76,7 @@ if (pn) {
     ggtitle(dt[[2]]) +
     xlab(dt[[3]]) +
     ylab(dt[[4]]) 
-    p
-
+    
     dev.off()
 }
 

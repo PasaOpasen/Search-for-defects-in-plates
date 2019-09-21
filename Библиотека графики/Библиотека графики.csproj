@@ -137,6 +137,10 @@
     <None Include="App.config" />
   </ItemGroup>
   <ItemGroup>
+    <ProjectReference Include="..\nzy3d-api-master\nzy3d-api-master\nzy3d-winformsDemo\nzy3d-winformsDemo.csproj">
+      <Project>{8c148a22-b1de-44f2-aea8-90853dca6efe}</Project>
+      <Name>nzy3d-winformsDemo</Name>
+    </ProjectReference>
     <ProjectReference Include="..\Классы\Классы %28библиотека%29.csproj">
       <Project>{cd3eefde-74ed-48da-8e82-1e6abab1a140}</Project>
       <Name>Классы %28библиотека%29</Name>

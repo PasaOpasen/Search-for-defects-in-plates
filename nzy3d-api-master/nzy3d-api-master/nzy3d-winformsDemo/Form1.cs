@@ -30,7 +30,7 @@ namespace nzy3d_winformsDemo
         public Form1(string name="",double xmin=-150,double xmax=150,int xstep=50, double ymin = -150, double ymax = 150, int ystep = 50,Func<double,double,double> func= null)
         {
             InitializeComponent();
-            //InitRenderer();
+
             this.xmin = xmin;
             this.xmax = xmax;
             this.ymin = ymin;

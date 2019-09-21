@@ -54,24 +54,12 @@ namespace PS5000A
         public const int DUAL_SCOPE = 2;
 
         uint _timebase = 15;
-        short _oversample = 1;
-        bool _scaleVoltages = true;
 
         ushort[] inputRanges = { 10, 20, 50, 100, 200, 500, 1000, 2000, 5000, 10000, 20000, 50000 };
         bool _ready = false;
-        short _trig = 0;
-        uint _trigAt = 0;
-        int _sampleCount = 0;
-        uint _startIndex = 0;
-        bool _autoStop;
         //private ChannelSettings[] _channelSettings;
         private int _channelCount;
-        private Imports.Range _firstRange;
-        private Imports.Range _lastRange;
-        private int _digitalPorts;
         private Imports.ps5000aBlockReady _callbackDelegate;
-        private string StreamFile = "stream.txt";
-        private string BlockFile = "block.txt";
         double w0;
         double w1;
         int wcount;
