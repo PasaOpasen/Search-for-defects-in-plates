@@ -17,12 +17,12 @@ namespace Библиотека_графики
         {
             InitializeComponent();
             chart1.Series[0].IsVisibleInLegend = false;
-            var points = МатКлассы.Point.PointsParallel(new RealFunc(t => f(t)), count - 1, a, b);
+            var points = МатКлассы.Point.Points(new RealFunc(t => f(t)), count - 1, a, b,true);
             for (int i = 0; i < points.Length; i++)
                 chart1.Series[0].Points.AddXY(points[i].x, points[i].y);
             Библиотека_графики.ForChart.SetToolTips(ref chart1);
         }
-        public MostSimpleGrafic(Func<double, double>[] f, double a, double b, int count, string[] names)
+        public MostSimpleGrafic(Func<double, double>[] f, double a, double b, int count, string[] names,bool parallel=true)
         {
             InitializeComponent();
             chart1.Series.Clear();
@@ -32,7 +32,7 @@ namespace Библиотека_графики
                 chart1.Series[k].BorderWidth = 3;
                 chart1.Series[k].ChartType = System.Windows.Forms.DataVisualization.Charting.SeriesChartType.Line;
 
-                var points = МатКлассы.Point.PointsParallel(new RealFunc(t => f[k](t)), count - 1, a, b);
+                var points = МатКлассы.Point.Points(new RealFunc(t => f[k](t)), count - 1, a, b,parallel);
                 for (int i = 0; i < points.Length; i++)
                     chart1.Series[k].Points.AddXY(points[i].x, points[i].y);
             }

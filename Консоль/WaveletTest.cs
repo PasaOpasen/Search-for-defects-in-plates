@@ -36,7 +36,8 @@ namespace Консоль
             new string[] {
                "Исходная функция",
                "Её преобразование туда-сюда"
-            }).ShowDialog();
+            },
+               false).ShowDialog();
         }
     }
 }

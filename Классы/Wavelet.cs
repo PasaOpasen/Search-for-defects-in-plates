@@ -199,6 +199,7 @@ namespace МатКлассы
         /// </summary>
         /// <param name="F"></param>
         /// <returns></returns>
+        /// <remarks>Сам несобственный интеграл считается параллельно, так что рисовать эту функцию лучше последовательно, что ввиду мемоизации будет раз в 6 быстрее, чем рисовать параллельно и считать последовательно</remarks>
         public Func<double,double> GetSyntesis(Func<double,double,Complex> F = null)
         {
             //вычисление коэффициента С
@@ -206,7 +207,8 @@ namespace МатКлассы
             Complex C;
             if (this.Type == Wavelets.LP) C = Math.Log(2) / Math.PI;
             else
-                C = DefInteg.GaussKronrod.DINN_GKwith0Full((Complex w) =>
+                C = DefInteg.GaussKronrod.DINN_GKwith0Full(
+                    (Complex w) =>
                 {
                     if (w == 0) return 0;
                     return this.FMother(w).Abs.Sqr() / w.Abs;
@@ -218,7 +220,9 @@ namespace МатКлассы
                 (double t) => 
                 (DefInteg.DoubleIntegralIn_FULL(
                     (Point p) => (this.Mother((t - p.y) / p.x) * func(p) / p.x / p.x).Re, 
-                    eps: eps, parallel: true, M: DefInteg.Method.GaussKronrod61, changestepcount: 0, a: 1, b: 10) / C).Re;
+                    eps: eps, 
+                    parallel: true, 
+                    M: DefInteg.Method.GaussKronrod61, changestepcount: 0, a: 1, b: 10) / C).Re;
 
             //задание промежуточных переменных
             if (F != null)

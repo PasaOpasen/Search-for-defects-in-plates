@@ -254,30 +254,16 @@ namespace МатКлассы
         /// <param name="a"></param>
         /// <param name="b"></param>
         /// <returns></returns>
-        public static Point[] Points(RealFunc f, int n, double a, double b)
+        public static Point[] Points(RealFunc f, int n, double a, double b,bool parallel=false)
         {
             double h = (b - a) / n;
             Point[] points = new Point[n + 1];
+            if(parallel)
+                Parallel.For(0, n + 1, (int i) => points[i] = new Point(a + h * i, f(a + h * i)));
+            else
             for (int i = 0; i <= n; i++)
-            {
                 points[i] = new Point(a + h * i, f(a + h * i));
-            }
-
-            return points;
-        }
-        /// <summary>
-        /// Набор n+1 точек на графике функции f, разбитых равномерно на отрезке от a до b
-        /// </summary>
-        /// <param name="f"></param>
-        /// <param name="n"></param>
-        /// <param name="a"></param>
-        /// <param name="b"></param>
-        /// <returns></returns>
-        public static Point[] PointsParallel(RealFunc f, int n, double a, double b)
-        {
-            double h = (b - a) / n;
-            Point[] points = new Point[n + 1];
-            Parallel.For(0, n + 1, (int i) => points[i] = new Point(a + h * i, f(a + h * i)));
+            
             return points;
         }
 
