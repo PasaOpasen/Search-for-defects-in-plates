@@ -16,7 +16,9 @@ y = arg[[2]]
 scalecoef = (max(y) - min(y)) / (max(x) - min(x))
 #x = x * scalecoef
 
-vals = matrix(z[[1]], nrow = length(x), ncol = length(y), byrow = TRUE)
+vals = matrix(z[[1]], nrow = length(x), ncol = length(y), byrow = F)
+
+vals2 = matrix(z[[1]], nrow = length(x), ncol = length(y), byrow = T)
 
 levels = 15
 
@@ -46,7 +48,8 @@ if (pd) {
     par(mfrow = c(2, 1), cex = 1.1, cex.sub = 1.2, col.sub = "blue")
     layout(matrix(c(1, 2), 2, 1, byrow = FALSE), heights = c(2.2, 1))
 
-persp3D(z = vals, x = x, y = y, scale = FALSE, zlab = dt[[5]], xlab = dt[[3]], ylab = dt[[4]],
+    tmp=(max(vals)-min(vals))/(max(x)-min(x))
+persp3D(z = vals, x = x*tmp, y = y*tmp, scale = FALSE, zlab = dt[[5]], xlab = dt[[3]], ylab = dt[[4]],
 contour = list(nlevels = levels, col = "red"),
         expand = 0.2,
        image = list(col = grey(seq(0, 1, length.out = 100))), main = dt[[2]])
@@ -84,7 +87,7 @@ if (ht) {
     library(htmlwidgets)
     library(plotly)
 
-    p2 = plot_ly(x = x, y = y, z = vals, type = "surface", contours = list(
+    p2 = plot_ly(x = x, y = y, z = vals2, type = "surface", contours = list(
     z = list(
       show = TRUE,
       usecolormap = TRUE,

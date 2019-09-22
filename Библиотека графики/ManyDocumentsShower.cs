@@ -55,6 +55,11 @@ namespace Библиотека_графики
                     }
                 }
                 tabControl1.TabPages.AddRange(Tmas);
+
+                this.FormClosing += (o, e) =>
+                {
+                    tabControl1.Dispose();
+                };
             }
         }
 

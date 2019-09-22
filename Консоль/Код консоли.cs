@@ -30,24 +30,22 @@ namespace Консоль
         static void WaveletCreate()
         {
             Func<double, double> func = t => Math.Sin(t) / (1 + t * t);
-            double a = 1;
-            double b = 5;
-            Wavelet.Wavelets wavelets = Wavelet.Wavelets.MHAT;
+            Wavelet.Wavelets wavelets = Wavelet.Wavelets.LP;
             double k = 1;
             double omega = 2;
             FuncMethods.DefInteg.GaussKronrod.NodesCount nodesCount = GaussKronrod.NodesCount.GK61;
 
-            double xmin=1;
-            double xmax=2;
-            double ymin=4;
-            double ymax=5;
-            int spaceCount=45;
+            double xmin=-10;
+            double xmax=12;
+            double ymin=-3;
+            double ymax=10;
+            int spaceCount=40;
 
-            double tmin=-3;
-            double tmax=3;
-            double tcount=70;
+            double tmin=-17;
+            double tmax=16;
+            int tcount=180;
 
-            WaveletTest.Start(func, a, b, wavelets, k, omega, nodesCount,xmin,xmax,ymin,ymax,spaceCount,tmin,tmax,tcount);
+            WaveletTest.Start(func, wavelets, k, omega, nodesCount,xmin,xmax,ymin,ymax,spaceCount,tmin,tmax,tcount);
         }
         static void Create3DGrafic()
         {

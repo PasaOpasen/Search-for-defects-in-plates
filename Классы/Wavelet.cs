@@ -155,6 +155,14 @@ namespace МатКлассы
                     break;
             }
         }
+        /// <summary>
+        /// Создать вейвлет
+        /// </summary>
+        /// <param name="W"></param>
+        /// <param name="k"></param>
+        /// <param name="ww"></param>
+        /// <returns></returns>
+        public static Wavelet Create(Wavelets W = Wavelets.MHAT, double k = -1, double ww = 1) => new Wavelet(W, k, ww);
 
         /// <summary>
         /// Функция, получившаяся при последнем анализе 
@@ -176,11 +184,10 @@ namespace МатКлассы
                  Func<Complex,Complex> F1 = (Complex t) => f(t.Re) * this.Mother((t.Re - b) / a).Conjugate;
                  Func<Complex,Complex> F2 = (Complex t) => f(-t.Re) * this.Mother((-t.Re - b) / a).Conjugate;
                  double con = 1.0 / Math.Sqrt(Math.Abs(a));
-                 Complex t1 = 0, t2 = 0;
-                 Parallel.Invoke(
-                     () => t1 = DefInteg.GaussKronrod.DINN_GK(F1, 0, 0, 0, 0, 0, 0, eps: eps, nodesCount: countNodes),
-                     () => t2 = DefInteg.GaussKronrod.DINN_GK(F2, 0, 0, 0, 0, 0, 0, eps: eps, nodesCount: countNodes)
-                     );
+                 Complex 
+                 t1 = DefInteg.GaussKronrod.DINN_GK(F1, 0, 0, 0, 0, 0, 0, eps: eps, nodesCount: countNodes), 
+                 t2 = DefInteg.GaussKronrod.DINN_GK(F2, 0, 0, 0, 0, 0, 0, eps: eps, nodesCount: countNodes);
+
                  return con * (t1 + t2);
              };
             Resultmems = new Memoize<Point, Complex>((Point p) => s(p.x, p.y));
@@ -203,7 +210,8 @@ namespace МатКлассы
                 {
                     if (w == 0) return 0;
                     return this.FMother(w).Abs.Sqr() / w.Abs;
-                }, eps: eps, nodesCount:countNodes);
+                }, 
+                eps: eps, nodesCount:countNodes);
             C *= Math.Sqrt(2);
 
             Func<double,double> GetRes(Func<Point,Complex> func)=> 
