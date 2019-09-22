@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Collections;
 using System.Collections.Concurrent;
 using System.Threading.Tasks;
 using static МатКлассы.Number;
@@ -19,20 +20,24 @@ namespace МатКлассы
             {
                 int nsqr = n * n;
                 return Complex.Sin(Math.PI * z * nsqr) / nsqr;
-                }, eps);
+                }, eps,ndo:12, ndomax:150);
+        /// <summary>
+        /// Число узлов для интегрирования
+        /// </summary>
         public static DefInteg.GaussKronrod.NodesCount countNodes = DefInteg.GaussKronrod.NodesCount.GK61;
+        /// <summary>
+        /// Коллекция нормирующих множителей
+        /// </summary>
+        public static ConcurrentDictionary<Wavelets, Complex> Cpsi = new ConcurrentDictionary<Wavelets, Complex>(2,6);
 
         /// <summary>
-        /// Масштабный множитель
+        /// Частота (нужна только для вейвлета Морле)
         /// </summary>
-        public double k;
+        public readonly double w;
         /// <summary>
-        /// Частота
+        /// Материнский вейвлет/анализирующий вейвлет
         /// </summary>
-        public double w;
-        /// <summary>
-        /// Материнский вейвлет
-        /// </summary>
+        //tex:$\psi : R \rightarrow C$
         private Func<double,Complex> Mother;
         /// <summary>
         /// Фурье-образ материнского вейвлета
@@ -89,10 +94,9 @@ namespace МатКлассы
         /// <param name="W"></param>
         /// <param name="ww"></param>
         /// <param name="k"></param>
-        public Wavelet(Wavelets W = Wavelets.MHAT, double k = -1, double ww = 1)
+        public Wavelet(Wavelets W = Wavelets.MHAT, double ww = 1)
         {
             this.w = ww;
-            this.k = k;
             this.Type = W;
             switch (W)
             {
@@ -162,7 +166,7 @@ namespace МатКлассы
         /// <param name="k"></param>
         /// <param name="ww"></param>
         /// <returns></returns>
-        public static Wavelet Create(Wavelets W = Wavelets.MHAT, double k = -1, double ww = 1) => new Wavelet(W, k, ww);
+        public static Wavelet Create(Wavelets W = Wavelets.MHAT, double ww = 1) => new Wavelet(W, ww);
 
         /// <summary>
         /// Функция, получившаяся при последнем анализе 
@@ -179,6 +183,7 @@ namespace МатКлассы
         /// <returns></returns>
         public Func<double,double,Complex> GetAnalys(Func<double,double> f)
         {
+            //tex: $Wf(a,b) = \dfrac{1}{|a|^{0.5}} \int_{-\infty}^{\infty} f(t) {\bar \psi(\dfrac{t-b}{a}) dt}$, еще написано, что a>0, но тогда зачем модуль
             Func<double,double,Complex> s = (double a, double b) =>
              {                
                  Func<Complex,Complex> F1 = (Complex t) => f(t.Re) * this.Mother((t.Re - b) / a).Conjugate;
@@ -204,18 +209,9 @@ namespace МатКлассы
         {
             //вычисление коэффициента С
             //надо добавить какое-нибудь ограничение на <inf 
-            Complex C;
-            if (this.Type == Wavelets.LP) C = Math.Log(2) / Math.PI;
-            else
-                C = DefInteg.GaussKronrod.DINN_GKwith0Full(
-                    (Complex w) =>
-                {
-                    if (w == 0) return 0;
-                    return this.FMother(w).Abs.Sqr() / w.Abs;
-                }, 
-                eps: eps, nodesCount:countNodes);
-            C *= Math.Sqrt(2);
+            Complex C = Ccoef;
 
+            //tex:$ f(t) =\dfrac{1}{C} \int_{R_* \times R} Wf(a,b) \psi_{a,b}(t) \dfrac{da db}{a^2}$
             Func<double,double> GetRes(Func<Point,Complex> func)=> 
                 (double t) => 
                 (DefInteg.DoubleIntegralIn_FULL(
@@ -233,6 +229,41 @@ namespace МатКлассы
             }
             else
                 return GetRes(p => ResultMemoized(p.x, p.y));
+        }
+
+        //tex:$ C_{\psi}= \int_{-\infty}^{\infty}  \dfrac{|\psi(\omega)|^2}{|\omega|} d \omega$
+        private Complex Ccoef
+        {
+            get
+            {
+                Complex C;
+                if (!Cpsi.ContainsKey(this.Type))
+                {
+                    switch (this.Type)
+                    {
+                        case Wavelets.LP:
+                            C = Math.Log(2) * Math.Sqrt(2) / Math.PI;
+                            break;
+                        case Wavelets.WAVE:
+                            C = 2 * Math.PI;
+                            break;
+                        default:
+                            C = DefInteg.GaussKronrod.DINN_GKwith0Full(
+                                (Complex w) =>
+                                {
+                                    if (w == 0) return 0;
+                                    return (this.FMother(w).Sqr() / w).Abs;
+                                },
+                            eps: eps, nodesCount: countNodes);
+                            break;
+                    }
+                    Cpsi[this.Type] = C;
+                }
+                else
+                    C = Cpsi[this.Type];
+                Console.WriteLine($"C coefficent = {C}");
+                return C;
+            }
         }
 
 

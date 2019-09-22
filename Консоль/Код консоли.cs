@@ -24,43 +24,42 @@ namespace Консоль
         static void Main(string[] args)
         {
             WaveletCreate();
-            //Create3DGrafic();
+           // Create3DGrafic();
         }
 
         static void WaveletCreate()
         {
-            Func<double, double> func = t => Math.Sin(t) / (1 + t * t);
+            Func<double, double> func = t => Math.Sin(6*t) / (1 + t * t);
             Wavelet.Wavelets wavelets = Wavelet.Wavelets.LP;
-            double k = 1;
             double omega = 2;
             FuncMethods.DefInteg.GaussKronrod.NodesCount nodesCount = GaussKronrod.NodesCount.GK61;
 
-            double xmin=-10;
-            double xmax=12;
-            double ymin=-3;
-            double ymax=10;
+            double xmin=-3;
+            double xmax=8;
+            double ymin=-4;
+            double ymax=4;
             int spaceCount=40;
 
-            double tmin=-17;
-            double tmax=16;
-            int tcount=180;
+            double tmin=-7;
+            double tmax=7;
+            int tcount=200;
 
-            WaveletTest.Start(func, wavelets, k, omega, nodesCount,xmin,xmax,ymin,ymax,spaceCount,tmin,tmax,tcount);
+            WaveletTest.Start(func, wavelets, omega, nodesCount,xmin,xmax,ymin,ymax,spaceCount,tmin,tmax,tcount);
         }
         static void Create3DGrafic()
         {
-            double xmin = -1;
-            double xmax = 2;
-            double ymin = 1;
-            double ymax = 2;
-            int count = 50;
+            double xmin = -3;
+            double xmax = 3;
+            double ymin = -3;
+            double ymax = 3;
+            int count = 40;
 
             string xlab = "xx";
             string ylab = "yy";
             string zlab = "zz";
             string title = "title";
 
-            Func<double, double, double> func = (double x, double y) => Math.Sin(x*x + y*y)+Math.Cos(x+y)+Math.Sin(y)*y;
+            Func<double, double, double> func = (double x, double y) => Math.Sin((x-2)*(x-2) + y*y);
             Create3DGrafics.GraficType type = Create3DGrafics.GraficType.PdfPngHtml;
             string name = "TestGrafic";
 

@@ -11,12 +11,12 @@ namespace Консоль
 {
     public static class WaveletTest
     {
-        public static void Start(Func<double,double> func, Wavelet.Wavelets wavelets, double k,double omega,FuncMethods.DefInteg.GaussKronrod.NodesCount nodesCount,
+        public static void Start(Func<double,double> func, Wavelet.Wavelets wavelets, double omega,FuncMethods.DefInteg.GaussKronrod.NodesCount nodesCount,
             double xmin,double xmax,double ymin,double ymax,int spaceCount,
             double tmin,double tmax,int tcount)
         {
             Wavelet.countNodes = nodesCount;
-            var wavel = Wavelet.Create(wavelets, k, omega);
+            var wavel = Wavelet.Create(wavelets, omega);
 
             Func<double, double, Complex> f = wavel.GetAnalys(func);
 
