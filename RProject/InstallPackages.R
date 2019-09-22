@@ -1,5 +1,5 @@
 
-arr = c("rgl", "plot3D", "data.table", "ggplot2", "viridis", "gridExtra", "fields", "plotly", "foreach", "htmlwidgets", "reshape2", "cowplot","psych")
+arr = c("rgl", "plot3D", "data.table", "ggplot2", "viridis", "gridExtra", "fields", "plotly", "foreach", "htmlwidgets", "reshape2", "cowplot","psych","Hmisc")
 
 foo <- function(x) {
     for (i in x) {

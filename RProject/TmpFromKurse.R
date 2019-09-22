@@ -126,3 +126,75 @@ df = data.frame(df)
 print(df)
 
 t.test(df[[1]], df[[2]], var.equal = F)
+
+
+
+g = npk
+t = aov(yield ~ N * P, g)
+summary(t)
+
+g = npk
+t = aov(yield ~ N + P+K, g)
+summary(t)
+
+g = iris
+t = aov(Sepal.Width ~ Species, g)
+TukeyHSD(t)
+
+
+
+
+df <- read.csv(url('https://stepic.org/media/attachments/lesson/11505/Pillulkin.csv'))
+df$patient = factor(df$patient)
+df$doctor = factor(df$doctor)
+an = aov(temperature ~ pill*doctor ++Error(patient/(doctor+pill)),df)
+summary(an)
+
+
+library(Hmisc)
+library(ggplot2)
+obj <- ggplot(ToothGrowth, aes(x = as.factor(dose), y = len,group=supp, col = supp)) +
+    stat_summary(fun.data = mean_cl_boot, geom = 'errorbar', width = 0.1, position = position_dodge(0.2)) +
+    stat_summary(fun.data = mean_cl_boot, geom = 'point', size = 3, position = position_dodge(0.2)) +
+    stat_summary(fun.data = mean_cl_boot, geom = 'line', position = position_dodge(0.2))
+obj
+
+
+
+NA.position <- function(x) {
+    t = is.na(x)
+    p=1:length(x)
+    return(p[t])
+}
+NA.counter <- function(x) {
+    # put your code here  
+    t = is.na(x)
+    p = 1:length(x)
+    return(length(p[t]))
+}
+v = c(1, 2, 3, NA, 5, 4, 3)
+NA.position(v)
+
+
+filtered.sum <- function(x) {
+   return(sum(x[!is.na(x)&x>0]) ) 
+}
+
+
+outliers.rm <- function(x) {
+   q = IQR(x)*1.5
+    ran = quantile(x, probs = c(0.25, 0.75))
+    return(x[(x>ran[1]-q)&(x<ran[2]+q)])
+
+}
+
+
+
+
+
+
+
+
+
+
+
