@@ -29,8 +29,10 @@ namespace Консоль
 
         static void WaveletCreate()
         {
-            Func<double, double> func = t => Math.Sin(6*t) / (1 + t * t);
-            Wavelet.Wavelets wavelets = Wavelet.Wavelets.LP;
+             Func<double, double> func = t => Math.Sin(6*t) / (1 + t * t);
+            //Func<double, double> func = t => (t >= 0.45 && t <= 0.55) ? Math.Sin(20 * Math.PI*(t - 0.45)) : 0;
+
+             Wavelet.Wavelets wavelets = Wavelet.Wavelets.LP;
             double omega = 2;
             FuncMethods.DefInteg.GaussKronrod.NodesCount nodesCount = GaussKronrod.NodesCount.GK61;
 

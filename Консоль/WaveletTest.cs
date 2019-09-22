@@ -37,7 +37,7 @@ namespace Консоль
                "Исходная функция",
                "Её преобразование туда-сюда"
             },
-               false).ShowDialog();
+               true).ShowDialog();
         }
     }
 }

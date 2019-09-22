@@ -21,6 +21,8 @@ namespace МатКлассы
                 int nsqr = n * n;
                 return Complex.Sin(Math.PI * z * nsqr) / nsqr;
                 }, eps,ndo:12, ndomax:150);
+
+
         /// <summary>
         /// Число узлов для интегрирования
         /// </summary>
@@ -85,7 +87,11 @@ namespace МатКлассы
             /// <summary>
             /// Вейвлет Морле
             /// </summary>
-            Morlet
+            Morlet,
+            /// <summary>
+            /// Вейвлет Габора
+            /// </summary>
+            Gabor
         }
 
         /// <summary>
@@ -157,6 +163,20 @@ namespace МатКлассы
                     this.Mother = t => Math.Exp(-t.Sqr() / 2) * Complex.Exp(Complex.I * w * t);
                     this.FMother = (Complex w) => sigma(w) * sqrt2pi * Complex.Exp(-(w - this.w).Sqr() / 2);
                     break;
+                case Wavelets.Gabor:
+                    double w_0 = 2 * Math.PI;
+                    double gamma = Math.PI * Math.Sqrt(2.0 / Math.Log(2));
+                    double fracw0gamma = Math.Sqrt(2 * Math.Log(2));
+                    double fracgammaw0 = 1.0 / fracw0gamma;             
+                    double sqrfracw0gamma = fracw0gamma * fracw0gamma;
+                    double sqrfracgammaw0 = fracgammaw0 * fracgammaw0;
+                    double fracpis = Math.Pow(Math.PI, -0.25);
+                    double sqrtfracw0gammapis = fracpis * Math.Sqrt(fracw0gamma);                   
+                    double fracs2pipis = sqrt2pi / fracpis;
+
+                    this.Mother = t => sqrtfracw0gammapis*Math.Exp(-sqrfracw0gamma/2*t*t)*Complex.Expi(w_0*t);
+                    this.FMother = (Complex w) => fracs2pipis*Math.Sqrt(fracgammaw0)* Complex.Exp(-sqrfracgammaw0/2*(w-w_0).Sqr());
+                    break;
             }
         }
         /// <summary>
@@ -212,13 +232,13 @@ namespace МатКлассы
             Complex C = Ccoef;
 
             //tex:$ f(t) =\dfrac{1}{C} \int_{R_* \times R} Wf(a,b) \psi_{a,b}(t) \dfrac{da db}{a^2}$
-            Func<double,double> GetRes(Func<Point,Complex> func)=> 
-                (double t) => 
-                (DefInteg.DoubleIntegralIn_FULL(
-                    (Point p) => (this.Mother((t - p.y) / p.x) * func(p) / p.x / p.x).Re, 
-                    eps: eps, 
-                    parallel: true, 
-                    M: DefInteg.Method.GaussKronrod61, changestepcount: 0, a: 1, b: 10) / C).Re;
+            Func<double, double> GetRes(Func<Point, Complex> func) =>
+                (double t) => (MathNet.Numerics.Integration.GaussLegendreRule.Integrate((x, y) => (this.Mother((t - y) / x) * func(new Point(x, y)) / x / x ).Re, 0.01, 3, -8, 8,96)/ C).Re/2;
+                //(DefInteg.DoubleIntegralIn_FULL(
+                //    (Point p) => (this.Mother((t - p.y) / p.x) * func(p) / p.x / p.x).Re, 
+                //    eps: eps, 
+                //    parallel: true, 
+                //    M: DefInteg.Method.GaussKronrod61, changestepcount: 0, a: 1, b: 10) / C).Re;
 
             //задание промежуточных переменных
             if (F != null)
@@ -246,6 +266,9 @@ namespace МатКлассы
                             break;
                         case Wavelets.WAVE:
                             C = 2 * Math.PI;
+                            break;
+                        case Wavelets.Gabor:
+                            C = 1/Math.PI;
                             break;
                         default:
                             C = DefInteg.GaussKronrod.DINN_GKwith0Full(
