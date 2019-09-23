@@ -146,12 +146,34 @@ namespace Библиотека_графики
             }
             else
             {
-                GetDataToFile(shortname, F, xmin, xmax, ymin, ymax, count, progress, token, title, xlab, ylab, zlab, parallel).GetAwaiter().GetResult();
-                GraficTypeToFile(graficType);
-                RemoveOlds(shortname);
-                Expendator.StartProcessOnly("Magic3Dscript.R");
+                JustGetGraficInFiles(shortname, F, xmin, xmax, ymin, ymax, count, progress, token, graficType, title, xlab, ylab, zlab, parallel).GetAwaiter().GetResult();
                 GetForm(shortname);
             }
+        }
+        /// <summary>
+        /// Только создать 3D графики с сохранением в файлы
+        /// </summary>
+        /// <param name="shortname"></param>
+        /// <param name="F"></param>
+        /// <param name="xmin"></param>
+        /// <param name="xmax"></param>
+        /// <param name="ymin"></param>
+        /// <param name="ymax"></param>
+        /// <param name="count"></param>
+        /// <param name="progress"></param>
+        /// <param name="token"></param>
+        /// <param name="graficType"></param>
+        /// <param name="title"></param>
+        /// <param name="xlab"></param>
+        /// <param name="ylab"></param>
+        /// <param name="zlab"></param>
+        /// <param name="parallel"></param>
+        public static async Task JustGetGraficInFiles(string shortname, Func<double, double, double> F, double xmin, double xmax, double ymin, double ymax, int count, IProgress<int> progress, System.Threading.CancellationToken token, GraficType graficType = GraficType.PdfPngHtml, string title = "", string xlab = "x", string ylab = "y", string zlab = "z", bool parallel = true)
+        {
+            await GetDataToFile(shortname, F, xmin, xmax, ymin, ymax, count, progress, token, title, xlab, ylab, zlab, parallel);
+            GraficTypeToFile(graficType);
+            RemoveOlds(shortname);
+            await Task.Run(() => Expendator.StartProcessOnly("Magic3Dscript.R"));
         }
 
         private static void GraficTypeToFile(GraficType type)

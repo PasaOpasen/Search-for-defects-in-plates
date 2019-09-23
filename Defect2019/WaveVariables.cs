@@ -22,6 +22,7 @@ using Point = МатКлассы.Point;
 using static РабКонсоль;
 using System.Diagnostics;
 using System.Runtime.Serialization.Formatters.Binary;
+using static МатКлассы.Wavelet;
 
 /// <summary>
 /// Формы, хранящиеся в приложении
@@ -869,6 +870,46 @@ public static class Functions
         return Uxt3;
     }
 
+    #endregion
+
+
+    #region Функции для вейвлета
+    /// <summary>
+    /// Возвращает координаты максимума от вейвлетной функции на указанном прямоугольнике
+    /// </summary>
+    /// <param name="xmin"></param>
+    /// <param name="xmax"></param>
+    /// <param name="ymin"></param>
+    /// <param name="ymax"></param>
+    /// <param name="count"></param>
+    /// <param name="begin"></param>
+    /// <param name="step"></param>
+    /// <param name="valuescount"></param>
+    /// <param name="filename"></param>
+    /// <param name="wavelets"></param>
+    /// <param name="path"></param>
+    /// <returns></returns>
+    public static async Task<Tuple<double, double>> GetMaximunFromArea(
+    double xmin, double xmax, double ymin, double ymax, int count,
+    double begin, double step, int valuescount, string filename,
+    Wavelets wavelets = Wavelets.LP, string path = null)
+    {
+        path = path ?? Environment.NewLine;
+        Wavelet wavelet = new Wavelet(wavelets);
+        Func<double, double, Complex> func = wavelet.GetAnalys(begin, step, valuescount, filename, path);
+        Func<double, double, double> F = (x, y) => func(x, y).Abs;
+
+        string name = filename.Replace(".txt", "");
+        await Библиотека_графики.Create3DGrafics.JustGetGraficInFiles(name, F, xmin, xmax, ymin, ymax, count,
+            new Progress<int>(), new System.Threading.CancellationToken(),
+            title: $"Wavelet-surface for {name}", xlab: "omega", ylab: "time",
+            graficType: Create3DGrafics.GraficType.Pdf);
+
+        var tmp = Expendator.GetStringArrayFromFile(Path.Combine(path, name + "(MaxCoordinate).txt"))[2].ToDoubleMas();
+
+        wavelet.Dispose();
+        return new Tuple<double, double>(tmp[0], tmp[1]);
+    }
     #endregion
 }
 

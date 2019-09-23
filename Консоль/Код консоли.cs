@@ -64,8 +64,8 @@ namespace Консоль
             double omega = 2;
             FuncMethods.DefInteg.GaussKronrod.NodesCount nodesCount = GaussKronrod.NodesCount.GK61;
 
-            double xmin = 0.001;
-            double xmax = 0.01;
+            double xmin = 1.0/5000;
+            double xmax = 1.0/150000;
             double ymin = -0.0004;
             double ymax = 0.002079984;
             int spaceCount = 50;
