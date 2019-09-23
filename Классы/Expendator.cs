@@ -434,7 +434,7 @@ namespace МатКлассы
         /// <param name="b"></param>
         /// <param name="is0outcut">Должна ли функция равняться 0 вне отрезка задания</param>
         /// <returns></returns>
-        public static RealFunc ToSpline(this NetFunc f, double a = 0, double b = 0, bool is0outcut = true) => Polynom.CubeSpline(f.Points, a, b, is0outcut);
+        public static Func<double,double> ToSpline(this NetFunc f, double a = 0, double b = 0, bool is0outcut = true) => Polynom.CubeSpline(f.Points, a, b, is0outcut);
 
         /// <summary>
         /// Сумма комплексного массива

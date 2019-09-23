@@ -11,16 +11,16 @@ namespace МатКлассы
     /// <summary>
     /// Класс с вейвлетным преобразованием
     /// </summary>
-    public sealed class Wavelet: IDisposable
+    public sealed class Wavelet : IDisposable
     {
         private static readonly double sqrt2pi = Math.Sqrt(2 * Math.PI);
         private static readonly double frac1sqrt2pi = 1.0 / sqrt2pi;
         private static readonly Func<Complex, Complex> sigma =
-            (Complex z) => SumsAndLimits.Sum(1, n => 
+            (Complex z) => SumsAndLimits.Sum(1, n =>
             {
                 int nsqr = n * n;
                 return Complex.Sin(Math.PI * z * nsqr) / nsqr;
-                }, eps,ndo:12, ndomax:150);
+            }, eps, ndo: 12, ndomax: 150);
 
 
         /// <summary>
@@ -30,7 +30,7 @@ namespace МатКлассы
         /// <summary>
         /// Коллекция нормирующих множителей
         /// </summary>
-        public static ConcurrentDictionary<Wavelets, Complex> Cpsi = new ConcurrentDictionary<Wavelets, Complex>(2,6);
+        public static ConcurrentDictionary<Wavelets, Complex> Cpsi = new ConcurrentDictionary<Wavelets, Complex>(2, 6);
 
         /// <summary>
         /// Частота (нужна только для вейвлета Морле)
@@ -40,11 +40,11 @@ namespace МатКлассы
         /// Материнский вейвлет/анализирующий вейвлет
         /// </summary>
         //tex:$\psi : R \rightarrow C$
-        private Func<double,Complex> Mother;
+        private Func<double, Complex> Mother;
         /// <summary>
         /// Фурье-образ материнского вейвлета
         /// </summary>
-        private Func<Complex,Complex> FMother;
+        private Func<Complex, Complex> FMother;
         /// <summary>
         /// Тип исходного вейвлета
         /// </summary>
@@ -107,19 +107,19 @@ namespace МатКлассы
             switch (W)
             {
                 case Wavelets.WAVE:
-                    this.Mother = (double t) => -t * Math.Exp(-t*t / 2);
+                    this.Mother = (double t) => -t * Math.Exp(-t * t / 2);
                     this.FMother = (Complex w) => Complex.I * w * sqrt2pi * Complex.Exp(-w * w / 2);
                     break;
                 case Wavelets.MHAT:
-                    this.Mother = (double t) => { double sqr = t*t; return (1 - sqr) * Math.Exp(-sqr / 2); };
+                    this.Mother = (double t) => { double sqr = t * t; return (1 - sqr) * Math.Exp(-sqr / 2); };
                     this.FMother = (Complex w) =>
                     {
                         var sqr = -w * w;
                         return sqr * sqrt2pi * Complex.Exp(sqr / 2);
                     };
-                        break;
+                    break;
                 case Wavelets.DOG:
-                    this.Mother = (double t) => { double sqr = -t*t/2; return Math.Exp(sqr) - 0.5 * Math.Exp(sqr / 4); };
+                    this.Mother = (double t) => { double sqr = -t * t / 2; return Math.Exp(sqr) - 0.5 * Math.Exp(sqr / 4); };
                     this.FMother = (Complex w) =>
                     {
                         var sqr = -w * w;
@@ -127,8 +127,8 @@ namespace МатКлассы
                     };
                     break;
                 case Wavelets.LP:
-                    this.Mother = t => { double pt = t * Math.PI; return (Math.Sin(2 * pt) - Math.Sin(pt)) / pt; };
-                    this.FMother = (Complex w) => 
+                    this.Mother = t => { double pt = t * Math.PI; return (pt == 0) ? 1 : (Math.Sin(2 * pt) - Math.Sin(pt)) / pt; };
+                    this.FMother = (Complex w) =>
                     {
                         double tmp = w.Abs;
                         if (tmp <= 2 * Math.PI && tmp >= Math.PI)
@@ -167,15 +167,15 @@ namespace МатКлассы
                     double w_0 = 2 * Math.PI;
                     double gamma = Math.PI * Math.Sqrt(2.0 / Math.Log(2));
                     double fracw0gamma = Math.Sqrt(2 * Math.Log(2));
-                    double fracgammaw0 = 1.0 / fracw0gamma;             
+                    double fracgammaw0 = 1.0 / fracw0gamma;
                     double sqrfracw0gamma = fracw0gamma * fracw0gamma;
                     double sqrfracgammaw0 = fracgammaw0 * fracgammaw0;
                     double fracpis = Math.Pow(Math.PI, -0.25);
-                    double sqrtfracw0gammapis = fracpis * Math.Sqrt(fracw0gamma);                   
+                    double sqrtfracw0gammapis = fracpis * Math.Sqrt(fracw0gamma);
                     double fracs2pipis = sqrt2pi / fracpis;
 
-                    this.Mother = t => sqrtfracw0gammapis*Math.Exp(-sqrfracw0gamma/2*t*t)*Complex.Expi(w_0*t);
-                    this.FMother = (Complex w) => fracs2pipis*Math.Sqrt(fracgammaw0)* Complex.Exp(-sqrfracgammaw0/2*(w-w_0).Sqr());
+                    this.Mother = t => sqrtfracw0gammapis * Math.Exp(-sqrfracw0gamma / 2 * t * t) * Complex.Expi(w_0 * t);
+                    this.FMother = (Complex w) => fracs2pipis * Math.Sqrt(fracgammaw0) * Complex.Exp(-sqrfracgammaw0 / 2 * (w - w_0).Sqr());
                     break;
             }
         }
@@ -191,7 +191,7 @@ namespace МатКлассы
         /// <summary>
         /// Функция, получившаяся при последнем анализе 
         /// </summary>
-        public Func<double,double,Complex> ResultMemoized = null;
+        public Func<double, double, Complex> ResultMemoized = null;
         private Memoize<Point, Complex> Resultmems = null;
 
         /// <summary>
@@ -201,31 +201,76 @@ namespace МатКлассы
         /// <param name="a"></param>
         /// <param name="b"></param>
         /// <returns></returns>
-        public Func<double,double,Complex> GetAnalys(Func<double,double> f)
+        public Func<double, double, Complex> GetAnalys(Func<double, double> f)
         {
             //tex: $Wf(a,b) = \dfrac{1}{|a|^{0.5}} \int_{-\infty}^{\infty} f(t) {\bar \psi(\dfrac{t-b}{a}) dt}$, еще написано, что a>0, но тогда зачем модуль
-            Func<double,double,Complex> s = (double a, double b) =>
-             {                
-                 Func<Complex,Complex> F1 = (Complex t) => f(t.Re) * this.Mother((t.Re - b) / a).Conjugate;
-                 Func<Complex,Complex> F2 = (Complex t) => f(-t.Re) * this.Mother((-t.Re - b) / a).Conjugate;
-                 double con = 1.0 / Math.Sqrt(Math.Abs(a));
-                 Complex 
-                 t1 = DefInteg.GaussKronrod.DINN_GK(F1, 0, 0, 0, 0, 0, 0, eps: eps, nodesCount: countNodes), 
-                 t2 = DefInteg.GaussKronrod.DINN_GK(F2, 0, 0, 0, 0, 0, 0, eps: eps, nodesCount: countNodes);
+            Func<double, double, Complex> s = (double a, double b) =>
+               {
+                   Func<Complex, Complex> F1 = (Complex t) => f(t.Re) * this.Mother((t.Re - b) / a).Conjugate;
+                   Func<Complex, Complex> F2 = (Complex t) => f(-t.Re) * this.Mother((-t.Re - b) / a).Conjugate;
+                   double con = 1.0 / Math.Sqrt(Math.Abs(a));
+                   Complex
+                   t1 = DefInteg.GaussKronrod.DINN_GK(F1, 0, 0, 0, 0, 0, 0, eps: eps, nodesCount: countNodes),
+                   t2 = DefInteg.GaussKronrod.DINN_GK(F2, 0, 0, 0, 0, 0, 0, eps: eps, nodesCount: countNodes);
 
-                 return con * (t1 + t2);
-             };
+                   return con * (t1 + t2);
+               };
+
+            return MemoizeAndReturn(s);
+        }
+        /// <summary>
+        /// Вейвлет-преобразование от массива точек по формулам Котеса
+        /// </summary>
+        /// <param name="f"></param>
+        /// <returns></returns>
+        public Func<double, double, Complex> GetAnalys(Point[] f)
+        {
+            double h3 = Math.Abs(f[1].x - f[0].x) / 3;
+            int n = (f.Length - 1) / 2;
+            //tex: $Wf(a,b) = \dfrac{1}{|a|^{0.5}} \int_{-\infty}^{\infty} f(t) {\bar \psi(\dfrac{t-b}{a}) dt}$, еще написано, что a>0, но тогда зачем модуль
+            Func<double, double, Complex> s = (double a, double b) =>
+            {
+                double con = h3 / Math.Sqrt(Math.Abs(a));
+
+                Complex sum = f[0].y * this.Mother((f[0].x - b) / a).Conjugate + f[f.Length - 1].y * this.Mother((f[f.Length - 1].x - b) / a).Conjugate;
+                for (int i = 1; i <= n - 1; i++)
+                {
+                    sum += 2 * (f[2 * i].y * this.Mother((f[2 * i].x - b) / a).Conjugate + 2 * f[2 * i - 1].y * this.Mother((f[2 * i - 1].x - b) / a).Conjugate);
+
+                    //if (Double.IsNaN(sum.Abs)) throw new Exception($"Что-то здесь не так {f[2 * i].y} {this.Mother((f[2 * i].x - b) / a).Conjugate} {f[2 * i - 1].y} {this.Mother((f[2 * i - 1].x - b) / a).Conjugate}");
+                }
+
+                sum += 4 * f[f.Length - 2].y * this.Mother((f[f.Length - 2].x - b) / a).Conjugate;
+
+                return con * sum;
+            };
+
+            return MemoizeAndReturn(s);
+        }
+        /// <summary>
+        /// Вейвлет-преобразование от замера, записанного в файл
+        /// </summary>
+        /// <param name="begin"></param>
+        /// <param name="step"></param>
+        /// <param name="count"></param>
+        /// <param name="filename"></param>
+        /// <param name="path"></param>
+        /// <returns></returns>
+        public Func<double, double, Complex> GetAnalys(double begin, double step, int count, string filename, string path) => GetAnalys(Point.CreatePointArray(begin, step, count, filename, path));
+        private Func<double, double, Complex> MemoizeAndReturn(Func<double, double, Complex> s)
+        {
             Resultmems = new Memoize<Point, Complex>((Point p) => s(p.x, p.y));
-            ResultMemoized = new Func<double,double,Complex>((double a, double b) => Resultmems.Value(new Point(a, b)));
+            ResultMemoized = new Func<double, double, Complex>((double a, double b) => Resultmems.Value(new Point(a, b)));
             return ResultMemoized;
         }
+
         /// <summary>
         /// Обратное вейвлет-преобразование указанной функции
         /// </summary>
         /// <param name="F"></param>
         /// <returns></returns>
         /// <remarks>Сам несобственный интеграл считается параллельно, так что рисовать эту функцию лучше последовательно, что ввиду мемоизации будет раз в 6 быстрее, чем рисовать параллельно и считать последовательно</remarks>
-        public Func<double,double> GetSyntesis(Func<double,double,Complex> F = null)
+        public Func<double, double> GetSyntesis(Func<double, double, Complex> F = null)
         {
             //вычисление коэффициента С
             //надо добавить какое-нибудь ограничение на <inf 
@@ -233,12 +278,12 @@ namespace МатКлассы
 
             //tex:$ f(t) =\dfrac{1}{C} \int_{R_* \times R} Wf(a,b) \psi_{a,b}(t) \dfrac{da db}{a^2}$
             Func<double, double> GetRes(Func<Point, Complex> func) =>
-                (double t) => (MathNet.Numerics.Integration.GaussLegendreRule.Integrate((x, y) => (this.Mother((t - y) / x) * func(new Point(x, y)) / x / x ).Re, 0.01, 3, -8, 8,96)/ C).Re/2;
-                //(DefInteg.DoubleIntegralIn_FULL(
-                //    (Point p) => (this.Mother((t - p.y) / p.x) * func(p) / p.x / p.x).Re, 
-                //    eps: eps, 
-                //    parallel: true, 
-                //    M: DefInteg.Method.GaussKronrod61, changestepcount: 0, a: 1, b: 10) / C).Re;
+                (double t) => (MathNet.Numerics.Integration.GaussLegendreRule.Integrate((x, y) => (this.Mother((t - y) / x) * func(new Point(x, y)) / x / x).Re, 0.01, 3, -8, 8, 96) / C).Re / 2;
+            //(DefInteg.DoubleIntegralIn_FULL(
+            //    (Point p) => (this.Mother((t - p.y) / p.x) * func(p) / p.x / p.x).Re, 
+            //    eps: eps, 
+            //    parallel: true, 
+            //    M: DefInteg.Method.GaussKronrod61, changestepcount: 0, a: 1, b: 10) / C).Re;
 
             //задание промежуточных переменных
             if (F != null)
@@ -268,7 +313,7 @@ namespace МатКлассы
                             C = 2 * Math.PI;
                             break;
                         case Wavelets.Gabor:
-                            C = 1/Math.PI;
+                            C = 1 / Math.PI;
                             break;
                         default:
                             C = DefInteg.GaussKronrod.DINN_GKwith0Full(

@@ -23,11 +23,14 @@ namespace Консоль
         [STAThread]
         static void Main(string[] args)
         {
-            WaveletCreate();
-           // Create3DGrafic();
+           // WaveletCreateFromFunction();
+            WaveletCreateFromArray();
+          
+            
+            // Create3DGrafic();
         }
 
-        static void WaveletCreate()
+        static void WaveletCreateFromFunction()
         {
              Func<double, double> func = t => Math.Sin(6*t) / (1 + t * t);
             //Func<double, double> func = t => (t >= 0.45 && t <= 0.55) ? Math.Sin(20 * Math.PI*(t - 0.45)) : 0;
@@ -48,6 +51,39 @@ namespace Консоль
 
             WaveletTest.Start(func, wavelets, omega, nodesCount,xmin,xmax,ymin,ymax,spaceCount,tmin,tmax,tcount);
         }
+        static void WaveletCreateFromArray()
+        {
+
+            double begin = 0;
+            double step = 0.1;
+            int count = 50000;
+            
+            string filename = "ArrayA.txt";
+            string path = @"C:\Users\крендель\Desktop\ZAM\Замер D\Разница";
+
+
+            Wavelet.Wavelets wavelets = Wavelet.Wavelets.LP;
+            double omega = 2;
+            FuncMethods.DefInteg.GaussKronrod.NodesCount nodesCount = GaussKronrod.NodesCount.GK61;
+
+            double xmin = -3;
+            double xmax = 8;
+            double ymin = -4;
+            double ymax = 4;
+            int spaceCount = 50;
+
+            double tmin = -7;
+            double tmax = 7;
+            int tcount = 200;
+
+            WaveletTest.Start(begin,step,count,filename,path, wavelets, omega, nodesCount, xmin, xmax, ymin, ymax, spaceCount);
+        }
+
+
+
+
+
+
         static void Create3DGrafic()
         {
             double xmin = -3;
@@ -191,14 +227,14 @@ namespace Консоль
         //e.Show();
         //r.Show();
 
-        //RealFunc f = (double x) => { return x * Math.Sin(x); };
+        //Func<double,double> f = (double x) => { return x * Math.Sin(x); };
         //SequenceFunc p = (double x, int n) => { return Polynom.Cheb(Kind.FirstKind ,n).Value(x); };
 
-        //RealFunc g = FuncMethods.Approx(f, p, SequenceFundKind.Other, 4, -1, 1);
+        //Func<double,double> g = FuncMethods.Approx(f, p, SequenceFundKind.Other, 4, -1, 1);
 
         //Console.WriteLine(FuncMethods.RealFuncMethods.NormDistance(f, g, -1, 1));
 
-        //RealFunc w = (double x) => { return x; }, e = (double x) => { return 1 / x; };
+        //Func<double,double> w = (double x) => { return x; }, e = (double x) => { return 1 / x; };
         //Console.WriteLine(FuncMethods.RealFuncMethods.ScalarPower(w, e, -1, 1));
         //Console.WriteLine(g(1));
 
@@ -237,7 +273,7 @@ namespace Консоль
 
 
 
-        // RealFunc f = (double t)=>t*t*t;
+        // Func<double,double> f = (double t)=>t*t*t;
 
         //double x = 3.141592653;
         //double Mn;
@@ -273,7 +309,7 @@ namespace Консоль
         //SLAU t = new SLAU(fs);
         //t.ShowErrors();
         //Polynom.PolynomTestShow(f, 3, 2.8, 3.2);
-        //RealFunc g= Polynom.
+        //Func<double,double> g= Polynom.
 
         // Point[] p = Point.Points(f, 4, 2.8, 3.2);
         //Console.WriteLine("{0} <= {1}",Math.Abs(f(x)-r.Value(x)),Polynom.wn(f, 4, 2.8, 3.2, x,Mn));
@@ -367,12 +403,12 @@ namespace Консоль
         //StreamWriter fe = new StreamWriter(@"F:\51.txt");
         //Vectors.ShowInfo(v, fe);
 
-        //RealFunc f = Math.Cos;
+        //Func<double,double> f = Math.Cos;
         //FuncMethods.DefInteg.Demonstration(f, 0, Math.PI/2);
 
         //Polynom p = Polynom.Hermit(5);p.Show();
-        //RealFunc a = Math.Exp;
-        //RealFunc b = (double x) => 1.0 / Math.Exp(x);
+        //Func<double,double> a = Math.Exp;
+        //Func<double,double> b = (double x) => 1.0 / Math.Exp(x);
         //Console.WriteLine(FuncMethods.RealFuncMethods.ScalarPower(a, b, 3, 5));
 
         //List<Point> P = new List<Point>();
@@ -381,19 +417,19 @@ namespace Консоль
         //FuncMethods.NetFunc f = new FuncMethods.NetFunc(P);
         //f.Show();
 
-        //RealFunc p = f.Spline;
+        //Func<double,double> p = f.Spline;
         //Console.WriteLine(p(2.1));
 
         //SequenceFunc t = FuncMethods.Lezhandrs(-1, 1);
-        //RealFunc f = (double x) => t(x, 3);
-        //RealFunc g = (double x) => t(x, 4);
+        //Func<double,double> f = (double x) => t(x, 3);
+        //Func<double,double> g = (double x) => t(x, 4);
         //Console.WriteLine(FuncMethods.RealFuncMethods.ScalarPower(f, g, -1, 1));
         //Console.WriteLine(FuncMethods.RealFuncMethods.ScalarPower(Polynom.Lezh(3).Value, Polynom.Lezh(4).Value, -1, 1));
 
         //Console.WriteLine(Polynom.ScalarP(new Polynom(new double[] {1,0,3 }),new Polynom(new double[] { 0, 0, 3 }),0,1));
 
         //SequenceFunc y = FuncMethods.Lezhandrs(-1, 1);
-        //RealFunc u = (double x) => t(x, 3);
+        //Func<double,double> u = (double x) => t(x, 3);
         //Polynom p = Polynom.Lezh(3);
         //Console.WriteLine(p.Value(0)-u(0));
 
@@ -403,7 +439,7 @@ namespace Консоль
         //SequencePol l = FuncMethods.Lezhandr(-3,5);
         //Console.WriteLine(Polynom.ScalarP(l(2), l(8), -3, 5));
 
-        //RealFunc f = (double t) => t * t * t;
+        //Func<double,double> f = (double t) => t * t * t;
         //double x = 0.5;
         //double[] g = { 1, 2, 3, 4 };
         //Point[] h = Point.Points(f, g);
@@ -419,10 +455,10 @@ namespace Консоль
         //t.ShowErrors();
 
         //SequenceFunc p = new SequenceFunc((double x, int i) => { return Math.Pow(x, i); });
-        //RealFunc f = Math.Sin;
+        //Func<double,double> f = Math.Sin;
         //FuncMethods.ShowApprox(f, new double[] { -1, -0.5,0,0.5, 1, 2,2.5, 3,4 }, p, SequenceFuncKind.Other,6);
-        //RealFunc g = FuncMethods.Approx(f, FuncMethods.Monom, SequenceFuncKind.Other, 3, -2, 2);
-        //RealFunc r = FuncMethods.Approx(f, FuncMethods.Monoms, SequenceFuncKind.Other, 3, -2, 2);
+        //Func<double,double> g = FuncMethods.Approx(f, FuncMethods.Monom, SequenceFuncKind.Other, 3, -2, 2);
+        //Func<double,double> r = FuncMethods.Approx(f, FuncMethods.Monoms, SequenceFuncKind.Other, 3, -2, 2);
 
 
         //StreamReader fs = new StreamReader(@"F:\2.txt");
@@ -450,7 +486,7 @@ namespace Консоль
         //int n = int.Parse(Console.ReadLine());
         //Console.WriteLine("Введите eps ");
         //double eps = Convert.ToDouble(Console.ReadLine());
-        //RealFunc F = (double t) => t*t + t*t*t;//Math.Sin(t);
+        //Func<double,double> F = (double t) => t*t + t*t*t;//Math.Sin(t);
         ////double res = FuncMethods.DefInteg.Simpson(F, a, b);
         //double res = FuncMethods.DefInteg.DefIntegral(F, a, b, FuncMethods.DefInteg.Method.Simpson, 
         //    FuncMethods.DefInteg.Criterion.StepCount, n, eps);
@@ -480,7 +516,7 @@ namespace Консоль
         //FuncMethods.MatrixFunc<double, double> G = new FuncMethods.MatrixFunc<double, double>(F);
         //(-G)[5, 2].PrintMatrix();
 
-        //RealFunc f = (double x) => 1 / x / x;
+        //Func<double,double> f = (double x) => 1 / x / x;
         //FuncMethods.DefInteg.ImproperFirstKindInf(f, 1).Show();
 
         //double p = 1, w = 0.4, l = 1.94117647058824, m = 1;
@@ -572,7 +608,7 @@ namespace Консоль
         //double i = DoubleIntegral((Point p) => 1, c, c.S, Method.GaussKronrod15, 0.001, 100);
         //(i - r * r * (Math.PI / 3 - Math.Sqrt(3) / 4)).Show();
 
-        //RealFunc f = (double x) => 8+2*x-x*x;
+        //Func<double,double> f = (double x) => 8+2*x-x*x;
         //TimeSpan t = new TimeSpan();
         //FuncMethods.DefInteg.GaussKronrod.Integral(f,-2, 4).Show();(t - new TimeSpan()).Ticks.Show();t = new TimeSpan();
         //FuncMethods.DefInteg.GaussKronrod.MySimpleGaussKronrod(f,-2, 4,15).Show(); (t - new TimeSpan()).Ticks.Show(); t = new TimeSpan();
@@ -592,7 +628,7 @@ namespace Консоль
         ////F.chart1.Titles[0].Text= "Логарифмическая зависимость аппроксимации функции cos(x)*sin(x/2) системой мономов на отрезке [-4,2] и невязок при решении СЛАУ для разного количества функций (точки с нулевыми невязками не выводятся)";
         //////SequenceFunc p=(double x,int k)=>Math.Exp(k*x);
         //SequencePol p = FuncMethods.Monom;
-        //RealFunc f = (double x) => Math.Cos(x);
+        //Func<double,double> f = (double x) => Math.Cos(x);
         //int a = -1, b = 1, n1 = 1, n2 = 35;
         //double[] MAS = new double[n2 + 1];
 
@@ -604,7 +640,7 @@ namespace Консоль
         //T.p = (double x, int j) => p(j).Value(x);
         //for (n = n1; n <= n2; n++)
         //{
-        //    RealFunc g = FuncMethods.Approx(f, p, SequenceFuncKind.Other, n, a, b);
+        //    Func<double,double> g = FuncMethods.Approx(f, p, SequenceFuncKind.Other, n, a, b);
         //    MAS[n] = FuncMethods.RealFuncMethods.NormDistance(f, g, a, b);
         //    F.chart1.Series[1].Points.AddXY(n, Math.Log10(MAS[n]));
         //    T.GaussSelection();
@@ -659,7 +695,7 @@ namespace Консоль
         //double pi3 = 3 * Math.PI / 2, t = 2*pi3; ;
         //(Math.Cosh(pi3 - t) / Math.Cosh(pi3)).Show();
 
-        //RealFunc f = Parser.GetDelegate("1,0/(1+(x-1)^2)");
+        //Func<double,double> f = Parser.GetDelegate("1,0/(1+(x-1)^2)");
         //"".Show();
         //f(4).Show();
 

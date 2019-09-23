@@ -143,7 +143,7 @@ namespace МатКлассы
         /// <summary>
         /// Функция, соответствующая прямой, от аргумента x, кроме того случая, когда B=0
         /// </summary>
-        public RealFunc Func
+        public Func<double,double> Func
         {
             get
             {
