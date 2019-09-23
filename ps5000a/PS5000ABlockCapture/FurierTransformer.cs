@@ -18,7 +18,6 @@ namespace PS5000A
     {
         static readonly double _2PI = 2 * Math.PI;
         static string InFile;
-        static string OutFile;
         static string CfgFile;
         public static double dt;
         public static double t_0;
@@ -33,9 +32,7 @@ namespace PS5000A
         public static int count_w;
         public static double dw;
         public static int n_avg;
-        static bool avd_all = false;
         public static int n_ignore;
-        static bool no_ignore = false;
         static double avg;
         static double[] f;
         static Complex[] F;
@@ -154,7 +151,6 @@ namespace PS5000A
             int[] s = new int[count_w];
             bool isnotnull = progress != null;
 
-
             Parallel.For(0, count_w, (int i) =>
             {
                 Complex result = 0;
@@ -271,7 +267,7 @@ namespace PS5000A
             Dictionary = new Memoize<Tuple<int, int>, Complex>((Tuple<int, int> t) => Fury(t.Item1, t.Item2));
             FuryMemoized = (int i, int j) => Dictionary.Value(new Tuple<int, int>(i, j));
 
-            DictionaryA = new Memoize<int, double>(i => AA(i));
+            DictionaryA = new Memoize<int, double>(i => AA(i),count_w);
             AAMemoized = DictionaryA.Value;
 
             argj = new double[count_t - n_ignore];

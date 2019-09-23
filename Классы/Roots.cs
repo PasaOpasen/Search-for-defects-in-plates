@@ -64,7 +64,7 @@ namespace МатКлассы
         /// <returns></returns>
         public static Vectors RootsByMinAbs(ComplexFunc f, double beg, double end, double step = 0.01, double eps = 1e-12)
         {
-            RealFunc fabs = (double c) => f(c).Abs;
+            Func<double,double> fabs = (double c) => f(c).Abs;
             List<double> list = new List<double>();
 
             double a = beg, a2 = beg + step, t1, t2, s, d1, d2, ds;
@@ -116,7 +116,7 @@ namespace МатКлассы
         /// <summary>
         /// Метод локального поиска корня
         /// </summary>
-        public enum MethodRoot
+        public enum MethodRoot : byte
         {
             Brent,
             Broyden,

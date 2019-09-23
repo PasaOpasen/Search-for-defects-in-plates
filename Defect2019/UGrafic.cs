@@ -34,7 +34,7 @@ namespace Практика_с_фортрана
         {
             InitializeComponent();
             SetSource();
-            HankelTuple = HankelTupleClear;
+            
             this.FormClosed += (object o, FormClosedEventArgs e) => HankelTuple = HankelTupleWith;
 
             label8.BackColor = Color.Transparent;
@@ -438,7 +438,7 @@ namespace Практика_с_фортрана
 
                     if (FilesUrUzExist(st) && MessageBox.Show($"Поскольку все нужные текстовые файлы в наличии, изображения можно восстановить. Создать анимацию? (может занять около 15 минут)", "Перерисовка", MessageBoxButtons.YesNo, MessageBoxIcon.Question) == System.Windows.Forms.DialogResult.Yes)
                     {
-                        await Task.Run(() => OtherMethods.StartProcessOnly("ReDraw3Duxt2.r", true));
+                        await Task.Run(() => Expendator.StartProcessOnly("ReDraw3Duxt2.r", true));
                         break;
                     }
                     else
@@ -556,6 +556,7 @@ namespace Практика_с_фортрана
         }
         public async void button1_Click(object sender, EventArgs e)
         {
+            HankelTuple = HankelTupleClear;
             ClearSeries();
             toolStripStatusLabel1.Text = "Чтение данных и генерация переменных";
 
@@ -651,6 +652,8 @@ namespace Практика_с_фортрана
             pictureBox1.Hide();
             progressBar1.Value = progressBar1.Maximum;
             ReDraw();
+
+            HankelTuple = HankelTupleWith;
         }
 
         private void ReDraw()

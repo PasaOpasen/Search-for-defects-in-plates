@@ -168,7 +168,7 @@ namespace МатКлассы
         /// <param name="n">Степень полинома</param>
         /// <param name="a">Начало отрезна интерполирования</param>
         /// <param name="b">Конец отрезка интерполирования</param>
-        public Polynom(RealFunc f, int n, double a, double b)
+        public Polynom(Func<double,double> f, int n, double a, double b)
         {
             Polynom p = new Polynom(Point.Points(f, n, a, b));
             this.degree = p.degree;
@@ -483,7 +483,7 @@ namespace МатКлассы
         /// <param name="b"></param>
         /// <param name="k"></param>
         /// <returns></returns>
-        public static Polynom Derivative(RealFunc f, int n, double a, double b, int k)
+        public static Polynom Derivative(Func<double,double> f, int n, double a, double b, int k)
         {
             Polynom p = new Polynom(f, n + k, a, b);
             return p | k;
@@ -571,7 +571,7 @@ namespace МатКлассы
         /// <param name="a"></param>
         /// <param name="b"></param>
         /// <returns></returns>
-        public static Polynom Lag(RealFunc f, int n, double a, double b) { return new Polynom(f, n, a, b); }
+        public static Polynom Lag(Func<double,double> f, int n, double a, double b) { return new Polynom(f, n, a, b); }
         /// <summary>
         /// Вывод полинома Чебышёва соответсвующего рода и степени
         /// </summary>
@@ -737,7 +737,7 @@ namespace МатКлассы
         /// <param name="q">Степень полинома в знаменателе</param>
         /// <param name="bq">Старший коэффициент в знаменателе</param>
         /// <returns></returns>
-        public static RealFunc R(Point[] P, int p, int q, double bq = 1)
+        public static Func<double,double> R(Point[] P, int p, int q, double bq = 1)
         {
             if (p + q + 1 != P.Length) throw new Exception("Не выполняется равенство p+q+1=n !");
             if (bq == 0) throw new Exception("Старший коэффициент полинома не может быть нулевым!");
@@ -774,7 +774,7 @@ namespace МатКлассы
         /// <summary>
         /// Первая и вторая производные сплайна
         /// </summary>
-        public static RealFunc DSpline = null, D2Spline = null;
+        public static Func<double,double> DSpline = null, D2Spline = null;
         /// <summary>
         /// Максимальный шаг между двумя соседними точками при интерполяции сплайном
         /// </summary>
@@ -787,7 +787,7 @@ namespace МатКлассы
         /// <param name="b">Граничное условие в конце отрезка</param>
         /// <param name="is0outcut">Должен ли сплайн равняться 0 вне отрезка задания</param>
         /// <returns></returns>
-        public static RealFunc CubeSpline(Point[] P, double a = 0, double b = 0, bool is0outcut = false)
+        public static Func<double,double> CubeSpline(Point[] P, double a = 0, double b = 0, bool is0outcut = false)
         {
             int n = P.Length - 1;//записать в новую переменную для облегчения
             double[] h = new double[n + 1];
@@ -933,7 +933,7 @@ namespace МатКлассы
         /// <param name="x"></param>
         /// <param name="Mn"></param>
         /// <returns></returns>
-        private static double wn(RealFunc f, int n, double a, double b, double x, double Mn)
+        private static double wn(Func<double,double> f, int n, double a, double b, double x, double Mn)
         {
             Point[] p = Point.Points(f, n, a, b);
             return wn(p, x, Mn);
@@ -947,7 +947,7 @@ namespace МатКлассы
         /// <param name="b">Конец отрезка интерполяции</param>
         /// <param name="x">Точка, в которой оценивается погрешность</param>
         /// <param name="Mn">Константа в погрешности</param>
-        public static void LagEstimateErr(RealFunc f, int n, double a, double b, double x, double Mn = 0)
+        public static void LagEstimateErr(Func<double,double> f, int n, double a, double b, double x, double Mn = 0)
         {
             if (Mn <= 0)
             {
@@ -977,7 +977,7 @@ namespace МатКлассы
         /// <param name="h"></param>
         /// <param name="f"></param>
         /// <param name="x"></param>
-        public static void ShowNeuNew(Point[] h, RealFunc f, double x)
+        public static void ShowNeuNew(Point[] h, Func<double,double> f, double x)
         {
             Polynom[] u, v;
             Polynom r = Polynom.NeuNew(h, out u, out v);
@@ -1044,15 +1044,15 @@ namespace МатКлассы
         /// <param name="p">Степень числителя у рациональной функции</param>
         /// <param name="q">Степень знаменателя у рациональной функции</param>
         /// <param name="bq">Старший коэффициент знаменателя рациональной функции</param>
-        public static void PolynomTestShow(RealFunc f, int k, double a = -10, double b = 10, int p = 1, int q = -1, double bq = 1)
+        public static void PolynomTestShow(Func<double,double> f, int k, double a = -10, double b = 10, int p = 1, int q = -1, double bq = 1)
         {
             if (q == -1) q = k - 1 - p;
             Point[] P = Point.Points(f, k - 1, a, b);
             Console.WriteLine("Набор узлов интерполяции:"); Point.Show(P);
             Polynom l = Polynom.Lag(P);//l.Show();
             Polynom n = Polynom.Neu(P);
-            RealFunc c = Polynom.CubeSpline(P);
-            RealFunc r = Polynom.R(P, p, q, bq);
+            Func<double,double> c = Polynom.CubeSpline(P);
+            Func<double,double> r = Polynom.R(P, p, q, bq);
 
             Console.WriteLine("Погрешности в равномерной норме:");
             Console.WriteLine("У полинома Лагранжа {0}", FuncMethods.RealFuncMethods.NormDistanceС(f, l.Value, a, b));
@@ -1077,7 +1077,7 @@ namespace МатКлассы
         /// <param name="p">Степень числителя у рациональной функции</param>
         /// <param name="q">Степень знаменателя у рациональной функции</param>
         /// <param name="bq">Старший коэффициент знаменателя рациональной функции</param>
-        public static void PolynomTestShow(RealFunc f, double[] c, double a = 0, double b = 0, int p = 1, int q = -1, double bq = 1)
+        public static void PolynomTestShow(Func<double,double> f, double[] c, double a = 0, double b = 0, int p = 1, int q = -1, double bq = 1)
         {
             if (a == 0 && b == 0) { a = c[0]; b = c[c.Length - 1]; }
             if (q == -1) q = c.Length - 1 - p;
@@ -1085,8 +1085,8 @@ namespace МатКлассы
             Console.WriteLine("Набор узлов интерполяции:"); Point.Show(P);
             Polynom l = Polynom.Lag(P);//l.Show();
             Polynom n = Polynom.Neu(P);
-            RealFunc cu = Polynom.CubeSpline(P);
-            RealFunc r = Polynom.R(P, p, q, bq);
+            Func<double,double> cu = Polynom.CubeSpline(P);
+            Func<double,double> r = Polynom.R(P, p, q, bq);
 
             Console.WriteLine("Погрешности в равномерной норме:");
             Console.WriteLine("У полинома Лагранжа {0}", FuncMethods.RealFuncMethods.NormDistanceС(f, l.Value, a, b));

@@ -47,10 +47,12 @@ namespace МатКлассы
         /// Конструктор по обычной функции
         /// </summary>
         /// <param name="Memoize">Исходная функция</param>
-        /// <param name="First">Точка, в которой можно посчитать первое значение функции (чтобы не было пустого словаря)</param>
-        public Memoize(Func<TVal, TResult> Memoize)
+        public Memoize(Func<TVal, TResult> Memoize, int capacity=0, int concurrencyLevel=0)
         {
-            dic=new ConcurrentDictionary<TVal, TResult>();
+            if (concurrencyLevel == 0)
+                concurrencyLevel = Environment.ProcessorCount;
+
+            dic=new ConcurrentDictionary<TVal, TResult>(concurrencyLevel,capacity);
             M = new Func<TVal, TResult>(Memoize);
         }
 

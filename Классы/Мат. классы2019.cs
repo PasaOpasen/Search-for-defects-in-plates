@@ -145,7 +145,7 @@ namespace МатКлассы
         /// <summary>
         /// Тип каррирования
         /// </summary>
-        public enum CarringType
+        public enum CarringType : byte
         {
             /// <summary>
             /// По первым аргументам

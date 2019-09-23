@@ -434,7 +434,7 @@ namespace МатКлассы
         /// <param name="b"></param>
         /// <param name="is0outcut">Должна ли функция равняться 0 вне отрезка задания</param>
         /// <returns></returns>
-        public static RealFunc ToSpline(this NetFunc f, double a = 0, double b = 0, bool is0outcut = true) => Polynom.CubeSpline(f.Points, a, b, is0outcut);
+        public static Func<double,double> ToSpline(this NetFunc f, double a = 0, double b = 0, bool is0outcut = true) => Polynom.CubeSpline(f.Points, a, b, is0outcut);
 
         /// <summary>
         /// Сумма комплексного массива
@@ -678,15 +678,7 @@ namespace МатКлассы
         /// </summary>
         /// <param name="s"></param>
         /// <returns></returns>
-        public static double[] ToDoubleMas(this string s)
-        {
-            string[] st = s.Split(new char[] { ' ' }, StringSplitOptions.RemoveEmptyEntries);
-            double[] res = new double[st.Length];
-            for (int i = 0; i < res.Length; i++)
-                res[i] = Convert.ToDouble(st[i]);
-            st = null;
-            return res;
-        }
+        public static double[] ToDoubleMas(this string s)=>s.Split(new char[] { ' ' }, StringSplitOptions.RemoveEmptyEntries).Select(st=>Convert.ToDouble(st)).ToArray();
         /// <summary>
         /// Преобразовать число в строку, из которой его можно воспроизвести
         /// </summary>
@@ -955,6 +947,29 @@ namespace МатКлассы
             for (int i = 0; i < count; i++)
                 m[i] = number;
             return m;
+        }
+
+
+
+        public static void StartProcessOnly(string fileName, bool global = false, string path = null)
+        {
+            path = path ?? Environment.CurrentDirectory;
+
+            Process process = new Process();
+            process.StartInfo.FileName = Path.Combine(path, fileName);
+            process.StartInfo.WorkingDirectory = path;
+
+            if (!global)
+            {
+                process.StartInfo.UseShellExecute = true;
+                process.StartInfo.CreateNoWindow = true;
+                process.StartInfo.WindowStyle = ProcessWindowStyle.Hidden;
+            }
+
+            process.Start();
+
+            process.WaitForExit();
+
         }
     }
 
