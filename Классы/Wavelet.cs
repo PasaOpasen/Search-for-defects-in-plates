@@ -230,6 +230,7 @@ namespace МатКлассы
             //tex: $Wf(a,b) = \dfrac{1}{|a|^{0.5}} \int_{-\infty}^{\infty} f(t) {\bar \psi(\dfrac{t-b}{a}) dt}$, еще написано, что a>0, но тогда зачем модуль
             Func<double, double, Complex> s = (double a, double b) =>
             {
+                if (a == 0) return 0;
                 double con = h3 / Math.Sqrt(Math.Abs(a));
 
                 Complex sum = f[0].y * this.Mother((f[0].x - b) / a).Conjugate + f[f.Length - 1].y * this.Mother((f[f.Length - 1].x - b) / a).Conjugate;
