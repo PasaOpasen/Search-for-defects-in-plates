@@ -25,8 +25,7 @@ namespace Консоль
         {
            // WaveletCreateFromFunction();
             WaveletCreateFromArray();
-          
-            
+                     
             // Create3DGrafic();
         }
 
@@ -35,7 +34,7 @@ namespace Консоль
              Func<double, double> func = t => Math.Sin(6*t) / (1 + t * t);
             //Func<double, double> func = t => (t >= 0.45 && t <= 0.55) ? Math.Sin(20 * Math.PI*(t - 0.45)) : 0;
 
-             Wavelet.Wavelets wavelets = Wavelet.Wavelets.LP;
+            Wavelet.Wavelets wavelets = Wavelet.Wavelets.LP;
             double omega = 2;
             FuncMethods.DefInteg.GaussKronrod.NodesCount nodesCount = GaussKronrod.NodesCount.GK61;
 
@@ -47,34 +46,29 @@ namespace Консоль
 
             double tmin=-7;
             double tmax=7;
-            int tcount=200;
+            int tcount=260;
 
             WaveletTest.Start(func, wavelets, omega, nodesCount,xmin,xmax,ymin,ymax,spaceCount,tmin,tmax,tcount);
         }
         static void WaveletCreateFromArray()
         {
-
-            double begin = 0;
-            double step = 0.1;
-            int count = 50000;
+            double begin = -0.0004;
+            double step = 16E-9;
+            int count = 150000;
             
-            string filename = "ArrayA.txt";
-            string path = @"C:\Users\крендель\Desktop\ZAM\Замер D\Разница";
+            string filename = "ArrayB.txt";
+            string path = @"C:\Users\user1\Desktop\zameri\n27_1d_amp_2us_18ns_19ms\Замер F\Разница";
 
 
             Wavelet.Wavelets wavelets = Wavelet.Wavelets.LP;
             double omega = 2;
             FuncMethods.DefInteg.GaussKronrod.NodesCount nodesCount = GaussKronrod.NodesCount.GK61;
 
-            double xmin = -3;
-            double xmax = 8;
-            double ymin = -4;
-            double ymax = 4;
+            double xmin = 0.001;
+            double xmax = 0.01;
+            double ymin = -0.0004;
+            double ymax = 0.002079984;
             int spaceCount = 50;
-
-            double tmin = -7;
-            double tmax = 7;
-            int tcount = 200;
 
             WaveletTest.Start(begin,step,count,filename,path, wavelets, omega, nodesCount, xmin, xmax, ymin, ymax, spaceCount);
         }
