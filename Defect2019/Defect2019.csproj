@@ -331,6 +331,12 @@
     <Compile Include="WaveContinious.Designer.cs">
       <DependentUpon>WaveContinious.cs</DependentUpon>
     </Compile>
+    <Compile Include="WaveletContinious.cs">
+      <SubType>Form</SubType>
+    </Compile>
+    <Compile Include="WaveletContinious.Designer.cs">
+      <DependentUpon>WaveletContinious.cs</DependentUpon>
+    </Compile>
     <Compile Include="WaveVariables.cs" />
     <Page Include="MainWindow.xaml">
       <Generator>MSBuild:Compile</Generator>
@@ -410,6 +416,9 @@
     </EmbeddedResource>
     <EmbeddedResource Include="WaveContinious.resx">
       <DependentUpon>WaveContinious.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="WaveletContinious.resx">
+      <DependentUpon>WaveletContinious.cs</DependentUpon>
     </EmbeddedResource>
     <None Include="packages.config" />
     <None Include="Properties\Settings.settings">

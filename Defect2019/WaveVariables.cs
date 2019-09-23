@@ -345,7 +345,7 @@ public static class Functions
     private static Func<double, Vectors> PolesMas = (double w) =>
        {
            ComplexFunc del = (Complex a) => Deltass(a, w);
-           Vectors v1 = w < 0.1 ? Roots.OtherMethod(del, РабКонсоль.polesBeg, РабКонсоль.polesEnd, РабКонсоль.steproot / 200, 1e-12, Roots.MethodRoot.Brent, false) : Roots.OtherMethod(del, РабКонсоль.polesBeg, РабКонсоль.polesEnd, РабКонсоль.steproot, 1e-10, Roots.MethodRoot.Brent, false);
+           Vectors v1 = w < 0.1 ? Roots.OtherMethod(del, РабКонсоль.polesBeg, РабКонсоль.polesEnd, РабКонсоль.steproot / 200, 1e-12, Roots.MethodRoot.Brent, false) : Roots.OtherMethod(del, РабКонсоль.polesBeg, РабКонсоль.polesEnd, РабКонсоль.steproot/40, 1e-10, Roots.MethodRoot.Brent, false);
            Vectors v2 = DeltassNPosRoots(w, РабКонсоль.polesBeg, РабКонсоль.polesEnd);
            v1.UnionWith(v2);
            return v1;
@@ -874,6 +874,9 @@ public static class Functions
 
 
     #region Функции для вейвлета
+    private static readonly double leteps=2e-3, let2eps=2*leteps*1000;
+    public static readonly Func<double, double> Vg = (double w) =>  let2eps / (PolesMas(w + leteps)[2] - PolesMas(w - leteps)[2]);
+
     /// <summary>
     /// Возвращает координаты максимума от вейвлетной функции на указанном прямоугольнике
     /// </summary>
