@@ -33,6 +33,7 @@ namespace МатКлассы
         /// <param name="f">Функция, сопоставляющая член ряда номеру</param>
         /// <param name="eps">Точность</param>
         /// <param name="ndo">Минимальное количество членов, которые должны быть суммированы</param>
+        /// <param name="ndomax">Максимальное число суммируемых членов</param>
         /// <returns></returns>
         public static Complex Sum(int n0, Func<int, Complex> f, double eps = 1e-8, int ndo = 10, int ndomax = 100)
         {

@@ -288,13 +288,13 @@ namespace МатКлассы
         /// <param name="k">Количество используемых функций системы</param>
         /// <param name="a">Начало отрезка интегрирования</param>
         /// <param name="b">Конец отрезка интегрирования</param>
-        public SLAU(SequenceFunc p, RealFunc f, int k, double a, double b, SequenceFuncKind kind = SequenceFuncKind.Other)
+        public SLAU(SequenceFunc p, Func<double,double> f, int k, double a, double b, SequenceFuncKind kind = SequenceFuncKind.Other)
         {
             Make(k);
-            RealFunc[] fi = new RealFunc[k];
+            Func<double,double>[] fi = new Func<double,double>[k];
             for (int i = 0; i < k; i++)
             {
-                fi[i] = new RealFunc((double x) => p(x, i));
+                fi[i] = new Func<double,double>((double x) => p(x, i));
                 //Console.WriteLine(fi[i](3)+" "+p(3,i));
                 this.b[i] = FuncMethods.RealFuncMethods.ScalarPower(f, fi[i], a, b);
             }
@@ -303,11 +303,11 @@ namespace МатКлассы
                 case SequenceFuncKind.Other:
                     for (int i = 0; i < k; i++)
                     {
-                        fi[i] = new RealFunc((double x) => p(x, i));//массив функций дохуя неустойчив и выдаёт какую-то дичь! функции всегда надо определять заново!!!!!!
+                        fi[i] = new Func<double,double>((double x) => p(x, i));//массив функций дохуя неустойчив и выдаёт какую-то дичь! функции всегда надо определять заново!!!!!!
                         A[i, i] = FuncMethods.RealFuncMethods.ScalarPower(fi[i], fi[i], a, b);
                         for (int j = i + 1; j < k; j++)
                         {
-                            fi[j] = new RealFunc((double x) => p(x, j));
+                            fi[j] = new Func<double,double>((double x) => p(x, j));
                             A[i, j] = FuncMethods.RealFuncMethods.ScalarPower(fi[j], fi[i], a, b);
                             A[j, i] = A[i, j];
                         }
@@ -316,7 +316,7 @@ namespace МатКлассы
                 case SequenceFuncKind.Orthogonal:
                     for (int i = 0; i < k; i++)
                     {
-                        fi[i] = new RealFunc((double x) => p(x, i));
+                        fi[i] = new Func<double,double>((double x) => p(x, i));
                         A[i, i] = FuncMethods.RealFuncMethods.NormScalar(fi[i], a, b);
                     }
 
@@ -344,17 +344,17 @@ namespace МатКлассы
         {
             if (k == 0) k = f.CountKnots;
             Make(k);
-            RealFunc[] fi = new RealFunc[k];
-            //for (int i = 0; i < k; i++) fi[i] = new RealFunc((double x) => p(x, i));
+            Func<double,double>[] fi = new Func<double,double>[k];
+            //for (int i = 0; i < k; i++) fi[i] = new Func<double,double>((double x) => p(x, i));
             for (int i = 0; i < k; i++)
             {
-                fi[i] = new RealFunc((double x) => p(x, i));
+                fi[i] = new Func<double,double>((double x) => p(x, i));
                 //Console.WriteLine(fi[i](3)+" "+p(3,i));
                 this.b[i] = FuncMethods.NetFunc.ScalarP(f, fi[i]);
                 A[i, i] = FuncMethods.NetFunc.ScalarP(fi[i], fi[i], f.Arguments);
                 for (int j = i + 1; j < k; j++)
                 {
-                    fi[j] = new RealFunc((double x) => p(x, j));
+                    fi[j] = new Func<double,double>((double x) => p(x, j));
                     A[i, j] = FuncMethods.NetFunc.ScalarP(fi[j], fi[i], f.Arguments);
                     A[j, i] = A[i, j];
                 }
@@ -368,10 +368,10 @@ namespace МатКлассы
         /// <param name="k">Количество используемых функций системы</param>
         /// <param name="a">Начало отрезка интегрирования</param>
         /// <param name="b">Конец отрезка интегрирования</param>
-        public SLAU(SequencePol p, RealFunc f, int k, double a, double b, SequenceFuncKind kind = SequenceFuncKind.Other)
+        public SLAU(SequencePol p, Func<double,double> f, int k, double a, double b, SequenceFuncKind kind = SequenceFuncKind.Other)
         {
             Make(k);
-            RealFunc[] fi = new RealFunc[k];
+            Func<double,double>[] fi = new Func<double,double>[k];
             for (int i = 0; i < k; i++)
             {
                 fi[i] = p(i).Value;
@@ -975,7 +975,7 @@ namespace МатКлассы
         /// <summary>
         /// Перечисление методов решения системы
         /// </summary>
-        public enum Method
+        public enum Method : byte
         {
             Gauss,
             Holets,
@@ -1068,7 +1068,7 @@ namespace МатКлассы
 
 
         public double[] ErrorsMas, ErrorMasP;
-        public RealFunc f = null;
+        public Func<double,double> f = null;
         public SequenceFunc p = null;
         public double begin = 0, end = 0;
         //public double Error(int k) //частичная погрешность
@@ -1087,7 +1087,7 @@ namespace МатКлассы
         //}
         public double Error(int k) //частичная погрешность
         {
-            RealFunc po = (double xx) =>
+            Func<double,double> po = (double xx) =>
               {
                   double sum = 0;
                   for (int i = 0; i < k; i++)
@@ -1124,7 +1124,7 @@ namespace МатКлассы
                                         //if (kind == SequenceFuncKind.Orthonormal) x[0] *= end - begin;
                 VALUE_FOR_ULTRA = Error(1);
                 ErrorsMas[0] = VALUE_FOR_ULTRA;
-                RealFunc ff = (double xx) =>
+                Func<double,double> ff = (double xx) =>
                 {
                     double sum = this.x[0] * p(xx, 0);
                     double s = sum - f(xx);
@@ -1266,7 +1266,7 @@ namespace МатКлассы
             }
 
             ErrorsMas[t - 1] = VALUE_FOR_ULTRA;
-            RealFunc ff = (double x) =>
+            Func<double,double> ff = (double x) =>
             {
                 sum = 0;
 

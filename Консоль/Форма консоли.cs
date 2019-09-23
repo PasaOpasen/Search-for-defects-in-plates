@@ -9,7 +9,7 @@ using System.Threading.Tasks;
 using System.Windows.Forms;
 using Библиотека_графики;
 using МатКлассы;
-using МатКлассы;
+using static МатКлассы.Number;
 using nzy3d_winformsDemo;
 
 
@@ -59,11 +59,11 @@ namespace Консоль
             
 
             DateTime time = DateTime.Now;
-            //RealFunc f = t => Math.Sin(t*9) / Math.Exp(t * t / 3) * Math.Sign(Math.Max(0, (2*Math.PI- t.Abs())));
-            RealFunc f = t => Math.Cos(t * 9)*t/ Math.Exp(t * t / 3) * Math.Sign(Math.Max(0, ( Math.PI/2 - t.Abs())));
-            //RealFunc f = t => Math.Sin(20*Math.PI*t)* Math.Sign(Math.Max(0, (1 - t.Abs())));
-            DComplexFunc[] f1 = new DComplexFunc[7];
-            RealFunc[] f2 = new RealFunc[7];
+            //Func<double,double> f = t => Math.Sin(t*9) / Math.Exp(t * t / 3) * Math.Sign(Math.Max(0, (2*Math.PI- t.Abs())));
+            Func<double,double> f = t => Math.Cos(t * 9)*t/ Math.Exp(t * t / 3) * Math.Sign(Math.Max(0, ( Math.PI/2 - t.Abs())));
+            //Func<double,double> f = t => Math.Sin(20*Math.PI*t)* Math.Sign(Math.Max(0, (1 - t.Abs())));
+            Func<double,double,Complex>[] f1 = new Func<double,double,Complex>[7];
+            Func<double,double>[] f2 = new Func<double,double>[7];
             Wavelet[] w = new Wavelet[7];
 
 

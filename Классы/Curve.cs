@@ -15,13 +15,13 @@ namespace МатКлассы
         /// <summary>
         /// Поля, рассчитанные под параметризацию границы области (на случай, если границу области нужно задать немного иначе, потому что функция имеет особенности)
         /// </summary>
-        private RealFunc uuu = null, vvv = null;
+        private Func<double,double> uuu = null, vvv = null;
 
         /// <summary>
         /// Свойства, выдающие параметризацию границы области
         /// </summary>
-        public RealFunc u { get { if (uuu == null) return (double t) => U(t, this.radius); return (double t) => uuu(t); } set { uuu = value; } }
-        public RealFunc v { get { if (vvv == null) return (double t) => V(t, this.radius); return (double t) => vvv(t); } set { vvv = value; } }
+        public Func<double,double> u { get { if (uuu == null) return (double t) => U(t, this.radius); return (double t) => uuu(t); } set { uuu = value; } }
+        public Func<double,double> v { get { if (vvv == null) return (double t) => V(t, this.radius); return (double t) => vvv(t); } set { vvv = value; } }
 
         /// <summary>
         /// Площадь сегмента
@@ -59,7 +59,7 @@ namespace МатКлассы
         /// <summary>
         /// Функция, выдающая нужную длину отрезка параметризации в зависимости от радиуса, поскольку иногда отрезок изменения параметра t зависит от r
         /// </summary>
-        public RealFunc End;
+        public Func<double,double> End;
 
         /// <summary>
         /// Количество шагов при интегрировании по умолчанию
@@ -122,7 +122,7 @@ namespace МатКлассы
         /// <param name="b0">Конечное значение параметра</param>
         /// <param name="uu">Отображение в первую координату</param>
         /// <param name="vv">Отображение во вторую координату</param>
-        public Curve(double a0, double b0, RealFunc uu, RealFunc vv)
+        public Curve(double a0, double b0, Func<double,double> uu, Func<double,double> vv)
         {
             a = a0;
             b = b0;
@@ -137,7 +137,7 @@ namespace МатКлассы
         /// <param name="uu"></param>
         /// <param name="vv"></param>
         /// <param name="BASEradius"></param>
-        public Curve(double a0, double b0, RealFunc uu, RealFunc vv, double BASEradius) : this(a0, b0, uu, vv)
+        public Curve(double a0, double b0, Func<double,double> uu, Func<double,double> vv, double BASEradius) : this(a0, b0, uu, vv)
         {
             radius = BASEradius;
         }
@@ -151,7 +151,7 @@ namespace МатКлассы
         /// <param name="BASEradius"></param>
         /// <param name="uuu"></param>
         /// <param name="vvv"></param>
-        public Curve(double a0, double b0, RealFunc uu, RealFunc vv, double BASEradius, DRealFunc uuu, DRealFunc vvv, TripleFunc T, RealFunc end) : this(a0, b0, uu, vv, BASEradius)
+        public Curve(double a0, double b0, Func<double,double> uu, Func<double,double> vv, double BASEradius, DRealFunc uuu, DRealFunc vvv, TripleFunc T, Func<double,double> end) : this(a0, b0, uu, vv, BASEradius)
         {
             this.U = uuu;
             this.V = vvv;
@@ -189,13 +189,13 @@ namespace МатКлассы
         /// <param name="BaseRad">Базовый радиус</param>
         /// <param name="T">Площадь сегмента</param>
         /// <param name="end">Возврат конца отрезка параметризации в зависимости от радиуса</param>
-        public Curve(double a0, double b0, DPointFunc Tr, double BaseRad, TripleFunc T, RealFunc end)
+        public Curve(double a0, double b0, DPointFunc Tr, double BaseRad, TripleFunc T, Func<double,double> end)
         {
             a = a0; b = b0;
             S = T;
             Trans = Tr;
             radius = BaseRad;
-            End = new RealFunc(end);
+            End = new Func<double,double>(end);
         }
 
         [Obsolete]
@@ -222,7 +222,7 @@ namespace МатКлассы
         /// <returns></returns>
         public double Firstkind(Functional f)
         {
-            RealFunc h = (double t) => f(this.Transfer(t));
+            Func<double,double> h = (double t) => f(this.Transfer(t));
             return FuncMethods.DefInteg.GaussKronrod.Integral(h, this.a, this.b);
         }
     }

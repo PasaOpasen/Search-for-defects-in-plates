@@ -144,7 +144,7 @@ namespace МатКлассы
             double r = Point.Eudistance(this, z);
             return Math.Log(1.0 / r) * r * r;
         }
-        
+
 
         /// <summary>
         /// Возвращает координаты нижнего левого и верхнего правого угла прямоугольника, содержащего все точки массива
@@ -231,7 +231,7 @@ namespace МатКлассы
             }
         }
 
-        public static bool operator ==(Point a, Point b) => (a.x == b.x) && (a.y == b.y); 
+        public static bool operator ==(Point a, Point b) => (a.x == b.x) && (a.y == b.y);
 
         /// <summary>
         /// Сравнение точек по установленной по умолчанию упорядоченности
@@ -254,30 +254,16 @@ namespace МатКлассы
         /// <param name="a"></param>
         /// <param name="b"></param>
         /// <returns></returns>
-        public static Point[] Points(RealFunc f, int n, double a, double b)
+        public static Point[] Points(Func<double,double> f, int n, double a, double b, bool parallel = false)
         {
             double h = (b - a) / n;
             Point[] points = new Point[n + 1];
-            for (int i = 0; i <= n; i++)
-            {
-                points[i] = new Point(a + h * i, f(a + h * i));
-            }
+            if (parallel)
+                Parallel.For(0, n + 1, (int i) => points[i] = new Point(a + h * i, f(a + h * i)));
+            else
+                for (int i = 0; i <= n; i++)
+                    points[i] = new Point(a + h * i, f(a + h * i));
 
-            return points;
-        }
-        /// <summary>
-        /// Набор n+1 точек на графике функции f, разбитых равномерно на отрезке от a до b
-        /// </summary>
-        /// <param name="f"></param>
-        /// <param name="n"></param>
-        /// <param name="a"></param>
-        /// <param name="b"></param>
-        /// <returns></returns>
-        public static Point[] PointsParallel(RealFunc f, int n, double a, double b)
-        {
-            double h = (b - a) / n;
-            Point[] points = new Point[n + 1];
-            Parallel.For(0, n + 1, (int i) => points[i] = new Point(a + h * i, f(a + h * i)));
             return points;
         }
 
@@ -289,7 +275,7 @@ namespace МатКлассы
         /// <param name="a">Начало отрезка</param>
         /// <param name="b">Конец отрезка</param>
         /// <returns></returns>
-        public static Point[] Points(RealFunc f, double h, double a, double b)
+        public static Point[] Points(Func<double,double> f, double h, double a, double b)
         {
             int n = (int)((b - a) / h);
             Point[] points = new Point[n];
@@ -330,14 +316,15 @@ namespace МатКлассы
         /// <param name="f"></param>
         /// <param name="c"></param>
         /// <returns></returns>
-        public static Point[] Points(RealFunc f, double[] c)
+        public static Point[] Points(Func<double,double> f, double[] c,bool parallel=false)
         {
             Point[] p = new Point[c.Length];
-            for (int i = 0; i < c.Length; i++)
-            {
+            if (parallel)
+                Parallel.For(0, c.Length, (int i) => p[i] = new Point(c[i], f(c[i])));
+            else
+            for (int i = 0; i < c.Length; i++)          
                 p[i] = new Point(c[i], f(c[i]));
-            }
-
+            
             return p;
         }
 
@@ -346,19 +333,30 @@ namespace МатКлассы
         /// </summary>
         /// <param name="L"></param>
         /// <returns></returns>
-        public static Point[] Points(List<Point> L)
-        {
-            Point[] P = new Point[L.Count];
-            for (int i = 0; i < P.Length; i++)
-            {
-                P[i] = new Point(L[i]);
-            }
+        public static Point[] Points(List<Point> L) => L.ToArray();
 
-            return P;
+        /// <summary>
+        /// Создать массив точек со значениями из файла и с аргументами с определённой закономерностью
+        /// </summary>
+        /// <param name="begin">Начало отрезка по аргументам</param>
+        /// <param name="step">Шаг по отрезкку</param>
+        /// <param name="count">Число точек</param>
+        /// <param name="filename">Имя файла со значениями</param>
+        /// <param name="path">Пусть к файлу</param>
+        /// <returns></returns>
+        public static Point[] CreatePointArray(double begin, double step, int count, string filename, string path = null)
+        {
+            path = path ?? Environment.CurrentDirectory;
+            var res = new Point[count];
+            using (StreamReader f = new StreamReader(Path.Combine(path, filename)))
+                for (int i = 0; i < count; i++)
+                    res[i] = new Point(begin + i * step, f.ReadLine().ToDouble());
+            return res;
         }
 
+
         //то же самое, только отдельными массивами выводятся первые и вторые координаты точек (сделано для рисования в Chart)
-        public static double[] PointsX(RealFunc f, int n, double a, double b)
+        public static double[] PointsX(Func<double,double> f, int n, double a, double b)
         {
             Point[] p = new Point[Point.Points(f, n, a, b).Length];
             for (int i = 0; i < p.Length; i++)
@@ -375,7 +373,7 @@ namespace МатКлассы
             return x;
         }
 
-        public static double[] PointsX(RealFunc f, double h, double a, double b)
+        public static double[] PointsX(Func<double,double> f, double h, double a, double b)
         {
             Point[] p = new Point[Point.Points(f, h, a, b).Length];
             for (int i = 0; i < p.Length; i++)
@@ -392,7 +390,7 @@ namespace МатКлассы
             return x;
         }
 
-        public static double[] PointsY(RealFunc f, int n, double a, double b)
+        public static double[] PointsY(Func<double,double> f, int n, double a, double b)
         {
             Point[] p = new Point[Point.Points(f, n, a, b).Length];
             for (int i = 0; i < p.Length; i++)
@@ -408,7 +406,7 @@ namespace МатКлассы
 
             return y;
         }
-        public static double[] PointsY(RealFunc f, double h, double a, double b)
+        public static double[] PointsY(Func<double,double> f, double h, double a, double b)
         {
             Point[] p = new Point[Point.Points(f, h, a, b).Length];
             for (int i = 0; i < p.Length; i++)

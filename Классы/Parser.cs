@@ -276,11 +276,11 @@ namespace МатКлассы
         /// </summary>
         /// <param name="s">Формула функции</param>
         /// <returns></returns>
-        public static RealFunc GetDelegate(string s)
+        public static Func<double,double> GetDelegate(string s)
         {
             Parser p = new Parser(s);
 
-            RealFunc f = (double x) =>
+            Func<double,double> f = (double x) =>
             {
                 p.arg = x;
                 p.nam = p.Product(p.term);

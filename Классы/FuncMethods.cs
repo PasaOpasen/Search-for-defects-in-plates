@@ -152,15 +152,15 @@ namespace МатКлассы
             /// <summary>
             /// Интерполяционный многочлен Лагранжа для этой сеточной функции
             /// </summary>
-            private RealFunc Lag = null;
+            private Func<double,double> Lag = null;
             /// <summary>
             /// Интерполяционная рациональная функция для этой сеточной функции
             /// </summary>
-            private RealFunc R = null;
+            private Func<double,double> R = null;
             /// <summary>
             /// Интерполяционный кубический сплайн для этой сеточной функции
             /// </summary>
-            private RealFunc CubeSpline = null;
+            private Func<double,double> CubeSpline = null;
             /// <summary>
             /// Значение сеточной функции в конце области определения
             /// </summary>
@@ -230,7 +230,7 @@ namespace МатКлассы
             /// <param name="n">Число точек</param>
             /// <param name="a">Начало отрезка интерполяции</param>
             /// <param name="b">Конец отрезка интерполяции</param>
-            public NetFunc(RealFunc f, int n, double a, double b)
+            public NetFunc(Func<double,double> f, int n, double a, double b)
             {
                 Point[] P = Point.Points(f, n, a, b);
                 this.Knots = new List<Point>();
@@ -241,7 +241,7 @@ namespace МатКлассы
             /// </summary>
             /// <param name="f"></param>
             /// <param name="c"></param>
-            public NetFunc(RealFunc f, double[] c)
+            public NetFunc(Func<double,double> f, double[] c)
             {
                 Point[] P = Point.Points(f, c);
                 this.Knots = new List<Point>();
@@ -343,7 +343,7 @@ namespace МатКлассы
             /// <summary>
             /// Интерполяционный полином Лагранжа этой сеточной функции
             /// </summary>
-            public RealFunc Lagrange
+            public Func<double,double> Lagrange
             {
                 get
                 {
@@ -358,14 +358,14 @@ namespace МатКлассы
             /// <summary>
             /// Интерполяционный кубический сплайн этой сеточной функции
             /// </summary>
-            public RealFunc Spline
+            public Func<double,double> Spline
             {
                 get
                 {
                     if (this.CubeSpline != null) return this.CubeSpline;
 
                     Point[] P = Point.Points(this.Knots);
-                    RealFunc Pol = Polynom.CubeSpline(P);
+                    Func<double,double> Pol = Polynom.CubeSpline(P);
                     this.CubeSpline = Pol;
                     return Pol;
                 }
@@ -373,12 +373,12 @@ namespace МатКлассы
             /// <summary>
             /// Интерполяционная рациональная функция этой сеточной функции
             /// </summary>
-            public RealFunc RatFunc(int p, int q)
+            public Func<double,double> RatFunc(int p, int q)
             {
                 if (this.R != null) return this.R;
 
                 Point[] P = Point.Points(this.Knots);
-                RealFunc Pol = Polynom.R(P, p, q);
+                Func<double,double> Pol = Polynom.R(P, p, q);
                 this.R = Pol;
                 return Pol;
             }
@@ -488,7 +488,7 @@ namespace МатКлассы
             /// <param name="a"></param>
             /// <param name="f"></param>
             /// <returns></returns>
-            public static double ScalarP(NetFunc a, RealFunc f)
+            public static double ScalarP(NetFunc a, Func<double,double> f)
             {
                 double[] c = a.Arguments;
                 NetFunc b = new NetFunc(f, c);
@@ -500,7 +500,7 @@ namespace МатКлассы
             /// <param name="f"></param>
             /// <param name="a"></param>
             /// <returns></returns>
-            public static double ScalarP(RealFunc f, NetFunc a) { return NetFunc.ScalarP(a, f); }
+            public static double ScalarP(Func<double,double> f, NetFunc a) { return NetFunc.ScalarP(a, f); }
             /// <summary>
             /// Скалярное произведение двух действителььных функций на сетке
             /// </summary>
@@ -508,7 +508,7 @@ namespace МатКлассы
             /// <param name="g"></param>
             /// <param name="c"></param>
             /// <returns></returns>
-            public static double ScalarP(RealFunc f, RealFunc g, double[] c)
+            public static double ScalarP(Func<double,double> f, Func<double,double> g, double[] c)
             {
                 NetFunc a = new NetFunc(f, c);
                 NetFunc b = new NetFunc(g, c);
@@ -540,7 +540,7 @@ namespace МатКлассы
             /// <param name="a"></param>
             /// <param name="b"></param>
             /// <returns></returns>
-            public static double Distance(NetFunc a, RealFunc b)
+            public static double Distance(NetFunc a, Func<double,double> b)
             {
                 NetFunc c = new NetFunc(b, a.Arguments);
                 return Distance(a, c);
@@ -552,7 +552,7 @@ namespace МатКлассы
         /// </summary>
         public static class ODU
         {
-            public enum Method
+            public enum Method:byte
             {
                 /// <summary>
                 /// Метод Эйлера
@@ -1065,7 +1065,7 @@ namespace МатКлассы
             /// <param name="C1"></param>
             /// <param name="D1"></param>
             /// <returns></returns>
-            public static NetFunc SchLiuQu(RealFunc g, RealFunc h, RealFunc s, RealFunc f, out double nevaska, double a = 0, double b = 10, int N = 50, double A = 1, double B = 1, double D = 1, double A1 = 1, double B1 = 1, double D1 = 1, bool firstkind = true)
+            public static NetFunc SchLiuQu(Func<double,double> g, Func<double,double> h, Func<double,double> s, Func<double,double> f, out double nevaska, double a = 0, double b = 10, int N = 50, double A = 1, double B = 1, double D = 1, double A1 = 1, double B1 = 1, double D1 = 1, bool firstkind = true)
             {
                 double[] hn = new double[N + 1], fn = new double[N + 1], sn = new double[N + 1], tn = new double[N + 1], an = new double[N + 1], bn = new double[N + 1], cn = new double[N + 1], dn = new double[N + 1];
                 double t = (b - a) / N;
@@ -1156,7 +1156,7 @@ namespace МатКлассы
             /// <param name="accuracy">Выводимая точность</param>
             /// <param name="explict">Использовать явную схему либо нет</param>
             /// <returns></returns>
-            public static List<NetFunc> TU(DRealFunc f, RealFunc f1, RealFunc f2, RealFunc u0, DRealFunc u, double a, double A1, double B1, double A2, double B2, double x0, double X, double t0, double T, int xcount, int tcount, out double accuracy, bool explict = true, bool thirdkind = true)
+            public static List<NetFunc> TU(DRealFunc f, Func<double,double> f1, Func<double,double> f2, Func<double,double> u0, DRealFunc u, double a, double A1, double B1, double A2, double B2, double x0, double X, double t0, double T, int xcount, int tcount, out double accuracy, bool explict = true, bool thirdkind = true)
             {
                 List<NetFunc> res = new List<NetFunc>();
                 double h = (X - x0) / (xcount - 1);
@@ -1278,7 +1278,7 @@ namespace МатКлассы
             /// <summary>
             /// Методы подсчёта интеграда
             /// </summary>
-            public enum Method
+            public enum Method : byte
             {
                 /// <summary>
                 /// Метод средних прямоугольников
@@ -1325,7 +1325,7 @@ namespace МатКлассы
             /// <summary>
             /// Критерии подсчёта интеграла
             /// </summary>
-            public enum Criterion
+            public enum Criterion : byte
             {
                 /// <summary>
                 /// Число шагов (узлов)
@@ -1348,7 +1348,7 @@ namespace МатКлассы
             /// <param name="a">Первая точка промежутка интегрирования</param>
             /// <param name="b">Последняя точка промежутка интегрирования</param>
             /// <returns></returns>
-            public static double MiddleRect(RealFunc F, double a, double b)//метод средних прямоугольников
+            public static double MiddleRect(Func<double,double> F, double a, double b)//метод средних прямоугольников
             {
                 double result = 0, h = STEP;
                 //h = (b - a) / n; //Шаг сетки
@@ -1367,7 +1367,7 @@ namespace МатКлассы
             /// <param name="a"></param>
             /// <param name="b"></param>
             /// <returns></returns>
-            public static double Trapez(RealFunc f, double a, double b)//метод трапеций
+            public static double Trapez(Func<double,double> f, double a, double b)//метод трапеций
             {
                 double h = STEP, result = 0;
                 int k = ((int)((b - a) / h) /*-1*/);
@@ -1385,7 +1385,7 @@ namespace МатКлассы
             /// <param name="a"></param>
             /// <param name="b"></param>
             /// <returns></returns>
-            public static double Simpson(RealFunc F, double a, double b)//метод Симпсона
+            public static double Simpson(Func<double,double> F, double a, double b)//метод Симпсона
             {
                 double step = (b - a) / (double)h_Count;
                 double S = 0, x, h = step;
@@ -1420,9 +1420,9 @@ namespace МатКлассы
             /// <param name="a">Начало отрезка итегрирования</param>
             /// <param name="b">Конец отрезка интегрирования</param>
             /// <returns></returns>
-            public static double Gauss(RealFunc f, double a, double b)
+            public static double Gauss(Func<double,double> f, double a, double b)
             {
-                RealFunc fi = (double t) => { return f((a + b) / 2 + (b - a) / 2 * t); };//замена координат
+                Func<double,double> fi = (double t) => { return f((a + b) / 2 + (b - a) / 2 * t); };//замена координат
                 double sum = 0;
                 Polynom p = Polynom.Lezh(DefInteg.n);//полином Лежандра
                 Vectors root;
@@ -1466,9 +1466,9 @@ namespace МатКлассы
             /// <param name="a">Начало отрезка итегрирования</param>
             /// <param name="b">Конец отрезка интегрирования</param>
             /// <returns></returns>
-            public static double Meler(RealFunc f, double a, double b)
+            public static double Meler(Func<double,double> f, double a, double b)
             {
-                RealFunc fi = (double t) => { return f((a + b) / 2 + (b - a) / 2 * t); };//замена координат
+                Func<double,double> fi = (double t) => { return f((a + b) / 2 + (b - a) / 2 * t); };//замена координат
                 double sum = 0;
                 Vectors root;
                 int n = DefInteg.n;
@@ -1527,7 +1527,7 @@ namespace МатКлассы
                 /// <summary>
                 /// Количество узлов при интегрировании
                 /// </summary>
-                public enum NodesCount
+                public enum NodesCount : byte
                 {
                     GK15, GK21, GK31, GK41, GK51, GK61
                 }
@@ -1840,7 +1840,7 @@ namespace МатКлассы
                 /// <param name="a">Начало отрезка интегрирования</param>
                 /// <param name="b">Конец отрезка интегрирования</param>
                 /// <returns></returns>
-                public static double Integral(RealFunc f, double a, double b)
+                public static double Integral(Func<double,double> f, double a, double b)
                 {
                     Myfunc z = (Complex x, ref Complex[] t, int N) => { t = new Complex[1]; t[0] = f(x.Re); };
                     Complex[] y = Integral(z, a, b, h, eps, 1);
@@ -2146,6 +2146,34 @@ namespace МатКлассы
                 /// </remarks>
                 /// <returns></returns>
                 public static Complex DINN_GK(ComplexFunc f, double t1, double t2, double t3, double t4, double tm, double tp = 0, double eps = 1e-4, double pr = 1e-2, double gr = 1e4, NodesCount nodesCount = NodesCount.GK15)
+                {
+                    ComplexVectorFunc ff = (Complex x, int n) => new Complex[] { f(x) };
+                    return DINN5_GK(ff, t1, t2, t3, t4, tm, tp, eps, pr, gr, 1, nodesCount)[0];
+                }
+                /// <summary>
+                /// Подсчёт несобственного комплексного интеграла от 0 до inf с учётом полюсов
+                /// </summary>
+                /// <param name="f">Функция комплексного переменного</param>
+                /// <param name="t1"></param>
+                /// <param name="t2"></param>
+                /// <param name="t3"></param>
+                /// <param name="t4"></param>
+                /// <param name="tm">Величина отклонения контура вниз</param>
+                /// <param name="tp">Величина отклонения контура вверх</param>
+                /// <param name="eps">Погрешность</param>
+                /// <param name="pr">Начальный шаг</param>
+                /// <param name="gr">Верхний предел</param>
+                /// <remarks>
+                /// ВЗЯТО С ДОКУМЕНТАЦИИ ОТ ФОРТРАНА
+                /// ! [t1,t2],[t3,t4] - участки отклонения контура вниз (real8)
+                ///!         [t2, t3] - участок отклонения контура вверх(real8)
+                ///! tm,tp > 0 - величины отклонения контура вниз и вверх(real8)
+                ///! (если нет обратной волны, то следует положить t2 = t3 = t1, tp = 0 
+                ///!  обход полюсов при этом будет только снизу на участке[t1, t4]
+                ///!  с отклонением на tm)
+                /// </remarks>
+                /// <returns></returns>
+                public static Complex DINN_GK(Func<Complex,Complex> f, double t1, double t2, double t3, double t4, double tm, double tp = 0, double eps = 1e-4, double pr = 1e-2, double gr = 1e4, NodesCount nodesCount = NodesCount.GK15)
                 {
                     ComplexVectorFunc ff = (Complex x, int n) => new Complex[] { f(x) };
                     return DINN5_GK(ff, t1, t2, t3, t4, tm, tp, eps, pr, gr, 1, nodesCount)[0];
@@ -2762,7 +2790,7 @@ Parallel.For(0, n, (int i) => {
                 /// <param name="b"></param>
                 /// <param name="n"></param>
                 /// <returns></returns>
-                public static double MySimpleGaussKronrod(RealFunc f, double a, double b, int n = 61, bool ChooseStepByCompareRes = false, int MaxDivCount = 3,bool parallel=false)
+                public static double MySimpleGaussKronrod(Func<double,double> f, double a, double b, int n = 61, bool ChooseStepByCompareRes = false, int MaxDivCount = 3,bool parallel=false)
                 {
                     return MySimpleGaussKronrod((Complex t) => f(t.Re), new Complex(a), new Complex(b), n,ChooseStepByCompareRes,MaxDivCount,parallel).Re;
                 }
@@ -2913,13 +2941,13 @@ Parallel.For(0, n, (int i) => {
                 /// <param name="b"></param>
                 /// <param name="n"></param>
                 /// <returns></returns>
-                public static double GaussKronrodSum(RealFunc f, double a, double b, int n = 61, int count = 50)
+                public static double GaussKronrodSum(Func<double,double> f, double a, double b, int n = 61, int count = 50)
                 {
                     return GaussKronrodSum((Complex t) => f(t.Re), new Complex(a), new Complex(b), n, count).Re;
                 }
             }
 
-            private delegate double FUNC(RealFunc f, double a, double b);
+            private delegate double FUNC(Func<double,double> f, double a, double b);
             /// <summary>
             /// Подсчёт определённого интеграла выбранными методом и относительно выбранного критерия
             /// </summary>
@@ -2932,7 +2960,7 @@ Parallel.For(0, n, (int i) => {
             /// <param name="eps">Точность интеграла</param>
             /// <param name="seqcount">На сколько частей разбивается отрезок</param>
             /// <returns></returns>
-            public static double DefIntegral(RealFunc f, double a, double b, DefInteg.Method M, DefInteg.Criterion C, int count = 15, double eps = 0.0001, int seqcount = 2, bool GetEPS = false, int n = 15)
+            public static double DefIntegral(Func<double,double> f, double a, double b, DefInteg.Method M, DefInteg.Criterion C, int count = 15, double eps = 0.0001, int seqcount = 2, bool GetEPS = false, int n = 15)
             {
                 //GaussKronrod.ChooseGK(GaussKronrod.NodesCount.GK15);
 
@@ -2940,10 +2968,10 @@ Parallel.For(0, n, (int i) => {
                 DefInteg.n = 20;
                 DefInteg.EPS = STEP / 200;
 
-                FUNC Met, TMP = (RealFunc q, double w, double e) => GaussKronrod.MySimpleGaussKronrod(q, w, e, n), TMP2 = (RealFunc q, double w, double e) => GaussKronrod.MySimpleGaussKronrod(q, w, e, 61);
-                FUNC Gmet = (RealFunc q, double w, double e) => { return GaussKronrod.Integral(q, w, e); };
-                FUNC GEmp = (RealFunc q, double w, double e) => { return GaussKronrod.MySimpleGaussKronrod(q, w, e,61,true); };
-                FUNC GS = (RealFunc q, double w, double e) => { return GaussKronrod.GaussKronrodSum(q, w, e, 61,2); };
+                FUNC Met, TMP = (Func<double,double> q, double w, double e) => GaussKronrod.MySimpleGaussKronrod(q, w, e, n), TMP2 = (Func<double,double> q, double w, double e) => GaussKronrod.MySimpleGaussKronrod(q, w, e, 61);
+                FUNC Gmet = (Func<double,double> q, double w, double e) => { return GaussKronrod.Integral(q, w, e); };
+                FUNC GEmp = (Func<double,double> q, double w, double e) => { return GaussKronrod.MySimpleGaussKronrod(q, w, e,61,true); };
+                FUNC GS = (Func<double,double> q, double w, double e) => { return GaussKronrod.GaussKronrodSum(q, w, e, 61,2); };
 
                 switch (M)
                 {
@@ -3085,7 +3113,7 @@ Parallel.For(0, n, (int i) => {
                         double rk = c.BaseRadius - ty * (k + 0.5) + rmin;//радиус кольца (контура посередине)
                         double lk = c.End(rk)/*2 * Math.PI * rk*/;//"длина" кольца (требуется для подсчёта числа шагов при поиске определённого интеграла)
                         Curve cc = new Curve(c.a, c.a + c.End(rk), c.U, c.V, rk);//кривая, по которой будет интегрирование
-                        RealFunc tmp = (double x) => f(cc.Transfer(x));//отображение кольца в отрезок, который отображается в действительную функцию
+                        Func<double,double> tmp = (double x) => f(cc.Transfer(x));//отображение кольца в отрезок, который отображается в действительную функцию
                         double s = DefIntegral(tmp, cc.a, cc.b, M, C, (int)Math.Floor(lk / tx));//интеграл по отрезку(кругу) с нужным числом шагов                
                         if (M != DefInteg.Method.GaussKronrod15 && M != DefInteg.Method.GaussKronrod61 && M != DefInteg.Method.GaussKronrod61fromFortran)//если метод требует разбиения отрезка интегрирования на части
                             sum += s * (S(tx, ty, rk) - S(tx, ty, rmin)) / tx;//умножение интеграла на отношение площади к шагу
@@ -3099,7 +3127,7 @@ Parallel.For(0, n, (int i) => {
                           double rk = c.BaseRadius - ty * (k + 0.5) + rmin;//радиус кольца (окружности посередине)
                           double lk = c.End(rk)/*2 * Math.PI * rk*/;//длина кольца
                           Curve cc = new Curve(c.a, c.a + c.End(rk), c.U, c.V, rk);//кривая, по которой будет интегрирование
-                          RealFunc tmp = (double x) => f(cc.Transfer(x));//отображение кольца в отрезок, который отображается в действительную функцию
+                          Func<double,double> tmp = (double x) => f(cc.Transfer(x));//отображение кольца в отрезок, который отображается в действительную функцию
                           double s = DefIntegral(tmp, cc.a, cc.b, M, C, (int)Math.Floor(lk / tx));//интеграл по отрезку(кругу) с нужным числом шагов
                           if (M != DefInteg.Method.GaussKronrod15 && M != DefInteg.Method.GaussKronrod61 && M != DefInteg.Method.GaussKronrod61fromFortran)
                               mas[k] = s * (S(tx, ty, rk) - S(tx, ty, rmin)) / tx;//умножение интеграла на отношение площади к шагу                        
@@ -3246,12 +3274,12 @@ Parallel.For(0, n, (int i) => {
                 double ty = c.BaseRadius / cy;
 
                 double[] mas = new double[countk];
-                        RealFunc curveint = (double r) => 
+                        Func<double,double> curveint = (double r) => 
                         {
                         double rk = r;//радиус кольца (окружности посередине)
                         double lk = c.End(rk);//длина кольца
                         Curve cc = new Curve(c.a, c.a + c.End(rk), c.U, c.V, rk);//кривая, по которой будет интегрирование
-                        RealFunc tmp = (double x) => f(cc.Transfer(x));//отображение кольца в отрезок, который отображается в действительную функцию
+                        Func<double,double> tmp = (double x) => f(cc.Transfer(x));//отображение кольца в отрезок, который отображается в действительную функцию
                             double s = GaussKronrod.MySimpleGaussKronrod(tmp, cc.a, cc.b, n); //DefIntegral(tmp, cc.a, cc.b, M, C, (int)Math.Floor(lk / tx));//интеграл по отрезку(кругу) с нужным числом шагов
                             return s / (cc.b - cc.a);
                         };
@@ -3272,7 +3300,7 @@ Parallel.For(0, n, (int i) => {
             /// <summary>
             /// Вариация метода Монте-Карло
             /// </summary>
-            public enum MonteKarloEnum
+            public enum MonteKarloEnum : byte
             {
                 /// <summary>
                 /// Обычный
@@ -3353,7 +3381,7 @@ Parallel.For(0, n, (int i) => {
             /// </summary>
             /// <param name="f"></param>
             /// <returns></returns>
-            public static double ImproperFirstKind(RealFunc f)
+            public static double ImproperFirstKind(Func<double,double> f)
             {
                 double t_max = 10, t_step = 1;
                 double t = 1;//длина шага в сумме интегралов; когда t большое или маленькое, интеграл считается слишком неточно - единица более-менее подходит для начального шага
@@ -3388,7 +3416,7 @@ Parallel.For(0, n, (int i) => {
             /// <param name="f"></param>
             /// <param name="a"></param>
             /// <returns></returns>
-            public static double ImproperFirstKindInf(RealFunc f, double a)
+            public static double ImproperFirstKindInf(Func<double,double> f, double a)
             {
                 double t_max = 100, t_step = 1;
                 double t = 1;//длина шага в сумме интегралов; когда t большое или маленькое, интеграл считается слишком неточно - единица более-менее подходит для начального шага
@@ -3411,7 +3439,7 @@ Parallel.For(0, n, (int i) => {
             /// <param name="f"></param>
             /// <param name="a"></param>
             /// <param name="b"></param>
-            public static void Demonstration(RealFunc f, double a, double b)
+            public static void Demonstration(Func<double,double> f, double a, double b)
             {
                 Console.WriteLine("Интеграл методом средних прямоугольников = \t" + MiddleRect(f, a, b));
                 Console.WriteLine("Интеграл методом трапеций = \t" + Trapez(f, a, b));
@@ -3633,9 +3661,9 @@ Parallel.For(0, n, (int i) => {
                 /// <returns></returns>
                 public double DInteg(Functional f, Method method, int stepcount = 100)
                 {
-                    // RealFunc integ = (double x) => DefInteg.DefIntegral((double y) => f(new Point(x, y)), InternalLimitDown(x), InternalLimitUp(x), method, Criterion.StepCount, stepcount);
+                    // Func<double,double> integ = (double x) => DefInteg.DefIntegral((double y) => f(new Point(x, y)), InternalLimitDown(x), InternalLimitUp(x), method, Criterion.StepCount, stepcount);
                     //ShowIn(0.1);
-                    RealFunc integ = (double x) => GaussKronrod.MySimpleGaussKronrod(new RealFunc( (double y) => f(new Point(x, y))), InternalLimitDown(x), InternalLimitUp(x),61,true,stepcount);
+                    Func<double,double> integ = (double x) => GaussKronrod.MySimpleGaussKronrod(new Func<double,double>( (double y) => f(new Point(x, y))), InternalLimitDown(x), InternalLimitUp(x),61,true,stepcount);
                     return DefIntegral(integ, ExternalLimitDown, ExternalLimitUp, method, Criterion.StepCount, stepcount);
                 }
                 /// <summary>
@@ -3647,21 +3675,21 @@ Parallel.For(0, n, (int i) => {
                 /// <returns></returns>
                 public double DInteg(Functional f, int stepcount = 100,bool parallel=true)
                 {
-                    RealFunc integ = (double x) =>GaussKronrod.MySimpleGaussKronrod((double y) => f(new Point(x, y)), InternalLimitDown(x), InternalLimitUp(x), 61, true, stepcount/3);
+                    Func<double,double> integ = (double x) =>GaussKronrod.MySimpleGaussKronrod((double y) => f(new Point(x, y)), InternalLimitDown(x), InternalLimitUp(x), 61, true, stepcount/3);
 
-                    //RealFunc integ = (double x) =>
+                    //Func<double,double> integ = (double x) =>
                     //{
                     //    double s = 0;
                     //    double lim1 = InternalLimitDown(x),lim2=InternalLimitUp(x);
                     //    double step = (lim2 - lim1) / (stepcount - 1);
-                    //    RealFunc ff=(double y) => f(new Point(x, y));
+                    //    Func<double,double> ff=(double y) => f(new Point(x, y));
 
                     //    for (int i = 1; i < stepcount; i++)
                     //        s+=GaussKronrod.MySimpleGaussKronrod(ff,lim1+(i-1)*step ,lim1+i*step, 61, true, 2);
                     //    return s;
                     //};
                     //var func = new Memoize<double, double>((double t) => integ(t));
-                    //RealFunc integ_ = (double t) => func.Value(t);
+                    //Func<double,double> integ_ = (double t) => func.Value(t);
 
                     double res = 0;
                     double h = (ExternalLimitUp - ExternalLimitDown) / (stepcount - 1);
@@ -3685,13 +3713,13 @@ Parallel.For(0, n, (int i) => {
         /// <param name="a">Начало отрезка</param>
         /// <param name="b">Конец отрезка</param>
         /// <returns></returns>
-        public static RealFunc Approx(RealFunc f, SequenceFunc p, SequenceFuncKind kind, int n, double a, double b, bool ultra = false)
+        public static Func<double,double> Approx(Func<double,double> f, SequenceFunc p, SequenceFuncKind kind, int n, double a, double b, bool ultra = false)
         {
             double[] c = new double[n];
-            RealFunc[] fi = new RealFunc[n];
+            Func<double,double>[] fi = new Func<double,double>[n];
             //for (int i = 0; i < n; i++)
             //{
-            //    fi[i] = new RealFunc((double x) => { return p(x, i); });
+            //    fi[i] = new Func<double,double>((double x) => { return p(x, i); });
             //    //Console.WriteLine(fi[i](3));
             //}
             if (ultra)
@@ -3704,7 +3732,7 @@ Parallel.For(0, n, (int i) => {
                     double sum = 0;
                     for (int i = 0; i < n; i++)
                     {
-                        //fi[i] = new RealFunc((double t) => { return p(t, i); });
+                        //fi[i] = new Func<double,double>((double t) => { return p(t, i); });
                         sum += T.x[i] * p(x, i);
                     }
                     return sum;
@@ -3717,7 +3745,7 @@ Parallel.For(0, n, (int i) => {
                     case SequenceFuncKind.Orthogonal:
                         for (int i = 0; i < n; i++)
                         {
-                            fi[i] = new RealFunc((double x) => { return p(x, i); });
+                            fi[i] = new Func<double,double>((double x) => { return p(x, i); });
                             c[i] = RealFuncMethods.ScalarPower(f, fi[i], a, b) / RealFuncMethods.ScalarPower(fi[i], fi[i], a, b);//Console.WriteLine(c[3]);
                         }
                         return (double x) =>
@@ -3725,7 +3753,7 @@ Parallel.For(0, n, (int i) => {
                             double sum = 0;
                             for (int i = 0; i < n; i++)
                             {
-                                //fi[i] = new RealFunc((double t) => { return p(t, i); });
+                                //fi[i] = new Func<double,double>((double t) => { return p(t, i); });
                                 sum += c[i] * p(x, i);
                             }
                             return sum;
@@ -3733,7 +3761,7 @@ Parallel.For(0, n, (int i) => {
                     case SequenceFuncKind.Orthonormal:
                         for (int i = 0; i < n; i++)
                         {
-                            fi[i] = new RealFunc((double x) => { return p(x, i); });
+                            fi[i] = new Func<double,double>((double x) => { return p(x, i); });
                             c[i] = RealFuncMethods.ScalarPower(f, fi[i], a, b) * (b - a);
                         }
                         return (double x) =>
@@ -3741,7 +3769,7 @@ Parallel.For(0, n, (int i) => {
                             double sum = 0;
                             for (int i = 0; i < n; i++)
                             {
-                                //fi[i] = new RealFunc((double t) => { return p(t, i); });
+                                //fi[i] = new Func<double,double>((double t) => { return p(t, i); });
                                 sum += c[i] * p(x, i);
                             }
                             return sum;
@@ -3778,7 +3806,7 @@ Parallel.For(0, n, (int i) => {
         /// <param name="a">Начало отрезка</param>
         /// <param name="b">Конец отрезка</param>
         /// <returns></returns>
-        public static RealFunc Approx(RealFunc f, SequencePol p, SequenceFuncKind kind, int n, double a, double b, bool ulrta = false)
+        public static Func<double,double> Approx(Func<double,double> f, SequencePol p, SequenceFuncKind kind, int n, double a, double b, bool ulrta = false)
         {
             double[] c = new double[n];
             if (ulrta)
@@ -3791,7 +3819,7 @@ Parallel.For(0, n, (int i) => {
                     double sum = 0;
                     for (int i = 0; i < n; i++)
                     {
-                        //fi[i] = new RealFunc((double t) => { return p(t, i); });
+                        //fi[i] = new Func<double,double>((double t) => { return p(t, i); });
                         sum += T.x[i] * p(i).Value(x);
                     }
                     return sum;
@@ -3812,7 +3840,7 @@ Parallel.For(0, n, (int i) => {
                             double sum = 0;
                             for (int i = 0; i < n; i++)
                             {
-                                //fi[i] = new RealFunc((double t) => { return p(t, i); });
+                                //fi[i] = new Func<double,double>((double t) => { return p(t, i); });
                                 sum += c[i] * p(i).Value(x);
                             }
                             return sum;
@@ -3827,7 +3855,7 @@ Parallel.For(0, n, (int i) => {
                             double sum = 0;
                             for (int i = 0; i < n; i++)
                             {
-                                //fi[i] = new RealFunc((double t) => { return p(t, i); });
+                                //fi[i] = new Func<double,double>((double t) => { return p(t, i); });
                                 sum += c[i] * p(i).Value(x);
                             }
                             return sum;
@@ -3846,7 +3874,7 @@ Parallel.For(0, n, (int i) => {
                             double sum = 0;
                             for (int i = 0; i < n; i++)
                             {
-                                //fi[i] = new RealFunc((double t) => { return p(t, i); });
+                                //fi[i] = new Func<double,double>((double t) => { return p(t, i); });
                                 sum += T.x[i] * p(i).Value(x);
                             }
                             return sum;
@@ -3864,17 +3892,17 @@ Parallel.For(0, n, (int i) => {
         /// <param name="kind">Характер аппроксимирующих функций (ортогональные/ортонормальные/неортогональные)</param>
         /// <param name="n">Размерность системы (по умолчанию совпадает с размерностью сеточной функции)</param>
         /// <returns></returns>
-        public static RealFunc Approx(NetFunc f, SequenceFunc p, SequenceFuncKind kind, int n = 0)
+        public static Func<double,double> Approx(NetFunc f, SequenceFunc p, SequenceFuncKind kind, int n = 0)
         {
             if (n == 0) n = f.CountKnots;
             double[] c = new double[n];
-            RealFunc[] fi = new RealFunc[n];
+            Func<double,double>[] fi = new Func<double,double>[n];
             //switch (kind)
             //{
             //    case SequenceFuncKind.Orthogonal:
             //        for (int i = 0; i < n; i++)
             //        {
-            //            fi[i] = new RealFunc((double x) => { return p(x, i); });
+            //            fi[i] = new Func<double,double>((double x) => { return p(x, i); });
             //            c[i] = NetFunc.ScalarP(f, fi[i]) / NetFunc.ScalarP(fi[i], fi[i],f.Arguments);//Console.WriteLine(c[3]);
             //        }
             //        return (double x) =>
@@ -3889,7 +3917,7 @@ Parallel.For(0, n, (int i) => {
             //    case SequenceFuncKind.Orthonormal:
             //        for (int i = 0; i < n; i++)
             //        {
-            //            fi[i] = new RealFunc((double x) => { return p(x, i); });
+            //            fi[i] = new Func<double,double>((double x) => { return p(x, i); });
             //            c[i] = NetFunc.ScalarP(f, fi[i])*f.CountKnots;
             //        }
             //        return (double x) =>
@@ -3897,7 +3925,7 @@ Parallel.For(0, n, (int i) => {
             //            double sum = 0;
             //            for (int i = 0; i < n; i++)
             //            {
-            //                //fi[i] = new RealFunc((double t) => { return p(t, i); });
+            //                //fi[i] = new Func<double,double>((double t) => { return p(t, i); });
             //                sum += c[i] * p(x, i);
             //            }
             //            return sum;
@@ -3919,7 +3947,7 @@ Parallel.For(0, n, (int i) => {
             //}
         }
 
-        public static RealFunc ApproxForLezhandr(RealFunc f, RealFunc[] masL, double a, double b)
+        public static Func<double,double> ApproxForLezhandr(Func<double,double> f, Func<double,double>[] masL, double a, double b)
         {
             int n = masL.Length;
             double[] c = new double[n];
@@ -3944,13 +3972,13 @@ Parallel.For(0, n, (int i) => {
         /// <param name="kind">Характер аппроксимирующих функций (ортогональные/ортонормальные/неортогональные)</param>
         /// <param name="n">Размерность системы (по умолчанию совпадает с размерностью сеточной функции)</param>
         /// <returns></returns>
-        public static void ShowApprox(RealFunc f, double[] c, SequenceFunc p, SequenceFuncKind kind, int n = 0)
+        public static void ShowApprox(Func<double,double> f, double[] c, SequenceFunc p, SequenceFuncKind kind, int n = 0)
         {
             NetFunc g = new NetFunc(f, c);
             Console.WriteLine("Точки сеточной функции:"); g.Show();
 
             if (n == 0) n = c.Length;
-            RealFunc ap = FuncMethods.Approx(g, p, kind, n);
+            Func<double,double> ap = FuncMethods.Approx(g, p, kind, n);
 
 
             Console.WriteLine("Размерность системы равна {0}, размерность сеточной функции равна {1}", n, c.Length);
@@ -3973,7 +4001,7 @@ Parallel.For(0, n, (int i) => {
             Console.WriteLine("Точки сеточной функции:"); g.Show();
 
             if (n == 0) n = g.CountKnots;
-            RealFunc ap = FuncMethods.Approx(g, p, kind, n);
+            Func<double,double> ap = FuncMethods.Approx(g, p, kind, n);
 
             Console.WriteLine("Размерность системы равна {0}, размерность сеточной функции равна {1}", n, g.CountKnots);
             Console.WriteLine("Аппроксимация сеточной функции полученной функцией");
@@ -3989,9 +4017,9 @@ Parallel.For(0, n, (int i) => {
         /// <param name="n"></param>
         /// <param name="a"></param>
         /// <param name="b"></param>
-        public static void ShowApprox(RealFunc f, SequenceFunc p, SequenceFuncKind kind, int n, double a, double b)
+        public static void ShowApprox(Func<double,double> f, SequenceFunc p, SequenceFuncKind kind, int n, double a, double b)
         {
-            RealFunc ap = FuncMethods.Approx(f, p, kind, n, a, b);
+            Func<double,double> ap = FuncMethods.Approx(f, p, kind, n, a, b);
 
             Console.WriteLine("Размерность системы равна {0}.", n);
             Console.WriteLine("Аппроксимация исходной функции полученной функцией");
@@ -4007,9 +4035,9 @@ Parallel.For(0, n, (int i) => {
         /// <param name="n"></param>
         /// <param name="a"></param>
         /// <param name="b"></param>
-        public static void ShowApprox(RealFunc f, SequencePol p, SequenceFuncKind kind, int n, double a, double b)
+        public static void ShowApprox(Func<double,double> f, SequencePol p, SequenceFuncKind kind, int n, double a, double b)
         {
-            RealFunc ap = FuncMethods.Approx(f, p, kind, n, a, b);
+            Func<double,double> ap = FuncMethods.Approx(f, p, kind, n, a, b);
 
             Console.WriteLine("Размерность системы равна {0}.", n);
             Console.WriteLine("Аппроксимация исходной функции полученной функцией");
@@ -4017,7 +4045,7 @@ Parallel.For(0, n, (int i) => {
             Console.WriteLine("\t(в равномерной норме) равна {0}", FuncMethods.RealFuncMethods.NormDistanceС(f, ap, a, b));
         }
 
-        public static Tuple<Vectors,Vectors> UltraVsNormal(RealFunc f, SequenceFunc s,SequenceFuncKind kind,int nn=80,double a=-1, double b = 1)
+        public static Tuple<Vectors,Vectors> UltraVsNormal(Func<double,double> f, SequenceFunc s,SequenceFuncKind kind,int nn=80,double a=-1, double b = 1)
         {
             SLAU slau = new SLAU(s, f, nn, a, b, kind);
             //slau.UltraHybrid(slau.Size);
@@ -4027,7 +4055,7 @@ Parallel.For(0, n, (int i) => {
 
             for (int i = 1; i <= slau.Size; i++)
             {
-                RealFunc g = FuncMethods.Approx(f, s, SequenceFuncKind.Other, i, a, b);
+                Func<double,double> g = FuncMethods.Approx(f, s, SequenceFuncKind.Other, i, a, b);
                 norm[i-1] = Math.Log10(FuncMethods.RealFuncMethods.NormDistance(f, g, a, b));
                 g = FuncMethods.Approx(f, s, SequenceFuncKind.Other, i, a, b,true);
                 ult[i-1] = Math.Log10(FuncMethods.RealFuncMethods.NormDistance(f, g, a, b));
@@ -4051,9 +4079,9 @@ Parallel.For(0, n, (int i) => {
             /// <param name="a"></param>
             /// <param name="b"></param>
             /// <returns></returns>
-            public static double ScalarPower(RealFunc f, RealFunc g, double a, double b)
+            public static double ScalarPower(Func<double,double> f, Func<double,double> g, double a, double b)
             {
-                RealFunc F = (double e) => { return f(e) * g(e); };
+                Func<double,double> F = (double e) => { return f(e) * g(e); };
                 //double tmp = DefInteg.Simpson(F, a, b);
                 double tmp = DefInteg.GaussKronrod.GaussKronrodSum(F, a, b,61,800);
                 if (b != a) { tmp /= Math.Abs(b - a); }
@@ -4066,7 +4094,7 @@ Parallel.For(0, n, (int i) => {
             /// <param name="a"></param>
             /// <param name="b"></param>
             /// <returns></returns>
-            public static double NormScalar(RealFunc f, double a, double b) { return Math.Sqrt(ScalarPower(f, f, a, b)); }
+            public static double NormScalar(Func<double,double> f, double a, double b) { return Math.Sqrt(ScalarPower(f, f, a, b)); }
             /// <summary>
             /// Расстояние между функциями по норме L(2)[a,b]
             /// </summary>
@@ -4075,9 +4103,9 @@ Parallel.For(0, n, (int i) => {
             /// <param name="a"></param>
             /// <param name="b"></param>
             /// <returns></returns>
-            public static double NormDistance(RealFunc f, RealFunc g, double a, double b)
+            public static double NormDistance(Func<double,double> f, Func<double,double> g, double a, double b)
             {
-                RealFunc t = (double x) => { return f(x) - g(x); };
+                Func<double,double> t = (double x) => { return f(x) - g(x); };
                 return NormScalar(t, a, b);
             }
             /// <summary>
@@ -4087,7 +4115,7 @@ Parallel.For(0, n, (int i) => {
             /// <param name="a"></param>
             /// <param name="b"></param>
             /// <returns></returns>
-            public static double NormC(RealFunc f, double a, double b)
+            public static double NormC(Func<double,double> f, double a, double b)
             {
                 double h = DefInteg.STEP;
                 double max = Math.Abs(f(a));
@@ -4103,9 +4131,9 @@ Parallel.For(0, n, (int i) => {
             /// <param name="a"></param>
             /// <param name="b"></param>
             /// <returns></returns>
-            public static double NormDistanceС(RealFunc f, RealFunc g, double a, double b)
+            public static double NormDistanceС(Func<double,double> f, Func<double,double> g, double a, double b)
             {
-                RealFunc t = (double x) => { return f(x) - g(x); };
+                Func<double,double> t = (double x) => { return f(x) - g(x); };
                 return NormC(t, a, b);
             }
         }
@@ -4237,7 +4265,7 @@ Parallel.For(0, n, (int i) => {
             /// <summary>
             /// Контроль над тем, модифицируется функция в методе или нет
             /// </summary>
-            public enum ModifyFunction
+            public enum ModifyFunction : byte
             {
                 /// <summary>
                 /// Да, модифицировать функцию
@@ -4532,7 +4560,7 @@ Parallel.For(0, n, (int i) => {
             /// <summary>
             /// Вариация метода
             /// </summary>
-            public enum Variety
+            public enum Variety : byte
             {
                 /// <summary>
                 /// Простейшая вариация метода
@@ -4684,7 +4712,7 @@ Parallel.For(0, n, (int i) => {
             /// <summary>
             /// Методы поиска минимума
             /// </summary>
-            public enum MinimumVar
+            public enum MinimumVar : byte
             {
                 /// <summary>
                 /// Метод золотого сечения
@@ -4809,7 +4837,7 @@ Parallel.For(0, n, (int i) => {
             /// <summary>
             /// Ключевая точка
             /// </summary>
-            public enum CriticalPoint
+            public enum CriticalPoint : byte
             {
                 /// <summary>
                 /// Корень
@@ -4824,7 +4852,7 @@ Parallel.For(0, n, (int i) => {
             /// <summary>
             /// Методы поиска корня
             /// </summary>
-            public enum RootSearchMethod
+            public enum RootSearchMethod : byte
             {
                 /// <summary>
                 /// Метод бисекции
@@ -5007,7 +5035,7 @@ Parallel.For(0, n, (int i) => {
         /// </summary>
         public static class IntegralTransformations
         {
-            public static ComplexFunc Furier(RealFunc f)
+            public static ComplexFunc Furier(Func<double,double> f)
             {
                 return (Complex w) =>
                 {
@@ -5015,7 +5043,7 @@ Parallel.For(0, n, (int i) => {
                     return DefInteg.GaussKronrod.IntegralInf(fe, -20, 20);
                 };
             }
-            public static RealFunc FurierRevers(ComplexFunc f, ComplexFunc delta = null, int t = 100)
+            public static Func<double,double> FurierRevers(ComplexFunc f, ComplexFunc delta = null, int t = 100)
             {
                 return (double x) =>
                 {
@@ -5024,10 +5052,10 @@ Parallel.For(0, n, (int i) => {
                 };
             }
 
-            public static void Test(RealFunc f, double arg)
+            public static void Test(Func<double,double> f, double arg)
             {
                 ComplexFunc f1 = Furier(f); //f1(arg).Abs.Show();
-                RealFunc f2 = FurierRevers(f1); f2(arg).Show();
+                Func<double,double> f2 = FurierRevers(f1); f2(arg).Show();
                 (f(arg) - f2(arg)).Show();
             }
         }

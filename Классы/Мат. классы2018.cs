@@ -9,12 +9,6 @@ namespace МатКлассы
 {
     #region Делегаты и перечисления
     /// <summary>
-    /// Действительные функции действительного аргумента
-    /// </summary>
-    /// <param name="x">Аргумент - действительное число</param>
-    /// <returns></returns>
-    public delegate double RealFunc(double x);
-    /// <summary>
     /// Комплексная функция комплексного аргумента
     /// </summary>
     /// <param name="x"></param>
@@ -135,11 +129,11 @@ namespace МатКлассы
     /// <summary>
     /// Перечисление "род": для криволинейных интегралов, полиномов Чебышёва и т.д.
     /// </summary>
-    public enum Kind { FirstKind, SecondKind };
+    public enum Kind : byte { FirstKind, SecondKind };
     /// <summary>
     /// Ортогональные функции, ортонормированные, неортогональные
     /// </summary>
-    public enum SequenceFuncKind { Orthogonal, Orthonormal, Other };
+    public enum SequenceFuncKind : byte { Orthogonal, Orthonormal, Other };
 
 #endregion
 
@@ -179,7 +173,7 @@ namespace МатКлассы
             /// <summary>
             /// Функция распределения
             /// </summary>
-            RealFunc F = null;
+            Func<double,double> F = null;
 
             //Конструкторы
 
@@ -239,7 +233,7 @@ namespace МатКлассы
             /// <summary>
             /// Функция распределения дискретной случайной величины
             /// </summary>
-            public RealFunc FDist
+            public Func<double,double> FDist
             {
                 get
                 {
@@ -371,21 +365,21 @@ namespace МатКлассы
             /// <summary>
             /// Тип распределения (нормальное, равномерное, пуассоновское, экспоненциальное и т. д.)
             /// </summary>
-            public enum BasisDistribution { Normal, Uniform, Puasson, Exp, Other };
+            public enum BasisDistribution : byte { Normal, Uniform, Puasson, Exp, Other };
 
             /// <summary>
             /// Вспомогательная функция
             /// </summary>
-            private RealFunc x = (double t) => { return t; };
+            private Func<double,double> x = (double t) => { return t; };
 
             /// <summary>
             /// Функция распределения
             /// </summary>
-            private RealFunc F = null;
+            private Func<double,double> F = null;
             /// <summary>
             /// Плотность распределения
             /// </summary>
-            private RealFunc f = null;
+            private Func<double,double> f = null;
             private BasisDistribution TypeValue = BasisDistribution.Other;
             /// <summary>
             /// Пока не известные мат. ожидание и дисперсия
@@ -398,12 +392,12 @@ namespace МатКлассы
             /// </summary>
             /// <param name="A"></param>
             /// <param name="a"></param>
-            public ConRandVal(RealFunc A, RealFunc a) { F = A; f = a; }//по обеим функциям
+            public ConRandVal(Func<double,double> A, Func<double,double> a) { F = A; f = a; }//по обеим функциям
                                                                        /// <summary>
                                                                        /// Конструктор только по плотности распределению
                                                                        /// </summary>
                                                                        /// <param name="a"></param>
-            public ConRandVal(RealFunc a) { f = a;/* F = (double t) => { return DefInteg.};*/ }//по плотности распределения
+            public ConRandVal(Func<double,double> a) { f = a;/* F = (double t) => { return DefInteg.};*/ }//по плотности распределения
                                                                                                /// <summary>
                                                                                                /// Конструктор копирования
                                                                                                /// </summary>
@@ -514,7 +508,7 @@ namespace МатКлассы
             /// <returns></returns>
             public static double MatExp(ConRandVal R)
             {
-                RealFunc xf = (double t) => { return R.x(t) * R.f(t); };
+                Func<double,double> xf = (double t) => { return R.x(t) * R.f(t); };
                 return FuncMethods.DefInteg.ImproperFirstKind(xf);
             }
             /// <summary>
