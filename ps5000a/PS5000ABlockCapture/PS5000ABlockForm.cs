@@ -278,7 +278,7 @@ namespace PS5000A
                                 string s = f0.ReadLine();
                                 while (s != null && s.Length > 0)
                                 {
-                                    double t = Convert.ToDouble(f1.ReadLine()) - Convert.ToDouble(s);
+                                    double t = Convert.ToDouble(f1.ReadLine().Replace(".",",")) - Convert.ToDouble(s.Replace(".", ","));
                                     if (max < t * t) max = t * t;
                                     s = f0.ReadLine();
                                 }
@@ -296,7 +296,7 @@ namespace PS5000A
                                 string s = f0.ReadLine();
                                 while (s != null && s.Length > 0)
                                 {
-                                    double t = Convert.ToDouble(f1.ReadLine()) - Convert.ToDouble(s);
+                                    double t = Convert.ToDouble(f1.ReadLine().Replace(".", ",")) - Convert.ToDouble(s.Replace(".", ","));
                                     res.WriteLine(t / max);
                                     s = f0.ReadLine();
                                 }
