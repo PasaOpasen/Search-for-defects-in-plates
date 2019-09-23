@@ -913,6 +913,14 @@ public static class Functions
         wavelet.Dispose();
         return new Tuple<double, double>(tmp[0], tmp[1]);
     }
+
+    /// <summary>
+    /// Возвращает параметр s (или a) для эллипса
+    /// </summary>
+    /// <param name="wt"></param>
+    /// <returns></returns>
+    public static double GetFockS(Tuple<double, double> wt) => Vg(wt.Item1) * wt.Item2;
+    
     #endregion
 }
 
