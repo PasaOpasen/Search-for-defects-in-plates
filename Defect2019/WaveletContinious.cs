@@ -98,8 +98,8 @@ namespace Работа2019
         }
         private void GetData()
         {
-            wmin = textBox1.Text.ToDouble();
-            wmax = textBox2.Text.ToDouble();
+            wmin = 1.0/textBox2.Text.ToDouble()/(2000*Math.PI);
+            wmax = 1.0 / textBox1.Text.ToDouble() / (2000 * Math.PI);
             tmin = textBox3.Text.ToDouble();
             tmax = textBox4.Text.ToDouble();
             count = numericUpDown1.Value.ToInt32();

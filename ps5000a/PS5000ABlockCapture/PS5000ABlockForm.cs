@@ -264,7 +264,7 @@ namespace PS5000A
                                 string s = f0.ReadLine();
                                 while (s != null && s.Length > 0)
                                 {
-                                    double t = Convert.ToDouble(f1.ReadLine().Replace(".",",")) - Convert.ToDouble(s.Replace(".", ","));
+                                    double t = Convert.ToDouble(f1.ReadLine().Replace('.',',')) - Convert.ToDouble(s.Replace('.', ','));
                                     if (max < t * t) max = t * t;
                                     s = f0.ReadLine();
                                 }
@@ -282,7 +282,7 @@ namespace PS5000A
                                 string s = f0.ReadLine();
                                 while (s != null && s.Length > 0)
                                 {
-                                    double t = Convert.ToDouble(f1.ReadLine().Replace(".", ",")) - Convert.ToDouble(s.Replace(".", ","));
+                                    double t = Convert.ToDouble(f1.ReadLine().Replace('.', ',')) - Convert.ToDouble(s.Replace('.', ','));
                                     res.WriteLine(t / max);
                                     s = f0.ReadLine();
                                 }
@@ -426,7 +426,7 @@ namespace PS5000A
             countAfter = Convert.ToInt32(textBox10.Text);
             countBefore = Convert.ToInt32(textBox13.Text);
             meansCount = Convert.ToInt32(textBox11.Text);
-            dt = (_timebase - 3) / 62500000.0; // 16 bit
+            dt = (_timebase - 3) / 62_500_000; // 16 bit
 
             CreateFurierTransform(w0, w1, wcount);
         }

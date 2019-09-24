@@ -259,9 +259,9 @@ namespace PS5000A
             this.label16.Font = new System.Drawing.Font("Microsoft Sans Serif", 9.75F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
             this.label16.Location = new System.Drawing.Point(282, 273);
             this.label16.Name = "label16";
-            this.label16.Size = new System.Drawing.Size(403, 16);
+            this.label16.Size = new System.Drawing.Size(388, 16);
             this.label16.TabIndex = 10;
-            this.label16.Text = "*Шаг по времени определяется как (timebase-2) /62500000 sek";
+            this.label16.Text = "*Шаг по времени определяется как (timebase-3) /62500000 с";
             // 
             // label15
             // 
