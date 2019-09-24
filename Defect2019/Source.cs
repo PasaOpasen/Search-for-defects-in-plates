@@ -134,6 +134,9 @@ public struct Source : Idup<Source>,IEquatable<Source>
         return 659946564 + EqualityComparer<Point>.Default.GetHashCode(Center);
     }
 
+    public static bool operator ==(Source s1, Source s2) => s1.Equals(s2);
+    public static bool operator !=(Source s1, Source s2) => !s1.Equals(s2);
+
     /// <summary>
     /// Характеристика массива в одной строке
     /// </summary>

@@ -685,10 +685,10 @@
         private System.Windows.Forms.ToolStripMenuItem ускоренныйПараллелизмДляUxtToolStripMenuItem;
         private System.Windows.Forms.ToolStripMenuItem даToolStripMenuItem;
         private System.Windows.Forms.ToolStripMenuItem нетToolStripMenuItem;
-        private System.Windows.Forms.CheckBox checkBox4;
         private System.Windows.Forms.OpenFileDialog openFileDialog1;
         public System.Windows.Forms.RadioButton radioButton9;
         public System.Windows.Forms.RadioButton radioButton8;
         public System.Windows.Forms.RadioButton radioButton7;
+        public System.Windows.Forms.CheckBox checkBox4;
     }
 }

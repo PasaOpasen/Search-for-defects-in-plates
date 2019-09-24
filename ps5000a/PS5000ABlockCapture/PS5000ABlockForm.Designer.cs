@@ -1112,9 +1112,9 @@ namespace PS5000A
             this.button4.BackColor = System.Drawing.Color.FromArgb(((int)(((byte)(192)))), ((int)(((byte)(255)))), ((int)(((byte)(255)))));
             this.button4.FlatStyle = System.Windows.Forms.FlatStyle.Popup;
             this.button4.Font = new System.Drawing.Font("Microsoft Sans Serif", 14.25F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(204)));
-            this.button4.Location = new System.Drawing.Point(541, 53);
+            this.button4.Location = new System.Drawing.Point(541, 33);
             this.button4.Name = "button4";
-            this.button4.Size = new System.Drawing.Size(147, 56);
+            this.button4.Size = new System.Drawing.Size(147, 91);
             this.button4.TabIndex = 5;
             this.button4.Text = "Создать разницу замеров";
             this.button4.UseVisualStyleBackColor = false;

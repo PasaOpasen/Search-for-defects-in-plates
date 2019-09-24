@@ -8,6 +8,7 @@ using System.Text;
 using System.Threading.Tasks;
 using System.Windows.Forms;
 using МатКлассы;
+using System.IO;
 
 namespace Работа2019
 {
@@ -97,6 +98,8 @@ namespace Работа2019
 
         private async void button1_Click(object sender, EventArgs e)
         {
+            OtherMethods.IlushaMethod(checkBox4);
+
             string[] names = new string[sources.Length];
             for (int i = 0; i < names.Length; i++)
                 names[i] = $"Array{dataGridView1[1, i].Value}.txt";
@@ -105,16 +108,29 @@ namespace Работа2019
 
             GetData();
             int all = count * count;
-            IProgress<int> progress = new Progress<int>((int val) => 
+            IProgress<int> progress = new Progress<int>((int val) =>
             {
                 var d = Expendator.GetProcent(val, all, 2);
                 toolStripLabel2.Text = $"{d}%";
-                toolStripProgressBar1.Value =(int)( d / 100 * toolStripProgressBar1.Maximum);
+                toolStripProgressBar1.Value = (int)(d / 100 * toolStripProgressBar1.Maximum);
             });
 
+            string[] wheredata = Expendator.GetStringArrayFromFile("WhereData.txt").Select(s => Path.Combine(s, "Разница")).ToArray();
+
+            for (int i = 0; i < sources.Length; i++)
+            {
+                var itSource = sources[i];
+                var otherSources = sources.Where(s => s != itSource).ToArray();
+                var othernames = names.Where(n => n != names[i]).ToArray();
+
+                for (int k = 0; k < otherSources.Length; k++)
+                {
+                    toolStripLabel1.Text = $"Замер {i + 1}, источник {k + 1}";
+                   // await Task.Run(() => System.Threading.Thread.Sleep(2000));
+                }
 
 
-
+            }
 
 
 

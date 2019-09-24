@@ -580,7 +580,7 @@ namespace Defect2019
             //    );
 
             Task tt = Task.Run(() => OtherMethods.Saveuxw3(xmin, xmax, count, ymin, ymax, sourcesArray));
-            IlushaMethod();
+            OtherMethods.IlushaMethod(checkBox4);
             //Task.WaitAll(tt);
             await tt;
 
@@ -602,22 +602,6 @@ namespace Defect2019
         /// Записать f(w) от всех источников в файлы
         /// </summary>
         public void FilesFromSources(Source[] sources) => Source.FilesFromSources(sources, "WhereData.txt");
-
-        /// <summary>
-        /// Вызвать форму Илуши
-        /// </summary>
-        public void IlushaMethod()
-        {
-            if (checkBox4.Checked)
-            {
-                var form = new PS5000A.PS5000ABlockForm(РабКонсоль.wbeg, РабКонсоль.wend, РабКонсоль.wcount);
-                form.ShowDialog();
-            }
-
-            OtherMethods.CorrectWhereDataFile();
-
-            OtherMethods.CopyFilesR();
-        }
 
         /// <summary>
         /// Задание пределов по осям
