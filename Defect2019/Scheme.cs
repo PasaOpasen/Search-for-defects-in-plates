@@ -19,15 +19,14 @@ namespace Работа2019
         /// Высота окна
         /// </summary>
         private double Y;
-        private double dwx, dwy;
         private Point center;
-        private int pcount = 100;
         private Source[] mas;
         private float rad;
 
         public Scheme()
         {
             InitializeComponent();
+            saveFileDialog1.Filter = "Image files(*.png)|*.png|All files(*.*)|*.*";
         }
 
         public Scheme(Source[] mass) : this()
@@ -36,6 +35,16 @@ namespace Работа2019
             CreateEmptyImageAndSetParams();
 
             DrawFigures();
+        }
+
+        public Scheme(Source[] mass,EllipseParam[] param) : this(mass)
+        {
+            foreach(var p in param)
+            {
+                var pens= new Pen(p.Color, 3);
+
+                g.DrawCurve(pens, EllipseToFpoint(p));
+            }
         }
 
         public Scheme(Source[] mass, Point beg, double lenx, double leny, string filename) : this(mass)
@@ -73,7 +82,7 @@ namespace Работа2019
             Y *= WindowCoef;
             
             int c = 1000;
-            pictureBox1.BackgroundImage = new Bitmap((int)(xy * c),c );
+            pictureBox1.BackgroundImage = new Bitmap((int)(xy * c),c);
             this.Size = new Size((int)(this.Size.Height * xy), this.Size.Height);
 
             g = Graphics.FromImage(pictureBox1.BackgroundImage);
@@ -122,6 +131,13 @@ namespace Работа2019
             return ps;
         }
 
+        private void сохранитьToolStripMenuItem_Click(object sender, System.EventArgs e)
+        {
+            if (saveFileDialog1.ShowDialog() == DialogResult.Cancel)
+                return;
+            pictureBox1.BackgroundImage.Save(saveFileDialog1.FileName);
+        }
+
         /// <summary>
         /// Преобразовать источник в массив точек (для рисования)
         /// </summary>
@@ -130,6 +146,23 @@ namespace Работа2019
         private PointF[] SourceToFpoint(Source ss)
         {
             var s = ss.NormsPositionArray;
+          return  PointArrayToPointF(s);
+        }
+
+        /// <summary>
+        /// Преобразовать EllipseParam в массив точек для рисования
+        /// </summary>
+        /// <param name="ss"></param>
+        /// <returns></returns>
+        private PointF[] EllipseToFpoint(EllipseParam el)
+        {
+            var s = el.GetPointArray(45);
+
+            return PointArrayToPointF(s);
+        }
+
+        private PointF[] PointArrayToPointF(Point[] s)
+        {
             PointF[] mas = new PointF[s.Length + 1];
             for (int i = 0; i < s.Length; i++)
             {

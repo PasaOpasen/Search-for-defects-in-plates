@@ -12,17 +12,40 @@ namespace Работа2019
     /// </summary>
     public struct EllipseParam
     {
-        private Point foc1, foc2;
-        double L, a, b;
-        System.Drawing.Color Color;
-        public EllipseParam(Point p1,Point p2, double s, System.Drawing.Color color)
+        internal Point focSource, focSensor;
+        internal readonly Point xM;
+        internal double L, a, b, tau;
+        public System.Drawing.Color Color;
+        public EllipseParam(Point SourceCenter, Point SensorCenter, double s, System.Drawing.Color color)
         {
-            L = Point.Eudistance(p1, p2);
-            foc1 = p1;
-            foc2 = p2;
+            L = Point.Eudistance(SourceCenter, SensorCenter);
+            if (s < L)
+                throw new ArgumentException($"s < L !!! ({s} < {L})");
+
+            focSource = SourceCenter;
+            focSensor = SensorCenter;
             a = s / 2;
             b = Math.Sqrt(a * a - (L / 2).Sqr());
             Color = color;
+
+            xM = new Point((focSensor.x + focSource.x) / 2, (focSensor.y + focSource.y) / 2);
+
+            tau = Math.Atan((focSensor.y - focSource.y) / (focSensor.x - focSource.x));
+            if (focSensor.x < focSource.x)
+                tau += Math.PI;
+        }
+
+        public Point[] GetPointArray(int count)
+        {
+            double cost = Math.Cos(tau), sint = Math.Sin(tau);
+            var angles = Expendator.Seq(0, 2 * Math.PI, count, false);
+            Point[] res = new Point[count];
+            for (int i = 0; i < angles.Length; i++)
+            {
+                double sinf = Math.Sin(angles[i]), cosf = Math.Cos(angles[i]);
+                res[i] = new Point(xM.x + a * cost * cosf - b * sint * sinf, xM.y + a * sint * cosf + b * cost * sinf);
+            }
+            return res;
         }
     }
 }

@@ -45,7 +45,7 @@ namespace Работа2019
         }
         private void SetDefaltProgressBar()
         {
-                        toolStripLabel2.Text = "";
+            toolStripLabel2.Text = "";
             toolStripProgressBar1.Value = 0;
         }
         private void SetDataGrid()
@@ -119,7 +119,7 @@ namespace Работа2019
 
             GetData();
             all = count * count;
-            IProgress<int> progress = new Progress<int>((int val) => save=val);
+            IProgress<int> progress = new Progress<int>((int val) => save = val);
 
             string[] wheredata = Expendator.GetStringArrayFromFile("WhereData.txt").Select(s => Path.Combine(s, "Разница")).ToArray();
 
@@ -138,14 +138,14 @@ namespace Работа2019
                         tmin, step, pcount, othernames[k], Wavelet.Wavelets.LP, wheredata[i]);
 
                     var s = Functions.GetFockS(tuple);
-                    param.Add(new EllipseParam(itSource.Center, otherSources[k].Center, s, Библиотека_графики.Other.colors[i]));
+                    param.Add(new EllipseParam(otherSources[k].Center, itSource.Center, s, Библиотека_графики.Other.colors[i]));
                 }
                 SetDefaltProgressBar();
                 timer1.Stop();
                 OtherMethods.PlaySound("ЗамерОбработан");
             }
 
-            
+
             OtherMethods.PlaySound("СоздаемЭллипсы");
             MakeEllipses(param);
             SetDefaultStrip();
@@ -153,7 +153,7 @@ namespace Работа2019
 
         private void MakeEllipses(List<EllipseParam> param)
         {
-
+            new Scheme(sources, param.ToArray()).Show();
         }
     }
 }

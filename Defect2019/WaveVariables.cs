@@ -874,7 +874,7 @@ public static class Functions
 
 
     #region Функции для вейвлета
-    private static readonly double leteps = 2e-3, let2eps = 2 * leteps * 1000*100;//из км/с перевел в мм/с
+    private static readonly double leteps = 2e-3, let2eps = 2 * leteps * 1000*1000;//из км/с перевел в мм/с
     public static readonly Func<double, double> Vg = (double w) => let2eps / (PolesMas(w + leteps)[2] - PolesMas(w - leteps)[2]);
 
     /// <summary>
