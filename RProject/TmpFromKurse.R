@@ -191,10 +191,53 @@ outliers.rm <- function(x) {
 
 
 
+corr.calc <- function(x) {
+    t = cor.test(x = x[[1]], y = x[[2]])
+    return(c(t$estimate, t$p.value))
+
+}
+
+corr.calc(iris[, 1:2])
+
+
+
+filtered.cor <- function(x) {
+    df = x[, sapply(x, is.numeric)]
+    mat=cor(df)
+    diag(mat) <- 0
+
+    mx = max(abs(mat))
+    if (length(which(as.array( mat) %in% mx)) > 0) {
+        return(mx)
+    }
+    return(-mx)
+}
+
+v = c(1, 2, 3, 4)
+which(v %in% 8)
+
+
+test_data <- as.data.frame(list(V3 = c(-0.4, 1.7, 0, -1, 0.5, -0.1, 0.4, 0.4), V2 = c(-0.4, 1.7, 0, -1, 0.5, -0.1, 0.4, 0.4), V1 = c(-0.5, 1.4, -0.1, 0.1, -0.3, -1, 0.5, 1.6), V5 = c("t", "t", "t", "t", "t", "t", "t", "t"), V4 = c("k", "k", "k", "k", "k", "k", "k", "k")))
+str(test_data)
+
+filtered.cor(test_data)
 
 
 
 
+smart_cor <- function(x) {
+    p1 = shapiro.test(x[[1]])$p.value
+    p2 = shapiro.test(x[[2]])$p.value
+    print(c(p1,p2))
+    if (p1 < 0.05 | p2 < 0.05) {
+        s = "spearman"
+    } else {
+        s="pearson"
+    }
+    return(cor.test(x = x[[1]], y = x[[2]],method=s)$estimate)
+}
 
+test_data <- as.data.frame(list(col1 = c(0.06, 0.68, 1.15, 1.17, -1.66, -0.13, 0.06, 0.24, 1.49, 0.21, 1.51, 1.96, 0.61, -0.81, 0.89, -0.91, -0.88, -0.61, -1.4, 1.4, 1.66, 0.65, -1.18, -0.21, 1.69, 0.73, -1.22, 1.83, -0.57, 1.44), col2 = c(-0.59, -0.65, -0.74, 1.39, 0.91, -1.42, 0.31, -1.71, -0.21, -0.43, -1.68, 0.13, -0.75, 0.37, -0.04, -0.03, -2.01, 0.11, 0.08, -1.29, -1.08, -0.67, 0.72, 1.23, -1.81, 1.65, -0.14, -1.66, 0.05, -0.67)))
 
+smart_cor(test_data)
 
