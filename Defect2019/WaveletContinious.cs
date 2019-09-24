@@ -41,7 +41,11 @@ namespace Работа2019
         private void SetDefaultStrip()
         {
             toolStripLabel1.Text = "Готов";
-            toolStripLabel2.Text = "";
+            SetDefaltProgressBar();
+        }
+        private void SetDefaltProgressBar()
+        {
+                        toolStripLabel2.Text = "";
             toolStripProgressBar1.Value = 0;
         }
         private void SetDataGrid()
@@ -135,8 +139,8 @@ namespace Работа2019
 
                     var s = Functions.GetFockS(tuple);
                     param.Add(new EllipseParam(itSource.Center, otherSources[k].Center, s, Библиотека_графики.Other.colors[i]));
-
                 }
+                SetDefaltProgressBar();
                 timer1.Stop();
                 OtherMethods.PlaySound("ЗамерОбработан");
             }

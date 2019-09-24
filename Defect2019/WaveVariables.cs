@@ -874,7 +874,7 @@ public static class Functions
 
 
     #region Функции для вейвлета
-    private static readonly double leteps = 2e-3, let2eps = 2 * leteps * 1000;
+    private static readonly double leteps = 2e-3, let2eps = 2 * leteps * 1000*100;//из км/с перевел в мм/с
     public static readonly Func<double, double> Vg = (double w) => let2eps / (PolesMas(w + leteps)[2] - PolesMas(w - leteps)[2]);
 
     /// <summary>
@@ -909,7 +909,7 @@ public static class Functions
             title: $"Wavelet-surface for {name}", xlab: "omega", ylab: "time",
             graficType: Create3DGrafics.GraficType.Pdf);
 
-        var tmp = Expendator.GetStringArrayFromFile(Path.Combine(path, name + "(MaxCoordinate).txt"))[2].ToDoubleMas();
+        var tmp = Expendator.GetStringArrayFromFile(/*Path.Combine(path,*/ name + "(MaxCoordinate).txt")/*)*/[1].Replace('.',',').ToDoubleMas();
 
         wavelet.Dispose();
         return new Tuple<double, double>(tmp[0], tmp[1]);
