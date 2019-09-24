@@ -187,12 +187,16 @@ namespace МатКлассы
             }
         }
 
+        /// <summary>
+        /// Последний элемент вектора
+        /// </summary>
+        public double LastElement => vector.Last();
 
-        //Конструктор
+        #region Конструкторы
         /// <summary>
         /// Вектор (0)
         /// </summary>
-        public Vectors()//по умолчанию
+        public Vectors()
         {
             this.n = 0;
             this.vector = new double[n];
@@ -201,7 +205,7 @@ namespace МатКлассы
         /// Нулевой вектор
         /// </summary>
         /// <param name="n">Размерность вектора</param>
-        public Vectors(int n)//по размерности
+        public Vectors(int n)
         {
             this.n = n;
             this.vector = new double[n];
@@ -219,7 +223,7 @@ namespace МатКлассы
         /// Считать вектор из файла
         /// </summary>
         /// <param name="fs"></param>
-        public Vectors(StreamReader fs)//через файл
+        public Vectors(StreamReader fs)
         {
             string s = fs.ReadLine();
             string[] st = s.Split(' ');
@@ -232,7 +236,7 @@ namespace МатКлассы
         /// Конструктор копирования
         /// </summary>
         /// <param name="V"></param>
-        public Vectors(Vectors V)//копирования
+        public Vectors(Vectors V)
         {
             this.n = V.n;
             this.vector = new double[V.n];
@@ -280,7 +284,6 @@ namespace МатКлассы
             this.vector = new double[n];
             for (int i = 0; i < n; i++) this[i] = v[a + i];
         }
-
         /// <summary>
         /// Метод, обратный ToString
         /// </summary>
@@ -293,6 +296,8 @@ namespace МатКлассы
             for (int i = 0; i < n; i++)
                 vector[i] = st[i].ToDouble();
         }
+        #endregion
+
 
         public Vectors dup => new Vectors(this);
 
