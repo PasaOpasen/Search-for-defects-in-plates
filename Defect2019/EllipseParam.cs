@@ -47,5 +47,16 @@ namespace Работа2019
             }
             return res;
         }
+        public override string ToString()
+        {
+            return $"source = {focSource} sensor = {focSensor} s = {2*a} color = {Color}";
+        }
+
+        /// <summary>
+        /// Записать коллекцию параметров в файл
+        /// </summary>
+        /// <param name="filename"></param>
+        /// <param name="list"></param>
+        public static void WriteInFile(string filename, IEnumerable<EllipseParam> list) => Expendator.WriteInFile(filename, list.Select(l => l.ToString()).ToArray());
     }
 }

@@ -153,6 +153,7 @@ namespace Работа2019
 
         private void MakeEllipses(List<EllipseParam> param)
         {
+            EllipseParam.WriteInFile("Ellipses.txt", param);
             new Scheme(sources, param.ToArray()).Show();
         }
     }
