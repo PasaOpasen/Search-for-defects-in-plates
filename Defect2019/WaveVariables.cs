@@ -894,6 +894,7 @@ public static class Functions
     /// <returns></returns>
     public static async Task<Tuple<double, double>> GetMaximunFromArea(
     double xmin, double xmax, double ymin, double ymax, int count,
+    IProgress<int> progress, System.Threading.CancellationToken token,
     double begin, double step, int valuescount, string filename,
     Wavelets wavelets = Wavelets.LP, string path = null)
     {
@@ -904,7 +905,7 @@ public static class Functions
 
         string name = filename.Replace(".txt", "");
         await Библиотека_графики.Create3DGrafics.JustGetGraficInFiles(name, F, xmin, xmax, ymin, ymax, count,
-            new Progress<int>(), new System.Threading.CancellationToken(),
+            progress, token,
             title: $"Wavelet-surface for {name}", xlab: "omega", ylab: "time",
             graficType: Create3DGrafics.GraficType.Pdf);
 

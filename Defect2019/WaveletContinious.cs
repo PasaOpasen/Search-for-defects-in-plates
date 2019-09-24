@@ -27,10 +27,15 @@ namespace Работа2019
             InitializeComponent();
             sources = array;
 
-
             SetDefaultStrip();
             SetDataGrid();
 
+            timer1.Tick += (o, e) =>
+            {
+                var d = Expendator.GetProcent(save, all, 2);
+                toolStripLabel2.Text = $"{d}%";
+                toolStripProgressBar1.Value = (int)(d / 100 * toolStripProgressBar1.Maximum);
+            };
         }
 
         private void SetDefaultStrip()
@@ -96,6 +101,8 @@ namespace Работа2019
             count = numericUpDown1.Value.ToInt32();
         }
 
+
+        int save = 0, all = 1;
         private async void button1_Click(object sender, EventArgs e)
         {
             OtherMethods.IlushaMethod(checkBox4);
@@ -107,13 +114,8 @@ namespace Работа2019
             List<EllipseParam> param = new List<EllipseParam>();
 
             GetData();
-            int all = count * count;
-            IProgress<int> progress = new Progress<int>((int val) =>
-            {
-                var d = Expendator.GetProcent(val, all, 2);
-                toolStripLabel2.Text = $"{d}%";
-                toolStripProgressBar1.Value = (int)(d / 100 * toolStripProgressBar1.Maximum);
-            });
+            all = count * count;
+            IProgress<int> progress = new Progress<int>((int val) => save=val);
 
             string[] wheredata = Expendator.GetStringArrayFromFile("WhereData.txt").Select(s => Path.Combine(s, "Разница")).ToArray();
 
@@ -123,19 +125,31 @@ namespace Работа2019
                 var otherSources = sources.Where(s => s != itSource).ToArray();
                 var othernames = names.Where(n => n != names[i]).ToArray();
 
+                timer1.Start();
                 for (int k = 0; k < otherSources.Length; k++)
                 {
                     toolStripLabel1.Text = $"Замер {i + 1}, источник {k + 1}";
-                   // await Task.Run(() => System.Threading.Thread.Sleep(2000));
+                    //await Task.Run(() => System.Threading.Thread.Sleep(1000));
+                    var tuple = await Functions.GetMaximunFromArea(wmin, wmax, tmin, tmax, count, progress, new System.Threading.CancellationToken(),
+                        tmin, step, pcount, othernames[k], Wavelet.Wavelets.LP, wheredata[i]);
+
+                    var s = Functions.GetFockS(tuple);
+                    param.Add(new EllipseParam(itSource.Center, otherSources[k].Center, s, Библиотека_графики.Other.colors[i]));
+
                 }
-
-
+                timer1.Stop();
+                OtherMethods.PlaySound("ЗамерОбработан");
             }
 
-
-
-
+            
+            OtherMethods.PlaySound("СоздаемЭллипсы");
+            MakeEllipses(param);
             SetDefaultStrip();
+        }
+
+        private void MakeEllipses(List<EllipseParam> param)
+        {
+
         }
     }
 }

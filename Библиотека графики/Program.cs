@@ -211,7 +211,7 @@ namespace Библиотека_графики
                 }
             }
         }
-        public static Color[] colors = new Color[] { Color.Blue, Color.Green, Color.Red, Color.Black };
+        public static Color[] colors = new Color[] { Color.Blue, Color.Red, Color.Green, Color.Yellow, Color.Black, Color.Chocolate, Color.HotPink , Color.Aqua,Color.Gold};
 
         private static Bitmap getControlScreenshot(Control c)
         {

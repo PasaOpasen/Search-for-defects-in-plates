@@ -28,6 +28,7 @@
         /// </summary>
         private void InitializeComponent()
         {
+            this.components = new System.ComponentModel.Container();
             System.Windows.Forms.DataGridViewCellStyle dataGridViewCellStyle3 = new System.Windows.Forms.DataGridViewCellStyle();
             this.dataGridView1 = new System.Windows.Forms.DataGridView();
             this.groupBox1 = new System.Windows.Forms.GroupBox();
@@ -45,6 +46,7 @@
             this.toolStripLabel2 = new System.Windows.Forms.ToolStripLabel();
             this.button1 = new System.Windows.Forms.Button();
             this.checkBox4 = new System.Windows.Forms.CheckBox();
+            this.timer1 = new System.Windows.Forms.Timer(this.components);
             ((System.ComponentModel.ISupportInitialize)(this.dataGridView1)).BeginInit();
             this.groupBox1.SuspendLayout();
             ((System.ComponentModel.ISupportInitialize)(this.numericUpDown1)).BeginInit();
@@ -64,7 +66,7 @@
             this.dataGridView1.DefaultCellStyle = dataGridViewCellStyle3;
             this.dataGridView1.Location = new System.Drawing.Point(12, 37);
             this.dataGridView1.Name = "dataGridView1";
-            this.dataGridView1.Size = new System.Drawing.Size(694, 216);
+            this.dataGridView1.Size = new System.Drawing.Size(595, 216);
             this.dataGridView1.TabIndex = 0;
             // 
             // groupBox1
@@ -188,7 +190,7 @@
             this.toolStripLabel2});
             this.toolStrip1.Location = new System.Drawing.Point(0, 0);
             this.toolStrip1.Name = "toolStrip1";
-            this.toolStrip1.Size = new System.Drawing.Size(718, 25);
+            this.toolStrip1.Size = new System.Drawing.Size(622, 25);
             this.toolStrip1.TabIndex = 2;
             this.toolStrip1.Text = "toolStrip1";
             // 
@@ -202,6 +204,7 @@
             // 
             this.toolStripProgressBar1.Name = "toolStripProgressBar1";
             this.toolStripProgressBar1.Size = new System.Drawing.Size(100, 22);
+            this.toolStripProgressBar1.Style = System.Windows.Forms.ProgressBarStyle.Continuous;
             // 
             // toolStripLabel2
             // 
@@ -214,7 +217,7 @@
             this.button1.BackColor = System.Drawing.Color.FromArgb(((int)(((byte)(255)))), ((int)(((byte)(128)))), ((int)(((byte)(0)))));
             this.button1.FlatStyle = System.Windows.Forms.FlatStyle.Popup;
             this.button1.Font = new System.Drawing.Font("Consolas", 20.25F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(204)));
-            this.button1.Location = new System.Drawing.Point(441, 336);
+            this.button1.Location = new System.Drawing.Point(393, 337);
             this.button1.Name = "button1";
             this.button1.Size = new System.Drawing.Size(175, 125);
             this.button1.TabIndex = 3;
@@ -232,12 +235,16 @@
             this.checkBox4.Text = "Сперва производить замеры";
             this.checkBox4.UseVisualStyleBackColor = true;
             // 
+            // timer1
+            // 
+            this.timer1.Interval = 400;
+            // 
             // WaveletContinious
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(9F, 19F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
             this.BackColor = System.Drawing.Color.FromArgb(((int)(((byte)(255)))), ((int)(((byte)(224)))), ((int)(((byte)(192)))));
-            this.ClientSize = new System.Drawing.Size(718, 474);
+            this.ClientSize = new System.Drawing.Size(622, 474);
             this.Controls.Add(this.checkBox4);
             this.Controls.Add(this.button1);
             this.Controls.Add(this.toolStrip1);
@@ -278,5 +285,6 @@
         private System.Windows.Forms.ToolStripLabel toolStripLabel2;
         private System.Windows.Forms.Button button1;
         public System.Windows.Forms.CheckBox checkBox4;
+        private System.Windows.Forms.Timer timer1;
     }
 }
