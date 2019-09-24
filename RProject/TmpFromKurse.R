@@ -241,3 +241,122 @@ test_data <- as.data.frame(list(col1 = c(0.06, 0.68, 1.15, 1.17, -1.66, -0.13, 0
 
 smart_cor(test_data)
 
+
+
+
+df = read.table("dataset_11508_12.txt", dec = ".")
+df = data.frame(df)
+t = lm(df[[1]]~ df[[2]])
+summary(t)
+
+
+library(ggplot2)
+df = subset(diamonds, cut == "Ideal" & carat == 0.46)
+fit_coef = lm(price ~ depth, df)$coefficients
+
+
+
+regr.calc <- function(x) {
+    p = cor.test(x[[1]], x[[2]])$p.value
+    if (p >= 0.05) {
+        return("There is no sense in prediction")
+    }
+
+    t = lm(x[[1]] ~ x[[2]])
+    fit = t$fitted.values
+    x$fit = fit
+    return(x)
+}
+
+
+library(ggplot2)
+my_plot = ggplot(iris, aes(x = Sepal.Width, y = Petal.Width, col = Species)) +
+    geom_smooth(method = "lm") +
+    geom_point()
+my_plot
+
+
+
+library(ggplot2)
+ggplot(mtcars, aes(mpg, disp, col = factor(am)))+
+  geom_point()+
+  geom_smooth()
+
+ggplot(mtcars, aes(mpg, disp)) +
+    geom_point(aes(col = factor(am))) +
+    geom_smooth()
+
+ggplot(mtcars, aes(mpg, disp)) +
+    geom_point() +
+    geom_smooth(aes(col = factor(am)))
+
+
+
+
+fill_na <- function(x) {
+    t = lm(y ~ x_1 + x_2, x,na.action = na.omit)
+    y_full = ifelse(is.na(x$y), predict(t,x), x$y)
+    x$y_full = y_full
+    return(x)
+}
+
+test_data <- read.csv(url('https://stepic.org/media/attachments/course/129/fill_na_test.csv'))
+fill_na(test_data)
+
+
+
+
+df = data.frame(mtcars$wt, mtcars$mpg, mtcars$disp, mtcars$drat, mtcars$hp)
+colnames(df)=c("wt", "mpg", "disp", "drat", "hp")
+df
+
+model = lm(wt ~ disp+mpg+hp, df)
+summary(model)
+
+
+
+summary(lm(rating ~ complaints*critical, attitude))
+
+
+
+mtcars$am <- factor(mtcars$am, labels = c('Automatic', 'Manual'))
+summary(lm(mpg ~ wt * am, mtcars))
+
+
+library(ggplot2)
+# сначала переведем переменную am в фактор
+mtcars$am <- factor(mtcars$am)
+# теперь строим график
+my_plot <- ggplot(mtcars, aes(wt, mpg, col = factor(am))) +
+    geom_smooth(method="lm")
+my_plot
+
+
+
+model_full <- lm(rating ~ ., data = attitude)
+model_null <- lm(rating ~ 1, data = attitude)
+scope = list(lower = model_null, upper = model_full)
+ideal_model <-step(model_null,scope = scope,direction = "forward")
+summary( ideal_model)
+
+anova(model_full,ideal_model)
+
+
+str(LifeCycleSavings)
+model <- lm(sr ~ (.)^2, LifeCycleSavings)# . значит сумму по всем переменным, квадрат делает ещё и взаимодействия до второго уровня
+summary(model)
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
