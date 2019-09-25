@@ -18,17 +18,18 @@ namespace Библиотека_графики
 
         private static async Task GetDataToFile(string shortname, Func<double, double, double> F, double[] x, double[] y, IProgress<int> progress, System.Threading.CancellationToken token, string title = "", string xlab = "x", string ylab = "y", string zlab = "z", bool parallel = true)
         {
-            int len = x.Length;
-            int[] k = new int[len * len];
-            double[,] ur = new double[len, len];
+            int lenx = x.Length;
+            int leny = y.Length;
+            int[] k = new int[lenx * leny];
+            double[,] ur = new double[lenx, leny];
 
             void InnerLoop(int i)
             {
-                for (int j = 0; j < len; j++)
+                for (int j = 0; j < leny; j++)
                 {
                     if (token.IsCancellationRequested) return;
                     ur[i, j] = F(x[i], y[j]);
-                    k[i * len + j] = 1;
+                    k[i * leny + j] = 1;
                 }
                 progress.Report(k.Sum());
             }
@@ -37,12 +38,12 @@ namespace Библиотека_графики
             {
                 //нахождение массивов
                 if (parallel)
-                    Parallel.For(0, len, (int i) =>
+                    Parallel.For(0, lenx, (int i) =>
                     {
                         InnerLoop(i);
                     });
                 else
-                    for (int i = 0; i < len; i++)
+                    for (int i = 0; i < lenx; i++)
                     {
                         InnerLoop(i);
                     }
@@ -64,31 +65,51 @@ namespace Библиотека_графики
                 xlab,ylab,zlab
             });
 
-            //запись в файлы            
-            using (StreamWriter xs = new StreamWriter(filenames[0]))
-            {
 
-                xs.WriteLine("x y");
-                for (int i = 0; i < len; i++)
-                    xs.WriteLine($"{x[i]} {y[i]}");
+            if (lenx == leny)
+            {
+                using (StreamWriter xs = new StreamWriter(filenames[0]))
+                {
+                    xs.WriteLine("x y");
+                    for (int i = 0; i < lenx; i++)
+                        xs.WriteLine($"{x[i]} {y[i]}");
+                }
+
+                using (StreamWriter ts = new StreamWriter(filenames[1]))
+                {
+                    ts.WriteLine("vals");
+                    for (int i = 0; i < lenx; i++)
+                        for (int j = 0; j < lenx; j++)
+                            if (Double.IsNaN(ur[i, j]))
+                                ts.WriteLine("NA");
+                            else
+                                ts.WriteLine($"{ur[i, j]}");
+                }
             }
-
-            using (StreamWriter ts = new StreamWriter(filenames[1]))
+            else
             {
-                ts.WriteLine("vals");
-                for (int i = 0; i < len; i++)
-                    for (int j = 0; j < len; j++)
-                        if (Double.IsNaN(ur[i, j]))
-                            ts.WriteLine("NA");
-                        else
-                            ts.WriteLine($"{ur[i, j]}");
+                double max = 0, a = 0, b = 0;
+                for(int i=0;i<lenx;i++)
+                    for(int j=0;j<leny;j++)
+                        if (ur[i, j] > max)
+                        {
+                            max = ur[i, j];
+                            a = x[i];
+                            b = y[j];
+                        }
+                Expendator.WriteInFile(shortname + "(MaxCoordinate).txt", new string[] 
+                {
+                    "a b",
+                    $"{a.ToRString()} {b.ToRString()}".Replace(',','.'),
+                    $"maximum is {max}".Replace(',','.')
+                });
             }
         }
 
-        private static async Task GetDataToFile(string shortname, Func<double, double, double> F, double xmin, double xmax, double ymin, double ymax, int count, IProgress<int> progress, System.Threading.CancellationToken token, string title = "", string xlab = "x", string ylab = "y", string zlab = "z", bool parallel = true)
+        private static async Task GetDataToFile(string shortname, Func<double, double, double> F, double xmin, double xmax, double ymin, double ymax, int acount, int bcount, IProgress<int> progress, System.Threading.CancellationToken token, string title = "", string xlab = "x", string ylab = "y", string zlab = "z", bool parallel = true)
         {
-            var x = Expendator.Seq(xmin, xmax, count);
-            var y = Expendator.Seq(ymin, ymax, count);
+            var x = Expendator.Seq(xmin, xmax, acount);
+            var y = Expendator.Seq(ymin, ymax, bcount);
             await GetDataToFile(shortname, F, x, y, progress, token, title, xlab, ylab, zlab, parallel);
         }
 
@@ -146,7 +167,7 @@ namespace Библиотека_графики
             }
             else
             {
-                JustGetGraficInFiles(shortname, F, xmin, xmax, ymin, ymax, count, progress, token, graficType, title, xlab, ylab, zlab, parallel).GetAwaiter().GetResult();
+                JustGetGraficInFiles(shortname, F, xmin, xmax, ymin, ymax, count, count, progress, token, graficType, title, xlab, ylab, zlab, parallel).GetAwaiter().GetResult();
                 GetForm(shortname);
             }
         }
@@ -168,12 +189,17 @@ namespace Библиотека_графики
         /// <param name="ylab"></param>
         /// <param name="zlab"></param>
         /// <param name="parallel"></param>
-        public static async Task JustGetGraficInFiles(string shortname, Func<double, double, double> F, double xmin, double xmax, double ymin, double ymax, int count, IProgress<int> progress, System.Threading.CancellationToken token, GraficType graficType = GraficType.PdfPngHtml, string title = "", string xlab = "x", string ylab = "y", string zlab = "z", bool parallel = true)
+        public static async Task JustGetGraficInFiles(string shortname, Func<double, double, double> F, double xmin, double xmax, double ymin, double ymax, int acount, int bcount, IProgress<int> progress, System.Threading.CancellationToken token, GraficType graficType = GraficType.PdfPngHtml, string title = "", string xlab = "x", string ylab = "y", string zlab = "z", bool parallel = true)
         {
-            await GetDataToFile(shortname, F, xmin, xmax, ymin, ymax, count, progress, token, title, xlab, ylab, zlab, parallel);
+            await GetDataToFile(shortname, F, xmin, xmax, ymin, ymax, acount, bcount, progress, token, title, xlab, ylab, zlab, parallel);
             GraficTypeToFile(graficType);
             RemoveOlds(shortname);
-            await Task.Run(() => Expendator.StartProcessOnly("Magic3Dscript.R"));
+            if (acount == bcount)
+                await Task.Run(() => Expendator.StartProcessOnly("Magic3Dscript.R"));
+        }
+        public static async Task JustGetGraficInFiles(string shortname, Func<double, double, double> F, double xmin, double xmax, double ymin, double ymax, int count, IProgress<int> progress, System.Threading.CancellationToken token, GraficType graficType = GraficType.PdfPngHtml, string title = "", string xlab = "x", string ylab = "y", string zlab = "z", bool parallel = true)
+        {
+            await JustGetGraficInFiles(shortname, F, xmin, xmax, ymin, ymax, count,count, progress, token,graficType, title, xlab, ylab, zlab, parallel);
         }
 
         private static void GraficTypeToFile(GraficType type)

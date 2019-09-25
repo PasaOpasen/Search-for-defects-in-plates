@@ -20,7 +20,7 @@ namespace Работа2019
         private static string symbols = "ABCDEFGH";
         private Source[] sources;
         private double wmin, wmax, tmin, tmax;
-        private int count;
+        private int wcount,tcount;
 
         public WaveletContinious(Source[] array)
         {
@@ -102,7 +102,8 @@ namespace Работа2019
             wmax = 1.0 / textBox1.Text.ToDouble() / 1000; //(2000 * Math.PI);
             tmin = textBox3.Text.ToDouble();
             tmax = textBox4.Text.ToDouble();
-            count = numericUpDown1.Value.ToInt32();
+            wcount = numericUpDown1.Value.ToInt32();
+            tcount= numericUpDown2.Value.ToInt32();
         }
 
 
@@ -118,7 +119,7 @@ namespace Работа2019
             List<EllipseParam> param = new List<EllipseParam>();
 
             GetData();
-            all = count * count;
+            all = wcount * tcount;
             IProgress<int> progress = new Progress<int>((int val) => save = val);
 
             string[] wheredata = Expendator.GetStringArrayFromFile("WhereData.txt").Select(s => Path.Combine(s, "Разница")).ToArray();
@@ -134,7 +135,7 @@ namespace Работа2019
                 {
                     toolStripLabel1.Text = $"Замер {i + 1}, источник {k + 1}";
                     //await Task.Run(() => System.Threading.Thread.Sleep(1000));
-                    var tuple = await Functions.GetMaximunFromArea(wmin, wmax, tmin, tmax, count, progress, new System.Threading.CancellationToken(),
+                    var tuple = await Functions.GetMaximunFromArea(wmin, wmax, tmin, tmax, wcount, tcount, progress, new System.Threading.CancellationToken(),
                         tmin, step, pcount, othernames[k], Wavelet.Wavelets.LP, wheredata[i]);
 
                     var s = Functions.GetFockS(tuple);
