@@ -41,10 +41,11 @@ namespace Работа2019
         {
             foreach(var p in param)
             {
-                var pens= new Pen(p.Color, 3);
+                var pens= new Pen(p.Color, 2);
 
                 g.DrawCurve(pens, EllipseToFpoint(p));
             }
+            DrawFigures();
         }
 
         public Scheme(Source[] mass, Point beg, double lenx, double leny, string filename) : this(mass)

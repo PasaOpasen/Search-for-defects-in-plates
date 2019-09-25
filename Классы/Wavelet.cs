@@ -229,9 +229,9 @@ namespace МатКлассы
         {
             double h3 = Math.Abs(farr[1].x - farr[0].x) / 3;
 
-            var ind = farr.First(point => point.y != 0);
-            var f = farr.Slice(Array.IndexOf(farr, ind), farr.Length - 1);
-
+            var ind = Array.IndexOf(farr, farr.First(point => point.y != 0));
+            var f = farr.Slice(ind == 0 ? 0 : ind - 1, farr.Length - 1);
+            //var f = farr;
             int n = (f.Length - 1) / 2;
             //tex: $Wf(a,b) = \dfrac{1}{|a|^{0.5}} \int_{-\infty}^{\infty} f(t) {\bar \psi(\dfrac{t-b}{a}) dt}$, еще написано, что a>0, но тогда зачем модуль
             Func<double, double, Complex> s = (double a, double b) =>
