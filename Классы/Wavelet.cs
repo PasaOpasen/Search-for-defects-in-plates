@@ -5,6 +5,7 @@ using System.Threading.Tasks;
 using static МатКлассы.Number;
 using static МатКлассы.FuncMethods;
 using МатКлассы;
+using System.Linq;
 
 
 namespace МатКлассы
@@ -224,9 +225,13 @@ namespace МатКлассы
         /// </summary>
         /// <param name="f"></param>
         /// <returns></returns>
-        public Func<double, double, Complex> GetAnalys(Point[] f)
+        public Func<double, double, Complex> GetAnalys(Point[] farr)
         {
-            double h3 = Math.Abs(f[1].x - f[0].x) / 3;
+            double h3 = Math.Abs(farr[1].x - farr[0].x) / 3;
+
+            var ind = farr.First(point => point.y != 0);
+            var f = farr.Slice(Array.IndexOf(farr, ind), farr.Length - 1);
+
             int n = (f.Length - 1) / 2;
             //tex: $Wf(a,b) = \dfrac{1}{|a|^{0.5}} \int_{-\infty}^{\infty} f(t) {\bar \psi(\dfrac{t-b}{a}) dt}$, еще написано, что a>0, но тогда зачем модуль
             Func<double, double, Complex> s = (double a, double b) =>

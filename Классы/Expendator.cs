@@ -661,7 +661,7 @@ namespace МатКлассы
         /// <returns></returns>
         public static T[] Slice<T>(this T[] mas, int i, int j) where T : Idup<T>
         {
-            T[] res = new T[j - 1 + 1];
+            T[] res = new T[j - i + 1];
             for (int s = 0; s < res.Length; s++)
                 res[s] = mas[i + s].dup;
             return res;
