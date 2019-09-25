@@ -239,17 +239,20 @@ namespace МатКлассы
                 if (a == 0) return 0;
                 double con = h3 / Math.Sqrt(Math.Abs(a));
 
-                Complex sum = f[0].y * this.Mother((f[0].x - b) / a) + f[f.Length - 1].y * this.Mother((f[f.Length - 1].x - b) / a);
+                Complex sum0 = f[0].y * this.Mother((f[0].x - b) / a) + f[f.Length - 1].y * this.Mother((f[f.Length - 1].x - b) / a);
+                Complex sum = 0;
                 for (int i = 1; i <= n - 1; i++)
                 {
-                    sum += 2 * (f[2 * i].y * this.Mother((f[2 * i].x - b) / a) + 2 * f[2 * i - 1].y * this.Mother((f[2 * i - 1].x - b) / a));
+                    sum += f[2 * i].y * this.Mother((f[2 * i].x - b) / a) + 2 * f[2 * i - 1].y * this.Mother((f[2 * i - 1].x - b) / a);
 
                     //if (Double.IsNaN(sum.Abs)) throw new Exception($"Что-то здесь не так {f[2 * i].y} {this.Mother((f[2 * i].x - b) / a).Conjugate} {f[2 * i - 1].y} {this.Mother((f[2 * i - 1].x - b) / a).Conjugate}");
                 }
 
-                sum += 4 * f[f.Length - 2].y * this.Mother((f[f.Length - 2].x - b) / a);
 
-                return con * sum.Conjugate;
+                if (f.Length % 2 == 1)
+                    sum0 += 4 * f[f.Length - 2].y * this.Mother((f[f.Length - 2].x - b) / a);
+
+                return con * (2 * sum + sum0).Conjugate;
             };
 
             return MemoizeAndReturn(s);
@@ -263,7 +266,7 @@ namespace МатКлассы
         /// <param name="filename"></param>
         /// <param name="path"></param>
         /// <returns></returns>
-        public Func<double, double, Complex> GetAnalys(double begin, double step, int count, string filename, string path,int byevery=1) => GetAnalys(Point.CreatePointArray(begin, step, count, filename, path,byevery));
+        public Func<double, double, Complex> GetAnalys(double begin, double step, int count, string filename, string path, int byevery = 1) => GetAnalys(Point.CreatePointArray(begin, step, count, filename, path, byevery));
         private Func<double, double, Complex> MemoizeAndReturn(Func<double, double, Complex> s)
         {
             Resultmems = new Memoize<Point, Complex>((Point p) => s(p.x, p.y));
