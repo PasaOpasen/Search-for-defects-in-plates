@@ -20,7 +20,7 @@ namespace Работа2019
         private static string symbols = "ABCDEFGH";
         private Source[] sources;
         private double wmin, wmax, tmin, tmax;
-        private int wcount,tcount;
+        private int wcount,tcount,byevery;
 
         public WaveletContinious(Source[] array)
         {
@@ -104,6 +104,7 @@ namespace Работа2019
             tmax = textBox4.Text.ToDouble();
             wcount = numericUpDown1.Value.ToInt32();
             tcount= numericUpDown2.Value.ToInt32();
+            byevery = numericUpDown3.Value.ToInt32();
         }
 
 
@@ -136,7 +137,7 @@ namespace Работа2019
                     toolStripLabel1.Text = $"Замер {i + 1}, источник {k + 1}";
                     //await Task.Run(() => System.Threading.Thread.Sleep(1000));
                     var tuple = await Functions.GetMaximunFromArea(wmin, wmax, tmin, tmax, wcount, tcount, progress, new System.Threading.CancellationToken(),
-                        tmin, step, pcount, othernames[k], Wavelet.Wavelets.LP, wheredata[i]);
+                        tmin, step, pcount, othernames[k], Wavelet.Wavelets.LP, wheredata[i],byevery);
 
                     var s = Functions.GetFockS(tuple);
                     param.Add(new EllipseParam(otherSources[k].Center, itSource.Center, s, Библиотека_графики.Other.colors[i]));

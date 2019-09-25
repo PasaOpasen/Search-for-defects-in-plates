@@ -258,7 +258,7 @@ namespace МатКлассы
         /// <param name="filename"></param>
         /// <param name="path"></param>
         /// <returns></returns>
-        public Func<double, double, Complex> GetAnalys(double begin, double step, int count, string filename, string path) => GetAnalys(Point.CreatePointArray(begin, step, count, filename, path));
+        public Func<double, double, Complex> GetAnalys(double begin, double step, int count, string filename, string path,int byevery=1) => GetAnalys(Point.CreatePointArray(begin, step, count, filename, path,byevery));
         private Func<double, double, Complex> MemoizeAndReturn(Func<double, double, Complex> s)
         {
             Resultmems = new Memoize<Point, Complex>((Point p) => s(p.x, p.y));
