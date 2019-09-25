@@ -57,18 +57,20 @@ namespace Консоль
             int count = 150000;
             
             string filename = "ArrayB.txt";
-            string path = @"C:\Users\user1\Desktop\zameri\n27_1d_amp_2us_18ns_19ms\Замер F\Разница";
+            string path = @"C:\Users\user1\Desktop\zameri\n28_uzkopolos\Замер G\Разница";
 
 
             Wavelet.Wavelets wavelets = Wavelet.Wavelets.LP;
             double omega = 2;
             FuncMethods.DefInteg.GaussKronrod.NodesCount nodesCount = GaussKronrod.NodesCount.GK61;
 
-            double xmin = 0.001;
-            double xmax = 0.01;
+
+
+            double xmin = 1.0 / 80000;
+            double xmax = 1.0 / 20000;
             double ymin = -0.0004;
             double ymax = 0.002079984;
-            int spaceCount = 50;
+            int spaceCount = 200;
 
             WaveletTest.Start(begin,step,count,filename,path, wavelets, omega, nodesCount, xmin, xmax, ymin, ymax, spaceCount);
         }
