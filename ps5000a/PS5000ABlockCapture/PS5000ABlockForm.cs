@@ -794,7 +794,7 @@ namespace PS5000A
 
                 using (StreamWriter fs = new StreamWriter(filename_))
                     for (int i = 0; i < countSum; i++)
-                        fs.WriteLine(Array[i]);
+                        fs.WriteLine(Array[i].ToString().Replace(",","."));
 
             });
         }
