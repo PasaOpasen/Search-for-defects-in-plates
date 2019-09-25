@@ -32,7 +32,7 @@ namespace МатКлассы
         /// <summary>
         /// Коллекция нормирующих множителей
         /// </summary>
-        public static ConcurrentDictionary<Wavelets, Complex> Cpsi = new ConcurrentDictionary<Wavelets, Complex>(2, 6);
+        public static ConcurrentDictionary<Wavelets, double> Cpsi = new ConcurrentDictionary<Wavelets, double>(2, 6);
 
         /// <summary>
         /// Частота (нужна только для вейвлета Морле)
@@ -239,17 +239,17 @@ namespace МатКлассы
                 if (a == 0) return 0;
                 double con = h3 / Math.Sqrt(Math.Abs(a));
 
-                Complex sum = f[0].y * this.Mother((f[0].x - b) / a).Conjugate + f[f.Length - 1].y * this.Mother((f[f.Length - 1].x - b) / a).Conjugate;
+                Complex sum = f[0].y * this.Mother((f[0].x - b) / a) + f[f.Length - 1].y * this.Mother((f[f.Length - 1].x - b) / a);
                 for (int i = 1; i <= n - 1; i++)
                 {
-                    sum += 2 * (f[2 * i].y * this.Mother((f[2 * i].x - b) / a).Conjugate + 2 * f[2 * i - 1].y * this.Mother((f[2 * i - 1].x - b) / a).Conjugate);
+                    sum += 2 * (f[2 * i].y * this.Mother((f[2 * i].x - b) / a) + 2 * f[2 * i - 1].y * this.Mother((f[2 * i - 1].x - b) / a));
 
                     //if (Double.IsNaN(sum.Abs)) throw new Exception($"Что-то здесь не так {f[2 * i].y} {this.Mother((f[2 * i].x - b) / a).Conjugate} {f[2 * i - 1].y} {this.Mother((f[2 * i - 1].x - b) / a).Conjugate}");
                 }
 
-                sum += 4 * f[f.Length - 2].y * this.Mother((f[f.Length - 2].x - b) / a).Conjugate;
+                sum += 4 * f[f.Length - 2].y * this.Mother((f[f.Length - 2].x - b) / a);
 
-                return con * sum;
+                return con * sum.Conjugate;
             };
 
             return MemoizeAndReturn(s);
@@ -303,12 +303,13 @@ namespace МатКлассы
                 return GetRes(p => ResultMemoized(p.x, p.y));
         }
 
+
         //tex:$ C_{\psi}= \int_{-\infty}^{\infty}  \dfrac{|\psi(\omega)|^2}{|\omega|} d \omega$
-        private Complex Ccoef
+        private double Ccoef
         {
             get
             {
-                Complex C;
+                double C;
                 if (!Cpsi.ContainsKey(this.Type))
                 {
                     switch (this.Type)
@@ -329,7 +330,7 @@ namespace МатКлассы
                                     if (w == 0) return 0;
                                     return (this.FMother(w).Sqr() / w).Abs;
                                 },
-                            eps: eps, nodesCount: countNodes);
+                            eps: eps, nodesCount: countNodes).Re;
                             break;
                     }
                     Cpsi[this.Type] = C;

@@ -350,9 +350,22 @@ summary(model)
 
 
 
+high.corr <- function(x) {
+    mat =abs( cor(x))
+    diag(mat) = 0
+    mx = which.max(mat)
+    len1 = nrow(mat)
+    len2=ncol(mat)
+    i = mx %/% len2
+    j = mx - (i - 1) * len2
+    return(c(rownames(mat)[i],colnames(mat)[j]))
+}
 
-
-
+x1 <- rnorm(30) # создадим случайную выборку
+x2 <- rnorm(30) # создадим случайную выборку
+x3 <- x2 + 5 # теперь коэффициент коррел€ции x1 и x3 равен единице
+my_df <- data.frame(var1 = x1, var2 = x2, var3 = x3)
+high.corr(my_df)
 
 
 
