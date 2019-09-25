@@ -6,6 +6,7 @@ using static МатКлассы.Number;
 using static МатКлассы.FuncMethods;
 using МатКлассы;
 
+
 namespace МатКлассы
 {
     /// <summary>
@@ -334,7 +335,6 @@ namespace МатКлассы
                 return C;
             }
         }
-
 
 
         public void Dispose()

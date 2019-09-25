@@ -191,6 +191,168 @@ outliers.rm <- function(x) {
 
 
 
+corr.calc <- function(x) {
+    t = cor.test(x = x[[1]], y = x[[2]])
+    return(c(t$estimate, t$p.value))
+
+}
+
+corr.calc(iris[, 1:2])
+
+
+
+filtered.cor <- function(x) {
+    df = x[, sapply(x, is.numeric)]
+    mat=cor(df)
+    diag(mat) <- 0
+
+    mx = max(abs(mat))
+    if (length(which(as.array( mat) %in% mx)) > 0) {
+        return(mx)
+    }
+    return(-mx)
+}
+
+v = c(1, 2, 3, 4)
+which(v %in% 8)
+
+
+test_data <- as.data.frame(list(V3 = c(-0.4, 1.7, 0, -1, 0.5, -0.1, 0.4, 0.4), V2 = c(-0.4, 1.7, 0, -1, 0.5, -0.1, 0.4, 0.4), V1 = c(-0.5, 1.4, -0.1, 0.1, -0.3, -1, 0.5, 1.6), V5 = c("t", "t", "t", "t", "t", "t", "t", "t"), V4 = c("k", "k", "k", "k", "k", "k", "k", "k")))
+str(test_data)
+
+filtered.cor(test_data)
+
+
+
+
+smart_cor <- function(x) {
+    p1 = shapiro.test(x[[1]])$p.value
+    p2 = shapiro.test(x[[2]])$p.value
+    print(c(p1,p2))
+    if (p1 < 0.05 | p2 < 0.05) {
+        s = "spearman"
+    } else {
+        s="pearson"
+    }
+    return(cor.test(x = x[[1]], y = x[[2]],method=s)$estimate)
+}
+
+test_data <- as.data.frame(list(col1 = c(0.06, 0.68, 1.15, 1.17, -1.66, -0.13, 0.06, 0.24, 1.49, 0.21, 1.51, 1.96, 0.61, -0.81, 0.89, -0.91, -0.88, -0.61, -1.4, 1.4, 1.66, 0.65, -1.18, -0.21, 1.69, 0.73, -1.22, 1.83, -0.57, 1.44), col2 = c(-0.59, -0.65, -0.74, 1.39, 0.91, -1.42, 0.31, -1.71, -0.21, -0.43, -1.68, 0.13, -0.75, 0.37, -0.04, -0.03, -2.01, 0.11, 0.08, -1.29, -1.08, -0.67, 0.72, 1.23, -1.81, 1.65, -0.14, -1.66, 0.05, -0.67)))
+
+smart_cor(test_data)
+
+
+
+
+df = read.table("dataset_11508_12.txt", dec = ".")
+df = data.frame(df)
+t = lm(df[[1]]~ df[[2]])
+summary(t)
+
+
+library(ggplot2)
+df = subset(diamonds, cut == "Ideal" & carat == 0.46)
+fit_coef = lm(price ~ depth, df)$coefficients
+
+
+
+regr.calc <- function(x) {
+    p = cor.test(x[[1]], x[[2]])$p.value
+    if (p >= 0.05) {
+        return("There is no sense in prediction")
+    }
+
+    t = lm(x[[1]] ~ x[[2]])
+    fit = t$fitted.values
+    x$fit = fit
+    return(x)
+}
+
+
+library(ggplot2)
+my_plot = ggplot(iris, aes(x = Sepal.Width, y = Petal.Width, col = Species)) +
+    geom_smooth(method = "lm") +
+    geom_point()
+my_plot
+
+
+
+library(ggplot2)
+ggplot(mtcars, aes(mpg, disp, col = factor(am)))+
+  geom_point()+
+  geom_smooth()
+
+ggplot(mtcars, aes(mpg, disp)) +
+    geom_point(aes(col = factor(am))) +
+    geom_smooth()
+
+ggplot(mtcars, aes(mpg, disp)) +
+    geom_point() +
+    geom_smooth(aes(col = factor(am)))
+
+
+
+
+fill_na <- function(x) {
+    t = lm(y ~ x_1 + x_2, x,na.action = na.omit)
+    y_full = ifelse(is.na(x$y), predict(t,x), x$y)
+    x$y_full = y_full
+    return(x)
+}
+
+test_data <- read.csv(url('https://stepic.org/media/attachments/course/129/fill_na_test.csv'))
+fill_na(test_data)
+
+
+
+
+df = data.frame(mtcars$wt, mtcars$mpg, mtcars$disp, mtcars$drat, mtcars$hp)
+colnames(df)=c("wt", "mpg", "disp", "drat", "hp")
+df
+
+model = lm(wt ~ disp+mpg+hp, df)
+summary(model)
+
+
+
+summary(lm(rating ~ complaints*critical, attitude))
+
+
+
+mtcars$am <- factor(mtcars$am, labels = c('Automatic', 'Manual'))
+summary(lm(mpg ~ wt * am, mtcars))
+
+
+library(ggplot2)
+# сначала переведем переменную am в фактор
+mtcars$am <- factor(mtcars$am)
+# теперь строим график
+my_plot <- ggplot(mtcars, aes(wt, mpg, col = factor(am))) +
+    geom_smooth(method="lm")
+my_plot
+
+
+
+model_full <- lm(rating ~ ., data = attitude)
+model_null <- lm(rating ~ 1, data = attitude)
+scope = list(lower = model_null, upper = model_full)
+ideal_model <-step(model_null,scope = scope,direction = "forward")
+summary( ideal_model)
+
+anova(model_full,ideal_model)
+
+
+str(LifeCycleSavings)
+model <- lm(sr ~ (.)^2, LifeCycleSavings)# . значит сумму по всем переменным, квадрат делает ещё и взаимодействия до второго уровня
+summary(model)
+
+
+
+
+
+
+
+
 
 
 

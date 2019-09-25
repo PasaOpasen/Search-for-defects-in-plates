@@ -117,41 +117,10 @@
   <resheader name="writer">
     <value>System.Resources.ResXResourceWriter, System.Windows.Forms, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
   </resheader>
-  <assembly alias="System.Windows.Forms" name="System.Windows.Forms, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089" />
-  <data name="Bez_imeni" type="System.Resources.ResXFileRef, System.Windows.Forms">
-    <value>..\Resources\Bez_imeni.png;System.Drawing.Bitmap, System.Drawing, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a</value>
-  </data>
-  <data name="po_with_scuter" type="System.Resources.ResXFileRef, System.Windows.Forms">
-    <value>..\Resources\po with scuter.ico;System.Drawing.Icon, System.Drawing, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a</value>
-  </data>
-  <data name="Uxt" type="System.Resources.ResXFileRef, System.Windows.Forms">
-    <value>..\Resources\Uxt.wav;System.IO.MemoryStream, mscorlib, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
-  </data>
-  <data name="АнимацияГотова" type="System.Resources.ResXFileRef, System.Windows.Forms">
-    <value>..\Resources\АнимацияГотова.wav;System.IO.MemoryStream, mscorlib, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
-  </data>
-  <data name="ЗамерОбработан" type="System.Resources.ResXFileRef, System.Windows.Forms">
-    <value>..\Resources\ЗамерОбработан.wav;System.IO.MemoryStream, mscorlib, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
-  </data>
-  <data name="ПоверхностиПостроены" type="System.Resources.ResXFileRef, System.Windows.Forms">
-    <value>..\Resources\ПоверхностиПостроены.wav;System.IO.MemoryStream, mscorlib, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
-  </data>
-  <data name="ВычисленияЗавершены" type="System.Resources.ResXFileRef, System.Windows.Forms">
-    <value>..\Resources\ВычисленияЗавершены.wav;System.IO.MemoryStream, mscorlib, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
-  </data>
-  <data name="ГенерацияДанных" type="System.Resources.ResXFileRef, System.Windows.Forms">
-    <value>..\Resources\ГенерацияДанных.wav;System.IO.MemoryStream, mscorlib, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
-  </data>
-  <data name="ДанныеСуммируются" type="System.Resources.ResXFileRef, System.Windows.Forms">
-    <value>..\Resources\ДанныеСуммируются.wav;System.IO.MemoryStream, mscorlib, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
-  </data>
-  <data name="InstallPackages" type="System.Resources.ResXFileRef, System.Windows.Forms">
-    <value>..\Resources\InstallPackages.R;System.Byte[], mscorlib, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
-  </data>
-  <data name="СохранениеДанных" type="System.Resources.ResXFileRef, System.Windows.Forms">
-    <value>..\Resources\СохранениеДанных.wav;System.IO.MemoryStream, mscorlib, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
-  </data>
-  <data name="СоздаемЭллипсы" type="System.Resources.ResXFileRef, System.Windows.Forms">
-    <value>..\Resources\СоздаемЭллипсы.wav;System.IO.MemoryStream, mscorlib, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
-  </data>
+  <metadata name="toolStrip1.TrayLocation" type="System.Drawing.Point, System.Drawing, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a">
+    <value>17, 17</value>
+  </metadata>
+  <metadata name="timer1.TrayLocation" type="System.Drawing.Point, System.Drawing, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a">
+    <value>122, 17</value>
+  </metadata>
 </root>

@@ -178,7 +178,13 @@ namespace Defect2019
         private void button2_Click(object sender, EventArgs e)
         {
             if (GetCheckedSources(out Source[] smas))
-                new WaveContinious(smas).Show();
+            {
+                if (radioButton1.Checked)
+                    new WaveContinious(smas).Show();
+                else
+                    new WaveletContinious(smas).Show();
+            }
+                
         }
 
         private void вставитьГотовыйПримерToolStripMenuItem_Click(object sender, EventArgs e)

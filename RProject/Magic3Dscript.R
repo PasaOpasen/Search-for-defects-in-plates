@@ -25,6 +25,20 @@ levels = 15
 
 dt = readLines(filenames[3])
 
+#координаты максимума
+mx = which.max(z)
+xi = mx %/% len + 1
+yi=mx-(xi-1)*len
+
+sink(paste0(dt[[1]],"(MaxCoordinate).txt"))
+cat("a b \n")
+cat(c(x[xi], y[yi]))
+cat("\n")
+cat(paste("maximum is",max(z)))
+sink()
+
+
+
 # Get type
 type = readLines("GraficType.txt")[1]
 

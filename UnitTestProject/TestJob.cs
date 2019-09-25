@@ -5,6 +5,7 @@ using МатКлассы;
 using Defect2019;
 using static Functions;
 using Complex = МатКлассы.Number.Complex;
+using System.Linq;
 
 
 namespace UnitTestProject
@@ -106,8 +107,6 @@ namespace UnitTestProject
         /// <returns></returns>
         public static CVectors KQmult3(Complex[,] M, Vectors v) => new CVectors(new Complex[3] { M[0,2]*v[2],M[1,2]*v[2],M[2,2]*v[2]});
 
-
-
         [TestMethod]
         public void tmp()
         {
@@ -165,6 +164,26 @@ namespace UnitTestProject
                 //Console.WriteLine();
             }
                 
+        }
+
+
+        [TestMethod]
+        public void Vg()
+        {
+            var arr = Expendator.Seq(РабКонсоль.wbeg,РабКонсоль.wend, 300);
+            using(StreamWriter f=new StreamWriter("Vg.txt"))
+            {
+                foreach (var p in arr)
+                    f.WriteLine($"{p} {Functions.Vg(p)}");
+            }
+        }
+
+        [TestMethod]
+        public void Vg2()
+        {
+            double[] w = Expendator.GetStringArrayFromFile("vg.dat", true).Select(s => s.Split(new char[] { ' ' }, StringSplitOptions.RemoveEmptyEntries)[1].Replace('.', ',').ToDouble() * pimult2 * 1e-3).ToArray();
+            foreach (var c in w)
+                Console.WriteLine($"{c}  {Functions.Vg(c)}");
         }
     }
 }

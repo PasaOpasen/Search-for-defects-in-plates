@@ -22,6 +22,7 @@ using Point = МатКлассы.Point;
 using static РабКонсоль;
 using System.Diagnostics;
 using System.Runtime.Serialization.Formatters.Binary;
+using static МатКлассы.Wavelet;
 
 /// <summary>
 /// Формы, хранящиеся в приложении
@@ -116,7 +117,7 @@ public static class Functions
         var prmsn = prmsnmem.Value;
         PRMSN_Memoized = (Complex a, double w) => prmsn(new Tuple<Complex, double>(a, w));
 
-        var pol = new Memoize<double, Vectors>((double t) => PolesMas(t),wcount).Value;
+        var pol = new Memoize<double, Vectors>((double t) => PolesMas(t), wcount).Value;
         PolesMasMemoized = (double x) => pol(x);
 
         var seq = new Memoize<Tuple<double, double, int>, double[]>((Tuple<double, double, int> t) => SeqW(t.Item1, t.Item2, t.Item3));
@@ -127,19 +128,19 @@ public static class Functions
     public static Memoize<Tuple<double, double, double, Source>, Tuple<Complex, Complex>> ur;
     public static Memoize<Tuple<double, double, Source>, Tuple<Complex, Complex>[]> cmas;
     public static Memoize<Tuple<Complex, double>, Complex[]> prmsnmem;
-    public static void RecreateBigCollections(int spaceCount=0,int timeCount=0,int sourceCount=0)
+    public static void RecreateBigCollections(int spaceCount = 0, int timeCount = 0, int sourceCount = 0)
     {
-        ur = new Memoize<Tuple<double, double, double, Source>, Tuple<Complex, Complex>>((Tuple<double, double, double, Source> t) => uxw(t.Item1, t.Item2, t.Item3, t.Item4),spaceCount*spaceCount*wcount*sourceCount);
+        ur = new Memoize<Tuple<double, double, double, Source>, Tuple<Complex, Complex>>((Tuple<double, double, double, Source> t) => uxw(t.Item1, t.Item2, t.Item3, t.Item4), spaceCount * spaceCount * wcount * sourceCount);
         uxwMemoized = (double x, double y, double w, Source n) => ur.Value(new Tuple<double, double, double, Source>(x, y, w, n));
 
         cmas = new Memoize<Tuple<double, double, Source>, Tuple<Complex, Complex>[]>((Tuple<double, double, Source> t) => CMAS(t.Item1, t.Item2, t.Item3), spaceCount * spaceCount * sourceCount);
         CMAS_Memoized = (double x, double y, Source s) => cmas.Value(new Tuple<double, double, Source>(x, y, s));
 
         wmas = SeqWMemoized(РабКонсоль.wbeg, РабКонсоль.wend, РабКонсоль.wcount);
-        var fs = new Memoize<double, CVectors>((double t) => Fi(wmas, t),timeCount);
+        var fs = new Memoize<double, CVectors>((double t) => Fi(wmas, t), timeCount);
         FiMemoized = (double t) => fs.Value(t);
 
-        var cs = new Memoize<Tuple<Complex[], double>, CVectors>((Tuple<Complex[], double> t) => t.Item1 * FiMemoized(t.Item2),timeCount*sourceCount);
+        var cs = new Memoize<Tuple<Complex[], double>, CVectors>((Tuple<Complex[], double> t) => t.Item1 * FiMemoized(t.Item2), timeCount * sourceCount);
         Phif = (Complex[] fw, double t) => cs.Value(new Tuple<Complex[], double>(fw, t));
     }
 
@@ -344,7 +345,7 @@ public static class Functions
     private static Func<double, Vectors> PolesMas = (double w) =>
        {
            ComplexFunc del = (Complex a) => Deltass(a, w);
-           Vectors v1 = w < 0.1 ? Roots.OtherMethod(del, РабКонсоль.polesBeg, РабКонсоль.polesEnd, РабКонсоль.steproot / 200, 1e-12, Roots.MethodRoot.Brent, false) : Roots.OtherMethod(del, РабКонсоль.polesBeg, РабКонсоль.polesEnd, РабКонсоль.steproot, 1e-10, Roots.MethodRoot.Brent, false);
+           Vectors v1 = w < 0.1 ? Roots.OtherMethod(del, РабКонсоль.polesBeg, РабКонсоль.polesEnd, РабКонсоль.steproot / 200, 1e-12, Roots.MethodRoot.Bisec, false) : Roots.OtherMethod(del, РабКонсоль.polesBeg, РабКонсоль.polesEnd, РабКонсоль.steproot / 40, 1e-7, Roots.MethodRoot.Broyden, false);
            Vectors v2 = DeltassNPosRoots(w, РабКонсоль.polesBeg, РабКонсоль.polesEnd);
            v1.UnionWith(v2);
            return v1;
@@ -870,6 +871,63 @@ public static class Functions
     }
 
     #endregion
+
+
+    #region Функции для вейвлета
+    private static readonly double leteps = 2e-3, let2eps = 2 * leteps;
+    private static double Eps(double w) => Math.Min(leteps, w / 100);
+    public static readonly Func<double, double> Vg = (double w) => 
+    {
+        var ps = Eps(w);
+        return 2 * ps / (PolesMasMemoized(w + ps).LastElement- PolesMasMemoized(w - ps).LastElement);
+    };
+
+    /// <summary>
+    /// Возвращает координаты максимума от вейвлетной функции на указанном прямоугольнике
+    /// </summary>
+    /// <param name="xmin"></param>
+    /// <param name="xmax"></param>
+    /// <param name="ymin"></param>
+    /// <param name="ymax"></param>
+    /// <param name="count"></param>
+    /// <param name="begin"></param>
+    /// <param name="step"></param>
+    /// <param name="valuescount"></param>
+    /// <param name="filename"></param>
+    /// <param name="wavelets"></param>
+    /// <param name="path"></param>
+    /// <returns></returns>
+    public static async Task<Tuple<double, double>> GetMaximunFromArea(
+    double xmin, double xmax, double ymin, double ymax, int count,
+    IProgress<int> progress, System.Threading.CancellationToken token,
+    double begin, double step, int valuescount, string filename,
+    Wavelets wavelets = Wavelets.LP, string path = null)
+    {
+        path = path ?? Environment.NewLine;
+        Wavelet wavelet = new Wavelet(wavelets);
+        Func<double, double, Complex> func = wavelet.GetAnalys(begin, step, valuescount, filename, path);
+        Func<double, double, double> F = (x, y) => func(x, y).Abs;
+
+        string name = filename.Replace(".txt", "");
+        await Библиотека_графики.Create3DGrafics.JustGetGraficInFiles(name, F, xmin, xmax, ymin, ymax, count,
+            progress, token,
+            title: $"Wavelet-surface for {name}", xlab: "omega", ylab: "time",
+            graficType: Create3DGrafics.GraficType.Pdf);
+
+        var tmp = Expendator.GetStringArrayFromFile(/*Path.Combine(path,*/ name + "(MaxCoordinate).txt")/*)*/[1].Replace('.',',').ToDoubleMas();
+
+        wavelet.Dispose();
+        return new Tuple<double, double>(tmp[0], tmp[1]);
+    }
+
+    /// <summary>
+    /// Возвращает параметр s (или a) для эллипса
+    /// </summary>
+    /// <param name="wt"></param>
+    /// <returns></returns>
+    public static double GetFockS(Tuple<double, double> wt) => Vg(/*1.0*/pimult2/(wt.Item1*1e6)) * (wt.Item2- 0.0000045) * 1_000_000;//из км/с перевел в мм/с;
+
+    #endregion
 }
 
 public static class OtherMethods
@@ -1069,7 +1127,7 @@ public static class OtherMethods
                 //проверить принадлежность точки к какому-либо из источников
                 b = false;
 
-                    foreach(var c in smas)
+                foreach (var c in smas)
                     if (Point.Eudistance(xy, c.Center) <= c.radius * 2.0)
                     {
                         b = true;
@@ -1078,7 +1136,7 @@ public static class OtherMethods
 
                 numberofs = 0;
                 if (!b)
-                    foreach(var s in smas)
+                    foreach (var s in smas)
                     {
                         cor = new Number.Complex(x - s.Center.x, y - s.Center.y).Arg;
                         sin = Math.Sin(cor);
@@ -1272,7 +1330,7 @@ public static class OtherMethods
     {
         List<Source> list = new List<Source>();
         List<string> names = new List<string>();
-        foreach(var s in smas)
+        foreach (var s in smas)
         {
             list.Add(s.dup);
             names.Add($"uxw {s.ToShortString()}.txt");
@@ -1338,6 +1396,7 @@ public static class OtherMethods
         Parallel.For(0, dir.Length, (int i) =>
         {
             Expendator.CopyFiles(Environment.CurrentDirectory, dir[i], "3Duxt(better).r", "3Duxt.r", "ReDraw3Duxt2.r", "Truezlims.r", "WavesSurface.r");
+            Expendator.CopyFiles(Environment.CurrentDirectory, Path.Combine(dir[i], "Разница"), "Magic3Dscript.r");
         });
     }
     public static void CopyFilesTxt()
@@ -1388,5 +1447,21 @@ public static class OtherMethods
                 }
             }
         }
+    }
+
+    /// <summary>
+    /// Вызвать форму Илуши
+    /// </summary>
+    public static void IlushaMethod(CheckBox checkBox)
+    {
+        if (checkBox.Checked)
+        {
+            var form = new PS5000A.PS5000ABlockForm(РабКонсоль.wbeg, РабКонсоль.wend, РабКонсоль.wcount);
+            form.ShowDialog();
+        }
+
+        OtherMethods.CorrectWhereDataFile();
+
+        OtherMethods.CopyFilesR();
     }
 }
