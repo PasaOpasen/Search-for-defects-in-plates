@@ -211,7 +211,10 @@ namespace Библиотека_графики
                 }
             }
         }
-        public static Color[] colors = new Color[] { Color.Blue, Color.Red, Color.Green, Color.Yellow, Color.Black, Color.Chocolate, Color.HotPink , Color.Aqua,Color.Gold};
+        /// <summary>
+        /// Массив разных цветов
+        /// </summary>
+        public static Color[] colors = new Color[] { Color.Blue, Color.Red, Color.Green, Color.Yellow, Color.Black, Color.Chocolate, Color.HotPink , Color.Orange,Color.Gold};
 
         private static Bitmap getControlScreenshot(Control c)
         {

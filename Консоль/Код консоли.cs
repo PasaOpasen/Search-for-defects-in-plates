@@ -23,39 +23,42 @@ namespace Консоль
         [STAThread]
         static void Main(string[] args)
         {
-           // WaveletCreateFromFunction();
+            // WaveletCreateFromFunction();
             WaveletCreateFromArray();
-                     
+
             // Create3DGrafic();
         }
 
         static void WaveletCreateFromFunction()
         {
-             Func<double, double> func = t => Math.Sin(6*t) / (1 + t * t);
+            Func<double, double> func = t => Math.Sin(6 * t) / (1 + t * t);
             //Func<double, double> func = t => (t >= 0.45 && t <= 0.55) ? Math.Sin(20 * Math.PI*(t - 0.45)) : 0;
 
             Wavelet.Wavelets wavelets = Wavelet.Wavelets.LP;
             double omega = 2;
             FuncMethods.DefInteg.GaussKronrod.NodesCount nodesCount = GaussKronrod.NodesCount.GK61;
 
-            double xmin=-3;
-            double xmax=8;
-            double ymin=-4;
-            double ymax=4;
-            int spaceCount=40;
+            double xmin = -3;
+            double xmax = 8;
+            double ymin = -4;
+            double ymax = 4;
+            int spaceCount = 40;
 
-            double tmin=-7;
-            double tmax=7;
-            int tcount=260;
+            double tmin = -7;
+            double tmax = 7;
+            int tcount = 260;
 
-            WaveletTest.Start(func, wavelets, omega, nodesCount,xmin,xmax,ymin,ymax,spaceCount,tmin,tmax,tcount);
+            WaveletTest.Start(func, wavelets, omega, nodesCount,
+                new NetOnDouble(xmin, xmax, spaceCount),
+                new NetOnDouble(ymin, ymax, spaceCount),
+                new NetOnDouble(tmin, tmax, tcount));
         }
         static void WaveletCreateFromArray()
         {
             double begin = -0.0004;
             double step = 16E-9;
             int count = 150000;
-            
+
             string filename = "ArrayB.txt";
             string path = @"C:\Users\user1\Desktop\zameri\n28_uzkopolos\Замер G\Разница";
 
@@ -70,7 +73,7 @@ namespace Консоль
             double ymax = 0.002079984;
             int spaceCount = 200;
 
-            WaveletTest.Start(begin,step,count,filename,path, wavelets, omega, nodesCount, xmin, xmax, ymin, ymax, spaceCount);
+            WaveletTest.Start(begin, step, count, filename, path, wavelets, omega, nodesCount, new NetOnDouble(xmin, xmax, spaceCount), new NetOnDouble(ymin, ymax, spaceCount));
         }
 
 
@@ -91,12 +94,12 @@ namespace Консоль
             string zlab = "zz";
             string title = "title";
 
-            Func<double, double, double> func = (double x, double y) => Math.Sin((x-2)*(x-2) + y*y);
+            Func<double, double, double> func = (double x, double y) => Math.Sin((x - 2) * (x - 2) + y * y);
             Create3DGrafics.GraficType type = Create3DGrafics.GraficType.PdfPngHtml;
             string name = "TestGrafic";
 
-            Create3DGrafics.MakeGrafic(type,name , func, xmin, xmax, ymin, ymax, count, new Progress<int>(), new System.Threading.CancellationToken(), title, xlab, ylab, zlab, true);
-        } 
+            Create3DGrafics.MakeGrafic(type, name, func, new NetOnDouble(xmin, xmax, count), new NetOnDouble(ymin, ymax, count), new Progress<int>(), new System.Threading.CancellationToken(), title, xlab, ylab, zlab, true);
+        }
 
         // Point p_ = new Point(0,1);
         // Point p0 = new Point(2,7);

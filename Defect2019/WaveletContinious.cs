@@ -21,6 +21,7 @@ namespace Работа2019
         private Source[] sources;
         private double wmin, wmax, tmin, tmax;
         private int wcount,tcount,byevery;
+        private NetOnDouble W, T;
 
         public WaveletContinious(Source[] array)
         {
@@ -105,6 +106,9 @@ namespace Работа2019
             wcount = numericUpDown1.Value.ToInt32();
             tcount= numericUpDown2.Value.ToInt32();
             byevery = numericUpDown3.Value.ToInt32();
+
+            W = new NetOnDouble(wmin, wmax, wcount);
+            T = new NetOnDouble(tmin, tmax, tcount);
         }
 
 
@@ -136,7 +140,7 @@ namespace Работа2019
                 {
                     toolStripLabel1.Text = $"Замер {i + 1}, источник {k + 1}";
                     //await Task.Run(() => System.Threading.Thread.Sleep(1000));
-                    var tuple = await Functions.GetMaximunFromArea(wmin, wmax, tmin, tmax, wcount, tcount, progress, new System.Threading.CancellationToken(),
+                    var tuple = await Functions.GetMaximunFromArea(W,T, progress, new System.Threading.CancellationToken(),
                         tmin, step, pcount, othernames[k], Wavelet.Wavelets.LP, wheredata[i],byevery);
 
                     var s = Functions.GetFockS(tuple);

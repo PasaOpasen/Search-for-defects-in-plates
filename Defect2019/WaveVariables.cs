@@ -898,7 +898,7 @@ public static class Functions
     /// <param name="path"></param>
     /// <returns></returns>
     public static async Task<Tuple<double, double>> GetMaximunFromArea(
-    double xmin, double xmax, double ymin, double ymax, int acount, int bcount,
+    NetOnDouble xx, NetOnDouble yy,
     IProgress<int> progress, System.Threading.CancellationToken token,
     double begin, double step, int valuescount, string filename,
     Wavelets wavelets = Wavelets.LP, string path = null, int byevery=1)
@@ -909,7 +909,7 @@ public static class Functions
         Func<double, double, double> F = (x, y) => func(x, y).Abs;
 
         string name = filename.Replace(".txt", "");
-        await Библиотека_графики.Create3DGrafics.JustGetGraficInFiles(name, F, xmin, xmax, ymin, ymax, acount,bcount,
+        await Библиотека_графики.Create3DGrafics.JustGetGraficInFiles(name, F, xx,yy,
             progress, token,
             title: $"Wavelet-surface for {name}", xlab: "omega", ylab: "time",
             graficType: Create3DGrafics.GraficType.Pdf);

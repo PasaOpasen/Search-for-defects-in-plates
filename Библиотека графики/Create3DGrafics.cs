@@ -106,11 +106,9 @@ namespace Библиотека_графики
             }
         }
 
-        private static async Task GetDataToFile(string shortname, Func<double, double, double> F, double xmin, double xmax, double ymin, double ymax, int acount, int bcount, IProgress<int> progress, System.Threading.CancellationToken token, string title = "", string xlab = "x", string ylab = "y", string zlab = "z", bool parallel = true)
+        private static async Task GetDataToFile(string shortname, Func<double, double, double> F, double xmin, NetOnDouble x,NetOnDouble y, IProgress<int> progress, System.Threading.CancellationToken token, string title = "", string xlab = "x", string ylab = "y", string zlab = "z", bool parallel = true)
         {
-            var x = Expendator.Seq(xmin, xmax, acount);
-            var y = Expendator.Seq(ymin, ymax, bcount);
-            await GetDataToFile(shortname, F, x, y, progress, token, title, xlab, ylab, zlab, parallel);
+            await GetDataToFile(shortname, F, x.Array, y.Array, progress, token, title, xlab, ylab, zlab, parallel);
         }
 
         /// <summary>
@@ -159,15 +157,15 @@ namespace Библиотека_графики
         /// <param name="ylab">Название оси Y</param>
         /// <param name="zlab">Название оси Z</param>
         /// <param name="parallel">Выполнять ли вычисления параллельно</param>
-        public static void MakeGrafic(GraficType graficType, string shortname, Func<double, double, double> F, double xmin, double xmax, double ymin, double ymax, int count, IProgress<int> progress, System.Threading.CancellationToken token, string title = "", string xlab = "x", string ylab = "y", string zlab = "z", bool parallel = true)
+        public static void MakeGrafic(GraficType graficType, string shortname, Func<double, double, double> F, NetOnDouble x, NetOnDouble y, IProgress<int> progress, System.Threading.CancellationToken token, string title = "", string xlab = "x", string ylab = "y", string zlab = "z", bool parallel = true)
         {
             if (graficType == GraficType.Window)
             {
-                new nzy3d_winformsDemo.Form1(title, xmin, xmax, count, ymin, ymax, count, F).ShowDialog();
+                new nzy3d_winformsDemo.Form1(title, x.Begin, x.End, x.Count, y.Begin, y.End, y.Count, F).ShowDialog();
             }
             else
             {
-                JustGetGraficInFiles(shortname, F, xmin, xmax, ymin, ymax, count, count, progress, token, graficType, title, xlab, ylab, zlab, parallel).GetAwaiter().GetResult();
+                JustGetGraficInFiles(shortname, F, x,y, progress, token, graficType, title, xlab, ylab, zlab, parallel).GetAwaiter().GetResult();
                 GetForm(shortname);
             }
         }
@@ -189,17 +187,13 @@ namespace Библиотека_графики
         /// <param name="ylab"></param>
         /// <param name="zlab"></param>
         /// <param name="parallel"></param>
-        public static async Task JustGetGraficInFiles(string shortname, Func<double, double, double> F, double xmin, double xmax, double ymin, double ymax, int acount, int bcount, IProgress<int> progress, System.Threading.CancellationToken token, GraficType graficType = GraficType.PdfPngHtml, string title = "", string xlab = "x", string ylab = "y", string zlab = "z", bool parallel = true)
+        public static async Task JustGetGraficInFiles(string shortname, Func<double, double, double> F, NetOnDouble x, NetOnDouble y, IProgress<int> progress, System.Threading.CancellationToken token, GraficType graficType = GraficType.PdfPngHtml, string title = "", string xlab = "x", string ylab = "y", string zlab = "z", bool parallel = true)
         {
-            await GetDataToFile(shortname, F, xmin, xmax, ymin, ymax, acount, bcount, progress, token, title, xlab, ylab, zlab, parallel);
+            await GetDataToFile(shortname, F, x.Array,y.Array, progress, token, title, xlab, ylab, zlab, parallel);
             GraficTypeToFile(graficType);
             RemoveOlds(shortname);
-            if (acount == bcount)
+            if (x.Count == y.Count)
                 await Task.Run(() => Expendator.StartProcessOnly("Magic3Dscript.R"));
-        }
-        public static async Task JustGetGraficInFiles(string shortname, Func<double, double, double> F, double xmin, double xmax, double ymin, double ymax, int count, IProgress<int> progress, System.Threading.CancellationToken token, GraficType graficType = GraficType.PdfPngHtml, string title = "", string xlab = "x", string ylab = "y", string zlab = "z", bool parallel = true)
-        {
-            await JustGetGraficInFiles(shortname, F, xmin, xmax, ymin, ymax, count,count, progress, token,graficType, title, xlab, ylab, zlab, parallel);
         }
 
         private static void GraficTypeToFile(GraficType type)
