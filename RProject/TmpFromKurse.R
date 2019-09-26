@@ -411,3 +411,6 @@ normality.test <- function(x) {
 normality.test(mtcars[, 1:6])
 
 
+
+########################################вторая часть курса
+

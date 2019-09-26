@@ -251,4 +251,24 @@ namespace Библиотека_графики
                 MessageBox.Show("Ни одного файла не получилось", "Ошибочка", MessageBoxButtons.OK, MessageBoxIcon.Error);
         }
     }
+
+
+    /// <summary>
+    /// Набор строк, нужных при построении графиков
+    /// </summary>
+    public sealed class StringsForGrafic
+    {
+        public readonly string Title;
+        public readonly string XLabel;
+        public readonly string Ylabel;
+        public readonly string Zlabel;
+
+        public StringsForGrafic(string title="",string xlab="x",string ylab="y",string zlab = "z")
+        {
+            Title = title;
+            XLabel = xlab;
+            Ylabel = ylab;
+            Zlabel = zlab;
+        }
+    }
 }

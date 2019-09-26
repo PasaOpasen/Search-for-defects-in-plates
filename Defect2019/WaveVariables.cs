@@ -901,11 +901,11 @@ public static class Functions
     NetOnDouble xx, NetOnDouble yy,
     IProgress<int> progress, System.Threading.CancellationToken token,
     double begin, double step, int valuescount, string filename,
-    Wavelets wavelets = Wavelets.LP, string path = null, int byevery=1)
+    Wavelets wavelets = Wavelets.LP, string path = null, int byevery=1, double epsForWaveletValues=0)
     {
         path = path ?? Environment.NewLine;
         Wavelet wavelet = new Wavelet(wavelets);
-        Func<double, double, Complex> func = wavelet.GetAnalys(begin, step, valuescount, filename, path,byevery);
+        Func<double, double, Complex> func = wavelet.GetAnalys(begin, step, valuescount, filename, path,byevery,epsForWaveletValues);
         Func<double, double, double> F = (x, y) => func(x, y).Abs;
 
         string name = filename.Replace(".txt", "");

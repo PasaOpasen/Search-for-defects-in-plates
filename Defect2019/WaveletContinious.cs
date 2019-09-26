@@ -19,7 +19,7 @@ namespace Работа2019
 
         private static string symbols = "ABCDEFGH";
         private Source[] sources;
-        private double wmin, wmax, tmin, tmax;
+        private double wmin, wmax, tmin, tmax, epsForWaveletValues=1e-8;
         private int wcount,tcount,byevery;
         private NetOnDouble W, T;
 
@@ -109,6 +109,7 @@ namespace Работа2019
 
             W = new NetOnDouble(wmin, wmax, wcount);
             T = new NetOnDouble(tmin, tmax, tcount);
+            epsForWaveletValues= textBox5.Text.ToDouble();
         }
 
 
@@ -141,7 +142,7 @@ namespace Работа2019
                     toolStripLabel1.Text = $"Замер {i + 1}, источник {k + 1}";
                     //await Task.Run(() => System.Threading.Thread.Sleep(1000));
                     var tuple = await Functions.GetMaximunFromArea(W,T, progress, new System.Threading.CancellationToken(),
-                        tmin, step, pcount, othernames[k], Wavelet.Wavelets.LP, wheredata[i],byevery);
+                        tmin, step, pcount, othernames[k], Wavelet.Wavelets.LP, wheredata[i],byevery, epsForWaveletValues);
 
                     var s = Functions.GetFockS(tuple);
                     param.Add(new EllipseParam(otherSources[k].Center, itSource.Center, s, Библиотека_графики.Other.colors[i]));

@@ -129,7 +129,7 @@ namespace МатКлассы
                     };
                     break;
                 case Wavelets.LP:
-                    this.Mother = t => { double pt = t * Math.PI; return (pt == 0) ? 1 : (Math.Sin(2 * pt) - Math.Sin(pt)) / pt; };
+                    this.Mother = t => { double pt = t * Math.PI; return /*(pt == 0) ? 1 :*/ (Math.Sin(2 * pt) - Math.Sin(pt)) / pt; };
                     this.FMother = (Complex w) =>
                     {
                         double tmp = w.Abs;
@@ -223,9 +223,10 @@ namespace МатКлассы
         /// <summary>
         /// Вейвлет-преобразование от массива точек по формулам Котеса
         /// </summary>
-        /// <param name="f"></param>
+        /// <param name="farr"></param>
+        /// <param name="epsForWaveletValues"></param>
         /// <returns></returns>
-        public Func<double, double, Complex> GetAnalys(Point[] farr)
+        public Func<double, double, Complex> GetAnalys(Point[] farr, double epsForWaveletValues = 0)
         {
             double h3 = Math.Abs(farr[1].x - farr[0].x) / 3;
 
@@ -234,26 +235,50 @@ namespace МатКлассы
             //var f = farr;
             int n = (f.Length - 1) / 2;
             //tex: $Wf(a,b) = \dfrac{1}{|a|^{0.5}} \int_{-\infty}^{\infty} f(t) {\bar \psi(\dfrac{t-b}{a}) dt}$, еще написано, что a>0, но тогда зачем модуль
-            Func<double, double, Complex> s = (double a, double b) =>
-            {
-                if (a == 0) return 0;
-                double con = h3 / Math.Sqrt(Math.Abs(a));
-
-                Complex sum0 = f[0].y * this.Mother((f[0].x - b) / a) + f[f.Length - 1].y * this.Mother((f[f.Length - 1].x - b) / a);
-                Complex sum = 0;
-                for (int i = 1; i <= n - 1; i++)
+            Func<double, double, Complex> s;
+            if (epsForWaveletValues <= 0)
+                s = (double a, double b) =>
                 {
-                    sum += f[2 * i].y * this.Mother((f[2 * i].x - b) / a) + 2 * f[2 * i - 1].y * this.Mother((f[2 * i - 1].x - b) / a);
+                    if (a == 0) return 0;
+                    double con = h3 / Math.Sqrt(Math.Abs(a));
 
-                    //if (Double.IsNaN(sum.Abs)) throw new Exception($"Что-то здесь не так {f[2 * i].y} {this.Mother((f[2 * i].x - b) / a).Conjugate} {f[2 * i - 1].y} {this.Mother((f[2 * i - 1].x - b) / a).Conjugate}");
-                }
+                    Complex sum0 = f[0].y * this.Mother((f[0].x - b) / a) + f[f.Length - 1].y * this.Mother((f[f.Length - 1].x - b) / a);
+                    Complex sum = 0;
+                    for (int i = 1; i <= n - 1; i++)
+                    {
+                        sum += f[2 * i].y * this.Mother((f[2 * i].x - b) / a) + 2 * f[2 * i - 1].y * this.Mother((f[2 * i - 1].x - b) / a);
+
+                        //if (Double.IsNaN(sum.Abs)) throw new Exception($"Что-то здесь не так {f[2 * i].y} {this.Mother((f[2 * i].x - b) / a).Conjugate} {f[2 * i - 1].y} {this.Mother((f[2 * i - 1].x - b) / a).Conjugate}");
+                    }
+
+                    if (f.Length % 2 == 1)
+                        sum0 += 4 * f[f.Length - 2].y * this.Mother((f[f.Length - 2].x - b) / a);
+
+                    return con * (2 * sum + sum0).Conjugate;
+                };
+            else
+                s = (double a, double b) =>
+                {
+                    if (a == 0) return 0;
+                    double con = h3 / Math.Sqrt(Math.Abs(a));
+
+                    Complex sum0 = f[0].y * this.Mother((f[0].x - b) / a) + f[f.Length - 1].y * this.Mother((f[f.Length - 1].x - b) / a);
+                    Complex sum = 0;
+                    Complex tmp;
+                    for (int i = 1; i <= n - 1; i++)
+                    {
+                        tmp = this.Mother((f[2 * i].x - b) / a);
+                        sum += f[2 * i].y * tmp + 2 * f[2 * i - 1].y * this.Mother((f[2 * i - 1].x - b) / a);
+                        if (f[2 * i].x > 0 && tmp.Abs < epsForWaveletValues*sum.Abs)
+                            break;
+                    }
 
 
-                if (f.Length % 2 == 1)
-                    sum0 += 4 * f[f.Length - 2].y * this.Mother((f[f.Length - 2].x - b) / a);
+                    if (f.Length % 2 == 1)
+                        sum0 += 4 * f[f.Length - 2].y * this.Mother((f[f.Length - 2].x - b) / a);
 
-                return con * (2 * sum + sum0).Conjugate;
-            };
+                    return con * (2 * sum + sum0).Conjugate;
+                };
 
             return MemoizeAndReturn(s);
         }
@@ -266,7 +291,7 @@ namespace МатКлассы
         /// <param name="filename"></param>
         /// <param name="path"></param>
         /// <returns></returns>
-        public Func<double, double, Complex> GetAnalys(double begin, double step, int count, string filename, string path, int byevery = 1) => GetAnalys(Point.CreatePointArray(begin, step, count, filename, path, byevery));
+        public Func<double, double, Complex> GetAnalys(double begin, double step, int count, string filename, string path, int byevery = 1, double epsForWaveletValues = 0) => GetAnalys(Point.CreatePointArray(begin, step, count, filename, path, byevery), epsForWaveletValues);
         private Func<double, double, Complex> MemoizeAndReturn(Func<double, double, Complex> s)
         {
             Resultmems = new Memoize<Point, Complex>((Point p) => s(p.x, p.y));
