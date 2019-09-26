@@ -12,12 +12,15 @@ namespace Работа2019
     /// </summary>
     public struct EllipseParam
     {
+        internal readonly string name;
         internal Point focSource, focSensor;
         internal readonly Point xM;
         internal double L, a, b, tau;
         public System.Drawing.Color Color;
-        public EllipseParam(Point SourceCenter, Point SensorCenter, double s, System.Drawing.Color color)
+        public EllipseParam(Point SourceCenter, Point SensorCenter, double s, System.Drawing.Color color, string Name="")
         {
+            name = Name;
+
             L = Point.Eudistance(SourceCenter, SensorCenter);
             if (s < L)
                 throw new ArgumentException($"s < L !!! ({s} < {L})");
@@ -49,7 +52,7 @@ namespace Работа2019
         }
         public override string ToString()
         {
-            return $"source = {focSource} sensor = {focSensor} s = {2*a} color = {Color}";
+            return $"{name}: source = {focSource} sensor = {focSensor} s = {2*a} color = {Color}";
         }
 
         /// <summary>

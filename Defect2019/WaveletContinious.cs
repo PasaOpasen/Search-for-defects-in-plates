@@ -147,7 +147,7 @@ namespace Работа2019
                         tmin, step, pcount, othernames[k], Wavelet.Wavelets.LP, wheredata[i],byevery, epsForWaveletValues);
 
                     var s = Functions.GetFockS(tuple);
-                    param.Add(new EllipseParam(otherSources[k].Center, itSource.Center, s, Библиотека_графики.Other.colors[i]));
+                    param.Add(new EllipseParam(otherSources[k].Center, itSource.Center, s, Библиотека_графики.Other.colors[i], $"{snames[k]} -> {symbols[i]}"));
                 }
                 SetDefaltProgressBar();
                 timer1.Stop();

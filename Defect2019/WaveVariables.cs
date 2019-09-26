@@ -86,6 +86,10 @@ public static class РабКонсоль
     /// </summary>
     public static int animacycles = 15;
     #endregion
+
+    #region Параметры для вейвлетов
+    public static double timeshift =0.000052;
+    #endregion
 }
 
 /// <summary>
@@ -929,7 +933,7 @@ public static class Functions
     /// </summary>
     /// <param name="wt"></param>
     /// <returns></returns>
-    public static double GetFockS(Tuple<double, double> wt) => Vg(/*1.0*/pimult2/(wt.Item1*1e6)) * (wt.Item2- 0.0000045) * 1_000_000;//из км/с перевел в мм/с;
+    public static double GetFockS(Tuple<double, double> wt) => Vg(/*1.0*/pimult2/(wt.Item1*1e6)) * (wt.Item2 - timeshift) * 1_000_000;//из км/с перевел в мм/с;
 
     #endregion
 }
