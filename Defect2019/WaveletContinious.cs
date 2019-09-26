@@ -126,6 +126,7 @@ namespace Работа2019
 
             GetData();
             all = wcount * tcount;
+            int alles = sources.Length * (sources.Length - 1);
             IProgress<int> progress = new Progress<int>((int val) => save = val);
 
             string[] wheredata = Expendator.GetStringArrayFromFile("WhereData.txt").Select(s => Path.Combine(s, "Разница")).ToArray();
@@ -135,11 +136,12 @@ namespace Работа2019
                 var itSource = sources[i];
                 var otherSources = sources.Where(s => s != itSource).ToArray();
                 var othernames = names.Where(n => n != names[i]).ToArray();
+                var snames = symbols.Where(s => s != symbols[i]).ToArray();
 
                 timer1.Start();
                 for (int k = 0; k < otherSources.Length; k++)
                 {
-                    toolStripLabel1.Text = $"Замер {i + 1}, источник {k + 1}";
+                    toolStripLabel1.Text = $"Замер {symbols[i]}, источник {snames[k]}, осталось {alles--}";
                     //await Task.Run(() => System.Threading.Thread.Sleep(1000));
                     var tuple = await Functions.GetMaximunFromArea(W,T, progress, new System.Threading.CancellationToken(),
                         tmin, step, pcount, othernames[k], Wavelet.Wavelets.LP, wheredata[i],byevery, epsForWaveletValues);

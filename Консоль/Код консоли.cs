@@ -98,7 +98,7 @@ namespace Консоль
             Create3DGrafics.GraficType type = Create3DGrafics.GraficType.PdfPngHtml;
             string name = "TestGrafic";
 
-            Create3DGrafics.MakeGrafic(type, name, func, new NetOnDouble(xmin, xmax, count), new NetOnDouble(ymin, ymax, count), new Progress<int>(), new System.Threading.CancellationToken(), title, xlab, ylab, zlab, true);
+            Create3DGrafics.MakeGrafic(type, name, func, new NetOnDouble(xmin, xmax, count), new NetOnDouble(ymin, ymax, count), new Progress<int>(), new System.Threading.CancellationToken(), new StringsForGrafic( title, xlab, ylab, zlab), true);
         }
 
         // Point p_ = new Point(0,1);

@@ -16,7 +16,7 @@ namespace Библиотека_графики
     public static class Create3DGrafics
     {
 
-        private static async Task GetDataToFile(string shortname, Func<double, double, double> F, double[] x, double[] y, IProgress<int> progress, System.Threading.CancellationToken token, string title = "", string xlab = "x", string ylab = "y", string zlab = "z", bool parallel = true)
+        private static async Task GetDataToFile(string shortname, Func<double, double, double> F, double[] x, double[] y, IProgress<int> progress, System.Threading.CancellationToken token, StringsForGrafic forGrafic, bool parallel = true)
         {
             int lenx = x.Length;
             int leny = y.Length;
@@ -58,13 +58,7 @@ namespace Библиотека_графики
             };
             Expendator.WriteInFile("3D Grafics Data Adress.txt", filenames);
 
-            Expendator.WriteInFile(filenames[2], new string[]
-            {
-                shortname,
-                title,
-                xlab,ylab,zlab
-            });
-
+            forGrafic.WriteInFile(filenames[2], shortname);
 
             if (lenx == leny)
             {
@@ -89,15 +83,15 @@ namespace Библиотека_графики
             else
             {
                 double max = 0, a = 0, b = 0;
-                for(int i=0;i<lenx;i++)
-                    for(int j=0;j<leny;j++)
+                for (int i = 0; i < lenx; i++)
+                    for (int j = 0; j < leny; j++)
                         if (ur[i, j] > max)
                         {
                             max = ur[i, j];
                             a = x[i];
                             b = y[j];
                         }
-                Expendator.WriteInFile(shortname + "(MaxCoordinate).txt", new string[] 
+                Expendator.WriteInFile(shortname + "(MaxCoordinate).txt", new string[]
                 {
                     "a b",
                     $"{a.ToRString()} {b.ToRString()}".Replace(',','.'),
@@ -106,9 +100,9 @@ namespace Библиотека_графики
             }
         }
 
-        private static async Task GetDataToFile(string shortname, Func<double, double, double> F, double xmin, NetOnDouble x,NetOnDouble y, IProgress<int> progress, System.Threading.CancellationToken token, string title = "", string xlab = "x", string ylab = "y", string zlab = "z", bool parallel = true)
+        private static async Task GetDataToFile(string shortname, Func<double, double, double> F, double xmin, NetOnDouble x, NetOnDouble y, IProgress<int> progress, System.Threading.CancellationToken token, StringsForGrafic forGrafic, bool parallel = true)
         {
-            await GetDataToFile(shortname, F, x.Array, y.Array, progress, token, title, xlab, ylab, zlab, parallel);
+            await GetDataToFile(shortname, F, x.Array, y.Array, progress, token, forGrafic, parallel);
         }
 
         /// <summary>
@@ -157,15 +151,15 @@ namespace Библиотека_графики
         /// <param name="ylab">Название оси Y</param>
         /// <param name="zlab">Название оси Z</param>
         /// <param name="parallel">Выполнять ли вычисления параллельно</param>
-        public static void MakeGrafic(GraficType graficType, string shortname, Func<double, double, double> F, NetOnDouble x, NetOnDouble y, IProgress<int> progress, System.Threading.CancellationToken token, string title = "", string xlab = "x", string ylab = "y", string zlab = "z", bool parallel = true)
+        public static void MakeGrafic(GraficType graficType, string shortname, Func<double, double, double> F, NetOnDouble x, NetOnDouble y, IProgress<int> progress, System.Threading.CancellationToken token, StringsForGrafic forGrafic, bool parallel = true)
         {
             if (graficType == GraficType.Window)
             {
-                new nzy3d_winformsDemo.Form1(title, x.Begin, x.End, x.Count, y.Begin, y.End, y.Count, F).ShowDialog();
+                new nzy3d_winformsDemo.Form1(forGrafic.Title, x.Begin, x.End, x.Count, y.Begin, y.End, y.Count, F).ShowDialog();
             }
             else
             {
-                JustGetGraficInFiles(shortname, F, x,y, progress, token, graficType, title, xlab, ylab, zlab, parallel).GetAwaiter().GetResult();
+                JustGetGraficInFiles(shortname, F, x, y, progress, token,forGrafic, graficType,  parallel).GetAwaiter().GetResult();
                 GetForm(shortname);
             }
         }
@@ -187,9 +181,9 @@ namespace Библиотека_графики
         /// <param name="ylab"></param>
         /// <param name="zlab"></param>
         /// <param name="parallel"></param>
-        public static async Task JustGetGraficInFiles(string shortname, Func<double, double, double> F, NetOnDouble x, NetOnDouble y, IProgress<int> progress, System.Threading.CancellationToken token, GraficType graficType = GraficType.PdfPngHtml, string title = "", string xlab = "x", string ylab = "y", string zlab = "z", bool parallel = true)
+        public static async Task JustGetGraficInFiles(string shortname, Func<double, double, double> F, NetOnDouble x, NetOnDouble y, IProgress<int> progress, System.Threading.CancellationToken token, StringsForGrafic forGrafic, GraficType graficType = GraficType.PdfPngHtml, bool parallel = true)
         {
-            await GetDataToFile(shortname, F, x.Array,y.Array, progress, token, title, xlab, ylab, zlab, parallel);
+            await GetDataToFile(shortname, F, x.Array, y.Array, progress, token, forGrafic, parallel);
             GraficTypeToFile(graficType);
             RemoveOlds(shortname);
             if (x.Count == y.Count)
@@ -263,12 +257,26 @@ namespace Библиотека_графики
         public readonly string Ylabel;
         public readonly string Zlabel;
 
-        public StringsForGrafic(string title="",string xlab="x",string ylab="y",string zlab = "z")
+        public StringsForGrafic(string title = "", string xlab = "x", string ylab = "y", string zlab = "z")
         {
             Title = title;
             XLabel = xlab;
             Ylabel = ylab;
             Zlabel = zlab;
         }
+
+        public void WriteInFile(string filename) => Expendator.WriteInFile(filename, new string[]
+            {
+                Title,
+                XLabel,Ylabel,Zlabel
+            });
+
+        public void WriteInFile(string filename, string shortname) => Expendator.WriteInFile(filename, new string[]
+        {
+                shortname,
+                Title,
+                XLabel,Ylabel,Zlabel
+        });
+
     }
 }

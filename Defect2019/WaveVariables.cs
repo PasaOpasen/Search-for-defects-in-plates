@@ -911,7 +911,11 @@ public static class Functions
         string name = filename.Replace(".txt", "");
         await Библиотека_графики.Create3DGrafics.JustGetGraficInFiles(name, F, xx,yy,
             progress, token,
-            title: $"Wavelet-surface for {name}", xlab: "omega", ylab: "time",
+            new StringsForGrafic
+            (
+                $"Wavelet-surface for {name}",
+                 "ω‎", "time","vals"
+            ),
             graficType: Create3DGrafics.GraficType.Pdf);
 
         var tmp = Expendator.GetStringArrayFromFile(/*Path.Combine(path,*/ name + "(MaxCoordinate).txt")/*)*/[1].Replace('.',',').ToDoubleMas();
