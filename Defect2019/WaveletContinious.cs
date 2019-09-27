@@ -104,6 +104,12 @@ namespace Работа2019
             new Defect2019.ParametrsQu().ShowDialog();
         }
 
+        private void button2_Click(object sender, EventArgs e)
+        {
+            GetData();
+            new R2Area(W, T).ShowDialog();
+        }
+
         private void GetData()
         {
             wmin = 1.0 / textBox2.Text.ToDouble() / 1000;//(2000*Math.PI);

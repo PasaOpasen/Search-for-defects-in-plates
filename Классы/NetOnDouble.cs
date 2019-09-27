@@ -9,7 +9,7 @@ namespace МатКлассы
     /// <summary>
     /// Сетка на отрезке действительной оси
     /// </summary>
-    public class NetOnDouble
+    public class NetOnDouble:Idup<NetOnDouble>
     {
         /// <summary>
         /// Начало отрезка
@@ -67,6 +67,15 @@ namespace МатКлассы
             WithEnd = begin + step * Count == end;
         }
 
+        private NetOnDouble(NetOnDouble netOnDouble)
+        {
+            Begin = netOnDouble.Begin;
+            End = netOnDouble.End;
+            Count = netOnDouble.Count;
+            Step = netOnDouble.Step;
+            WithEnd = netOnDouble.WithEnd;
+        }
+
         private double[] arr = null;
         /// <summary>
         /// Сам массив сетки
@@ -80,5 +89,17 @@ namespace МатКлассы
                 return arr;
             }
         }
+
+        public NetOnDouble dup => new NetOnDouble(this);
+
+        /// <summary>
+        /// Длина отрезка для сетки
+        /// </summary>
+        public double Range => Math.Abs(Begin - End);
+
+        /// <summary>
+        /// Середина отрезка
+        /// </summary>
+        public double Center => (Begin + End) / 2;
     }
 }

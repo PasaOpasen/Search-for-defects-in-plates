@@ -277,12 +277,6 @@
     <Compile Include="kGrafic.designer.cs">
       <DependentUpon>kGrafic.cs</DependentUpon>
     </Compile>
-    <Compile Include="Names.cs">
-      <SubType>Form</SubType>
-    </Compile>
-    <Compile Include="Names.Designer.cs">
-      <DependentUpon>Names.cs</DependentUpon>
-    </Compile>
     <Compile Include="OnePoint.cs">
       <SubType>Form</SubType>
     </Compile>
@@ -300,6 +294,12 @@
     </Compile>
     <Compile Include="PRMSN.Designer.cs">
       <DependentUpon>PRMSN.cs</DependentUpon>
+    </Compile>
+    <Compile Include="R2Area.cs">
+      <SubType>Form</SubType>
+    </Compile>
+    <Compile Include="R2Area.Designer.cs">
+      <DependentUpon>R2Area.cs</DependentUpon>
     </Compile>
     <Compile Include="Scheme.cs">
       <SubType>Form</SubType>
@@ -393,9 +393,6 @@
     <EmbeddedResource Include="kGrafic.resx">
       <DependentUpon>kGrafic.cs</DependentUpon>
     </EmbeddedResource>
-    <EmbeddedResource Include="Names.resx">
-      <DependentUpon>Names.cs</DependentUpon>
-    </EmbeddedResource>
     <EmbeddedResource Include="OnePoint.resx">
       <DependentUpon>OnePoint.cs</DependentUpon>
     </EmbeddedResource>
@@ -408,6 +405,9 @@
     <EmbeddedResource Include="Properties\Resources.resx">
       <Generator>PublicResXFileCodeGenerator</Generator>
       <LastGenOutput>Resources.Designer.cs</LastGenOutput>
+    </EmbeddedResource>
+    <EmbeddedResource Include="R2Area.resx">
+      <DependentUpon>R2Area.cs</DependentUpon>
     </EmbeddedResource>
     <EmbeddedResource Include="Scheme.resx">
       <DependentUpon>Scheme.cs</DependentUpon>
