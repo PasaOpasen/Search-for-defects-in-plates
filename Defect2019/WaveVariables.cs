@@ -979,17 +979,17 @@ public static class Functions
     /// <returns></returns>
     private static async Task BeeHiveSearch(Func<double, double, double> F, string savename, double xmin, double xmax, double ymin, double ymax, int countpoint,int maxtit= 280, int maxfit = 70)
     {
-        Func<Vectors, double> func = (Vectors v) => Math.Exp(-12 * F(v[0], v[1]));
+        Func<Vectors, double> func = (Vectors v) => Math.Exp(-F(v[0], v[1]));
         Vectors min = new Vectors(xmin, ymin);
         Vectors max = new Vectors(xmax, ymax);
 
-        var res = await Task.Run(() => BeeHiveAlgorithm.GetGlobalMin(func, min, max, 1e-12, countpoint, maxtit, maxfit));
+        var res = await Task.Run(() => BeeHiveAlgorithm.GetGlobalMin(func, min, max, 1e-13, countpoint,  maxfit,maxtit));
 
         Expendator.WriteInFile(savename + "(MaxCoordinate).txt", new string[]
         {
             "a b",
             $"{res.Item1[0]} {res.Item1[1]}",
-            $"maximum is {Math.Log(res.Item2)/(-12)}"
+            $"maximum is {Math.Log(res.Item2)/(-1)}"
         });
     }
 

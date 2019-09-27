@@ -98,6 +98,12 @@ namespace Работа2019
             //    }
             //}
         }
+
+        private void toolStripButton1_Click(object sender, EventArgs e)
+        {
+            new Defect2019.ParametrsQu().ShowDialog();
+        }
+
         private void GetData()
         {
             wmin = 1.0 / textBox2.Text.ToDouble() / 1000;//(2000*Math.PI);

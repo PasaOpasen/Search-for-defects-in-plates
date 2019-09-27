@@ -37,6 +37,10 @@ namespace Defect2019
             numericUpDown3.Value = РабКонсоль.animatime;
             numericUpDown4.Value = РабКонсоль.animacycles;
             numericUpDown5.Value = РабКонсоль.clastersCount;
+
+            textBox7.Text = BeeHiveAlgorithm.w.ToRString();
+            textBox13.Text = BeeHiveAlgorithm.fp.ToRString();
+            textBox14.Text = BeeHiveAlgorithm.fg.ToRString();
         }
 
         private void button1_Click(object sender, EventArgs e)
@@ -61,6 +65,11 @@ namespace Defect2019
             РабКонсоль.animatime = Convert.ToInt32(numericUpDown3.Value);
             РабКонсоль.animacycles = Convert.ToInt32(numericUpDown4.Value);
             РабКонсоль.clastersCount = Convert.ToInt32(numericUpDown5.Value);
+
+
+            BeeHiveAlgorithm.w = textBox7.Text.ToDouble();
+            BeeHiveAlgorithm.fp = textBox13.Text.ToDouble();
+            BeeHiveAlgorithm.fg = textBox14.Text.ToDouble();
 
             AfterChaigeData();
             this.Close();

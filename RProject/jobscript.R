@@ -148,15 +148,3 @@ s = read.table("Vg.txt", dec = ",")
 x = s[[1]]
 y = s[[2]]
 plot(x, y, "b", col = "red")
-
-
-
-#bee
-s = read.table("bee.txt", dec = ",")
-x = s[[1]]
-y = s[[2]]
-n = 1:length(x)
-df=data.frame(n,x,y)
-library(ggplot2)
-ggplot(df,aes(x = n,y = x-y)) +
-    geom_point(col="green",size=3)

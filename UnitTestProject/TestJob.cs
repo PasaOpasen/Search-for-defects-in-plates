@@ -7,6 +7,7 @@ using static Functions;
 using Complex = МатКлассы.Number.Complex;
 using System.Linq;
 using System.Collections;
+using System.Diagnostics;
 
 namespace UnitTestProject
 {
@@ -208,6 +209,9 @@ namespace UnitTestProject
             using (StreamWriter r = new StreamWriter("bee.txt"))
                 for (int i = 0; i < vec1.Length; i++)
                     r.WriteLine($"{vec1[i]} {vec2[i]}");
+
+            Expendator.StartProcessOnly("TestBee.r");
+            Process.Start("bee.png");
         }
     }
 }
