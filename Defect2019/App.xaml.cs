@@ -33,6 +33,7 @@ namespace Defect2019
         {
             AppDomain.CurrentDomain.UnhandledException += (object sender, UnhandledExceptionEventArgs args) =>
             {
+                OtherMethods.PlaySound("КритическаяОшибка");
                 var ex = (args.ExceptionObject as Exception);
                 if (MessageBox.Show($"Произошло исключение \" {ex.Message} \", которое не было перехвачено. Программа будет закрыта, стек исключения находится в файле Exeptions.txt",
                     "Неперехваченное исключение", MessageBoxButton.OK, MessageBoxImage.Exclamation) == MessageBoxResult.OK)

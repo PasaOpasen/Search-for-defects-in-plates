@@ -160,7 +160,7 @@
             this.numericUpDown1.TabIndex = 7;
             this.numericUpDown1.TextAlign = System.Windows.Forms.HorizontalAlignment.Center;
             this.numericUpDown1.Value = new decimal(new int[] {
-            120,
+            60,
             0,
             0,
             0});
@@ -201,7 +201,7 @@
             this.textBox4.Name = "textBox4";
             this.textBox4.Size = new System.Drawing.Size(122, 26);
             this.textBox4.TabIndex = 3;
-            this.textBox4.Text = "0,002079984";
+            this.textBox4.Text = "0,0015";
             this.textBox4.TextAlign = System.Windows.Forms.HorizontalAlignment.Center;
             // 
             // textBox3
@@ -219,7 +219,7 @@
             this.textBox2.Name = "textBox2";
             this.textBox2.Size = new System.Drawing.Size(122, 26);
             this.textBox2.TabIndex = 1;
-            this.textBox2.Text = "100";
+            this.textBox2.Text = "70";
             this.textBox2.TextAlign = System.Windows.Forms.HorizontalAlignment.Center;
             // 
             // textBox1
@@ -228,7 +228,7 @@
             this.textBox1.Name = "textBox1";
             this.textBox1.Size = new System.Drawing.Size(129, 26);
             this.textBox1.TabIndex = 0;
-            this.textBox1.Text = "5";
+            this.textBox1.Text = "35";
             this.textBox1.TextAlign = System.Windows.Forms.HorizontalAlignment.Center;
             // 
             // toolStrip1

@@ -154,4 +154,10 @@
   <data name="СоздаемЭллипсы" type="System.Resources.ResXFileRef, System.Windows.Forms">
     <value>..\Resources\СоздаемЭллипсы.wav;System.IO.MemoryStream, mscorlib, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
   </data>
+  <data name="КритическаяОшибка" type="System.Resources.ResXFileRef, System.Windows.Forms">
+    <value>..\Resources\КритическаяОшибка.wav;System.IO.MemoryStream, mscorlib, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
+  </data>
+  <data name="Поехали" type="System.Resources.ResXFileRef, System.Windows.Forms">
+    <value>..\Resources\Поехали.wav;System.IO.MemoryStream, mscorlib, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
+  </data>
 </root>

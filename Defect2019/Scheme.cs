@@ -23,13 +23,14 @@ namespace Работа2019
         private Source[] mas;
         private float rad;
 
-        public Scheme()
+        public Scheme(string title="Схема эксперимента")
         {
             InitializeComponent();
             saveFileDialog1.Filter = "Image files(*.png)|*.png|All files(*.*)|*.*";
+            this.Text = title;
         }
 
-        public Scheme(Source[] mass) : this()
+        public Scheme(Source[] mass, string title = "Схема эксперимента") : this(title)
         {
             mas = mass;
             CreateEmptyImageAndSetParams();
@@ -37,7 +38,7 @@ namespace Работа2019
             DrawFigures();
         }
 
-        public Scheme(Source[] mass,EllipseParam[] param) : this(mass)
+        public Scheme(Source[] mass,EllipseParam[] param, string title = "Схема эксперимента") : this(mass,title)
         {
             foreach(var p in param)
             {

@@ -117,6 +117,7 @@ namespace Работа2019
         private async void button1_Click(object sender, EventArgs e)
         {
             OtherMethods.IlushaMethod(checkBox4);
+            OtherMethods.PlaySound("Поехали");
 
             string[] names = new string[sources.Length];
             for (int i = 0; i < names.Length; i++)
@@ -137,6 +138,7 @@ namespace Работа2019
                 var otherSources = sources.Where(s => s != itSource).ToArray();
                 var othernames = names.Where(n => n != names[i]).ToArray();
                 var snames = symbols.Where(s => s != symbols[i]).ToArray();
+                var ItElleps = new EllipseParam[sources.Length - 1];
 
                 timer1.Start();
                 for (int k = 0; k < otherSources.Length; k++)
@@ -147,8 +149,10 @@ namespace Работа2019
                         tmin, step, pcount, othernames[k], Wavelet.Wavelets.LP, wheredata[i],byevery, epsForWaveletValues);
 
                     var s = Functions.GetFockS(tuple);
-                    param.Add(new EllipseParam(otherSources[k].Center, itSource.Center, s, Библиотека_графики.Other.colors[i], $"{snames[k]} -> {symbols[i]}"));
+                    ItElleps[k] = new EllipseParam(otherSources[k].Center, itSource.Center, s, Библиотека_графики.Other.colors[i], $"{snames[k]} -> {symbols[i]}");            
                 }
+//                new Scheme(sources, ItElleps,$"Схема для замера {symbols[i]}").ShowDialog();
+                param.AddRange(ItElleps);
                 SetDefaltProgressBar();
                 timer1.Stop();
                 OtherMethods.PlaySound("ЗамерОбработан");
@@ -163,7 +167,7 @@ namespace Работа2019
         private void MakeEllipses(List<EllipseParam> param)
         {
             EllipseParam.WriteInFile("Ellipses.txt", param);
-            new Scheme(sources, param.ToArray()).Show();
+            new Scheme(sources, param.ToArray(),"Схема для всех замеров").Show();
         }
     }
 }

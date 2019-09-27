@@ -147,9 +147,27 @@ namespace Работа2019.Properties {
         /// <summary>
         ///   Поиск локализованного ресурса типа System.IO.UnmanagedMemoryStream, аналогичного System.IO.MemoryStream.
         /// </summary>
+        public static System.IO.UnmanagedMemoryStream КритическаяОшибка {
+            get {
+                return ResourceManager.GetStream("КритическаяОшибка", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Поиск локализованного ресурса типа System.IO.UnmanagedMemoryStream, аналогичного System.IO.MemoryStream.
+        /// </summary>
         public static System.IO.UnmanagedMemoryStream ПоверхностиПостроены {
             get {
                 return ResourceManager.GetStream("ПоверхностиПостроены", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Поиск локализованного ресурса типа System.IO.UnmanagedMemoryStream, аналогичного System.IO.MemoryStream.
+        /// </summary>
+        public static System.IO.UnmanagedMemoryStream Поехали {
+            get {
+                return ResourceManager.GetStream("Поехали", resourceCulture);
             }
         }
         
