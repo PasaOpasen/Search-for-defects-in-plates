@@ -107,7 +107,22 @@ namespace Работа2019
         private void button2_Click(object sender, EventArgs e)
         {
             GetData();
-            new R2Area(W, T).ShowDialog();
+            var form = new R2Area(W, T);
+            form.FormClosing += (o, s) =>
+            {
+                if (form.OK)
+                {
+                    textBox2.Text = (1.0/(form.X.Begin*1000)).ToString();
+                    textBox1.Text = (1.0 / (form.X.End * 1000)).ToString();
+                    textBox3.Text = form.Y.Begin.ToString();
+                    textBox4.Text = form.Y.End.ToString();
+                    numericUpDown1.Value = form.X.Count;
+                    numericUpDown1.Value = form.Y.Count;
+                    GetData();
+                }
+            };
+
+            form.ShowDialog();
         }
 
         private void GetData()

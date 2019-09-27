@@ -14,7 +14,10 @@ y = arg[[2]]
 
 len = length(x)
 
-scalecoef = (max(y) - min(y)) / (max(x) - min(x))
+
+xlen = max(x) - min(x)
+scalecoef = (max(y) - min(y)) / xlen
+
 #x = x * scalecoef
 
 vals = matrix(z, nrow = len, byrow = T)
@@ -29,20 +32,19 @@ save.name = dt[[2]]
 titles = dt[[3]]
 xlabs = dt[[4]]
 ylabs = dt[[5]]
-zlabs=dt[[6]]
+zlabs = dt[[6]]
 
 #координаты максимума
 mx = which.max(z)
 xi = mx %/% len + 1
-yi=mx-(xi-1)*len
+yi = mx - (xi - 1) * len
 
-sink(paste0(save.name,"(MaxCoordinate).txt"))
+sink(paste0(save.name, "(MaxCoordinate).txt"))
 cat("a b \n")
 cat(c(x[xi], y[yi]))
 cat("\n")
-cat(paste("maximum is",max(z)))
+cat(paste("maximum is", max(z)))
 sink()
-
 
 
 # Get type
@@ -63,14 +65,24 @@ if (type == "all") {
     ht = TRUE
 }
 
+sc = as.logical(readLines("MakeScaleForPdf.txt")[1])
+
 # Create grafics
 if (pd) {
     pdf(file = paste0(save.name, ".pdf"), width = 12, height = 12, paper = "letter")
     par(mfrow = c(2, 1), cex = 1.1, cex.sub = 1.2, col.sub = "blue")
     layout(matrix(c(1, 2), 2, 1, byrow = FALSE), heights = c(2.2, 1))
 
-    tmp = (max(vals) - min(vals)) / (max(x) - min(x))
-    persp3D(z = vals, x = x * tmp, y = y * tmp, scale = FALSE, zlab = zlabs, xlab = xlabs, ylab = ylabs,
+    if (sc) {
+        xs = x / xlen
+        ys = y / (max(y) - min(x))
+    } else {
+        tmp = (max(vals) - min(vals)) / (max(x) - min(x))
+        xs = x * tmp
+        ys = y * tmp
+    }
+
+    persp3D(z = vals, x = xs, y = ys, scale = FALSE, zlab = zlabs, xlab = xlabs, ylab = ylabs,
     contour = list(nlevels = levels, col = "red"),
         expand = 0.2,
        image = list(col = grey(seq(0, 1, length.out = 100))), main = titles)
@@ -125,4 +137,3 @@ if (ht) {
 
     saveWidget(as.widget(p2), paste0(save.name, ".html"), FALSE)
 }
-
