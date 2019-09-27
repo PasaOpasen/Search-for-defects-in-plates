@@ -29,7 +29,7 @@
         private void InitializeComponent()
         {
             this.components = new System.ComponentModel.Container();
-            System.Windows.Forms.DataGridViewCellStyle dataGridViewCellStyle5 = new System.Windows.Forms.DataGridViewCellStyle();
+            System.Windows.Forms.DataGridViewCellStyle dataGridViewCellStyle12 = new System.Windows.Forms.DataGridViewCellStyle();
             this.dataGridView1 = new System.Windows.Forms.DataGridView();
             this.groupBox1 = new System.Windows.Forms.GroupBox();
             this.numericUpDown2 = new System.Windows.Forms.NumericUpDown();
@@ -82,14 +82,14 @@
             // dataGridView1
             // 
             this.dataGridView1.ColumnHeadersHeightSizeMode = System.Windows.Forms.DataGridViewColumnHeadersHeightSizeMode.AutoSize;
-            dataGridViewCellStyle5.Alignment = System.Windows.Forms.DataGridViewContentAlignment.MiddleLeft;
-            dataGridViewCellStyle5.BackColor = System.Drawing.SystemColors.Window;
-            dataGridViewCellStyle5.Font = new System.Drawing.Font("Consolas", 12F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(204)));
-            dataGridViewCellStyle5.ForeColor = System.Drawing.SystemColors.ControlText;
-            dataGridViewCellStyle5.SelectionBackColor = System.Drawing.Color.LimeGreen;
-            dataGridViewCellStyle5.SelectionForeColor = System.Drawing.SystemColors.HighlightText;
-            dataGridViewCellStyle5.WrapMode = System.Windows.Forms.DataGridViewTriState.False;
-            this.dataGridView1.DefaultCellStyle = dataGridViewCellStyle5;
+            dataGridViewCellStyle12.Alignment = System.Windows.Forms.DataGridViewContentAlignment.MiddleLeft;
+            dataGridViewCellStyle12.BackColor = System.Drawing.SystemColors.Window;
+            dataGridViewCellStyle12.Font = new System.Drawing.Font("Consolas", 12F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(204)));
+            dataGridViewCellStyle12.ForeColor = System.Drawing.SystemColors.ControlText;
+            dataGridViewCellStyle12.SelectionBackColor = System.Drawing.Color.LimeGreen;
+            dataGridViewCellStyle12.SelectionForeColor = System.Drawing.SystemColors.HighlightText;
+            dataGridViewCellStyle12.WrapMode = System.Windows.Forms.DataGridViewTriState.False;
+            this.dataGridView1.DefaultCellStyle = dataGridViewCellStyle12;
             this.dataGridView1.Location = new System.Drawing.Point(12, 37);
             this.dataGridView1.Name = "dataGridView1";
             this.dataGridView1.Size = new System.Drawing.Size(595, 216);
@@ -134,7 +134,7 @@
             this.numericUpDown2.TabIndex = 9;
             this.numericUpDown2.TextAlign = System.Windows.Forms.HorizontalAlignment.Center;
             this.numericUpDown2.Value = new decimal(new int[] {
-            50,
+            1000,
             0,
             0,
             0});
@@ -415,12 +415,12 @@
             0});
             this.numericUpDown4.Location = new System.Drawing.Point(246, 25);
             this.numericUpDown4.Maximum = new decimal(new int[] {
-            250,
+            400,
             0,
             0,
             0});
             this.numericUpDown4.Minimum = new decimal(new int[] {
-            10,
+            100,
             0,
             0,
             0});
@@ -429,7 +429,7 @@
             this.numericUpDown4.TabIndex = 8;
             this.numericUpDown4.TextAlign = System.Windows.Forms.HorizontalAlignment.Center;
             this.numericUpDown4.Value = new decimal(new int[] {
-            60,
+            200,
             0,
             0,
             0});
@@ -444,7 +444,7 @@
             0});
             this.numericUpDown5.Location = new System.Drawing.Point(246, 57);
             this.numericUpDown5.Maximum = new decimal(new int[] {
-            250,
+            400,
             0,
             0,
             0});
@@ -458,7 +458,7 @@
             this.numericUpDown5.TabIndex = 9;
             this.numericUpDown5.TextAlign = System.Windows.Forms.HorizontalAlignment.Center;
             this.numericUpDown5.Value = new decimal(new int[] {
-            60,
+            220,
             0,
             0,
             0});
@@ -487,7 +487,7 @@
             this.numericUpDown6.TabIndex = 10;
             this.numericUpDown6.TextAlign = System.Windows.Forms.HorizontalAlignment.Center;
             this.numericUpDown6.Value = new decimal(new int[] {
-            60,
+            50,
             0,
             0,
             0});
@@ -507,12 +507,12 @@
             // 
             this.label8.AutoSize = true;
             this.label8.BackColor = System.Drawing.Color.FromArgb(((int)(((byte)(192)))), ((int)(((byte)(255)))), ((int)(((byte)(192)))));
-            this.label8.Location = new System.Drawing.Point(24, 60);
+            this.label8.Location = new System.Drawing.Point(51, 60);
             this.label8.Name = "label8";
-            this.label8.Size = new System.Drawing.Size(216, 19);
+            this.label8.Size = new System.Drawing.Size(189, 19);
             this.label8.TabIndex = 12;
-            this.label8.Text = "Число успешных итераций";
-            this.toolTip1.SetToolTip(this.label8, "Максимальное число успешных итераций, после которого алгоритм завершается");
+            this.label8.Text = "Макс. число итераций";
+            this.toolTip1.SetToolTip(this.label8, "Максимальное число итераций, после которого алгоритм завершается");
             // 
             // label9
             // 
@@ -534,6 +534,7 @@
             this.radioButton1.TabIndex = 2;
             this.radioButton1.Text = "Перебор";
             this.radioButton1.UseVisualStyleBackColor = true;
+            this.radioButton1.CheckedChanged += new System.EventHandler(this.radioButton1_CheckedChanged);
             // 
             // radioButton2
             // 
@@ -546,6 +547,7 @@
             this.radioButton2.TabStop = true;
             this.radioButton2.Text = "Рой";
             this.radioButton2.UseVisualStyleBackColor = true;
+            this.radioButton2.CheckedChanged += new System.EventHandler(this.radioButton2_CheckedChanged);
             // 
             // WaveletContinious
             // 

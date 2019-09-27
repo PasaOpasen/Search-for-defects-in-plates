@@ -20,7 +20,7 @@ namespace Работа2019
         private static string symbols = "ABCDEFGH";
         private Source[] sources;
         private double wmin, wmax, tmin, tmax, epsForWaveletValues = 1e-8;
-        private int wcount, tcount, byevery;
+        private int wcount, tcount, byevery,pointcount,pointmax,pointmax2;
         private NetOnDouble W, T;
 
         public WaveletContinious(Source[] array)
@@ -37,6 +37,7 @@ namespace Работа2019
                 toolStripLabel2.Text = $"{d}%";
                 toolStripProgressBar1.Value = (int)(d / 100 * toolStripProgressBar1.Maximum);
             };
+            groupBox3.Hide();
         }
 
         private void SetDefaultStrip()
@@ -106,12 +107,26 @@ namespace Работа2019
             wcount = numericUpDown1.Value.ToInt32();
             tcount = numericUpDown2.Value.ToInt32();
             byevery = numericUpDown3.Value.ToInt32();
+            pointcount = numericUpDown4.Value.ToInt32();
+            pointmax = numericUpDown5.Value.ToInt32();
+            pointmax2 = numericUpDown6.Value.ToInt32();
 
             W = new NetOnDouble(wmin, wmax, wcount);
             T = new NetOnDouble(tmin, tmax, tcount);
             epsForWaveletValues = textBox5.Text.ToDouble();
         }
 
+        private void radioButton1_CheckedChanged(object sender, EventArgs e)
+        {
+            groupBox3.Show();
+            groupBox4.Hide();
+        }
+
+        private void radioButton2_CheckedChanged(object sender, EventArgs e)
+        {
+            groupBox3.Hide();
+            groupBox4.Show();
+        }
 
         int save = 0, all = 1;
         string dir;
@@ -158,9 +173,13 @@ namespace Работа2019
 
                     toolStripLabel1.Text = $"Замер {symbols[i]}, источник {snames[k]}, осталось {alles--}";
 
-                    var tuple = await Functions.GetMaximunFromArea(W, T, progress, new System.Threading.CancellationToken(),
+                    var tuple =(radioButton1.Checked)? await Functions.GetMaximunFromArea(W, T, progress, new System.Threading.CancellationToken(),
                         tmin, step, pcount, othernames[k], Path.Combine(dir, savename.Replace(" -> ", "to")),
-                        Wavelet.Wavelets.LP, wheredata[i], byevery, epsForWaveletValues);
+                        Wavelet.Wavelets.LP, wheredata[i], byevery, epsForWaveletValues):
+                       await Functions.GetMaximunFromArea(wmin,wmax, tmin,tmax,
+                        tmin, step, pcount, othernames[k], Path.Combine(dir, savename.Replace(" -> ", "to")),
+                        Wavelet.Wavelets.LP, wheredata[i], byevery, epsForWaveletValues,
+                        pointcount,pointmax,pointmax2);
 
                     ItElleps[k] = new EllipseParam(otherSources[k].Center, itSource.Center, Functions.GetFockS(tuple), Библиотека_графики.Other.colors[i], savename);
                     AddToScheme(ItElleps[k]);
