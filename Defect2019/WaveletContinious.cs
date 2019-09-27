@@ -136,7 +136,7 @@ namespace Работа2019
                 names[i] = $"Array{dataGridView1[1, i].Value}.txt";
 
             List<EllipseParam> param = new List<EllipseParam>();
-          
+
             all = wcount * tcount;
             int alles = sources.Length * (sources.Length - 1);
             IProgress<int> progress = new Progress<int>((int val) => save = val);
@@ -163,6 +163,7 @@ namespace Работа2019
                         Wavelet.Wavelets.LP, wheredata[i], byevery, epsForWaveletValues);
 
                     ItElleps[k] = new EllipseParam(otherSources[k].Center, itSource.Center, Functions.GetFockS(tuple), Библиотека_графики.Other.colors[i], savename);
+                    AddToScheme(ItElleps[k]);
                 }
                 //new Scheme(sources, ItElleps,$"Схема для замера {symbols[i]}").ShowDialog();
                 param.AddRange(ItElleps);
@@ -177,10 +178,27 @@ namespace Работа2019
             SetDefaultStrip();
         }
 
+        Scheme scheme = null;
+
+        private void AddToScheme(EllipseParam p)
+        {
+            if (scheme == null)
+            {
+                scheme = new Scheme(sources, new EllipseParam[] { p });
+                scheme.Show();
+            }
+            else
+            {
+                scheme.Add(p);
+                scheme.Refresh();
+            }
+
+        }
         private void MakeEllipses(List<EllipseParam> param)
         {
             EllipseParam.WriteInFile("Ellipses.txt", param);
-            //new Scheme(sources, param.ToArray(), "Схема для всех замеров").Show();
+            if (scheme.IsDisposed)
+                new Scheme(sources, param.ToArray(), "Схема для всех замеров").Show();
         }
     }
 }
