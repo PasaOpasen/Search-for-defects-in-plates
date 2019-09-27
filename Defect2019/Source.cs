@@ -196,7 +196,7 @@ public struct Source : Idup<Source>,IEquatable<Source>
             // List<double> d = new List<double>();
             List<Complex> c = new List<Complex>();
 
-            s = fs.ReadLine();
+            s = fs.ReadLine().Replace('.',',');
             while (s != null)
             {
                 //s.Show();

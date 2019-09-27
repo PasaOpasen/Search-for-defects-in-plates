@@ -351,7 +351,7 @@ namespace МатКлассы
             var res = new Point[count];
             using (StreamReader f = new StreamReader(Path.Combine(path, filename)))
                 for (int i = 0; i < count; i++)
-                    res[i] = new Point(begin + i * step, f.ReadLine().ToDouble());
+                    res[i] = new Point(begin + i * step, f.ReadLine().Replace('.',',').ToDouble());
             if(byevery==1)
             return res;
 

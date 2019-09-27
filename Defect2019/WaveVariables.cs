@@ -904,7 +904,7 @@ public static class Functions
     public static async Task<Tuple<double, double>> GetMaximunFromArea(
     NetOnDouble xx, NetOnDouble yy,
     IProgress<int> progress, System.Threading.CancellationToken token,
-    double begin, double step, int valuescount, string filename,
+    double begin, double step, int valuescount, string filename, string savename,
     Wavelets wavelets = Wavelets.LP, string path = null, int byevery=1, double epsForWaveletValues=0)
     {
         path = path ?? Environment.NewLine;
@@ -913,7 +913,7 @@ public static class Functions
         Func<double, double, double> F = (x, y) => func(x, y).Abs;
 
         string name = filename.Replace(".txt", "");
-        await Библиотека_графики.Create3DGrafics.JustGetGraficInFiles(name, F, xx,yy,
+        await Библиотека_графики.Create3DGrafics.JustGetGraficInFiles(name, savename, F, xx,yy,
             progress, token,
             new StringsForGrafic
             (
@@ -922,7 +922,7 @@ public static class Functions
             ),
             graficType: Create3DGrafics.GraficType.Pdf);
 
-        var tmp = Expendator.GetStringArrayFromFile(/*Path.Combine(path,*/ name + "(MaxCoordinate).txt")/*)*/[1].Replace('.',',').ToDoubleMas();
+        var tmp = Expendator.GetStringArrayFromFile(/*Path.Combine(path,*/ savename + "(MaxCoordinate).txt")/*)*/[1].Replace('.',',').ToDoubleMas();
 
         wavelet.Dispose();
         return new Tuple<double, double>(tmp[0], tmp[1]);
