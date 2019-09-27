@@ -6,7 +6,7 @@ using Defect2019;
 using static Functions;
 using Complex = МатКлассы.Number.Complex;
 using System.Linq;
-
+using System.Collections;
 
 namespace UnitTestProject
 {
@@ -184,6 +184,30 @@ namespace UnitTestProject
             double[] w = Expendator.GetStringArrayFromFile("vg.dat", true).Select(s => s.Split(new char[] { ' ' }, StringSplitOptions.RemoveEmptyEntries)[1].Replace('.', ',').ToDouble() * pimult2 * 1e-3).ToArray();
             foreach (var c in w)
                 Console.WriteLine($"{c}  {Functions.Vg(c)}");
+        }
+
+        [TestMethod]
+        public void BeeHiveVersNotBeeHive()
+        {
+            string BeeHiveAdress = @"C:\Users\крендель\Desktop\Code\Defect2019\bin\Debug\Максимумы с эллипсов";
+            string NotBeeHiveAdress = @"C:\Users\крендель\Desktop\Code\Defect2019\bin\Release\Максимумы с эллипсов";
+            string Symbols = "ABCDEFGH";
+
+            string[] files = new string[Symbols.Length * (Symbols.Length - 1)];
+            int k = 0;
+            for (int i = 0; i < Symbols.Length; i++)
+                for (int j = 0; j < Symbols.Length; j++)
+                    if (i != j)
+                        files[k++] = $"{Symbols[i]}to{Symbols[j]}(MaxCoordinate).txt";
+
+            double[] Get(string path)=>files.Select(s => Expendator.GetStringArrayFromFile(Path.Combine(path, s))[2].Split(new char[] { ' ' }, StringSplitOptions.RemoveEmptyEntries)[2].ToDouble()).ToArray();
+
+            var vec1 = Get(BeeHiveAdress);
+            var vec2 = Get(NotBeeHiveAdress);
+
+            using (StreamWriter r = new StreamWriter("bee.txt"))
+                for (int i = 0; i < vec1.Length; i++)
+                    r.WriteLine($"{vec1[i]} {vec2[i]}");
         }
     }
 }
