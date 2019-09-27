@@ -86,6 +86,10 @@ public static class РабКонсоль
     /// </summary>
     public static int animacycles = 15;
     #endregion
+
+    #region Параметры для вейвлетов
+    public static double timeshift =0.000052;
+    #endregion
 }
 
 /// <summary>
@@ -898,23 +902,27 @@ public static class Functions
     /// <param name="path"></param>
     /// <returns></returns>
     public static async Task<Tuple<double, double>> GetMaximunFromArea(
-    double xmin, double xmax, double ymin, double ymax, int count,
+    NetOnDouble xx, NetOnDouble yy,
     IProgress<int> progress, System.Threading.CancellationToken token,
-    double begin, double step, int valuescount, string filename,
-    Wavelets wavelets = Wavelets.LP, string path = null)
+    double begin, double step, int valuescount, string filename, string savename,
+    Wavelets wavelets = Wavelets.LP, string path = null, int byevery=1, double epsForWaveletValues=0)
     {
         path = path ?? Environment.NewLine;
         Wavelet wavelet = new Wavelet(wavelets);
-        Func<double, double, Complex> func = wavelet.GetAnalys(begin, step, valuescount, filename, path);
+        Func<double, double, Complex> func = wavelet.GetAnalys(begin, step, valuescount, filename, path,byevery,epsForWaveletValues);
         Func<double, double, double> F = (x, y) => func(x, y).Abs;
 
         string name = filename.Replace(".txt", "");
-        await Библиотека_графики.Create3DGrafics.JustGetGraficInFiles(name, F, xmin, xmax, ymin, ymax, count,
+        await Библиотека_графики.Create3DGrafics.JustGetGraficInFiles(name, savename, F, xx,yy,
             progress, token,
-            title: $"Wavelet-surface for {name}", xlab: "omega", ylab: "time",
+            new StringsForGrafic
+            (
+                $"Wavelet-surface for {name}",
+                 "ω‎", "time","vals"
+            ),
             graficType: Create3DGrafics.GraficType.Pdf);
 
-        var tmp = Expendator.GetStringArrayFromFile(/*Path.Combine(path,*/ name + "(MaxCoordinate).txt")/*)*/[1].Replace('.',',').ToDoubleMas();
+        var tmp = Expendator.GetStringArrayFromFile(/*Path.Combine(path,*/ savename + "(MaxCoordinate).txt")/*)*/[1].Replace('.',',').ToDoubleMas();
 
         wavelet.Dispose();
         return new Tuple<double, double>(tmp[0], tmp[1]);
@@ -925,7 +933,7 @@ public static class Functions
     /// </summary>
     /// <param name="wt"></param>
     /// <returns></returns>
-    public static double GetFockS(Tuple<double, double> wt) => Vg(/*1.0*/pimult2/(wt.Item1*1e6)) * (wt.Item2- 0.0000045) * 1_000_000;//из км/с перевел в мм/с;
+    public static double GetFockS(Tuple<double, double> wt) => Vg(/*1.0*/pimult2/(wt.Item1*1e6)) * (wt.Item2 - timeshift) * 1_000_000;//из км/с перевел в мм/с;
 
     #endregion
 }

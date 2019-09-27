@@ -514,6 +514,12 @@
   <ItemGroup>
     <None Include="Resources\СоздаемЭллипсы.wav" />
   </ItemGroup>
+  <ItemGroup>
+    <None Include="Resources\КритическаяОшибка.wav" />
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="Resources\Поехали.wav" />
+  </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
   <Target Name="EnsureNuGetPackageBuildImports" BeforeTargets="PrepareForBuild">
     <PropertyGroup>

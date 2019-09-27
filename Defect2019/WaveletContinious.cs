@@ -19,8 +19,9 @@ namespace Работа2019
 
         private static string symbols = "ABCDEFGH";
         private Source[] sources;
-        private double wmin, wmax, tmin, tmax;
-        private int count;
+        private double wmin, wmax, tmin, tmax, epsForWaveletValues = 1e-8;
+        private int wcount, tcount, byevery;
+        private NetOnDouble W, T;
 
         public WaveletContinious(Source[] array)
         {
@@ -102,23 +103,42 @@ namespace Работа2019
             wmax = 1.0 / textBox1.Text.ToDouble() / 1000; //(2000 * Math.PI);
             tmin = textBox3.Text.ToDouble();
             tmax = textBox4.Text.ToDouble();
-            count = numericUpDown1.Value.ToInt32();
+            wcount = numericUpDown1.Value.ToInt32();
+            tcount = numericUpDown2.Value.ToInt32();
+            byevery = numericUpDown3.Value.ToInt32();
+
+            W = new NetOnDouble(wmin, wmax, wcount);
+            T = new NetOnDouble(tmin, tmax, tcount);
+            epsForWaveletValues = textBox5.Text.ToDouble();
         }
 
 
         int save = 0, all = 1;
+        string dir;
+
+        private void SetDir()
+        {
+            dir = Path.Combine(Environment.CurrentDirectory, "Максимумы с эллипсов");
+            if (!Directory.Exists(dir))
+                Directory.CreateDirectory(dir);
+        }
+
         private async void button1_Click(object sender, EventArgs e)
         {
             OtherMethods.IlushaMethod(checkBox4);
+            OtherMethods.PlaySound("Поехали");
+
+            SetDir();
+            GetData();
 
             string[] names = new string[sources.Length];
             for (int i = 0; i < names.Length; i++)
                 names[i] = $"Array{dataGridView1[1, i].Value}.txt";
 
             List<EllipseParam> param = new List<EllipseParam>();
-
-            GetData();
-            all = count * count;
+          
+            all = wcount * tcount;
+            int alles = sources.Length * (sources.Length - 1);
             IProgress<int> progress = new Progress<int>((int val) => save = val);
 
             string[] wheredata = Expendator.GetStringArrayFromFile("WhereData.txt").Select(s => Path.Combine(s, "Разница")).ToArray();
@@ -128,18 +148,24 @@ namespace Работа2019
                 var itSource = sources[i];
                 var otherSources = sources.Where(s => s != itSource).ToArray();
                 var othernames = names.Where(n => n != names[i]).ToArray();
+                var snames = symbols.Where(s => s != symbols[i]).ToArray();
+                var ItElleps = new EllipseParam[sources.Length - 1];
 
                 timer1.Start();
                 for (int k = 0; k < otherSources.Length; k++)
                 {
-                    toolStripLabel1.Text = $"Замер {i + 1}, источник {k + 1}";
-                    //await Task.Run(() => System.Threading.Thread.Sleep(1000));
-                    var tuple = await Functions.GetMaximunFromArea(wmin, wmax, tmin, tmax, count, progress, new System.Threading.CancellationToken(),
-                        tmin, step, pcount, othernames[k], Wavelet.Wavelets.LP, wheredata[i]);
+                    string savename = $"{snames[k]} -> {symbols[i]}";
 
-                    var s = Functions.GetFockS(tuple);
-                    param.Add(new EllipseParam(otherSources[k].Center, itSource.Center, s, Библиотека_графики.Other.colors[i]));
+                    toolStripLabel1.Text = $"Замер {symbols[i]}, источник {snames[k]}, осталось {alles--}";
+
+                    var tuple = await Functions.GetMaximunFromArea(W, T, progress, new System.Threading.CancellationToken(),
+                        tmin, step, pcount, othernames[k], Path.Combine(dir, savename.Replace(" -> ", "to")),
+                        Wavelet.Wavelets.LP, wheredata[i], byevery, epsForWaveletValues);
+
+                    ItElleps[k] = new EllipseParam(otherSources[k].Center, itSource.Center, Functions.GetFockS(tuple), Библиотека_графики.Other.colors[i], savename);
                 }
+                //new Scheme(sources, ItElleps,$"Схема для замера {symbols[i]}").ShowDialog();
+                param.AddRange(ItElleps);
                 SetDefaltProgressBar();
                 timer1.Stop();
                 OtherMethods.PlaySound("ЗамерОбработан");
@@ -154,7 +180,7 @@ namespace Работа2019
         private void MakeEllipses(List<EllipseParam> param)
         {
             EllipseParam.WriteInFile("Ellipses.txt", param);
-            new Scheme(sources, param.ToArray()).Show();
+            //new Scheme(sources, param.ToArray(), "Схема для всех замеров").Show();
         }
     }
 }

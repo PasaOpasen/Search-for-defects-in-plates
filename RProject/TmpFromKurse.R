@@ -350,13 +350,67 @@ summary(model)
 
 
 
+high.corr <- function(x) {
+    mat =abs( cor(x))
+    diag(mat) = 0
+    mx = which.max(mat)
+    len1 = nrow(mat)
+    len2=ncol(mat)
+    i = mx %/% len2
+    j = mx - (i - 1) * len2
+    return(c(rownames(mat)[i],colnames(mat)[j]))
+}
+
+x1 <- rnorm(30) # создадим случайную выборку
+x2 <- rnorm(30) # создадим случайную выборку
+x3 <- x2 + 5 # теперь коэффициент коррел€ции x1 и x3 равен единице
+my_df <- data.frame(var1 = x1, var2 = x2, var3 = x3)
+high.corr(my_df)
+
+
+
+df = mtcars
+df$am = factor(df$am)
+t = glm(am ~ disp + vs + mpg, df, family = "binomial")
+#summary(t)
+log_coef=t$coefficients
+
+
+library("ggplot2")
+obj <- ggplot(data = ToothGrowth, aes(x = supp, y = len, fill = factor(dose))) +
+    geom_boxplot()
+obj
 
 
 
 
+test_data <- read.csv(url('https://stepic.org/media/attachments/lesson/11478/data.csv'))
+test_data = data.frame(test_data)
+test_data$admit = factor(test_data$admit)
+test_data$rank=factor(test_data$rank)
+
+t = glm(admit ~ (gre+gpa +rank)^2,test_data, family = "binomial", na.action = na.omit)
+y_full = ifelse(is.na(test_data$admit), predict(t, test_data, type = "response",newdata=T), 0)
+y_full=y_full[y_full >= 0.4]
+length(y_full)
 
 
 
 
+normality.test <- function(x) {
+    df = x[, sapply(x, is.numeric)]
+    v=c()
+    for (i in 1:ncol(df)) {
+        p = shapiro.test(df[[i]])$p.value
+        v=cbind(v,p)
+    }
+    v=as.vector( v)
+    names(v)=colnames(df)
+    return(v)
+}
+normality.test(mtcars[, 1:6])
 
+
+
+########################################втора€ часть курса
 

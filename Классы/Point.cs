@@ -343,15 +343,22 @@ namespace МатКлассы
         /// <param name="count">Число точек</param>
         /// <param name="filename">Имя файла со значениями</param>
         /// <param name="path">Пусть к файлу</param>
+        /// <param name="byevery">Брать каждый какой-то элемент</param>
         /// <returns></returns>
-        public static Point[] CreatePointArray(double begin, double step, int count, string filename, string path = null)
+        public static Point[] CreatePointArray(double begin, double step, int count, string filename, string path = null,int byevery=1)
         {
             path = path ?? Environment.CurrentDirectory;
             var res = new Point[count];
             using (StreamReader f = new StreamReader(Path.Combine(path, filename)))
                 for (int i = 0; i < count; i++)
-                    res[i] = new Point(begin + i * step, f.ReadLine().ToDouble());
+                    res[i] = new Point(begin + i * step, f.ReadLine().Replace('.',',').ToDouble());
+            if(byevery==1)
             return res;
+
+            var pc = new Point[count / byevery];
+            for (int i = 0; i < pc.Length; i++)
+                pc[i] = res[i * byevery];
+            return pc;
         }
 
 

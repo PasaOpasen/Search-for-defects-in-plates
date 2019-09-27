@@ -45,6 +45,9 @@
     <Reference Include="Microsoft.Office.Interop.Excel, Version=15.0.0.0, Culture=neutral, PublicKeyToken=71e9bce111e9429c, processorArchitecture=MSIL">
       <EmbedInteropTypes>True</EmbedInteropTypes>
     </Reference>
+    <Reference Include="MiscUtil, Version=0.2.0.0, Culture=neutral, PublicKeyToken=d3c42c4bfacf7596, processorArchitecture=MSIL">
+      <HintPath>..\packages\JonSkeet.MiscUtil.0.2.0\lib\net35\MiscUtil.dll</HintPath>
+    </Reference>
     <Reference Include="System" />
     <Reference Include="System.Core" />
     <Reference Include="System.Numerics" />
@@ -73,6 +76,7 @@
     <Compile Include="Matrix.cs" />
     <Compile Include="Memoize.cs" />
     <Compile Include="MultipleKnot.cs" />
+    <Compile Include="NetOnDouble.cs" />
     <Compile Include="Number.cs" />
     <Compile Include="Parser.cs" />
     <Compile Include="Point.cs" />
