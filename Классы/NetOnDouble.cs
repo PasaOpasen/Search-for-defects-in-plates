@@ -76,6 +76,16 @@ namespace МатКлассы
             WithEnd = netOnDouble.WithEnd;
         }
 
+        /// <summary>
+        /// Копия сетки, но с другим числом узлов
+        /// </summary>
+        /// <param name="netOnDouble"></param>
+        /// <param name="newCount"></param>
+        public NetOnDouble(NetOnDouble netOnDouble,int newCount) : this(netOnDouble)
+        {
+            Count = newCount;
+        }
+
         private double[] arr = null;
         /// <summary>
         /// Сам массив сетки

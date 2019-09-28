@@ -122,17 +122,68 @@ namespace Работа2019
                 }
             };
 
-            form.ShowDialog();
+            form.Show();
         }
 
         private async void toolStripButton2_Click(object sender, EventArgs e)
         {
+            if (MessageBox.Show("Для текущего прямоугольника будут произведены все построения на сетке 40*40, затем будут показаны некоторые результаты в случайном порядке. Это займёт время. Взглянув на результаты, пользователь должен сам обрезать исходный прямоугольник. Выполнить?", "Тестирование для опеределения области", MessageBoxButtons.YesNo, MessageBoxIcon.Information) == DialogResult.No)
+                return;
+
+            OtherMethods.PlaySound("Поехали");
             GetData();
 
+            string[] names = Enumerable.Range(0, sources.Length).Select(i => $"Array{dataGridView1[1, i].Value}.txt").ToArray();
+            string[] wheredata = Expendator.GetStringArrayFromFile("WhereData.txt").Select(s => Path.Combine(s, "Разница")).ToArray();
+            all = 40 * 40;
+            int alles = sources.Length * (sources.Length - 1);
+            IProgress<int> progress = new Progress<int>((int val) => save = val);
 
+            for (int i = 0; i < sources.Length; i++)
+            {
+                var itSource = sources[i];
+                var otherSources = sources.Where(s => s != itSource).ToArray();
+                var othernames = names.Where(n => n != names[i]).ToArray();
+                var snames = symbols.Where(s => s != symbols[i]).ToArray();
 
+                timer1.Start();
+                for (int k = 0; k < otherSources.Length; k++)
+                {
+                    string savename = $"{snames[k]} -> {symbols[i]}";
+
+                    toolStripLabel1.Text = $"Замер {symbols[i]}, источник {snames[k]}, осталось {alles--}";
+
+                    var tuple = await Functions.GetMaximunFromArea(
+                        new NetOnDouble( W,40), new NetOnDouble(T,40), 
+                        progress, new System.Threading.CancellationToken(),
+                        tmin, step, pcount, othernames[k], Path.Combine(dir, savename.Replace(" -> ", "to")),
+                        Wavelet.Wavelets.LP, wheredata[i], 32, epsForWaveletValues);
+                }
+                SetDefaltProgressBar();
+                timer1.Stop();
+                OtherMethods.PlaySound("ЗамерОбработан");
+            }
+
+            ShowPdfs();
+
+            SetDefaultStrip();
             OtherMethods.PlaySound("ТестированиеОкончено");
         }
+        private void ShowPdfs()
+        {
+            List<string> L = new List<string>();
+            for (int i = 0; i < symbols.Length; i++)
+                for (int j = 0; j < symbols.Length; j++)
+                    L.Add($"{symbols[i]}to{symbols[j]}");
+            var arrt = L.Where(s => s[0] != s[3]).ToArray();
+
+            var mas = Enumerable.Range(0, 15).Select(i => RandomNumbers.NextNumber(sources.Length * (sources.Length - 1))).Distinct().ToArray();
+            var arr = mas.Select(i => arrt[i]).ToArray();
+
+            new Библиотека_графики.ManyDocumentsShower("Поверхности на негустой сетке", arr, arr.Select(i=>i+".pdf").ToArray()).Show();
+            button2_Click(new object(), new EventArgs());
+        }
+
 
         private void GetData()
         {
