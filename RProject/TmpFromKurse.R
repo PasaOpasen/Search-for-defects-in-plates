@@ -414,3 +414,98 @@ normality.test(mtcars[, 1:6])
 
 ########################################вторая часть курса
 
+library(dplyr)
+find_outliers <- function(t) {
+   
+    number = sapply(t, is.numeric)
+
+    s = t %>% group_by_if(is.factor) %>% summarise_if(is.numeric, funs(mean, sd))
+    print(s)
+    s2=sapply(s,is.numeric)
+    is_outlier = ifelse(abs(t[number] - s[s2][[1]]) <= 2 * s[s2][[2]], 0, 1)
+
+    res = cbind(t, is_outlier)
+    colnames(res)[length(colnames(res))]="is_outlier"
+
+    return(as.data.frame( res))
+}
+ToothGrowth$dose <- factor(ToothGrowth$dose)
+find_outliers(ToothGrowth)
+
+
+library(data.table)
+filter.expensive.available <- function(products, brands) {
+    return(products[price/100>=5000 &available==T & brand %in% brands,])
+}
+
+sample.products <- data.table(price = c(10000, 600000, 700000, 1000000),
+                              brand = c("a", "b", "c", "d"),
+                              available = c(T, T, F, T))
+filter.expensive.available(sample.products, c("a", "c", "d"))
+
+
+
+
+ordered.short.purchase.data <- function(purchases) {
+    return(purchases[order(-price)][quantity>=0, c("ordernumber", "product_id")])
+}
+
+sample.purchases <- data.table(price = c(100000, 6000, 7000, 5000000),
+                               ordernumber = 1:4,
+                               quantity = c(1, 2, 1, -1),
+                               product_id = 1:4)
+ordered.short.purchase.data(sample.purchases)
+
+
+
+library(dplyr)
+purchases.median.order.price <- function(purchases) {
+
+    SUMARIZE = purchases[quantity > 0, .(pr = quantity * price), by = ordernumber]
+    s=SUMARIZE%>%as.data.frame()%>%group_by(ordernumber)%>%summarise(sp=sum(pr))
+    return(median(s$sp))
+}
+sample.purchases <- data.table(price = c(100000, 6000, 7000, 5000000),
+                               ordernumber = c(1, 2, 2, 3),
+                               quantity = c(1, 2, 1, -1),
+                               product_id = 1:4)
+purchases.median.order.price(sample.purchases)
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
