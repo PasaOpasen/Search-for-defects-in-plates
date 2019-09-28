@@ -14,7 +14,7 @@ public enum Type : byte { Circle, DCircle };
 /// <summary>
 /// Источник с дополнительными свойствами
 /// </summary>
-public struct Source : Idup<Source>,IEquatable<Source>
+public struct Source : Idup<Source>, IEquatable<Source>, IComparable<Source>
 {
     /// <summary>
     /// Центр источника
@@ -40,7 +40,7 @@ public struct Source : Idup<Source>,IEquatable<Source>
     /// Массив f(w)
     /// </summary>
     public Complex[] Fmas;
-   
+
     public Circle GetCircle => new Circle(Center, radius);
 
     /// <summary>
@@ -84,7 +84,7 @@ public struct Source : Idup<Source>,IEquatable<Source>
     /// <param name="circle"></param>
     /// <param name="normals"></param>
     /// <param name="fmas"></param>
-    public Source(Circle circle, Normal2D[] normals, Complex[] fmas) : this(circle.center,normals,p=>circle.ContainPoint(p),fmas, Type.Circle,circle.radius) { }
+    public Source(Circle circle, Normal2D[] normals, Complex[] fmas) : this(circle.center, normals, p => circle.ContainPoint(p), fmas, Type.Circle, circle.radius) { }
     /// <summary>
     /// Создать источник по полумесяцу и нужным массивам
     /// </summary>
@@ -120,8 +120,8 @@ public struct Source : Idup<Source>,IEquatable<Source>
     /// </summary>
     /// <param name="obj"></param>
     /// <returns></returns>
-    public override bool Equals(object obj)=> Equals((Source)(obj));
-    
+    public override bool Equals(object obj) => Equals((Source)(obj));
+
     /// <summary>
     /// Эквивалентность по центрам
     /// </summary>
@@ -196,7 +196,7 @@ public struct Source : Idup<Source>,IEquatable<Source>
             // List<double> d = new List<double>();
             List<Complex> c = new List<Complex>();
 
-            s = fs.ReadLine().Replace('.',',');
+            s = fs.ReadLine().Replace('.', ',');
             while (s != null)
             {
                 //s.Show();
@@ -239,16 +239,16 @@ public struct Source : Idup<Source>,IEquatable<Source>
     /// </summary>
     /// <param name="directory"></param>
     /// <returns></returns>
-    public static Source[] GetSourcesWithReadFw(string directory,Source[] sourcesArray,bool makeCopies=false)
+    public static Source[] GetSourcesWithReadFw(string directory, Source[] sourcesArray, bool makeCopies = false)
     {
         var s = Source.GetSourcesWithFw(sourcesArray, directory);
-        if(s.Length>0 && makeCopies)
-            for(int i = 0; i < s.Length; i++)
+        if (s.Length > 0 && makeCopies)
+            for (int i = 0; i < s.Length; i++)
             {
                 string ss = $"f(w) from {s[i].Center}.txt";
                 File.Copy(Path.Combine(directory, ss), Path.Combine(Environment.CurrentDirectory, ss), true);
             }
-                
+
 
         FilesToSources(s, directory);
         return s;
@@ -271,7 +271,7 @@ public struct Source : Idup<Source>,IEquatable<Source>
     /// <summary>
     /// Записать f(w) от всех источников в файлы
     /// </summary>
-    public static void FilesFromSources(Source[] sources,string filename)
+    public static void FilesFromSources(Source[] sources, string filename)
     {
         string t;
         using (StreamReader r = new StreamReader(filename))
@@ -287,8 +287,8 @@ public struct Source : Idup<Source>,IEquatable<Source>
     internal static string[] GetCenters(Source[] arr)
     {
         var st = new string[arr.Length];
-        for(int i=0;i<st.Length;i++)
-            st[i]= $"({arr[i].Center.x} , {arr[i].Center.y})";
+        for (int i = 0; i < st.Length; i++)
+            st[i] = $"({arr[i].Center.x} , {arr[i].Center.y})";
         return st;
     }
 
@@ -299,5 +299,15 @@ public struct Source : Idup<Source>,IEquatable<Source>
             if (s[i].radius > res)
                 res = s[i].radius;
         return res;
+    }
+
+    /// <summary>
+    /// Сравнение сначала по y, затем по x координатом центра
+    /// </summary>
+    /// <param name="other"></param>
+    /// <returns></returns>
+    public int CompareTo(Source other)
+    {
+        return this.Center.Swap.CompareTo(other.Center.Swap);
     }
 }

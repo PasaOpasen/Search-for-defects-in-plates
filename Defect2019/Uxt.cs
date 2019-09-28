@@ -247,6 +247,16 @@ namespace Defect2019
                 await Task.Run(() => Expendator.StartProcessOnly(OtherMethods.GetResource("InstallPackages.r"), true));
         }
 
+        private void сортироватьToolStripMenuItem_Click(object sender, EventArgs e)
+        {
+            checkedListBox1.Items.Clear();
+            sources.Sort();
+
+            for (int i = 0; i < sources.Count; i++)
+                checkedListBox1.Items.Add(sources[i].ToString(), true);
+            checkedListBox1.Update();
+        }
+
         private void текущиеИсточникиToolStripMenuItem_Click(object sender, EventArgs e)
         {
             for (int i = 0; i < examples2.Count; i++)

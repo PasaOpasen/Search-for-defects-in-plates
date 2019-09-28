@@ -52,8 +52,9 @@
             this.button2 = new System.Windows.Forms.Button();
             this.timer1 = new System.Windows.Forms.Timer(this.components);
             this.groupBox2 = new System.Windows.Forms.GroupBox();
-            this.radioButton1 = new System.Windows.Forms.RadioButton();
             this.radioButton2 = new System.Windows.Forms.RadioButton();
+            this.radioButton1 = new System.Windows.Forms.RadioButton();
+            this.сортироватьToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.menuStrip1.SuspendLayout();
             this.contextMenuStrip1.SuspendLayout();
             this.groupBox1.SuspendLayout();
@@ -144,10 +145,11 @@
             this.очиститьToolStripMenuItem,
             this.удалитьПоследнееВхождениеToolStripMenuItem,
             this.реверсироватьToolStripMenuItem,
+            this.сортироватьToolStripMenuItem,
             this.вставитьГотовыйПримерToolStripMenuItem,
             this.текущиеИсточникиToolStripMenuItem});
             this.contextMenuStrip1.Name = "contextMenuStrip1";
-            this.contextMenuStrip1.Size = new System.Drawing.Size(242, 136);
+            this.contextMenuStrip1.Size = new System.Drawing.Size(242, 180);
             // 
             // добавитьToolStripMenuItem
             // 
@@ -157,6 +159,7 @@
             this.добавитьToolStripMenuItem.Name = "добавитьToolStripMenuItem";
             this.добавитьToolStripMenuItem.Size = new System.Drawing.Size(241, 22);
             this.добавитьToolStripMenuItem.Text = "Добавить";
+            this.добавитьToolStripMenuItem.ToolTipText = "Добавить источник в список";
             // 
             // toolStripMenuItem1
             // 
@@ -177,6 +180,7 @@
             this.очиститьToolStripMenuItem.Name = "очиститьToolStripMenuItem";
             this.очиститьToolStripMenuItem.Size = new System.Drawing.Size(241, 22);
             this.очиститьToolStripMenuItem.Text = "Очистить";
+            this.очиститьToolStripMenuItem.ToolTipText = "Удалить все источники";
             this.очиститьToolStripMenuItem.Click += new System.EventHandler(this.очиститьToolStripMenuItem_Click);
             // 
             // удалитьПоследнееВхождениеToolStripMenuItem
@@ -184,6 +188,7 @@
             this.удалитьПоследнееВхождениеToolStripMenuItem.Name = "удалитьПоследнееВхождениеToolStripMenuItem";
             this.удалитьПоследнееВхождениеToolStripMenuItem.Size = new System.Drawing.Size(241, 22);
             this.удалитьПоследнееВхождениеToolStripMenuItem.Text = "Удалить последнее вхождение";
+            this.удалитьПоследнееВхождениеToolStripMenuItem.ToolTipText = "Удалить последний элемент";
             this.удалитьПоследнееВхождениеToolStripMenuItem.Click += new System.EventHandler(this.удалитьПоследнееВхождениеToolStripMenuItem_Click);
             // 
             // реверсироватьToolStripMenuItem
@@ -259,6 +264,16 @@
             this.groupBox2.TabStop = false;
             this.groupBox2.Text = "Тип анализа";
             // 
+            // radioButton2
+            // 
+            this.radioButton2.AutoSize = true;
+            this.radioButton2.Location = new System.Drawing.Point(182, 25);
+            this.radioButton2.Name = "radioButton2";
+            this.radioButton2.Size = new System.Drawing.Size(117, 23);
+            this.radioButton2.TabIndex = 6;
+            this.radioButton2.Text = "Вейвлетный";
+            this.radioButton2.UseVisualStyleBackColor = true;
+            // 
             // radioButton1
             // 
             this.radioButton1.AutoSize = true;
@@ -271,15 +286,13 @@
             this.radioButton1.Text = "Интегральный";
             this.radioButton1.UseVisualStyleBackColor = true;
             // 
-            // radioButton2
+            // сортироватьToolStripMenuItem
             // 
-            this.radioButton2.AutoSize = true;
-            this.radioButton2.Location = new System.Drawing.Point(182, 25);
-            this.radioButton2.Name = "radioButton2";
-            this.radioButton2.Size = new System.Drawing.Size(117, 23);
-            this.radioButton2.TabIndex = 6;
-            this.radioButton2.Text = "Вейвлетный";
-            this.radioButton2.UseVisualStyleBackColor = true;
+            this.сортироватьToolStripMenuItem.Name = "сортироватьToolStripMenuItem";
+            this.сортироватьToolStripMenuItem.Size = new System.Drawing.Size(241, 22);
+            this.сортироватьToolStripMenuItem.Text = "Сортировать";
+            this.сортироватьToolStripMenuItem.ToolTipText = "Сортировать источники по их центрам, сначала по ординатам, затем по абциссам";
+            this.сортироватьToolStripMenuItem.Click += new System.EventHandler(this.сортироватьToolStripMenuItem_Click);
             // 
             // Uxt
             // 
@@ -335,5 +348,6 @@
         private System.Windows.Forms.GroupBox groupBox2;
         private System.Windows.Forms.RadioButton radioButton2;
         private System.Windows.Forms.RadioButton radioButton1;
+        private System.Windows.Forms.ToolStripMenuItem сортироватьToolStripMenuItem;
     }
 }
