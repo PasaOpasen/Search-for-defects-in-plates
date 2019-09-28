@@ -23,7 +23,7 @@ namespace Библиотека_графики
             Application.Run(
                 //new PdfOpen("e33", "formula")
                 //new JustGrafic(new string[] { "ArrayA","ArrayB","ArrayC"},"Жопа",0.021,11420)
-                new ManyDocumentsShower("maint",new string[] {"T1","T2","T3" }, new string[3] { "22.pdf",  "22.png", "23.pdf" })
+                new ManyDocumentsShower("maint", new string[] { "T1", "T2", "T3" }, new string[3] { "22.pdf", "22.png", "23.pdf" })
                 );
         }
     }
@@ -54,16 +54,16 @@ namespace Библиотека_графики
                     list.AddRange(chart.Series[i].Points[j].YValues);
             if (list.Count > 0)
             {
-            double min = list.Min(), max = list.Max();
+                double min = list.Min(), max = list.Max();
 
-            if (min == max)
-            {
-                min -= t;
-                max += t;
-            }
+                if (min == max)
+                {
+                    min -= t;
+                    max += t;
+                }
 
-            chart.ChartAreas[0].AxisY.Minimum = (min > 0) ? min * (1 - t) : min * (1 + t);
-            chart.ChartAreas[0].AxisY.Maximum = (max > 0) ? max * (1 + t) : max * (1 - t);
+                chart.ChartAreas[0].AxisY.Minimum = (min > 0) ? min * (1 - t) : min * (1 + t);
+                chart.ChartAreas[0].AxisY.Maximum = (max > 0) ? max * (1 + t) : max * (1 - t);
             }
 
         }
@@ -89,7 +89,7 @@ namespace Библиотека_графики
         {
             SaveFileDialog savedialog = new SaveFileDialog();
             savedialog.Title = "Сохранить рисунок как...";
-            savedialog.FileName =System.IO.Path.Combine( Environment.CurrentDirectory, name+".png");
+            savedialog.FileName = System.IO.Path.Combine(Environment.CurrentDirectory, name + ".png");
             savedialog.Filter = "Image files (*.png)|*.png|All files (*.*)|*.*";
 
             savedialog.OverwritePrompt = true;
@@ -114,7 +114,7 @@ namespace Библиотека_графики
             get
             {
                 Console.WriteLine("!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!");
-                Color[] m = new Color[] { Color.Blue, Color.Red, Color.Green, Color.Yellow, Color.Black,  Color.Chocolate,Color.HotPink };
+                Color[] m = new Color[] { Color.Blue, Color.Red, Color.Green, Color.Yellow, Color.Black, Color.Chocolate, Color.HotPink };
                 return m;
             }
         }
@@ -127,12 +127,12 @@ namespace Библиотека_графики
         /// <param name="type">Тип графиков</param>
         /// <param name="style">Стиль рисования</param>
         /// <param name="mas">Массив цветов</param>
-        public static void CreatSeries(ref Chart chart, string[] names, int width=3,SeriesChartType type=SeriesChartType.Line, MarkerStyle style= MarkerStyle.Circle,Color[] mas=null)
+        public static void CreatSeries(ref Chart chart, string[] names, int width = 3, SeriesChartType type = SeriesChartType.Line, MarkerStyle style = MarkerStyle.Circle, Color[] mas = null)
         {
             if (mas == null)
                 mas = DefaltColors;
 
-            for(int i=0;i<names.Length;i++)
+            for (int i = 0; i < names.Length; i++)
             {
                 chart.Series.Add(names[i]);
                 chart.Series.Last().BorderWidth = width;
@@ -147,9 +147,9 @@ namespace Библиотека_графики
         /// <param name="chart"></param>
         /// <param name="args"></param>
         /// <param name="values"></param>
-        public static void AddMasOfPoints(ref Chart chart, double[] args,params double[][] values)
+        public static void AddMasOfPoints(ref Chart chart, double[] args, params double[][] values)
         {
-            for(int i=0;i<values.Length;i++)
+            for (int i = 0; i < values.Length; i++)
             {
                 chart.Series[i].Points.Clear();
                 chart.Series[i].Points.DataBindXY(args, values[i]);
@@ -165,9 +165,9 @@ namespace Библиотека_графики
         /// <param name="img1"></param>
         /// <param name="img2"></param>
         /// <returns></returns>
-        public static Image MergerOfImages(Image img1,Image img2)
+        public static Image MergerOfImages(Image img1, Image img2)
         {
-            Bitmap res = new Bitmap(Math.Max(img1.Width, img2.Width),img1.Height+img2.Height);
+            Bitmap res = new Bitmap(Math.Max(img1.Width, img2.Width), img1.Height + img2.Height);
 
             Graphics g = Graphics.FromImage(res);
             g.DrawImage(img1, 0, 0);
@@ -182,11 +182,11 @@ namespace Библиотека_графики
         /// <param name="f1">Имя файла с нижним изображением</param>
         /// <param name="f2">Имя файла с верхним изображением</param>
         /// <param name="f3">Имя результирующего файла</param>
-        public static void SaveRastAndVec(string f1,string f2, string f3)
+        public static void SaveRastAndVec(string f1, string f2, string f3)
         {
             var im = ImageActions.MergerOfImages(Image.FromFile(f2), Image.FromFile(f1));//
             im.Save(f3, System.Drawing.Imaging.ImageFormat.Bmp);
-            im.Save(f3.Substring(0,f3.IndexOf(".bmp"))+".emf", System.Drawing.Imaging.ImageFormat.Emf);
+            im.Save(f3.Substring(0, f3.IndexOf(".bmp")) + ".emf", System.Drawing.Imaging.ImageFormat.Emf);
         }
     }
 
@@ -214,7 +214,7 @@ namespace Библиотека_графики
         /// <summary>
         /// Массив разных цветов
         /// </summary>
-        public static Color[] colors = new Color[] { Color.Blue, Color.Red, Color.Green, Color.Yellow, Color.Black, Color.Chocolate, Color.HotPink , Color.Orange,Color.Gold};
+        public static Color[] colors = new Color[] { Color.Blue, Color.Red, Color.Green, Color.Violet, Color.OrangeRed, Color.Chocolate, Color.HotPink, Color.Orange, Color.Gold };
 
         private static Bitmap getControlScreenshot(Control c)
         {
@@ -222,7 +222,7 @@ namespace Библиотека_графики
             c.DrawToBitmap(res, new Rectangle(Point.Empty, c.Size));
             return res;
         }
-        public static void MakeScreenShot(Control control,string name, System.Drawing.Imaging.ImageFormat format=null)
+        public static void MakeScreenShot(Control control, string name, System.Drawing.Imaging.ImageFormat format = null)
         {
             format = format ?? System.Drawing.Imaging.ImageFormat.Png;
             Bitmap scr = getControlScreenshot(control);

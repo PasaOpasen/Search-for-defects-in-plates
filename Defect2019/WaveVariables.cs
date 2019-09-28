@@ -88,7 +88,7 @@ public static class РабКонсоль
     #endregion
 
     #region Параметры для вейвлетов
-    public static double timeshift =0.000052;
+    public static double timeshift = 0.000052;
     #endregion
 }
 
@@ -880,11 +880,21 @@ public static class Functions
     #region Функции для вейвлета
     private static readonly double leteps = 2e-3, let2eps = 2 * leteps;
     private static double Eps(double w) => Math.Min(leteps, w / 100);
-    public static readonly Func<double, double> Vg = (double w) => 
+    public static readonly Func<double, double> Vg = (double w) =>
     {
         var ps = Eps(w);
-        return 2 * ps / (PolesMasMemoized(w + ps).LastElement- PolesMasMemoized(w - ps).LastElement);
+        return 2 * ps / (PolesMasMemoized(w + ps).LastElement - PolesMasMemoized(w - ps).LastElement);
     };
+
+    private static Tuple< Wavelet, Func<double, double, double>> GetWavelet(double begin, double step, int valuescount, string filename,
+    Wavelets wavelets = Wavelets.LP, string path = null, int byevery = 1, double epsForWaveletValues = 0)
+    {
+        path = path ?? Environment.NewLine;
+        Wavelet wavelet = new Wavelet(wavelets);
+        Func<double, double, Complex> func = wavelet.GetAnalys(begin, step, valuescount, filename, path, byevery, epsForWaveletValues);
+        Func<double, double, double> F = (x, y) => func(x, y).Abs;
+        return new Tuple<Wavelet, Func<double, double, double>>(wavelet, F);
+    }
 
     /// <summary>
     /// Возвращает координаты максимума от вейвлетной функции на указанном прямоугольнике
@@ -905,35 +915,91 @@ public static class Functions
     NetOnDouble xx, NetOnDouble yy,
     IProgress<int> progress, System.Threading.CancellationToken token,
     double begin, double step, int valuescount, string filename, string savename,
-    Wavelets wavelets = Wavelets.LP, string path = null, int byevery=1, double epsForWaveletValues=0)
+    Wavelets wavelets = Wavelets.LP, string path = null, int byevery = 1, double epsForWaveletValues = 0)
     {
-        path = path ?? Environment.NewLine;
-        Wavelet wavelet = new Wavelet(wavelets);
-        Func<double, double, Complex> func = wavelet.GetAnalys(begin, step, valuescount, filename, path,byevery,epsForWaveletValues);
-        Func<double, double, double> F = (x, y) => func(x, y).Abs;
+        var Wavelt = GetWavelet(begin, step, valuescount, filename, wavelets, path, byevery, epsForWaveletValues);
 
-        string name = filename.Replace(".txt", "");
-        await Библиотека_графики.Create3DGrafics.JustGetGraficInFiles(name, savename, F, xx,yy,
-            progress, token,
-            new StringsForGrafic
-            (
-                $"Wavelet-surface for {name}",
-                 "ω‎", "time","vals"
-            ),
-            graficType: Create3DGrafics.GraficType.Pdf);
+            string name = filename.Replace(".txt", "");
+            await Библиотека_графики.Create3DGrafics.JustGetGraficInFiles(name, savename, Wavelt.Item2, xx, yy,
+                progress, token,
+                new StringsForGrafic
+                (
+                    $"Wavelet-surface for {name}",
+                     "w‎", "time", "vals"
+                ),
+                graficType: Create3DGrafics.GraficType.Pdf);
 
-        var tmp = Expendator.GetStringArrayFromFile(/*Path.Combine(path,*/ savename + "(MaxCoordinate).txt")/*)*/[1].Replace('.',',').ToDoubleMas();
+        var tmp = Expendator.GetStringArrayFromFile( savename + "(MaxCoordinate).txt")[1].Replace('.', ',').ToDoubleMas();
 
-        wavelet.Dispose();
+        Wavelt.Item1.Dispose();
         return new Tuple<double, double>(tmp[0], tmp[1]);
     }
+  
+    /// <summary>
+    /// Возвращает координаты максимума от вейвлетной функции на указанном прямоугольнике
+    /// </summary>
+    /// <param name="xmin"></param>
+    /// <param name="xmax"></param>
+    /// <param name="ymin"></param>
+    /// <param name="ymax"></param>
+    /// <param name="count"></param>
+    /// <param name="begin"></param>
+    /// <param name="step"></param>
+    /// <param name="valuescount"></param>
+    /// <param name="filename"></param>
+    /// <param name="wavelets"></param>
+    /// <param name="path"></param>
+    /// <returns></returns>
+    public static async Task<Tuple<double, double>> GetMaximunFromArea(
+        double xmin,double xmax,double ymin,double ymax,
+    double begin, double step, int valuescount, string filename, string savename,
+    Wavelets wavelets = Wavelets.LP, string path = null, int byevery = 1, double epsForWaveletValues = 0,
+    int countpoint=250,int maxtit=200,int maxfit=60)
+    {
+        var Wavelt = GetWavelet(begin, step, valuescount, filename, wavelets, path, byevery, epsForWaveletValues);
+        await BeeHiveSearch(Wavelt.Item2, savename, xmin, xmax, ymin, ymax, countpoint,maxtit, maxfit);
+        
+
+        var tmp = Expendator.GetStringArrayFromFile(/*Path.Combine(path,*/ savename + "(MaxCoordinate).txt")/*)*/[1].Replace('.', ',').ToDoubleMas();
+
+        Wavelt.Item1.Dispose();
+        return new Tuple<double, double>(tmp[0], tmp[1]);
+    }
+
+    /// <summary>
+    /// Найти максимум методом пчелиного роя
+    /// </summary>
+    /// <param name="F"></param>
+    /// <param name="savename"></param>
+    /// <param name="xmin"></param>
+    /// <param name="xmax"></param>
+    /// <param name="ymin"></param>
+    /// <param name="ymax"></param>
+    /// <param name="countpoint"></param>
+    /// <returns></returns>
+    private static async Task BeeHiveSearch(Func<double, double, double> F, string savename, double xmin, double xmax, double ymin, double ymax, int countpoint,int maxtit= 280, int maxfit = 70)
+    {
+        Func<Vectors, double> func = (Vectors v) => Math.Exp(-F(v[0], v[1]));
+        Vectors min = new Vectors(xmin, ymin);
+        Vectors max = new Vectors(xmax, ymax);
+
+        var res = await Task.Run(() => BeeHiveAlgorithm.GetGlobalMin(func, min, max, 1e-13, countpoint,  maxfit,maxtit));
+
+        Expendator.WriteInFile(savename + "(MaxCoordinate).txt", new string[]
+        {
+            "a b",
+            $"{res.Item1[0]} {res.Item1[1]}",
+            $"maximum is {Math.Log(res.Item2)/(-1)}"
+        });
+    }
+
 
     /// <summary>
     /// Возвращает параметр s (или a) для эллипса
     /// </summary>
     /// <param name="wt"></param>
     /// <returns></returns>
-    public static double GetFockS(Tuple<double, double> wt) => Vg(/*1.0*/pimult2/(wt.Item1*1e6)) * (wt.Item2 - timeshift) * 1_000_000;//из км/с перевел в мм/с;
+    public static double GetFockS(Tuple<double, double> wt) => Vg(/*1.0*/pimult2 / (wt.Item1 * 1e6)) * (wt.Item2 - timeshift) * 1_000_000;//из км/с перевел в мм/с;
 
     #endregion
 }

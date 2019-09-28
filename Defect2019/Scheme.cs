@@ -42,9 +42,7 @@ namespace Работа2019
         {
             foreach(var p in param)
             {
-                var pens= new Pen(p.Color, 2);
-
-                g.DrawCurve(pens, EllipseToFpoint(p));
+                this.Add(p);
             }
             DrawFigures();
         }
@@ -58,6 +56,13 @@ namespace Работа2019
           var p = MyPointToPointF(beg);
             float cc = 15.0f / 11;
             g.DrawImage(Image.FromFile(filename), p.X, p.Y, (float)(lenx / X * pictureBox1.BackgroundImage.Size.Width/*+ pictureBox1.BackgroundImage.Size.Width/14*0.5*/) * cc, (float)(leny / Y * pictureBox1.BackgroundImage.Size.Height/*- pictureBox1.BackgroundImage.Size.Height/14*0.5)*cc*/));
+        }
+
+        public void Add(EllipseParam p)
+        {
+            var pens = new Pen(p.Color, 2);
+
+            g.DrawCurve(pens, EllipseToFpoint(p));
         }
 
         /// <summary>

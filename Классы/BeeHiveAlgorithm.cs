@@ -37,6 +37,12 @@ namespace МатКлассы
         };
 
         /// <summary>
+        /// Параметры шага для роя
+        /// </summary>
+        //tex: Каждая частица в рое делает следующий шаг: $v_{i+1} = w v_i + \varphi_p \cdot random_1 (p_i - x_i) + \varphi_g \cdot random_2 (g_i - x_i)$
+        public static double w=0.3, fp=2, fg=5;
+
+        /// <summary>
         /// Получить минимум функции, посчитанный роевым методом
         /// </summary>
         /// <param name="f">Целевая функция</param>
@@ -51,20 +57,39 @@ namespace МатКлассы
         {
             Vectors minimum = new Vectors(n, min);
             Vectors maximum = new Vectors(n, max);
-            if (maxiter <= 0) maxiter = Int32.MaxValue;
-
+           
             Hive hive;
                 if(center==null) hive=new Hive(minimum, maximum, f, countpoints);
                 else hive = new Hive(minimum+center, maximum+center, f, countpoints,center);
 
+            return Gets(hive, eps, maxcountstep, maxiter);
 
+        }
+        /// <summary>
+        /// Получить минимум функции, посчитанный роевым методом
+        /// </summary>
+        /// <param name="f">Целевая функция</param>
+        /// <param name="n">Размерность области определения целевой функции</param>
+        /// <param name="min">Минимальное возможное значение каждого аргумента</param>
+        /// <param name="max">Максимальное возможное значение каждого аргумента</param>
+        /// <param name="eps">Допустимая погрешность</param>
+        /// <param name="countpoints">Количество пчёл в рое</param>
+        /// <param name="maxcountstep">Максимальное число итераций метода</param>
+        /// <returns></returns>
+        public static Tuple<Vectors, double> GetGlobalMin(Func<Vectors, double> f, Vectors minimum,Vectors maximum, double eps = 1e-10, int countpoints = 1000, int maxcountstep = 100, int maxiter = 150)
+        {
+            return Gets(new Hive(minimum , maximum , f, countpoints),eps,maxcountstep,maxiter);
+        }
+        public static Tuple<Vectors, double> Gets(Hive hive, double eps = 1e-10, int maxcountstep = 100, int maxiter = 150)
+        {
+            if (maxiter <= 0) maxiter = Int32.MaxValue;
             double e = hive.val;
             int c = maxcountstep,k=0;
 
             Debug.WriteLine($"Погрешность после инициализации пчёл:  {e}");
             while (e>eps && maxcountstep > 0 && hive.Radius>eps)
             {
-                hive.MakeStep();
+                hive.MakeStep(w,fp,fg);
                 k++;
                 if (hive.val < e)
                 {
@@ -79,7 +104,7 @@ namespace МатКлассы
             }
             return new Tuple<Vectors, double>(hive.g, hive.val);
         }
-        
+
         /// <summary>
         /// Рой пчёл
         /// </summary>
@@ -240,7 +265,7 @@ namespace МатКлассы
                 {
                   x[i] += r.NextDouble() * (max[i] - min[i]); 
                 }
-                //  Debug.WriteLine($"  bee = {x}");   
+               // v = null;f = null;bestval = double.MaxValue;p = null;  
 
                 WhenX(min, max, f);
             }

@@ -14,8 +14,10 @@ y = arg[[2]]
 
 len = length(x)
 
-scalecoef = (max(y) - min(y)) / (max(x) - min(x))
-#x = x * scalecoef
+
+xlen = max(x) - min(x)
+scalecoef = (max(y) - min(y)) / xlen
+
 
 vals = matrix(z, nrow = len, byrow = T)
 
@@ -29,20 +31,22 @@ save.name = dt[[2]]
 titles = dt[[3]]
 xlabs = dt[[4]]
 ylabs = dt[[5]]
-zlabs=dt[[6]]
+zlabs = dt[[6]]
+
+saves = strsplit(save.name, "\\", fixed = T)[[1]]
+save2 = saves[length(saves)]
 
 #координаты максимума
 mx = which.max(z)
 xi = mx %/% len + 1
-yi=mx-(xi-1)*len
+yi = mx - (xi - 1) * len
 
-sink(paste0(save.name,"(MaxCoordinate).txt"))
+sink(paste0(save2, "(MaxCoordinate).txt"))
 cat("a b \n")
 cat(c(x[xi], y[yi]))
 cat("\n")
-cat(paste("maximum is",max(z)))
+cat(paste("maximum is", max(z)))
 sink()
-
 
 
 # Get type
@@ -63,19 +67,30 @@ if (type == "all") {
     ht = TRUE
 }
 
+sc = as.logical(readLines("MakeScaleForPdf.txt")[1])
+
 # Create grafics
 if (pd) {
-    pdf(file = paste0(save.name, ".pdf"), width = 12, height = 12, paper = "letter")
-    par(mfrow = c(2, 1), cex = 1.1, cex.sub = 1.2, col.sub = "blue")
-    layout(matrix(c(1, 2), 2, 1, byrow = FALSE), heights = c(2.2, 1))
+    pdf(file = paste0(save2, ".pdf"), width = 20, height = 8,paper = "special")
+    par(mfrow = c(2, 1), cex = 1.8, cex.sub = 1.2, col.sub = "blue")
+    layout(matrix(c(1, 2), 1, 2, byrow = FALSE), widths = c(1.8, 1))
 
-    tmp = (max(vals) - min(vals)) / (max(x) - min(x))
-    persp3D(z = vals, x = x * tmp, y = y * tmp, scale = FALSE, zlab = zlabs, xlab = xlabs, ylab = ylabs,
+    if (sc) {
+        xs = x / xlen
+        ys = y / (max(y) - min(y))
+    } else {
+        xs = x
+        ys = y
+    }
+    tmp = (max(vals) - min(vals)) / (max(xs) - min(xs))
+
+    persp3D(z = vals, x = xs * tmp, y = ys * tmp, scale = FALSE, zlab = zlabs, xlab = xlabs, ylab = ylabs,
     contour = list(nlevels = levels, col = "red"),
         expand = 0.2,
-       image = list(col = grey(seq(0, 1, length.out = 100))), main = titles)
+       image = list(col = grey(seq(0, 1, length.out = 100))), main = titles,clab = zlabs)
 
-    image(x, y, vals, col = topo.colors(20), main = "|uz|")
+
+    image(x, y, vals, col = topo.colors(20), main = zlabs,xlab=xlabs,ylab=ylabs)
     dev.off()
 }
 
@@ -87,7 +102,7 @@ if (pn) {
 
     urt = data.frame(vals = z, x = rep(x, len), y = rep(y, each = len))
 
-    png(filename = paste0(save.name, ".png"), 900, 800)
+    png(filename = paste0(save2, ".png"), 900, 800)
     options(scipen = 4)
     ggplot(urt, aes(x, y, fill = vals)) +
     #scale_x_continuous(breaks = seq(min(x), max(x), length.out = 7)) +
@@ -123,6 +138,5 @@ if (ht) {
         )
       ))
 
-    saveWidget(as.widget(p2), paste0(save.name, ".html"), FALSE)
+    saveWidget(as.widget(p2), paste0(save2, ".html"), FALSE)
 }
-

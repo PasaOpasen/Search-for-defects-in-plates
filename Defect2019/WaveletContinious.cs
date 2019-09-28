@@ -20,7 +20,7 @@ namespace Работа2019
         private static string symbols = "ABCDEFGH";
         private Source[] sources;
         private double wmin, wmax, tmin, tmax, epsForWaveletValues = 1e-8;
-        private int wcount, tcount, byevery;
+        private int wcount, tcount, byevery,pointcount,pointmax,pointmax2;
         private NetOnDouble W, T;
 
         public WaveletContinious(Source[] array)
@@ -37,6 +37,7 @@ namespace Работа2019
                 toolStripLabel2.Text = $"{d}%";
                 toolStripProgressBar1.Value = (int)(d / 100 * toolStripProgressBar1.Maximum);
             };
+            groupBox3.Hide();
         }
 
         private void SetDefaultStrip()
@@ -97,6 +98,93 @@ namespace Работа2019
             //    }
             //}
         }
+
+        private void toolStripButton1_Click(object sender, EventArgs e)
+        {
+            new Defect2019.ParametrsQu().ShowDialog();
+        }
+
+        private void button2_Click(object sender, EventArgs e)
+        {
+            GetData();
+            var form = new R2Area(W, T);
+            form.FormClosing += (o, s) =>
+            {
+                if (form.OK)
+                {
+                    textBox2.Text = (1.0/(form.X.Begin*1000)).ToString();
+                    textBox1.Text = (1.0 / (form.X.End * 1000)).ToString();
+                    textBox3.Text = form.Y.Begin.ToString();
+                    textBox4.Text = form.Y.End.ToString();
+                    numericUpDown1.Value = form.X.Count;
+                    numericUpDown1.Value = form.Y.Count;
+                    GetData();
+                }
+            };
+
+            form.Show();
+        }
+
+        private async void toolStripButton2_Click(object sender, EventArgs e)
+        {
+            if (MessageBox.Show("Для текущего прямоугольника будут произведены все построения на сетке 40*40, затем будут показаны некоторые результаты в случайном порядке. Это займёт время. Взглянув на результаты, пользователь должен сам обрезать исходный прямоугольник. Выполнить?", "Тестирование для опеределения области", MessageBoxButtons.YesNo, MessageBoxIcon.Information) == DialogResult.No)
+                return;
+
+            OtherMethods.PlaySound("Поехали");
+            GetData();
+
+            string[] names = Enumerable.Range(0, sources.Length).Select(i => $"Array{dataGridView1[1, i].Value}.txt").ToArray();
+            string[] wheredata = Expendator.GetStringArrayFromFile("WhereData.txt").Select(s => Path.Combine(s, "Разница")).ToArray();
+            all = 40 * 40;
+            int alles = sources.Length * (sources.Length - 1);
+            IProgress<int> progress = new Progress<int>((int val) => save = val);
+
+            for (int i = 0; i < sources.Length; i++)
+            {
+                var itSource = sources[i];
+                var otherSources = sources.Where(s => s != itSource).ToArray();
+                var othernames = names.Where(n => n != names[i]).ToArray();
+                var snames = symbols.Where(s => s != symbols[i]).ToArray();
+
+                timer1.Start();
+                for (int k = 0; k < otherSources.Length; k++)
+                {
+                    string savename = $"{snames[k]} -> {symbols[i]}";
+
+                    toolStripLabel1.Text = $"Замер {symbols[i]}, источник {snames[k]}, осталось {alles--}";
+
+                    var tuple = await Functions.GetMaximunFromArea(
+                        new NetOnDouble( W,40), new NetOnDouble(T,40), 
+                        progress, new System.Threading.CancellationToken(),
+                        tmin, step, pcount, othernames[k], Path.Combine(dir, savename.Replace(" -> ", "to")),
+                        Wavelet.Wavelets.LP, wheredata[i], 32, epsForWaveletValues);
+                }
+                SetDefaltProgressBar();
+                timer1.Stop();
+                OtherMethods.PlaySound("ЗамерОбработан");
+            }
+
+            ShowPdfs();
+
+            SetDefaultStrip();
+            OtherMethods.PlaySound("ТестированиеОкончено");
+        }
+        private void ShowPdfs()
+        {
+            List<string> L = new List<string>();
+            for (int i = 0; i < symbols.Length; i++)
+                for (int j = 0; j < symbols.Length; j++)
+                    L.Add($"{symbols[i]}to{symbols[j]}");
+            var arrt = L.Where(s => s[0] != s[3]).ToArray();
+
+            var mas = Enumerable.Range(0, 15).Select(i => RandomNumbers.NextNumber(sources.Length * (sources.Length - 1))).Distinct().ToArray();
+            var arr = mas.Select(i => arrt[i]).ToArray();
+
+            new Библиотека_графики.ManyDocumentsShower("Поверхности на негустой сетке", arr, arr.Select(i=>i+".pdf").ToArray()).Show();
+            button2_Click(new object(), new EventArgs());
+        }
+
+
         private void GetData()
         {
             wmin = 1.0 / textBox2.Text.ToDouble() / 1000;//(2000*Math.PI);
@@ -106,12 +194,29 @@ namespace Работа2019
             wcount = numericUpDown1.Value.ToInt32();
             tcount = numericUpDown2.Value.ToInt32();
             byevery = numericUpDown3.Value.ToInt32();
+            pointcount = numericUpDown4.Value.ToInt32();
+            pointmax = numericUpDown5.Value.ToInt32();
+            pointmax2 = numericUpDown6.Value.ToInt32();
 
             W = new NetOnDouble(wmin, wmax, wcount);
             T = new NetOnDouble(tmin, tmax, tcount);
             epsForWaveletValues = textBox5.Text.ToDouble();
+
+            all = wcount * tcount;
+            SetDir();
         }
 
+        private void radioButton1_CheckedChanged(object sender, EventArgs e)
+        {
+            groupBox3.Show();
+            groupBox4.Hide();
+        }
+
+        private void radioButton2_CheckedChanged(object sender, EventArgs e)
+        {
+            groupBox3.Hide();
+            groupBox4.Show();
+        }
 
         int save = 0, all = 1;
         string dir;
@@ -127,22 +232,16 @@ namespace Работа2019
         {
             OtherMethods.IlushaMethod(checkBox4);
             OtherMethods.PlaySound("Поехали");
-
-            SetDir();
+        
             GetData();
 
-            string[] names = new string[sources.Length];
-            for (int i = 0; i < names.Length; i++)
-                names[i] = $"Array{dataGridView1[1, i].Value}.txt";
-
-            List<EllipseParam> param = new List<EllipseParam>();
-          
-            all = wcount * tcount;
-            int alles = sources.Length * (sources.Length - 1);
-            IProgress<int> progress = new Progress<int>((int val) => save = val);
-
+            string[] names = Enumerable.Range(0, sources.Length).Select(i => $"Array{dataGridView1[1, i].Value}.txt").ToArray();
             string[] wheredata = Expendator.GetStringArrayFromFile("WhereData.txt").Select(s => Path.Combine(s, "Разница")).ToArray();
 
+            List<EllipseParam> param = new List<EllipseParam>();   
+            int alles = sources.Length * (sources.Length - 1);
+            IProgress<int> progress = new Progress<int>((int val) => save = val);
+           
             for (int i = 0; i < sources.Length; i++)
             {
                 var itSource = sources[i];
@@ -158,13 +257,17 @@ namespace Работа2019
 
                     toolStripLabel1.Text = $"Замер {symbols[i]}, источник {snames[k]}, осталось {alles--}";
 
-                    var tuple = await Functions.GetMaximunFromArea(W, T, progress, new System.Threading.CancellationToken(),
+                    var tuple =(radioButton1.Checked)? await Functions.GetMaximunFromArea(W, T, progress, new System.Threading.CancellationToken(),
                         tmin, step, pcount, othernames[k], Path.Combine(dir, savename.Replace(" -> ", "to")),
-                        Wavelet.Wavelets.LP, wheredata[i], byevery, epsForWaveletValues);
+                        Wavelet.Wavelets.LP, wheredata[i], byevery, epsForWaveletValues):
+                       await Functions.GetMaximunFromArea(wmin,wmax, tmin,tmax,
+                        tmin, step, pcount, othernames[k], Path.Combine(dir, savename.Replace(" -> ", "to")),
+                        Wavelet.Wavelets.LP, wheredata[i], byevery, epsForWaveletValues,
+                        pointcount,pointmax,pointmax2);
 
                     ItElleps[k] = new EllipseParam(otherSources[k].Center, itSource.Center, Functions.GetFockS(tuple), Библиотека_графики.Other.colors[i], savename);
+                    AddToScheme(ItElleps[k]);
                 }
-                //new Scheme(sources, ItElleps,$"Схема для замера {symbols[i]}").ShowDialog();
                 param.AddRange(ItElleps);
                 SetDefaltProgressBar();
                 timer1.Stop();
@@ -177,10 +280,26 @@ namespace Работа2019
             SetDefaultStrip();
         }
 
+
+        Scheme scheme = null;
+        private void AddToScheme(EllipseParam p)
+        {
+            if (scheme == null)
+            {
+                scheme = new Scheme(sources, new EllipseParam[] { p });
+                scheme.Show();
+            }
+            else
+            {
+                scheme.Add(p);
+                scheme.Refresh();
+            }
+        }
         private void MakeEllipses(List<EllipseParam> param)
         {
             EllipseParam.WriteInFile("Ellipses.txt", param);
-            //new Scheme(sources, param.ToArray(), "Схема для всех замеров").Show();
+            if (scheme.IsDisposed)
+                new Scheme(sources, param.ToArray(), "Схема для всех замеров").Show();
         }
     }
 }

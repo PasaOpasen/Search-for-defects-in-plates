@@ -147,4 +147,4 @@ plot_grid(li[[1]], li[[2]], li[[3]],
 s = read.table("Vg.txt", dec = ",")
 x = s[[1]]
 y = s[[2]]
-plot(x,y,"b",col="red")
+plot(x, y, "b", col = "red")
