@@ -45,16 +45,15 @@
             this.очиститьToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.удалитьПоследнееВхождениеToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.реверсироватьToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
+            this.сортироватьToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.вставитьГотовыйПримерToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.текущиеИсточникиToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.groupBox1 = new System.Windows.Forms.GroupBox();
-            this.button1 = new System.Windows.Forms.Button();
             this.button2 = new System.Windows.Forms.Button();
             this.timer1 = new System.Windows.Forms.Timer(this.components);
             this.groupBox2 = new System.Windows.Forms.GroupBox();
             this.radioButton2 = new System.Windows.Forms.RadioButton();
             this.radioButton1 = new System.Windows.Forms.RadioButton();
-            this.сортироватьToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.menuStrip1.SuspendLayout();
             this.contextMenuStrip1.SuspendLayout();
             this.groupBox1.SuspendLayout();
@@ -135,7 +134,7 @@
             this.checkedListBox1.FormattingEnabled = true;
             this.checkedListBox1.Location = new System.Drawing.Point(3, 22);
             this.checkedListBox1.Name = "checkedListBox1";
-            this.checkedListBox1.Size = new System.Drawing.Size(655, 198);
+            this.checkedListBox1.Size = new System.Drawing.Size(655, 216);
             this.checkedListBox1.TabIndex = 1;
             // 
             // contextMenuStrip1
@@ -149,7 +148,7 @@
             this.вставитьГотовыйПримерToolStripMenuItem,
             this.текущиеИсточникиToolStripMenuItem});
             this.contextMenuStrip1.Name = "contextMenuStrip1";
-            this.contextMenuStrip1.Size = new System.Drawing.Size(242, 180);
+            this.contextMenuStrip1.Size = new System.Drawing.Size(242, 158);
             // 
             // добавитьToolStripMenuItem
             // 
@@ -198,6 +197,14 @@
             this.реверсироватьToolStripMenuItem.Text = "Реверсировать";
             this.реверсироватьToolStripMenuItem.Click += new System.EventHandler(this.реверсироватьToolStripMenuItem_Click);
             // 
+            // сортироватьToolStripMenuItem
+            // 
+            this.сортироватьToolStripMenuItem.Name = "сортироватьToolStripMenuItem";
+            this.сортироватьToolStripMenuItem.Size = new System.Drawing.Size(241, 22);
+            this.сортироватьToolStripMenuItem.Text = "Сортировать";
+            this.сортироватьToolStripMenuItem.ToolTipText = "Сортировать источники по их центрам, сначала по ординатам, затем по абциссам";
+            this.сортироватьToolStripMenuItem.Click += new System.EventHandler(this.сортироватьToolStripMenuItem_Click);
+            // 
             // вставитьГотовыйПримерToolStripMenuItem
             // 
             this.вставитьГотовыйПримерToolStripMenuItem.Name = "вставитьГотовыйПримерToolStripMenuItem";
@@ -214,38 +221,22 @@
             // 
             // groupBox1
             // 
-            this.groupBox1.Anchor = ((System.Windows.Forms.AnchorStyles)((((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Bottom) 
-            | System.Windows.Forms.AnchorStyles.Left) 
-            | System.Windows.Forms.AnchorStyles.Right)));
             this.groupBox1.Controls.Add(this.checkedListBox1);
             this.groupBox1.Location = new System.Drawing.Point(22, 41);
             this.groupBox1.Name = "groupBox1";
-            this.groupBox1.Size = new System.Drawing.Size(661, 223);
+            this.groupBox1.Size = new System.Drawing.Size(661, 241);
             this.groupBox1.TabIndex = 2;
             this.groupBox1.TabStop = false;
             this.groupBox1.Text = "Используемые источники";
-            // 
-            // button1
-            // 
-            this.button1.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Bottom | System.Windows.Forms.AnchorStyles.Right)));
-            this.button1.BackColor = System.Drawing.Color.White;
-            this.button1.FlatStyle = System.Windows.Forms.FlatStyle.Flat;
-            this.button1.Location = new System.Drawing.Point(551, 278);
-            this.button1.Name = "button1";
-            this.button1.Size = new System.Drawing.Size(132, 61);
-            this.button1.TabIndex = 3;
-            this.button1.Text = "Закрыть";
-            this.button1.UseVisualStyleBackColor = false;
-            this.button1.Click += new System.EventHandler(this.button1_Click);
             // 
             // button2
             // 
             this.button2.BackColor = System.Drawing.Color.OrangeRed;
             this.button2.Dock = System.Windows.Forms.DockStyle.Right;
             this.button2.FlatStyle = System.Windows.Forms.FlatStyle.Popup;
-            this.button2.Location = new System.Drawing.Point(356, 22);
+            this.button2.Location = new System.Drawing.Point(324, 22);
             this.button2.Name = "button2";
-            this.button2.Size = new System.Drawing.Size(158, 42);
+            this.button2.Size = new System.Drawing.Size(376, 42);
             this.button2.TabIndex = 4;
             this.button2.Text = "Запуск анализа";
             this.button2.UseVisualStyleBackColor = false;
@@ -257,9 +248,10 @@
             this.groupBox2.Controls.Add(this.radioButton2);
             this.groupBox2.Controls.Add(this.radioButton1);
             this.groupBox2.Controls.Add(this.button2);
-            this.groupBox2.Location = new System.Drawing.Point(25, 275);
+            this.groupBox2.Dock = System.Windows.Forms.DockStyle.Bottom;
+            this.groupBox2.Location = new System.Drawing.Point(0, 288);
             this.groupBox2.Name = "groupBox2";
-            this.groupBox2.Size = new System.Drawing.Size(517, 67);
+            this.groupBox2.Size = new System.Drawing.Size(703, 67);
             this.groupBox2.TabIndex = 5;
             this.groupBox2.TabStop = false;
             this.groupBox2.Text = "Тип анализа";
@@ -286,14 +278,6 @@
             this.radioButton1.Text = "Интегральный";
             this.radioButton1.UseVisualStyleBackColor = true;
             // 
-            // сортироватьToolStripMenuItem
-            // 
-            this.сортироватьToolStripMenuItem.Name = "сортироватьToolStripMenuItem";
-            this.сортироватьToolStripMenuItem.Size = new System.Drawing.Size(241, 22);
-            this.сортироватьToolStripMenuItem.Text = "Сортировать";
-            this.сортироватьToolStripMenuItem.ToolTipText = "Сортировать источники по их центрам, сначала по ординатам, затем по абциссам";
-            this.сортироватьToolStripMenuItem.Click += new System.EventHandler(this.сортироватьToolStripMenuItem_Click);
-            // 
             // Uxt
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(9F, 19F);
@@ -301,7 +285,6 @@
             this.BackColor = System.Drawing.SystemColors.Info;
             this.ClientSize = new System.Drawing.Size(703, 355);
             this.Controls.Add(this.groupBox2);
-            this.Controls.Add(this.button1);
             this.Controls.Add(this.groupBox1);
             this.Controls.Add(this.menuStrip1);
             this.Font = new System.Drawing.Font("Consolas", 12F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(204)));
@@ -328,7 +311,6 @@
         private System.Windows.Forms.ToolStripMenuItem построитьПоследнююСохранённуюАнимациюToolStripMenuItem;
         private System.Windows.Forms.CheckedListBox checkedListBox1;
         private System.Windows.Forms.GroupBox groupBox1;
-        private System.Windows.Forms.Button button1;
         private System.Windows.Forms.Button button2;
         private System.Windows.Forms.ContextMenuStrip contextMenuStrip1;
         private System.Windows.Forms.ToolStripMenuItem добавитьToolStripMenuItem;

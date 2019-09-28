@@ -31,6 +31,11 @@ namespace Работа2019
             Y = yNet.dup;
             SetParams();
             SetEvents();
+
+            chart1.ChartAreas[0].AxisX.MajorGrid.Enabled = false;
+            chart1.ChartAreas[0].AxisY.MajorGrid.Enabled = false;
+            chart1.ChartAreas[0].AxisX.Crossing = 0;
+            chart1.ChartAreas[0].AxisY.Crossing = 0;
         }
 
         private void SetParams()

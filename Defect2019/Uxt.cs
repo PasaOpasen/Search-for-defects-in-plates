@@ -109,11 +109,6 @@ namespace Defect2019
             Forms.UG.анимацияПоПоследнимСохранённымДаннымToolStripMenuItem_Click(new object(), new EventArgs());
         }
 
-        private void button1_Click(object sender, EventArgs e)
-        {
-            this.Close();
-        }
-
         private void реверсироватьToolStripMenuItem_Click(object sender, EventArgs e)
         {
             checkedListBox1.Items.Clear();
