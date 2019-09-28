@@ -125,6 +125,15 @@ namespace Работа2019
             form.ShowDialog();
         }
 
+        private async void toolStripButton2_Click(object sender, EventArgs e)
+        {
+            GetData();
+
+
+
+            OtherMethods.PlaySound("ТестированиеОкончено");
+        }
+
         private void GetData()
         {
             wmin = 1.0 / textBox2.Text.ToDouble() / 1000;//(2000*Math.PI);
@@ -141,6 +150,9 @@ namespace Работа2019
             W = new NetOnDouble(wmin, wmax, wcount);
             T = new NetOnDouble(tmin, tmax, tcount);
             epsForWaveletValues = textBox5.Text.ToDouble();
+
+            all = wcount * tcount;
+            SetDir();
         }
 
         private void radioButton1_CheckedChanged(object sender, EventArgs e)
@@ -169,22 +181,16 @@ namespace Работа2019
         {
             OtherMethods.IlushaMethod(checkBox4);
             OtherMethods.PlaySound("Поехали");
-
-            SetDir();
+        
             GetData();
 
-            string[] names = new string[sources.Length];
-            for (int i = 0; i < names.Length; i++)
-                names[i] = $"Array{dataGridView1[1, i].Value}.txt";
-
-            List<EllipseParam> param = new List<EllipseParam>();
-
-            all = wcount * tcount;
-            int alles = sources.Length * (sources.Length - 1);
-            IProgress<int> progress = new Progress<int>((int val) => save = val);
-
+            string[] names = Enumerable.Range(0, sources.Length).Select(i => $"Array{dataGridView1[1, i].Value}.txt").ToArray();
             string[] wheredata = Expendator.GetStringArrayFromFile("WhereData.txt").Select(s => Path.Combine(s, "Разница")).ToArray();
 
+            List<EllipseParam> param = new List<EllipseParam>();   
+            int alles = sources.Length * (sources.Length - 1);
+            IProgress<int> progress = new Progress<int>((int val) => save = val);
+           
             for (int i = 0; i < sources.Length; i++)
             {
                 var itSource = sources[i];
@@ -211,7 +217,6 @@ namespace Работа2019
                     ItElleps[k] = new EllipseParam(otherSources[k].Center, itSource.Center, Functions.GetFockS(tuple), Библиотека_графики.Other.colors[i], savename);
                     AddToScheme(ItElleps[k]);
                 }
-                //new Scheme(sources, ItElleps,$"Схема для замера {symbols[i]}").ShowDialog();
                 param.AddRange(ItElleps);
                 SetDefaltProgressBar();
                 timer1.Stop();
@@ -224,8 +229,8 @@ namespace Работа2019
             SetDefaultStrip();
         }
 
-        Scheme scheme = null;
 
+        Scheme scheme = null;
         private void AddToScheme(EllipseParam p)
         {
             if (scheme == null)
@@ -238,7 +243,6 @@ namespace Работа2019
                 scheme.Add(p);
                 scheme.Refresh();
             }
-
         }
         private void MakeEllipses(List<EllipseParam> param)
         {
