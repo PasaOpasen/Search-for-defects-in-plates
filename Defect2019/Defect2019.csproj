@@ -540,9 +540,6 @@
     <None Include="Resources\roger.wav" />
   </ItemGroup>
   <ItemGroup>
-    <None Include="Resources\gamestartup.mp3" />
-  </ItemGroup>
-  <ItemGroup>
     <None Include="Resources\gamestartup.wav" />
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
