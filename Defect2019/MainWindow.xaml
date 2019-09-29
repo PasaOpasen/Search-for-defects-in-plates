@@ -20,11 +20,20 @@
             <StackPanel.Background>
                 <ImageBrush/>
             </StackPanel.Background>
-            <StackPanel HorizontalAlignment="Center" Height="326" Margin="288,100,276,0" Width="188" RenderTransformOrigin="0.503,0.509">
+            <StackPanel HorizontalAlignment="Center" Height="408" Margin="288,100,276,0" Width="188" RenderTransformOrigin="0.503,0.509">
+                <StackPanel.RenderTransform>
+                    <TransformGroup>
+                        <ScaleTransform/>
+                        <SkewTransform AngleY="1.682"/>
+                        <RotateTransform/>
+                        <TranslateTransform Y="2.776"/>
+                    </TransformGroup>
+                </StackPanel.RenderTransform>
                 <Button x:Name="uxtButton" HorizontalAlignment="Center" Margin="5,15,0,5" VerticalAlignment="Top" Width="150" Height="49" RenderTransformOrigin="-3.263,-3.143" Click="Button_Click_3" Content="Выполнить эксперимент"/>
                 <Button x:Name="DispButton" HorizontalAlignment="Center" Margin="5,15,0,5" VerticalAlignment="Top" Width="150" Height="49" RenderTransformOrigin="-3.263,-3.143" Click="Button_Click_1" Content="Дисперсионки"/>
                 <Button x:Name="uriButton" HorizontalAlignment="Center" Margin="5,15,0,5" VerticalAlignment="Top" Width="150" Height="49" RenderTransformOrigin="-3.263,-3.143" Click="Button_Click_2" Content="Анализ источника"/>
-                <Button x:Name="CloseButton" HorizontalAlignment="Center" Margin="5,65,0,5" VerticalAlignment="Bottom" Width="96" Height="49" RenderTransformOrigin="-3.263,-3.143" Click="Button_Click" Content="Выход"/>
+                <Button x:Name="DocButton" HorizontalAlignment="Center" Margin="5,15,0,5" VerticalAlignment="Top" Width="150" Height="49" RenderTransformOrigin="-3.263,-3.143" Click="Button_Click_4" Content="Документация"/>
+                <Button x:Name="CloseButton" HorizontalAlignment="Center" Margin="5,55,0,5" VerticalAlignment="Bottom" Width="96" Height="49" RenderTransformOrigin="-3.263,-3.143" Click="Button_Click" Content="Выход"/>
             </StackPanel>
         </StackPanel>
         
