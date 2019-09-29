@@ -19,6 +19,7 @@ namespace Работа2019
         private void button1_Click(object sender, EventArgs e)
         {
             OK = true;
+            SoundMethods.OK();
             this.Close();
         }
 

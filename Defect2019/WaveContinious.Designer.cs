@@ -380,7 +380,7 @@
             this.button4.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Right)));
             this.button4.BackColor = System.Drawing.Color.Red;
             this.button4.FlatStyle = System.Windows.Forms.FlatStyle.Popup;
-            this.button4.Location = new System.Drawing.Point(644, 202);
+            this.button4.Location = new System.Drawing.Point(644, 215);
             this.button4.Name = "button4";
             this.button4.Size = new System.Drawing.Size(214, 53);
             this.button4.TabIndex = 8;

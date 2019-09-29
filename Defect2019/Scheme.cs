@@ -28,6 +28,7 @@ namespace Работа2019
             InitializeComponent();
             saveFileDialog1.Filter = "Image files(*.png)|*.png|All files(*.*)|*.*";
             this.Text = title;
+            SoundMethods.SetPositions();
         }
 
         public Scheme(Source[] mass, string title = "Схема эксперимента") : this(title)

@@ -25,6 +25,8 @@ namespace Defect2019
         {
             App app = new App();
             MainWindow window = new MainWindow();
+            window.WindowStartupLocation = System.Windows.WindowStartupLocation.CenterScreen;
+
             SetExeptions();
             app.Run(window);
         }

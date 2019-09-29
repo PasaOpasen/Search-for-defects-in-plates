@@ -118,6 +118,7 @@ namespace Defect2019
 
             sources.Reverse();
             checkedListBox1.Update();
+            SoundMethods.SetPositions();
         }
 
         private void удалитьПоследнееВхождениеToolStripMenuItem_Click(object sender, EventArgs e)
@@ -135,6 +136,7 @@ namespace Defect2019
         {
             checkedListBox1.Items.Clear();
             sources.Clear();
+            SoundMethods.Clear();
         }
 
         private void toolStripMenuItem1_Click(object sender, EventArgs e)
@@ -239,7 +241,10 @@ namespace Defect2019
             string mess = "Требуется подключение к Интернету. Будут загружены все пакеты R, необходимые программе. Загрузка может занимать несколько минут, по окончанию загрузки консоль закроется. Уже установленные пакеты могут загрузиться заново либо обновиться. Выполнить действие?";
 
             if (MessageBox.Show(mess, "Требуется подтверждение", MessageBoxButtons.YesNo, MessageBoxIcon.Question) == DialogResult.Yes)
-                await Task.Run(() => Expendator.StartProcessOnly(OtherMethods.GetResource("InstallPackages.r"), true));
+            {
+                SoundMethods.OK();
+await Task.Run(() => Expendator.StartProcessOnly(OtherMethods.GetResource("InstallPackages.r"), true));
+            }               
         }
 
         private void сортироватьToolStripMenuItem_Click(object sender, EventArgs e)
@@ -250,6 +255,7 @@ namespace Defect2019
             for (int i = 0; i < sources.Count; i++)
                 checkedListBox1.Items.Add(sources[i].ToString(), true);
             checkedListBox1.Update();
+            SoundMethods.SetPositions();
         }
 
         private void текущиеИсточникиToolStripMenuItem_Click(object sender, EventArgs e)
@@ -257,6 +263,7 @@ namespace Defect2019
             for (int i = 0; i < examples2.Count; i++)
                 sources.Add(examples2[i]);
             Recostract();
+            SoundMethods.TukTuk();
         }
     }
 }

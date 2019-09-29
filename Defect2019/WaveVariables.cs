@@ -1520,6 +1520,7 @@ public static class OtherMethods
                     break;
                 }
             }
+            Работа2019.SoundMethods.Clear();
         }
     }
 

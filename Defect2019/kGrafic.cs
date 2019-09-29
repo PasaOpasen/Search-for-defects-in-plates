@@ -368,6 +368,7 @@ namespace Defect2019
             savedialog.ShowHelp = true;
             if (savedialog.ShowDialog() == DialogResult.OK)
             {
+                Работа2019.SoundMethods.OK();
                 try
                 {
                     chart1.SaveImage(savedialog.FileName.Substring(0, savedialog.FileName.IndexOf(".png")) + ".emf", System.Windows.Forms.DataVisualization.Charting.ChartImageFormat.Emf);

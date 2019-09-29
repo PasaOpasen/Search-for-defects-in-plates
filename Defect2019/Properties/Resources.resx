@@ -163,4 +163,19 @@
   <data name="ТестированиеОкончено" type="System.Resources.ResXFileRef, System.Windows.Forms">
     <value>..\Resources\ТестированиеОкончено.wav;System.IO.MemoryStream, mscorlib, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
   </data>
+  <data name="achievement_earned" type="System.Resources.ResXFileRef, System.Windows.Forms">
+    <value>..\Resources\achievement_earned.wav;System.IO.MemoryStream, mscorlib, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
+  </data>
+  <data name="circleback" type="System.Resources.ResXFileRef, System.Windows.Forms">
+    <value>..\Resources\circleback.wav;System.IO.MemoryStream, mscorlib, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
+  </data>
+  <data name="clear" type="System.Resources.ResXFileRef, System.Windows.Forms">
+    <value>..\Resources\clear.wav;System.IO.MemoryStream, mscorlib, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
+  </data>
+  <data name="ct_point" type="System.Resources.ResXFileRef, System.Windows.Forms">
+    <value>..\Resources\ct_point.wav;System.IO.MemoryStream, mscorlib, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
+  </data>
+  <data name="roger" type="System.Resources.ResXFileRef, System.Windows.Forms">
+    <value>..\Resources\roger.wav;System.IO.MemoryStream, mscorlib, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
+  </data>
 </root>

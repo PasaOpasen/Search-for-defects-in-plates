@@ -4,25 +4,29 @@
         xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
         xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
         xmlns:local="clr-namespace:Defect2019"
-        mc:Ignorable="d"
-        Title="2019Job" Height="598.739" Width="1083.614" Background="#FF96B292" ResizeMode="CanMinimize">
+        mc:Ignorable="d"       
+        Title="2019Job" Height="598.739" Width="763.791" Background="#FF96B292" ResizeMode="CanMinimize">
 
     <Grid>
+        <Grid.ColumnDefinitions>
+            <ColumnDefinition Width="297*"/>
+            <ColumnDefinition Width="82*"/>
+        </Grid.ColumnDefinitions>
         <Grid.Background>
             <ImageBrush TileMode="None" ImageSource="Resources/Bez_imeni.png"/>
         </Grid.Background>
 
-        <StackPanel Margin="3">
+        <StackPanel Margin="3" Grid.ColumnSpan="2">
             <StackPanel.Background>
                 <ImageBrush/>
             </StackPanel.Background>
-            <StackPanel HorizontalAlignment="Left" Height="326" Margin="874,100,0,0" Width="170" RenderTransformOrigin="0.503,0.509">
-                <Button x:Name="uxtButton" HorizontalAlignment="Left" Margin="5,5,0,5" VerticalAlignment="Top" Width="150" Height="49" RenderTransformOrigin="-3.263,-3.143" Click="Button_Click_3" Content="Выполнить эксперимент"/>
-                <Button x:Name="DispButton" HorizontalAlignment="Left" Margin="5,5,0,5" VerticalAlignment="Top" Width="122" Height="49" RenderTransformOrigin="-3.263,-3.143" Click="Button_Click_1" Content="Дисперсионки"/>
-                <Button x:Name="uriButton" HorizontalAlignment="Left" Margin="5,5,0,5" VerticalAlignment="Top" Width="122" Height="49" RenderTransformOrigin="-3.263,-3.143" Click="Button_Click_2" Content="Анализ источника"/>
-                <Button x:Name="CloseButton" HorizontalAlignment="Left" Margin="5,5,0,5" VerticalAlignment="Top" Width="96" Height="49" RenderTransformOrigin="-3.263,-3.143" Click="Button_Click" Content="Закрыть"/>
+            <StackPanel HorizontalAlignment="Center" Height="326" Margin="288,100,276,0" Width="188" RenderTransformOrigin="0.503,0.509">
+                <Button x:Name="uxtButton" HorizontalAlignment="Center" Margin="5,15,0,5" VerticalAlignment="Top" Width="150" Height="49" RenderTransformOrigin="-3.263,-3.143" Click="Button_Click_3" Content="Выполнить эксперимент"/>
+                <Button x:Name="DispButton" HorizontalAlignment="Center" Margin="5,15,0,5" VerticalAlignment="Top" Width="150" Height="49" RenderTransformOrigin="-3.263,-3.143" Click="Button_Click_1" Content="Дисперсионки"/>
+                <Button x:Name="uriButton" HorizontalAlignment="Center" Margin="5,15,0,5" VerticalAlignment="Top" Width="150" Height="49" RenderTransformOrigin="-3.263,-3.143" Click="Button_Click_2" Content="Анализ источника"/>
+                <Button x:Name="CloseButton" HorizontalAlignment="Center" Margin="5,65,0,5" VerticalAlignment="Bottom" Width="96" Height="49" RenderTransformOrigin="-3.263,-3.143" Click="Button_Click" Content="Выход"/>
             </StackPanel>
         </StackPanel>
-
+        
     </Grid>
 </Window>

@@ -113,7 +113,7 @@ namespace Работа2019
             {
                 if (form.OK)
                 {
-                    textBox2.Text = (1.0/(form.X.Begin*1000)).ToString();
+                    textBox2.Text = (1.0 / (form.X.Begin * 1000)).ToString();
                     textBox1.Text = (1.0 / (form.X.End * 1000)).ToString();
                     textBox3.Text = form.Y.Begin.ToString();
                     textBox4.Text = form.Y.End.ToString();
@@ -121,6 +121,8 @@ namespace Работа2019
                     numericUpDown1.Value = form.Y.Count;
                     GetData();
                 }
+                else
+                    SoundMethods.Back();
             };
 
             form.Show();

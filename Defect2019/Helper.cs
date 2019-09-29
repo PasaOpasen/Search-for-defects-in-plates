@@ -73,6 +73,7 @@ namespace Работа2019
                       };
                       if (MessageBox.Show(Expendator.StringArrayToString(st), "Исправить данные на форме?", MessageBoxButtons.YesNo, MessageBoxIcon.Question) == DialogResult.Yes)
                       {
+                          SoundMethods.OK();
                           tminBox.Text = tmin.ToRString();
                           tmaxBox.Text = tmax.ToRString();
                           tcountBox.Value = tcount;
