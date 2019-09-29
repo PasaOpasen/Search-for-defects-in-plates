@@ -16,6 +16,7 @@ ggplot(df, aes(x = pair, y = error, col = result)) +
     scale_y_continuous(name = "Error percent", breaks = round(seq(min(df$error), max(df$error), length.out = 15))) +
     scale_x_continuous(name = "Every cup", breaks = c()) +
     scale_color_manual(values = c("black", "green"), name = "Position",
-                       labels = c(paste("less =", sum(df$error < 0)), paste("more =", sum(df$error >= 0))))
+                       labels = c(paste("less =", sum(df$error < 0)), paste("more =", sum(df$error >= 0)))) +
+                       theme_bw()
 
 dev.off()
