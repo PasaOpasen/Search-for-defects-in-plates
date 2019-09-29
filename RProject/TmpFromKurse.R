@@ -512,14 +512,46 @@ my_plot <- ggplot(sales, aes(x = date, y = sale, col = shop)) +
 my_plot
 
 
+library(ggplot2)
+mpg_facet <- ggplot(mtcars, aes(x = mpg)) +
+    facet_grid(am ~ vs) +
+    geom_dotplot()
+mpg_facet
 
 
 
+sl_wrap <- ggplot(iris, aes(x = Sepal.Length)) +
+    geom_density() +
+    facet_wrap(~Species)
+sl_wrap
 
 
+my_plot <- ggplot(iris, aes(x = Sepal.Length, y = Sepal.Width)) +
+    geom_point() +
+    geom_smooth()+
+    facet_wrap(~Species)
+my_plot
 
 
+myMovieData = read.csv("myMovieData.csv")
+str(myMovieData)
 
+my_plot <- ggplot(myMovieData, aes(x = Type, y = Budget)) +
+    geom_boxplot() +
+    facet_grid(.~Year)+
+theme(axis.text.x = element_text(angle = 90, hjust = 1))
+
+my_plot
+
+
+iris_plot <- ggplot(iris, aes(x = Sepal.Length, y = Petal.Length, col = Species)) +
+    geom_point() +
+    geom_smooth(method = "lm") +
+    scale_color_discrete(name = "Вид цветка",
+                       labels = c("Ирис щетинистый", "Ирис разноцветный", "Ирис виргинский")) +
+                       scale_x_continuous(name = "Длина чашелистика", breaks = c(4, 5, 6, 7, 8),limits = c(4,8)) +
+                       scale_y_continuous(name = "Длина лепестка", breaks = c(1, 2, 3, 4, 5, 6, 7)) 
+iris_plot
 
 
 
