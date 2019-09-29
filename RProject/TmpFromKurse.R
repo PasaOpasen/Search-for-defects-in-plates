@@ -474,23 +474,42 @@ purchases.median.order.price(sample.purchases)
 
 
 
+library(ggplot2)
+x_cut_density <- qplot(x = x, data = diamonds, color = cut, geom = "density")
+ x_cut_density
+
+price_violin <- qplot(x=color,y=price,data = diamonds,geom = "violin")
+
+
+my_plot <- ggplot(mtcars, aes(x = factor(am), y = mpg)) +
+                  geom_violin()+
+geom_boxplot(width = 0.2)
+my_plot
 
 
 
+sales = read.csv("https://stepic.org/media/attachments/course/724/sales.csv")
+
+my_plot <- ggplot(sales, aes(x = income, y = sale)) +
+    geom_point(aes(col = shop)) +
+    geom_smooth()
+my_plot
 
 
+my_plot <- ggplot(sales, aes(x = shop, y = income, col = season)) +
+    stat_summary(fun.data = mean_cl_boot, geom = "pointrange",
+                 position = position_dodge(0.2))
+my_plot
 
 
-
-
-
-
-
-
-
-
-
-
+my_plot <- ggplot(sales, aes(x = date, y = sale, col = shop)) +
+    stat_summary(fun.data = mean_cl_boot, geom = "errorbar",
+                 position = position_dodge(0.2)) + # добавим стандартную ошибку
+                 stat_summary(fun.data = mean_cl_boot, geom = "point",
+                 position = position_dodge(0.2)) + # добавим точки
+                 stat_summary(fun.data = mean_cl_boot, geom = "line",
+                 position = position_dodge(0.2)) # соединим линиями
+my_plot
 
 
 

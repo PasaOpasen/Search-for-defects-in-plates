@@ -10,6 +10,6 @@ png(filename = "bee.png",width = 800, height = 850)
 library(ggplot2)
 ggplot(df, aes(x = pair, y = error)) +
     geom_point(col = "green", size = 3) +
-    geom_line(y = 0, col = "red", size = 1.3)
+    geom_line(y = 0, col = "red", size = 1.2, linetype="dotted")
 
 dev.off()

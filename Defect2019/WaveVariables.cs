@@ -983,7 +983,7 @@ public static class Functions
         Vectors min = new Vectors(xmin, ymin);
         Vectors max = new Vectors(xmax, ymax);
 
-        var res = await Task.Run(() => BeeHiveAlgorithm.GetGlobalMin(func, min, max, 1e-13, countpoint,  maxfit,maxtit));
+        var res = await Task.Run(() => BeeHiveAlgorithm.GetGlobalMin(func, min, max, 1e-17, countpoint,  maxfit,maxtit));
 
         Expendator.WriteInFile(savename + "(MaxCoordinate).txt", new string[]
         {
