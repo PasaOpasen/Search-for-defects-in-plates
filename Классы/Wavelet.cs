@@ -270,8 +270,8 @@ namespace МатКлассы
                     {
                         i2 = 2 * i;
                         tmp = this.Mother((f[i2].x - b) / a);
-                        sum += f[i2].y * tmp + 2 * f[i2 - 1].y * this.Mother((f[i2 - 1].x - b) / a);
-                        if (f[i2].x > 0 && tmp.Abs < epsForWaveletValues*sum.Abs)
+                        sum += f[i2].y * tmp + 2.0 * f[i2 - 1].y * this.Mother((f[i2 - 1].x - b) / a);
+                        if (tmp.Abs < epsForWaveletValues * sum.Abs && f[i2].x > 0)
                             break;
                     }
 
