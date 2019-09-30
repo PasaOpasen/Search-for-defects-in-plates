@@ -414,3 +414,149 @@ normality.test(mtcars[, 1:6])
 
 ########################################вторая часть курса
 
+library(dplyr)
+find_outliers <- function(t) {
+   
+    number = sapply(t, is.numeric)
+
+    s = t %>% group_by_if(is.factor) %>% summarise_if(is.numeric, funs(mean, sd))
+    print(s)
+    s2=sapply(s,is.numeric)
+    is_outlier = ifelse(abs(t[number] - s[s2][[1]]) <= 2 * s[s2][[2]], 0, 1)
+
+    res = cbind(t, is_outlier)
+    colnames(res)[length(colnames(res))]="is_outlier"
+
+    return(as.data.frame( res))
+}
+ToothGrowth$dose <- factor(ToothGrowth$dose)
+find_outliers(ToothGrowth)
+
+
+library(data.table)
+filter.expensive.available <- function(products, brands) {
+    return(products[price/100>=5000 &available==T & brand %in% brands,])
+}
+
+sample.products <- data.table(price = c(10000, 600000, 700000, 1000000),
+                              brand = c("a", "b", "c", "d"),
+                              available = c(T, T, F, T))
+filter.expensive.available(sample.products, c("a", "c", "d"))
+
+
+
+
+ordered.short.purchase.data <- function(purchases) {
+    return(purchases[order(-price)][quantity>=0, c("ordernumber", "product_id")])
+}
+
+sample.purchases <- data.table(price = c(100000, 6000, 7000, 5000000),
+                               ordernumber = 1:4,
+                               quantity = c(1, 2, 1, -1),
+                               product_id = 1:4)
+ordered.short.purchase.data(sample.purchases)
+
+
+
+library(dplyr)
+purchases.median.order.price <- function(purchases) {
+
+    SUMARIZE = purchases[quantity > 0, .(pr = quantity * price), by = ordernumber]
+    s=SUMARIZE%>%as.data.frame()%>%group_by(ordernumber)%>%summarise(sp=sum(pr))
+    return(median(s$sp))
+}
+sample.purchases <- data.table(price = c(100000, 6000, 7000, 5000000),
+                               ordernumber = c(1, 2, 2, 3),
+                               quantity = c(1, 2, 1, -1),
+                               product_id = 1:4)
+purchases.median.order.price(sample.purchases)
+
+
+
+
+library(ggplot2)
+x_cut_density <- qplot(x = x, data = diamonds, color = cut, geom = "density")
+ x_cut_density
+
+price_violin <- qplot(x=color,y=price,data = diamonds,geom = "violin")
+
+
+my_plot <- ggplot(mtcars, aes(x = factor(am), y = mpg)) +
+                  geom_violin()+
+geom_boxplot(width = 0.2)
+my_plot
+
+
+
+sales = read.csv("https://stepic.org/media/attachments/course/724/sales.csv")
+
+my_plot <- ggplot(sales, aes(x = income, y = sale)) +
+    geom_point(aes(col = shop)) +
+    geom_smooth()
+my_plot
+
+
+my_plot <- ggplot(sales, aes(x = shop, y = income, col = season)) +
+    stat_summary(fun.data = mean_cl_boot, geom = "pointrange",
+                 position = position_dodge(0.2))
+my_plot
+
+
+my_plot <- ggplot(sales, aes(x = date, y = sale, col = shop)) +
+    stat_summary(fun.data = mean_cl_boot, geom = "errorbar",
+                 position = position_dodge(0.2)) + # добавим стандартную ошибку
+                 stat_summary(fun.data = mean_cl_boot, geom = "point",
+                 position = position_dodge(0.2)) + # добавим точки
+                 stat_summary(fun.data = mean_cl_boot, geom = "line",
+                 position = position_dodge(0.2)) # соединим линиями
+my_plot
+
+
+library(ggplot2)
+mpg_facet <- ggplot(mtcars, aes(x = mpg)) +
+    facet_grid(am ~ vs) +
+    geom_dotplot()
+mpg_facet
+
+
+
+sl_wrap <- ggplot(iris, aes(x = Sepal.Length)) +
+    geom_density() +
+    facet_wrap(~Species)
+sl_wrap
+
+
+my_plot <- ggplot(iris, aes(x = Sepal.Length, y = Sepal.Width)) +
+    geom_point() +
+    geom_smooth()+
+    facet_wrap(~Species)
+my_plot
+
+
+myMovieData = read.csv("myMovieData.csv")
+str(myMovieData)
+
+my_plot <- ggplot(myMovieData, aes(x = Type, y = Budget)) +
+    geom_boxplot() +
+    facet_grid(.~Year)+
+theme(axis.text.x = element_text(angle = 90, hjust = 1))
+
+my_plot
+
+
+iris_plot <- ggplot(iris, aes(x = Sepal.Length, y = Petal.Length, col = Species)) +
+    geom_point() +
+    geom_smooth(method = "lm") +
+    scale_color_discrete(name = "Вид цветка",
+                       labels = c("Ирис щетинистый", "Ирис разноцветный", "Ирис виргинский")) +
+                       scale_x_continuous(name = "Длина чашелистика", breaks = c(4, 5, 6, 7, 8),limits = c(4,8)) +
+                       scale_y_continuous(name = "Длина лепестка", breaks = c(1, 2, 3, 4, 5, 6, 7)) 
+iris_plot
+
+
+
+
+
+
+
+

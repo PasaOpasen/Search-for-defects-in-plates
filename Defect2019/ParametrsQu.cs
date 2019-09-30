@@ -41,6 +41,12 @@ namespace Defect2019
             textBox7.Text = BeeHiveAlgorithm.w.ToRString();
             textBox13.Text = BeeHiveAlgorithm.fp.ToRString();
             textBox14.Text = BeeHiveAlgorithm.fg.ToRString();
+
+            this.FormClosing += (o, e) =>
+            {
+                if(!UGrafic.wchange)
+                    Работа2019.SoundMethods.Back();
+            };
         }
 
         private void button1_Click(object sender, EventArgs e)
@@ -72,6 +78,7 @@ namespace Defect2019
             BeeHiveAlgorithm.fg = textBox14.Text.ToDouble();
 
             AfterChaigeData();
+            Работа2019.SoundMethods.OK();
             this.Close();
         }
     }

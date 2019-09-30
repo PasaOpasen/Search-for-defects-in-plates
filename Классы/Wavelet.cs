@@ -265,11 +265,13 @@ namespace МатКлассы
                     Complex sum0 = f[0].y * this.Mother((f[0].x - b) / a) + f[f.Length - 1].y * this.Mother((f[f.Length - 1].x - b) / a);
                     Complex sum = 0;
                     Complex tmp;
+                    int i2;
                     for (int i = 1; i <= n - 1; i++)
                     {
-                        tmp = this.Mother((f[2 * i].x - b) / a);
-                        sum += f[2 * i].y * tmp + 2 * f[2 * i - 1].y * this.Mother((f[2 * i - 1].x - b) / a);
-                        if (f[2 * i].x > 0 && tmp.Abs < epsForWaveletValues*sum.Abs)
+                        i2 = 2 * i;
+                        tmp = this.Mother((f[i2].x - b) / a);
+                        sum += f[i2].y * tmp + 2 * f[i2 - 1].y * this.Mother((f[i2 - 1].x - b) / a);
+                        if (f[i2].x > 0 && tmp.Abs < epsForWaveletValues*sum.Abs)
                             break;
                     }
 

@@ -299,6 +299,7 @@ namespace Работа2019
             {
                 if (folderBrowserDialog1.ShowDialog() == DialogResult.OK)
                 {
+                    SoundMethods.OK();
                     path = folderBrowserDialog1.SelectedPath;
                     arr = Source.GetSourcesWithReadFw(path, sources, true);
                     if (arr.Length > 0)

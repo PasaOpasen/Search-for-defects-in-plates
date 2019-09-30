@@ -307,6 +307,7 @@
     <Compile Include="Scheme.Designer.cs">
       <DependentUpon>Scheme.cs</DependentUpon>
     </Compile>
+    <Compile Include="SoundMethods.cs" />
     <Compile Include="Source.cs" />
     <Compile Include="Sources.cs">
       <SubType>Form</SubType>
@@ -522,6 +523,24 @@
   </ItemGroup>
   <ItemGroup>
     <None Include="Resources\ТестированиеОкончено.wav" />
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="Resources\achievement_earned.wav" />
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="Resources\circleback.wav" />
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="Resources\clear.wav" />
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="Resources\ct_point.wav" />
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="Resources\roger.wav" />
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="Resources\gamestartup.wav" />
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
   <Target Name="EnsureNuGetPackageBuildImports" BeforeTargets="PrepareForBuild">

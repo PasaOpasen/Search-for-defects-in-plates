@@ -498,6 +498,7 @@ namespace Практика_с_фортрана
             savedialog.ShowHelp = true;
             if (savedialog.ShowDialog() == DialogResult.OK)
             {
+               Работа2019.SoundMethods.OK();
                 try
                 {
                     chart1.SaveImage(savedialog.FileName, System.Windows.Forms.DataVisualization.Charting.ChartImageFormat.Png);

@@ -33,10 +33,10 @@ namespace OptimisationTest
                 for (int i = 0; i < vec1.Length; i++)
                 {
                     r.WriteLine($"{vec1[i]} {vec2[i]}");
-                    Console.WriteLine($"{vec1[i]} \t{vec2[i]} " + ((vec1[i]>=vec2[i])?"\tЛучше":"\tХучше"));
+                    Console.WriteLine($"{vec1[i]} \t{vec2[i]} " + ((vec1[i]>=vec2[i])?"\tЛучше  +":"\tХучше  -"));
                 }
 
-
+            File.Copy(Expendator.GetResource("TestBee.r", "OptimisationTest"), "TestBee.r", true);
             Expendator.StartProcessOnly("TestBee.r");
             Process.Start("bee.png");
 

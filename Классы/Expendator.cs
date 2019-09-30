@@ -868,8 +868,8 @@ namespace МатКлассы
         /// <summary>
         /// Возвращает полный адрес ресурса по его краткому имени и проекту
         /// </summary>
-        /// <param name="name"></param>
-        /// <param name="projectname"></param>
+        /// <param name="name">Имя файла с расширением</param>
+        /// <param name="projectname">Имя проекта</param>
         /// <returns></returns>
         public static string GetResource(string name, string projectname)
         {

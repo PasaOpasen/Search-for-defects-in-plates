@@ -16,8 +16,9 @@ namespace Работа2019
     {
         private readonly double step = 16E-9;
         private readonly int pcount = 150000;
+        private readonly string DefSymbols = "ABCDEFGH";
 
-        private static string symbols = "ABCDEFGH";
+        private static string symbols;
         private Source[] sources;
         private double wmin, wmax, tmin, tmax, epsForWaveletValues = 1e-8;
         private int wcount, tcount, byevery,pointcount,pointmax,pointmax2;
@@ -75,7 +76,7 @@ namespace Работа2019
             for (int i = 0; i < sources.Length; ++i)
             {
                 //Добавляем строку, указывая значения колонок поочереди слева направо
-                dataGridView1.Rows.Add(sources[i].ToShortString(), symbols[i]);
+                dataGridView1.Rows.Add(sources[i].ToShortString(), DefSymbols[i]);
             }
 
             //for (int i = 0; i < 5; ++i)
@@ -112,7 +113,7 @@ namespace Работа2019
             {
                 if (form.OK)
                 {
-                    textBox2.Text = (1.0/(form.X.Begin*1000)).ToString();
+                    textBox2.Text = (1.0 / (form.X.Begin * 1000)).ToString();
                     textBox1.Text = (1.0 / (form.X.End * 1000)).ToString();
                     textBox3.Text = form.Y.Begin.ToString();
                     textBox4.Text = form.Y.End.ToString();
@@ -120,6 +121,8 @@ namespace Работа2019
                     numericUpDown1.Value = form.Y.Count;
                     GetData();
                 }
+                else
+                    SoundMethods.Back();
             };
 
             form.Show();
@@ -204,6 +207,31 @@ namespace Работа2019
 
             all = wcount * tcount;
             SetDir();
+            SetSymbols();
+        }
+        private void SetSymbols()
+        {
+            DialogResult MB(string text)=> MessageBox.Show(text, "Ошибка в именах", MessageBoxButtons.OK, MessageBoxIcon.Error);
+
+            try
+            {
+                symbols=new string(Enumerable.Range(0, sources.Length).Select(i =>Convert.ToChar( dataGridView1[1, i].Value)).ToArray());
+                if(symbols.Length != symbols.Distinct().Count())
+                {
+                    MB("Найдены совпадающие имена. Будут использованы имена по умолчанию");
+                    symbols = DefSymbols;
+                }
+            }
+            catch
+            {
+                MB("Минимум одно из заданных имён не является допустимым. Используйте только символы. Будут использованы имена по умолчанию");
+                symbols = new string( DefSymbols.ToCharArray());
+            }
+            finally
+            {
+                for (int i = 0; i < sources.Length; i++)
+                    dataGridView1[1, i].Value = symbols[i];
+            }
         }
 
         private void radioButton1_CheckedChanged(object sender, EventArgs e)
@@ -235,7 +263,7 @@ namespace Работа2019
         
             GetData();
 
-            string[] names = Enumerable.Range(0, sources.Length).Select(i => $"Array{dataGridView1[1, i].Value}.txt").ToArray();
+            string[] names = Enumerable.Range(0, sources.Length).Select(i => $"Array{symbols[i]}.txt").ToArray();
             string[] wheredata = Expendator.GetStringArrayFromFile("WhereData.txt").Select(s => Path.Combine(s, "Разница")).ToArray();
 
             List<EllipseParam> param = new List<EllipseParam>();   

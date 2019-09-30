@@ -26,31 +26,42 @@ namespace Defect2019
     /// </summary>
     public partial class MainWindow : Window
     {
+        private System.Media.SoundPlayer SoundPlayer = new System.Media.SoundPlayer(Expendator.GetResource("gamestartup.wav", "Defect2019"));
         public MainWindow()
         {
             InitializeComponent();
+            SoundPlayer.PlayLooping();
         }
 
         private void Button_Click(object sender, RoutedEventArgs e)
         {
+           
             this.Close();
         }
 
         private void Button_Click_1(object sender, RoutedEventArgs e)
         {
-            new kGrafic().Show();
+            SoundPlayer.Stop();
+            new kGrafic().Show();          
         }
 
         private void Button_Click_2(object sender, RoutedEventArgs e)
         {
+            SoundPlayer.Stop();
             Forms.UG = new Практика_с_фортрана.UGrafic();
             Forms.UG.Show();
         }
 
         private void Button_Click_3(object sender, RoutedEventArgs e)
         {
+            SoundPlayer.Stop();
             Forms.Uform = new Uxt();
             Forms.Uform.Show();
         }
+        private void Button_Click_4(object sender, RoutedEventArgs e)
+        {
+            SoundPlayer.Stop();
+        }
     }
+
 }

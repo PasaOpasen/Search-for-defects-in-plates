@@ -69,6 +69,7 @@
             this.numericUpDown5 = new System.Windows.Forms.NumericUpDown();
             this.numericUpDown4 = new System.Windows.Forms.NumericUpDown();
             this.groupBox3 = new System.Windows.Forms.GroupBox();
+            this.groupBox5 = new System.Windows.Forms.GroupBox();
             ((System.ComponentModel.ISupportInitialize)(this.dataGridView1)).BeginInit();
             this.groupBox1.SuspendLayout();
             ((System.ComponentModel.ISupportInitialize)(this.numericUpDown2)).BeginInit();
@@ -81,6 +82,7 @@
             ((System.ComponentModel.ISupportInitialize)(this.numericUpDown5)).BeginInit();
             ((System.ComponentModel.ISupportInitialize)(this.numericUpDown4)).BeginInit();
             this.groupBox3.SuspendLayout();
+            this.groupBox5.SuspendLayout();
             this.SuspendLayout();
             // 
             // dataGridView1
@@ -322,9 +324,9 @@
             this.button1.BackColor = System.Drawing.Color.FromArgb(((int)(((byte)(255)))), ((int)(((byte)(128)))), ((int)(((byte)(0)))));
             this.button1.FlatStyle = System.Windows.Forms.FlatStyle.Popup;
             this.button1.Font = new System.Drawing.Font("Consolas", 20.25F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(204)));
-            this.button1.Location = new System.Drawing.Point(336, 402);
+            this.button1.Location = new System.Drawing.Point(339, 297);
             this.button1.Name = "button1";
-            this.button1.Size = new System.Drawing.Size(271, 62);
+            this.button1.Size = new System.Drawing.Size(271, 55);
             this.button1.TabIndex = 3;
             this.button1.Text = "Пуск";
             this.button1.UseVisualStyleBackColor = false;
@@ -333,7 +335,7 @@
             // checkBox4
             // 
             this.checkBox4.AutoSize = true;
-            this.checkBox4.Location = new System.Drawing.Point(354, 277);
+            this.checkBox4.Location = new System.Drawing.Point(351, 268);
             this.checkBox4.Name = "checkBox4";
             this.checkBox4.Size = new System.Drawing.Size(253, 23);
             this.checkBox4.TabIndex = 18;
@@ -347,7 +349,7 @@
             // label5
             // 
             this.label5.AutoSize = true;
-            this.label5.Location = new System.Drawing.Point(350, 312);
+            this.label5.Location = new System.Drawing.Point(6, 32);
             this.label5.Name = "label5";
             this.label5.Size = new System.Drawing.Size(135, 19);
             this.label5.TabIndex = 19;
@@ -363,7 +365,7 @@
             0,
             0,
             0});
-            this.numericUpDown3.Location = new System.Drawing.Point(504, 310);
+            this.numericUpDown3.Location = new System.Drawing.Point(160, 30);
             this.numericUpDown3.Maximum = new decimal(new int[] {
             50,
             0,
@@ -387,16 +389,17 @@
             // label6
             // 
             this.label6.AutoSize = true;
-            this.label6.Location = new System.Drawing.Point(369, 348);
+            this.label6.Location = new System.Drawing.Point(6, 72);
             this.label6.Name = "label6";
-            this.label6.Size = new System.Drawing.Size(207, 19);
+            this.label6.Size = new System.Drawing.Size(108, 19);
             this.label6.TabIndex = 21;
-            this.label6.Text = "Ограничение на вейвлет";
-            this.toolTip1.SetToolTip(this.label6, "Значение модуля вейвлетной функции, меньше которого суммирование останавливается");
+            this.label6.Text = "Погрешность";
+            this.toolTip1.SetToolTip(this.label6, "Значение на добавок к интегральной сумме, меньше которого суммирование останавлив" +
+        "ается");
             // 
             // textBox5
             // 
-            this.textBox5.Location = new System.Drawing.Point(410, 370);
+            this.textBox5.Location = new System.Drawing.Point(130, 69);
             this.textBox5.Name = "textBox5";
             this.textBox5.Size = new System.Drawing.Size(122, 26);
             this.textBox5.TabIndex = 22;
@@ -591,17 +594,27 @@
             this.groupBox3.TabStop = false;
             this.groupBox3.Text = "Перебор";
             // 
+            // groupBox5
+            // 
+            this.groupBox5.Controls.Add(this.textBox5);
+            this.groupBox5.Controls.Add(this.label6);
+            this.groupBox5.Controls.Add(this.numericUpDown3);
+            this.groupBox5.Controls.Add(this.label5);
+            this.groupBox5.Location = new System.Drawing.Point(341, 358);
+            this.groupBox5.Name = "groupBox5";
+            this.groupBox5.Size = new System.Drawing.Size(269, 109);
+            this.groupBox5.TabIndex = 24;
+            this.groupBox5.TabStop = false;
+            this.groupBox5.Text = "Интегрирование";
+            // 
             // WaveletContinious
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(9F, 19F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
             this.BackColor = System.Drawing.Color.FromArgb(((int)(((byte)(255)))), ((int)(((byte)(224)))), ((int)(((byte)(192)))));
             this.ClientSize = new System.Drawing.Size(622, 616);
+            this.Controls.Add(this.groupBox5);
             this.Controls.Add(this.groupBox2);
-            this.Controls.Add(this.textBox5);
-            this.Controls.Add(this.label6);
-            this.Controls.Add(this.numericUpDown3);
-            this.Controls.Add(this.label5);
             this.Controls.Add(this.checkBox4);
             this.Controls.Add(this.button1);
             this.Controls.Add(this.toolStrip1);
@@ -630,6 +643,8 @@
             ((System.ComponentModel.ISupportInitialize)(this.numericUpDown4)).EndInit();
             this.groupBox3.ResumeLayout(false);
             this.groupBox3.PerformLayout();
+            this.groupBox5.ResumeLayout(false);
+            this.groupBox5.PerformLayout();
             this.ResumeLayout(false);
             this.PerformLayout();
 
@@ -675,5 +690,6 @@
         private System.Windows.Forms.ToolStripButton toolStripButton1;
         private System.Windows.Forms.Button button2;
         private System.Windows.Forms.ToolStripButton toolStripButton2;
+        private System.Windows.Forms.GroupBox groupBox5;
     }
 }
