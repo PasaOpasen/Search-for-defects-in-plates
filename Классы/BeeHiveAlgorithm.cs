@@ -12,13 +12,11 @@ namespace МатКлассы
         /// <summary>
         /// Многомерная парабола
         /// </summary>
-        public static Func<Vectors, double> Parabol = (Vectors v) => {
-            return v.DistNorm;
-        };
+        public static readonly Func<Vectors, double> Parabol = (Vectors v) =>v.DistNorm; 
         /// <summary>
         /// Функция Растригина
         /// </summary>
-        public static Func<Vectors, double> Rastr = (Vectors v) => {
+        public static readonly Func<Vectors, double> Rastr = (Vectors v) => {
             double s = 10 * v.Deg;
             for (int i = 0; i < v.Deg; i++)
                 s += v[i] * v[i] - 10 * Math.Cos(2 * Math.PI * v[i]);
@@ -28,7 +26,7 @@ namespace МатКлассы
         /// <summary>
         /// Функция Швеля
         /// </summary>
-        public static Func<Vectors, double> Shvel = (Vectors v) => {
+        public static readonly Func<Vectors, double> Shvel = (Vectors v) => {
             double s = 0;
             for (int i = 0; i < v.Deg; i++)
                 s += -v[i] * Math.Sin(Math.Sqrt(v[i].Abs()));
@@ -39,7 +37,7 @@ namespace МатКлассы
         /// <summary>
         /// Параметры шага для роя
         /// </summary>
-        //tex: Каждая частица в рое делает следующий шаг: $v_{i+1} = w v_i + \varphi_p \cdot random_1 (p_i - x_i) + \varphi_g \cdot random_2 (g_i - x_i)$
+        //tex:Каждая частица в рое делает примерно следующий шаг: $v_{i+1} = w v_i + \varphi_p \cdot random_1 (p_i - x_i) + \varphi_g \cdot random_2 (g_i - x_i)$
         public static double w=0.3, fp=2, fg=5;
 
         /// <summary>
@@ -108,7 +106,7 @@ namespace МатКлассы
         /// <summary>
         /// Рой пчёл
         /// </summary>
-        public class Hive
+        public sealed class Hive
         {
             /// <summary>
             /// Массив пчёл
@@ -226,7 +224,7 @@ namespace МатКлассы
         /// <summary>
         /// Классы пчелы
         /// </summary>
-        public class Bee
+        public sealed class Bee
         {
             /// <summary>
             /// Текущее положение частицы
@@ -244,7 +242,7 @@ namespace МатКлассы
             /// <summary>
             /// Значение целевой функции в наилучшем положении
             /// </summary>
-           public double bestval { get; private set; }
+            public double bestval { get; private set; }
             /// <summary>
             /// Целевая функция
             /// </summary>
@@ -324,12 +322,11 @@ namespace МатКлассы
             }
 
             /// <summary>
-            /// Сделать шаг по скорости и обновить наилучшее значение
+            /// Сделать шаг по скорости
             /// </summary>
             public void Move()
             {
                 x =x+v;
-               // ReCount();
             }
 
             /// <summary>
