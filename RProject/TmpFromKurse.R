@@ -415,16 +415,15 @@ normality.test(mtcars[, 1:6])
 ########################################вторая часть курса
 
 library(dplyr)
+library(lazyeval)
+
 find_outliers <- function(t) {
    
-    number = sapply(t, is.numeric)
-    fn=sapply(t,is.factor)
-    p = as.name(colnames[t][number])
-    print(p)
-    s = t %>% group_by_if(is.factor) %>% mutate(is_outlier = ifelse(abs(len - mean(len)) <= 2 * sd(len), 0, 1))
-    print(s)
+    s = t %>% group_by_if(is.factor)
+    mutate_call = lazyeval::interp(~ifelse(abs(a-mean(a)) <= 2 * sd(a),0,1), a = as.name(colnames(s)[sapply(s, is.numeric)]))
+    k = mutate_(s, .dots = setNames(list(mutate_call), 'is_outlier'))
 
-    return(as.data.frame( s))
+    return(as.data.frame( k))
 }
 ToothGrowth$dose <- factor(ToothGrowth$dose)
 find_outliers(ToothGrowth)
@@ -558,4 +557,49 @@ iris_plot
 
 
 
+library(data.table)
+library(plotly)
+make.fancy.teapot <- function(teapot.coords) {
+    len=nrow(teapot.coords)
+    i.s <- seq(0, len - 2, 3)
+    j.s <- seq(1, len - 1, 3)
+    k.s <- seq(2, len , 3)
+    plot_ly(teapot.coords, x = ~x, y = ~y, z = ~z, i = ~i.s, j = ~j.s, k = ~k.s, type = "mesh3d")
+}
 
+df=data.table(read.csv("teapot2.csv",sep = ";",dec = "."))
+head(df,14)
+make.fancy.teapot(df)
+
+
+
+
+library(dplyr)
+mark.position.portion <- function(purchases) {
+
+    SUMARIZE = purchases[quantity > 0, .(pr = quantity * price), by = ordernumber]
+    s = SUMARIZE %>% as.data.frame() %>% group_by(ordernumber) %>% mutate(price.portion = formatC(round(pr / sum(pr) * 100, 2), format = 'f', digits = 2))
+    s=as.data.frame(s)
+    return(as.data.table(cbind(purchases[quantity > 0], s["price.portion"])))
+}
+sample.purchases <- data.table(price = c(100, 300, 50, 700, 30),
+                               ordernumber = c(1, 1, 1, 2, 3),
+                               quantity = c(1, 1, 2, 1, -1),
+                               product_id = 1:5)
+
+
+
+library(data.table)
+sample.purchases = data.table(
+product_id = c(1739, 1948, 1055, 285, 291, 147),
+price = c(7840592.95, 5958649.13, 529825.34, 4607180.89, 1681484.37, 176796683.66),
+quantity = c(1, 1, 1, 1, 1, 1),
+ordernumber = c(3, 3, 5, 6, 6, 9))
+
+mark.position.portion <- function(purchases) {
+    S = purchases[quantity > 0, price.portion := formatC(round((quantity * price) / sum((quantity * price)) * 100, 2), format = 'f', digits = 2), by = ordernumber]
+   # print(S)
+    return(as.data.table(S[quantity > 0]))
+}
+
+mark.position.portion(sample.purchases)
