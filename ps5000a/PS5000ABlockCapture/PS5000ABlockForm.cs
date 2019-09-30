@@ -800,8 +800,8 @@ namespace PS5000A
             textBoxUnitInfo.AppendText(Switch_.GetAccepted() + "\n");
             Switch_.SendCmd(1, id);
             textBoxUnitInfo.AppendText(Switch_.GetAccepted() + "\n");
+            Application.DoEvents();
             Thread.Sleep(2000);
-
 
             all = usred;
             save = 0;
@@ -813,6 +813,8 @@ namespace PS5000A
                 start((uint)countAfter, (uint)countBefore, 250);
                 save = i + 1;
                 Timer1_Tick(new object(), new EventArgs());
+                Application.DoEvents();
+                Thread.Sleep(1);
             }
             //});
 
@@ -846,7 +848,8 @@ namespace PS5000A
 
                 using (StreamWriter fs = new StreamWriter(filename_))
                     for (int i = 0; i < countSum; i++)
-                        fs.WriteLine(Array[i]);
+//                        fs.WriteLine(Array[i]);
+                        fs.WriteLine(Array[i].ToString().Replace(',','.')); //тут изменил
 
             });
         }
