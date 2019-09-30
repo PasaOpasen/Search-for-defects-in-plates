@@ -375,7 +375,7 @@ namespace Библиотека_графики
             {
                 using (StreamWriter t = new StreamWriter(fnames[i]))
                     for (int j = 0; j < arr2[i].Length; j++)
-                        t.WriteLine(arr2[i][j].ToString());
+                        t.WriteLine(arr2[i][j].ToString().Replace(',','.'));
 
             });
         }

@@ -418,19 +418,18 @@ library(dplyr)
 find_outliers <- function(t) {
    
     number = sapply(t, is.numeric)
-
-    s = t %>% group_by_if(is.factor) %>% summarise_if(is.numeric, funs(mean, sd))
+    fn=sapply(t,is.factor)
+    p = as.name(colnames[t][number])
+    print(p)
+    s = t %>% group_by_if(is.factor) %>% mutate(is_outlier = ifelse(abs(len - mean(len)) <= 2 * sd(len), 0, 1))
     print(s)
-    s2=sapply(s,is.numeric)
-    is_outlier = ifelse(abs(t[number] - s[s2][[1]]) <= 2 * s[s2][[2]], 0, 1)
 
-    res = cbind(t, is_outlier)
-    colnames(res)[length(colnames(res))]="is_outlier"
-
-    return(as.data.frame( res))
+    return(as.data.frame( s))
 }
 ToothGrowth$dose <- factor(ToothGrowth$dose)
 find_outliers(ToothGrowth)
+
+
 
 
 library(data.table)
