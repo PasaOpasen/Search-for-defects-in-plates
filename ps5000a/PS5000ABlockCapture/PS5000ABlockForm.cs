@@ -443,7 +443,7 @@ namespace PS5000A
             countAfter = Convert.ToInt32(textBox10.Text);
             countBefore = Convert.ToInt32(textBox13.Text);
             usred = Convert.ToInt32(textBox11.Text);
-            dt = (_timebase - 3) / 62500000.0; // 16 bit
+            dt = (_timebase - 3) / 62_500_000.0; // 16 bit
         }
         private void buttonOpen_Click(object sender, EventArgs e)
         {
