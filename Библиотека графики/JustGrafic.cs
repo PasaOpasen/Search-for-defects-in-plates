@@ -115,19 +115,19 @@ namespace Библиотека_графики
         private void ReadDataOld()
         {
             Parallel.For(0, fnames.Length, (int i) =>
-             {
-                 using (StreamReader f = new StreamReader(fnames[i]))
-                 {
-                     var p = (f.ReadToEnd()).Split(new string[] { "\n" }, StringSplitOptions.RemoveEmptyEntries);
-                     arr[i] = new double[p.Length];
-                     arr2[i] = new double[p.Length];
-                     for (int k = 0; k < arr[i].Length; k++)
-                     {
-                         arr[i][k] = p[k].Replace('.', ',').ToDouble();
-                         arr2[i][k] = arr[i][k];
-                     }
-                 }
-             });
+            {
+                using (StreamReader f = new StreamReader(fnames[i]))
+                {
+                    var p = (f.ReadToEnd()).Split(new string[] { "\n" }, StringSplitOptions.RemoveEmptyEntries);
+                    arr[i] = new double[p.Length];
+                    arr2[i] = new double[p.Length];
+                    for (int k = 0; k < arr[i].Length; k++)
+                    {
+                        arr[i][k] = p[k].Replace('.', ',').ToDouble();
+                        arr2[i][k] = arr[i][k];
+                    }
+                }
+            });
         }
 
         private void ReadData()

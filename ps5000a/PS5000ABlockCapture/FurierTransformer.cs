@@ -16,8 +16,8 @@ namespace PS5000A
 {
     public static class FurierTransformer
     {
-        static readonly double _2PI = 2 * Math.PI;
         static string InFile;
+        static string OutFile;
         static string CfgFile;
         public static double dt;
         public static double t_0;
@@ -32,7 +32,9 @@ namespace PS5000A
         public static int count_w;
         public static double dw;
         public static int n_avg;
+        static bool avd_all = false;
         public static int n_ignore;
+        static bool no_ignore = false;
         static double avg;
         static double[] f;
         static Complex[] F;
@@ -52,32 +54,47 @@ namespace PS5000A
 
         public static void LoadCfg(string filename)
         {
-            CfgFile = filename;
-            using (StreamReader sr = new StreamReader(CfgFile, System.Text.Encoding.Default))
+            try
             {
-                int IntGet() => Int32.Parse(sr.ReadLine());
-                double DoubleGet() => Double.Parse(sr.ReadLine());
+                CfgFile = filename;
+                using (StreamReader sr = new StreamReader(CfgFile, System.Text.Encoding.Default))
+                {
 
-                //параметры сигнала по времени
-                t_0 = DoubleGet();
-                t_n = DoubleGet();
-                count_t = IntGet();
-                dt = (t_n - t_0) / (count_t - 1);
-                //параметры преобразования по частоте
-                f_0 = DoubleGet();
-                f_m = DoubleGet();
-                count_f = IntGet();
-                df = (f_m - f_0) / (count_f - 1);
+                    string line;
 
-                w_0 = _2PI * f_0;
-                w_m = _2PI * f_m;
-                count_w = count_f;
-                dw = (w_m - w_0) / (double)(count_w - 1);
+                    //параметры сигнала по времени
+                    line = sr.ReadLine();
+                    t_0 = Double.Parse(line);
+                    line = sr.ReadLine();
+                    t_n = Double.Parse(line);
+                    line = sr.ReadLine();
+                    count_t = Int32.Parse(line);
+                    dt = (t_n - t_0) / (double)(count_t - 1);
+                    //параметры преобразования по частоте
+                    line = sr.ReadLine();
+                    f_0 = Double.Parse(line);
+                    line = sr.ReadLine();
+                    f_m = Double.Parse(line);
+                    line = sr.ReadLine();
+                    count_f = Int32.Parse(line);
+                    df = (f_m - f_0) / (double)(count_f - 1);
 
-                //параметры вычитания постоянной составляющей
-                n_avg = IntGet();
-                //параметры вычитания постоянной составляющей
-                n_ignore = IntGet();
+                    w_0 = 2 * Math.PI * f_0;
+                    w_m = 2 * Math.PI * f_m;
+                    count_w = count_f;
+                    dw = (w_m - w_0) / (double)(count_w - 1);
+
+                    //параметры вычитания постоянной составляющей
+                    line = sr.ReadLine();
+                    n_avg = Int32.Parse(line);
+                    //параметры вычитания постоянной составляющей
+                    line = sr.ReadLine();
+                    n_ignore = Int32.Parse(line);
+                }
+            }
+            catch (Exception e)
+            {
+                Console.WriteLine(e.Message);
             }
         }
         public static void LoadIn(string filename)
@@ -97,47 +114,93 @@ namespace PS5000A
                 f[i] -= avg;
         }
 
+
         public static void LoadIn2(string filename)
         {
-            InFile = filename;
-            f = new double[count_t];
-            using (StreamReader sr = new StreamReader(InFile, System.Text.Encoding.Default))
+            try
             {
+                InFile = filename;
+                using (StreamReader sr = new StreamReader(InFile, System.Text.Encoding.Default))
+                {
+                    f = new double[count_t];
+                    string line;
+                    for (int i = 0; i < count_t; i++)
+                    {
+                        line = sr.ReadLine();
+                        string[] s = line.Split('\t');
+                        string s0 = s[1];
+                        double a = double.Parse(s0);
+                        f[i] = a;
+
+                    }
+
+                }
+                avg = 0;
+                for (int i = n_ignore; i < n_avg; i++)
+                {
+                    avg += f[i];
+                }
+                avg /= n_avg;
                 for (int i = 0; i < count_t; i++)
-                    f[i] = double.Parse(sr.ReadLine().Split('\t')[1]);
+                {
+
+                    f[i] -= avg;
+                }
+
             }
-            avg = 0;
-            for (int i = n_ignore; i < n_avg; i++)
-                avg += f[i];
-            avg /= n_avg;
-            for (int i = 0; i < count_t; i++)
-                f[i] -= avg;
+
+            catch (Exception e)
+            {
+                Console.WriteLine(e.Message);
+            }
         }
 
         public static void LoadInDiff(string filename1, string filename2, int len)
         {
-            count_t = len;
-            using (StreamReader sr1 = new StreamReader(filename1, System.Text.Encoding.Default))
-            using (StreamReader sr2 = new StreamReader(filename2, System.Text.Encoding.Default))
+            try
             {
-                f = new double[count_t];
+                count_t = len;
+                using (StreamReader sr1 = new StreamReader(filename1, System.Text.Encoding.Default))
+                using (StreamReader sr2 = new StreamReader(filename2, System.Text.Encoding.Default))
+                {
+                    f = new double[count_t];
+                    string line;
+                    // line = sr1.ReadLine();
+                    for (int i = 0; i < count_t; i++)
+                    {
+
+
+                        line = sr1.ReadLine().Replace('.', ',');
+                        double a = double.Parse(line);
+                        f[i] = -a;
+                        line = sr2.ReadLine().Replace('.', ',');
+                        a = double.Parse(line);
+                        f[i] += a;
+                        if (i < n_ignore)
+                        {
+                            f[i] = 0;
+                        }
+                    }
+
+                }
+
+                avg = 0;
+                for (int i = n_ignore; i < n_avg; i++)
+                {
+                    avg += f[i];
+                }
+                avg /= n_avg;
                 for (int i = 0; i < count_t; i++)
                 {
-                    f[i] = -double.Parse(sr1.ReadLine().Replace('.', ','));
-                    f[i] += double.Parse(sr2.ReadLine().Replace('.', ','));
-                    if (i < n_ignore)
-                    {
-                        f[i] = 0;
-                    }
+                    f[i] -= avg;
                 }
+
             }
 
-            avg = 0;
-            for (int i = n_ignore; i < n_avg; i++)
-                avg += f[i];
-            avg /= n_avg;
-            for (int i = 0; i < count_t; i++)
-                f[i] -= avg;
+            catch (Exception e)
+            {
+                Console.WriteLine(e.Message);
+            }
         }
 
         private static Complex Expi(double val) => new Complex(Math.Cos(val), Math.Sin(val));
@@ -151,6 +214,7 @@ namespace PS5000A
             int[] s = new int[count_w];
             bool isnotnull = progress != null;
 
+
             Parallel.For(0, count_w, (int i) =>
             {
                 Complex result = 0;
@@ -161,6 +225,7 @@ namespace PS5000A
 
                 F[i] = result;
                 s[i]++;
+
                 if (isnotnull && i % 7 == 0)
                     progress.Report(s.Sum());
             });
@@ -214,12 +279,11 @@ namespace PS5000A
         //        Console.WriteLine(e.Message);
         //    }
         //}
-        private static double ToW(int i) => (dw * i + w_0) / _2PI;
         public static void SaveIn(string filename)
         {
             using (StreamWriter sw = new StreamWriter(filename))
                 for (int i = 0; i < count_t; i++)
-                    sw.WriteLine(f[i].ToString().Replace(",", "."));
+                    sw.WriteLine(f[i].ToString().Replace(',', '.'));
         }
         public static void SaveOut(string filename)
         {
@@ -227,7 +291,7 @@ namespace PS5000A
             {
                 sw.WriteLine("w Re(f(w)) Im(f(w))");
                 for (int i = 0; i < count_w; i++)
-                    sw.WriteLine($"{ToW(i).ToString().Replace(",", ".")} {F[i].Real.ToString().Replace(",", ".")} {(-F[i].Imaginary).ToString().Replace(",", ".")}");
+                    sw.WriteLine(((dw * i + w_0) / 2.0 / Math.PI).ToString().Replace(',','.') + " " + (F[i].Real).ToString().Replace(',', '.') + " " + (-F[i].Imaginary).ToString().Replace(',', '.'));
             }
         }
         public static void SaveOutAbs(string filename)
@@ -235,26 +299,27 @@ namespace PS5000A
             using (StreamWriter sw = new StreamWriter(filename))
             {
                 sw.WriteLine("w Re(f(w)) Im(f(w))");
-                for (int i = 0; i < count_w; i++)
-                    sw.WriteLine($"{ToW(i).ToString().Replace(",", ".")} {F[i].Magnitude.ToString().Replace(",", ".")}");
+                for (int i = 0; i < count_w - 1; i++)
+                    sw.WriteLine(((dw * i + w_0) / 2.0 / Math.PI).ToString() + " " + (F[i].Magnitude).ToString());
+                sw.WriteLine(((dw * (count_w - 1) + w_0) / 2.0 / Math.PI).ToString() + " " + (F[count_w - 1].Magnitude).ToString());
             }
         }
 
 
         static Memoize<Tuple<int, int>, Complex> Dictionary;
         static Func<int, int, Complex> Fury = (int i, int j) =>
-             {
-                 double w = (dw * i + w_0);
-                 return Expi(w * (dt * j + t_0)) * AAMemoized(i);
-             };
+        {
+            double w = (dw * i + w_0);
+            return Expi(w * (dt * j + t_0)) * AAMemoized(i);
+        };
         static Func<int, int, Complex> FuryMemoized;
         static Memoize<int, double> DictionaryA;
         static Func<int, double> AA = (int i) =>
-         {
-             double w = (dw * i + w_0);
-             double dtw = dt * w;
-             return 2.0 * (1.0 - Math.Cos(dtw)) / (dtw * w);
-         };
+        {
+            double w = (dw * i + w_0);
+            double dtw = dt * w;
+            return 2.0 * (1.0 - Math.Cos(dtw)) / (dtw * w);
+        };
         static Func<int, double> AAMemoized;
         static double[] argi, argj;
         //static Complex[,] tmpArray;
@@ -267,7 +332,7 @@ namespace PS5000A
             Dictionary = new Memoize<Tuple<int, int>, Complex>((Tuple<int, int> t) => Fury(t.Item1, t.Item2));
             FuryMemoized = (int i, int j) => Dictionary.Value(new Tuple<int, int>(i, j));
 
-            DictionaryA = new Memoize<int, double>(i => AA(i),count_w);
+            DictionaryA = new Memoize<int, double>(i => AA(i));
             AAMemoized = DictionaryA.Value;
 
             argj = new double[count_t - n_ignore];
