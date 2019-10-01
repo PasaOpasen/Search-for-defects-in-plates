@@ -226,6 +226,7 @@ namespace PS5000A
 
                     fs.WriteLine(folderbase[i]);
                 }
+            File.Copy("WhereData.txt", Path.Combine(globalbase, "WhereData.txt"), true);
         }
 
         private async Task MakeTimeAsync()

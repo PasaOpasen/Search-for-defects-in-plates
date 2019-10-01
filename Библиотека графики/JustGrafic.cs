@@ -134,7 +134,7 @@ namespace Библиотека_графики
         {
             Parallel.For(0, fnames.Length, (int i) =>
             {
-                var collection = File.ReadLines(fnames[i]).Select(p => Convert.ToDouble(p));
+                var collection = File.ReadLines(fnames[i]).Select(p => Convert.ToDouble(p.Replace('.', ',')));
 
                 arr[i] = collection.ToArray();
                 arr2[i] = collection.ToArray();
