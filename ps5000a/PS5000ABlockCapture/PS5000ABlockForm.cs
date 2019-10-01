@@ -80,6 +80,7 @@ namespace PS5000A
 
         #endregion
         bool opened = false;
+        int meansCount;
         int n_ignore = 28200;
         int usred = 1;
         public CSwitchInterface Switch_;
