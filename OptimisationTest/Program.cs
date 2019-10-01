@@ -24,17 +24,26 @@ namespace OptimisationTest
                     if (i != j)
                         files[k++] = $"{Symbols[i]}to{Symbols[j]}(MaxCoordinate).txt";
 
-            double[] Get(string path) => files.Select(s => Expendator.GetStringArrayFromFile(Path.Combine(path, s))[2].Split(new char[] { ' ' }, StringSplitOptions.RemoveEmptyEntries)[2].Replace('.',',').ToDouble()).ToArray();
+            double[] Get(string path) => files.Select(s => Expendator.GetStringArrayFromFile(Path.Combine(path, s))[2].Split(new char[] { ' ' }, StringSplitOptions.RemoveEmptyEntries)[2].Replace('.', ',').ToDouble()).ToArray();
 
             var vec1 = Get(BeeHiveAdress);
             var vec2 = Get(NotBeeHiveAdress);
+
+            double s1 = 0, s2 = 0;
 
             using (StreamWriter r = new StreamWriter("bee.txt"))
                 for (int i = 0; i < vec1.Length; i++)
                 {
                     r.WriteLine($"{vec1[i]} {vec2[i]}");
-                    Console.WriteLine($"{vec1[i]} \t{vec2[i]} " + ((vec1[i]>=vec2[i])?"\tЛучше  +":"\tХучше  -"));
+                    Console.WriteLine($"{vec1[i]} \t{vec2[i]} " + ((vec1[i] >= vec2[i]) ? "\tЛучше  +" : "\tХучше  -"));
+                    double tmp = vec1[i] - vec2[i];
+                    if (tmp < 0)
+                        s2 -= tmp;
+                    else
+                        s1 += tmp;
                 }
+            Console.WriteLine($"Выигрыш = \t{s1} ({Expendator.GetProcent(s1, s1 + s2)}%)");
+            Console.WriteLine($"Проигрыш = \t{s2} ({Expendator.GetProcent(s2, s1 + s2)}%)");
 
             File.Copy(Expendator.GetResource("TestBee.r", "OptimisationTest"), "TestBee.r", true);
             Expendator.StartProcessOnly("TestBee.r");

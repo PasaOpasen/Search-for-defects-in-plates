@@ -979,7 +979,8 @@ public static class Functions
     /// <returns></returns>
     private static async Task BeeHiveSearch(Func<double, double, double> F, string savename, double xmin, double xmax, double ymin, double ymax, int countpoint,int maxtit= 280, int maxfit = 70)
     {
-        Func<Vectors, double> func = (Vectors v) => Math.Exp(-F(v[0], v[1]));
+        const double coef = -1000;
+        Func<Vectors, double> func = (Vectors v) => Math.Exp(coef*F(v[0], v[1]));
         Vectors min = new Vectors(xmin, ymin);
         Vectors max = new Vectors(xmax, ymax);
 
@@ -989,7 +990,7 @@ public static class Functions
         {
             "a b",
             $"{res.Item1[0]} {res.Item1[1]}",
-            $"maximum is {Math.Log(res.Item2)/(-1)}"
+            $"maximum is {Math.Log(res.Item2)/coef}"
         });
     }
 

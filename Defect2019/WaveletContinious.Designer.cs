@@ -403,7 +403,7 @@
             this.textBox5.Name = "textBox5";
             this.textBox5.Size = new System.Drawing.Size(122, 26);
             this.textBox5.TabIndex = 22;
-            this.textBox5.Text = "1e-8";
+            this.textBox5.Text = "1e-4";
             this.textBox5.TextAlign = System.Windows.Forms.HorizontalAlignment.Center;
             // 
             // label7
@@ -518,7 +518,7 @@
             this.numericUpDown6.TabIndex = 10;
             this.numericUpDown6.TextAlign = System.Windows.Forms.HorizontalAlignment.Center;
             this.numericUpDown6.Value = new decimal(new int[] {
-            60,
+            70,
             0,
             0,
             0});
@@ -547,7 +547,7 @@
             this.numericUpDown5.TabIndex = 9;
             this.numericUpDown5.TextAlign = System.Windows.Forms.HorizontalAlignment.Center;
             this.numericUpDown5.Value = new decimal(new int[] {
-            150,
+            190,
             0,
             0,
             0});
@@ -562,7 +562,7 @@
             0});
             this.numericUpDown4.Location = new System.Drawing.Point(246, 25);
             this.numericUpDown4.Maximum = new decimal(new int[] {
-            400,
+            1000,
             0,
             0,
             0});
@@ -576,7 +576,7 @@
             this.numericUpDown4.TabIndex = 8;
             this.numericUpDown4.TextAlign = System.Windows.Forms.HorizontalAlignment.Center;
             this.numericUpDown4.Value = new decimal(new int[] {
-            300,
+            400,
             0,
             0,
             0});

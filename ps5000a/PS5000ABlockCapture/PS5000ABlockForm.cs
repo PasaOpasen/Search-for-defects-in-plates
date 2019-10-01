@@ -442,8 +442,9 @@ namespace PS5000A
             _timebase = Convert.ToUInt32(textBox9.Text);
             countAfter = Convert.ToInt32(textBox10.Text);
             countBefore = Convert.ToInt32(textBox13.Text);
-            usred = Convert.ToInt32(textBox11.Text);
+            meansCount = Convert.ToInt32(textBox11.Text);
             dt = (_timebase - 3) / 62_500_000.0; // 16 bit
+            CreateFurierTransform(w0, w1, wcount);
         }
         private void buttonOpen_Click(object sender, EventArgs e)
         {
