@@ -219,7 +219,7 @@ namespace PS5000A
         {
             using (StreamWriter sw = new StreamWriter(filename))
                 for (int i = 0; i < count_t; i++)
-                    sw.WriteLine(f[i].ToString().Replace(",", "."));
+                    sw.WriteLine(f[i].ToString().Replace(',', '.'));
         }
         public static void SaveOut(string filename)
         {
@@ -227,7 +227,7 @@ namespace PS5000A
             {
                 sw.WriteLine("w Re(f(w)) Im(f(w))");
                 for (int i = 0; i < count_w; i++)
-                    sw.WriteLine($"{ToW(i).ToString().Replace(",", ".")} {F[i].Real.ToString().Replace(",", ".")} {(-F[i].Imaginary).ToString().Replace(",", ".")}");
+                    sw.WriteLine($"{ToW(i).ToString().Replace(',', '.')} {F[i].Real.ToString().Replace(',', '.')} {(-F[i].Imaginary).ToString().Replace(',', '.')}");
             }
         }
         public static void SaveOutAbs(string filename)
@@ -236,7 +236,7 @@ namespace PS5000A
             {
                 sw.WriteLine("w Re(f(w)) Im(f(w))");
                 for (int i = 0; i < count_w; i++)
-                    sw.WriteLine($"{ToW(i).ToString().Replace(",", ".")} {F[i].Magnitude.ToString().Replace(",", ".")}");
+                    sw.WriteLine($"{ToW(i).ToString().Replace(',', '.')} {F[i].Magnitude.ToString().Replace(',', '.')}");
             }
         }
 
