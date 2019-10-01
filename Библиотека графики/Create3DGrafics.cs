@@ -95,7 +95,8 @@ namespace Библиотека_графики
                 {
                     "a b",
                     $"{a.ToRString()} {b.ToRString()}".Replace(',','.'),
-                    $"maximum is {max}".Replace(',','.')
+                    $"maximum is {max}".Replace(',','.'),
+                    $"omega = {1.0 / (a * 1000)}"
                 });
             }
         }

@@ -990,7 +990,8 @@ public static class Functions
         {
             "a b",
             $"{res.Item1[0]} {res.Item1[1]}",
-            $"maximum is {Math.Log(res.Item2)/coef}"
+            $"maximum is {Math.Log(res.Item2)/coef}",
+            $"omega(кГц) = {1.0 / (res.Item1[0] * 1000)}"
         });
     }
 
