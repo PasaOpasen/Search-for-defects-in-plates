@@ -196,20 +196,15 @@ public struct Source : Idup<Source>, IEquatable<Source>, IComparable<Source>
             // List<double> d = new List<double>();
             List<Complex> c = new List<Complex>();
 
-            s = fs.ReadLine().Replace('.', ',');
+            s = fs.ReadLine();
             while (s != null)
             {
-                //s.Show();
-                st = s.Split(new char[] { ' ' }, StringSplitOptions.RemoveEmptyEntries);
-                // d.Add(st[0].ToDouble());
+                st = s.Replace('.', ',').Split(new char[] { ' ' }, StringSplitOptions.RemoveEmptyEntries);
                 c.Add(new Complex(st[1].ToDouble(), st[2].ToDouble()));
-                //Console.WriteLine(new Complex(st[1].ToDouble(), st[2].ToDouble()).Conjugate);
-
                 s = fs.ReadLine();
             }
 
             Fmas = c.ToArray();
-            //Fmas = new Tuple<double[], Complex[]>(Functions.SeqWMemoized(wbeg, wend, wcount), c.ToArray().ToCVector().Normalize.ComplexMas);
         }
         System.Diagnostics.Debug.WriteLine($"Считано f(w) для источника {this.ToString()}" + Environment.NewLine + Fmas[0] + Environment.NewLine + Fmas[1] + Environment.NewLine + Fmas[2]);
     }
