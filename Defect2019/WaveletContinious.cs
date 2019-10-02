@@ -258,6 +258,38 @@ namespace Работа2019
                 Directory.CreateDirectory(dir);
         }
 
+        private void TransformArea(string ABCfile)
+        {
+            TransformWariety(ABCfile);
+
+            this.Refresh();
+        }
+        private void TransformWariety(string ABCfile)
+        {
+            double w = 0, max = 0,tmp;
+            using(StreamReader r=new StreamReader(ABCfile))
+            {            
+                string s = r.ReadLine();
+                string[] st;
+                while (true)
+                {
+                    s = r.ReadLine();
+                    if (s == null)
+                        break;
+                    st = s.Replace('.',',').Split(new char[] { ' ' }, StringSplitOptions.RemoveEmptyEntries);
+                    tmp = new Number.Complex(Convert.ToDouble(st[1]), Convert.ToDouble(st[2])).Abs;
+                    if (tmp > max)
+                    {
+                        max = tmp;
+                        w = Convert.ToDouble(st[0]);
+                    }
+                }
+            }
+            w /= 1000;
+            textBox1.Text = (w - 5).ToString();
+            textBox2.Text = (w + 5).ToString();
+        }
+
         private async void button1_Click(object sender, EventArgs e)
         {
             OtherMethods.IlushaMethod(checkBox4);
@@ -283,6 +315,7 @@ namespace Работа2019
                 timer1.Start();
                 for (int k = 0; k < otherSources.Length; k++)
                 {
+                    TransformArea(Path.Combine(wheredata[i],$"{snames[k]}.txt"));
                     GetData();
                     string savename = $"{snames[k]} -> {symbols[i]}";
 
@@ -320,6 +353,7 @@ namespace Работа2019
             if (scheme == null)
             {
                 scheme = new Scheme(sources, new EllipseParam[] { p });
+                scheme.StartPosition = FormStartPosition.CenterScreen;
                 scheme.Show();
             }
             else
