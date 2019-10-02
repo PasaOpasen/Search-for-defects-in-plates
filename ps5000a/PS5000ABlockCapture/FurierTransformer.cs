@@ -86,7 +86,7 @@ namespace PS5000A
             f = new double[count_t];
             using (StreamReader sr = new StreamReader(InFile))
                 for (int i = 0; i < count_t; i++)
-                    f[i] = Double.Parse(sr.ReadLine().Replace('.',','));
+                    f[i] = Double.Parse(sr.ReadLine());
 
             avg = 0;
             for (int i = n_ignore; i < n_avg; i++)
@@ -104,7 +104,7 @@ namespace PS5000A
             using (StreamReader sr = new StreamReader(InFile, System.Text.Encoding.Default))
             {
                 for (int i = 0; i < count_t; i++)
-                    f[i] = double.Parse(sr.ReadLine().Split('\t')[1].Replace('.', ','));
+                    f[i] = double.Parse(sr.ReadLine().Split('\t')[1]);
             }
             avg = 0;
             for (int i = n_ignore; i < n_avg; i++)
@@ -219,7 +219,7 @@ namespace PS5000A
         {
             using (StreamWriter sw = new StreamWriter(filename))
                 for (int i = 0; i < count_t; i++)
-                    sw.WriteLine(f[i].ToString().Replace(",", "."));
+                    sw.WriteLine(f[i].ToString().Replace(',', '.'));
         }
         public static void SaveOut(string filename)
         {
@@ -227,7 +227,7 @@ namespace PS5000A
             {
                 sw.WriteLine("w Re(f(w)) Im(f(w))");
                 for (int i = 0; i < count_w; i++)
-                    sw.WriteLine($"{ToW(i).ToString().Replace(",", ".")} {F[i].Real.ToString().Replace(",", ".")} {(-F[i].Imaginary).ToString().Replace(",", ".")}");
+                    sw.WriteLine($"{ToW(i).ToString().Replace(',', '.')} {F[i].Real.ToString().Replace(',', '.')} {(-F[i].Imaginary).ToString().Replace(',', '.')}");
             }
         }
         public static void SaveOutAbs(string filename)
@@ -236,25 +236,25 @@ namespace PS5000A
             {
                 sw.WriteLine("w Re(f(w)) Im(f(w))");
                 for (int i = 0; i < count_w; i++)
-                    sw.WriteLine($"{ToW(i).ToString().Replace(",", ".")} {F[i].Magnitude.ToString().Replace(",", ".")}");
+                    sw.WriteLine($"{ToW(i).ToString().Replace(',', '.')} {F[i].Magnitude.ToString().Replace(',', '.')}");
             }
         }
 
 
         static Memoize<Tuple<int, int>, Complex> Dictionary;
         static Func<int, int, Complex> Fury = (int i, int j) =>
-        {
-            double w = (dw * i + w_0);
-            return Expi(w * (dt * j + t_0)) * AAMemoized(i);
-        };
+             {
+                 double w = (dw * i + w_0);
+                 return Expi(w * (dt * j + t_0)) * AAMemoized(i);
+             };
         static Func<int, int, Complex> FuryMemoized;
         static Memoize<int, double> DictionaryA;
         static Func<int, double> AA = (int i) =>
-        {
-            double w = (dw * i + w_0);
-            double dtw = dt * w;
-            return 2.0 * (1.0 - Math.Cos(dtw)) / (dtw * w);
-        };
+         {
+             double w = (dw * i + w_0);
+             double dtw = dt * w;
+             return 2.0 * (1.0 - Math.Cos(dtw)) / (dtw * w);
+         };
         static Func<int, double> AAMemoized;
         static double[] argi, argj;
         //static Complex[,] tmpArray;
@@ -267,7 +267,7 @@ namespace PS5000A
             Dictionary = new Memoize<Tuple<int, int>, Complex>((Tuple<int, int> t) => Fury(t.Item1, t.Item2));
             FuryMemoized = (int i, int j) => Dictionary.Value(new Tuple<int, int>(i, j));
 
-            DictionaryA = new Memoize<int, double>(i => AA(i), count_w);
+            DictionaryA = new Memoize<int, double>(i => AA(i),count_w);
             AAMemoized = DictionaryA.Value;
 
             argj = new double[count_t - n_ignore];

@@ -53,38 +53,23 @@ namespace PS5000A
         public const int QUAD_SCOPE = 4;
         public const int DUAL_SCOPE = 2;
 
-
         uint _timebase = 15;
-        short _oversample = 1;
-        bool _scaleVoltages = true;
 
         ushort[] inputRanges = { 10, 20, 50, 100, 200, 500, 1000, 2000, 5000, 10000, 20000, 50000 };
         bool _ready = false;
-        short _trig = 0;
-        uint _trigAt = 0;
-        int _sampleCount = 0;
-        uint _startIndex = 0;
-        bool _autoStop;
         //private ChannelSettings[] _channelSettings;
         private int _channelCount;
-        private Imports.Range _firstRange;
-        private Imports.Range _lastRange;
-        private int _digitalPorts;
         private Imports.ps5000aBlockReady _callbackDelegate;
-        private string StreamFile = "stream.txt";
-        private string BlockFile = "block.txt";
         double w0;
         double w1;
         int wcount;
 
-
-        #endregion
-        bool opened = false;
-        int meansCount;
         int n_ignore = 28200;
-        int usred = 1;
+        int meansCount = 1;
         public CSwitchInterface Switch_;
         public readonly int countPorts = 4;
+        #endregion
+
         /// <summary>
         /// Конструктор
         /// </summary>
@@ -107,9 +92,9 @@ namespace PS5000A
             SetParams();
 
             this.FormClosing += (object o, FormClosingEventArgs aa) =>
-            {
-                GetParams();
-            };
+              {
+                  GetParams();
+              };
 
             this.FormClosed += new FormClosedEventHandler((object o, FormClosedEventArgs a) =>
             {
@@ -197,7 +182,7 @@ namespace PS5000A
                 toolStripStatusLabel1.Text = label1String;
             if (label2String != null)
                 toolStripStatusLabel2.Text = label2String;
-            toolStripProgressBar1.Value = (int)(((double)save) / all * toolStripProgressBar1.Maximum);
+            toolStripProgressBar1.Value = (int)(Expendator.GetProcent(save, all)/100 * toolStripProgressBar1.Maximum);
             this.Refresh();
         }
         private string Symbols = "ABCDEFGHIKLMNOPQRSTVXYZ";
@@ -241,6 +226,7 @@ namespace PS5000A
 
                     fs.WriteLine(folderbase[i]);
                 }
+            File.Copy("WhereData.txt", Path.Combine(globalbase, "WhereData.txt"), true);
         }
 
         private async Task MakeTimeAsync()
@@ -345,7 +331,6 @@ namespace PS5000A
             groupBox4.Hide();
             button6.Hide();
             listBox1.Hide();
-            //label19.Hide();
         }
 
         private async void button4_Click(object sender, EventArgs e)
@@ -362,8 +347,6 @@ namespace PS5000A
 
             await FurierOrShowForm(i => fdiff[i], i => folderbase[i]);
             SygnalOfEndCalc();
-
-            await Task.Run(() => Thread.Sleep(300));
 
             this.Close();
         }
@@ -445,6 +428,7 @@ namespace PS5000A
             countBefore = Convert.ToInt32(textBox13.Text);
             meansCount = Convert.ToInt32(textBox11.Text);
             dt = (_timebase - 3) / 62_500_000.0; // 16 bit
+
             CreateFurierTransform(w0, w1, wcount);
         }
         private void buttonOpen_Click(object sender, EventArgs e)
@@ -474,7 +458,6 @@ namespace PS5000A
             if (_handle > 0)
             {
                 Imports.CloseUnit(_handle);
-                //   textBoxUnitInfo.Text = "";
                 _handle = 0;
                 buttonOpen.Text = "Open";
             }
@@ -511,103 +494,101 @@ namespace PS5000A
                     buttonOpen.Text = "Закрыть";
                 }
             }
-            opened = true;
 
-            buttonOpen.Text = "Запущено";
+            buttonOpen.Text = "Подключено";
             groupBox4.Show();
         }
 
         void start(uint sampleCountAfter = 50000, uint sampleCountBefore = 50000, int write_every = 100)
         {
+            uint all_ = sampleCountAfter + sampleCountBefore;
+            uint status;
+            int ms;
+            status = Imports.MemorySegments(_handle, 1, out ms);
+
+            Voltage_Range = 200;
+            status = Imports.SetChannel(_handle, Imports.Channel.ChannelA, 1, Imports.Coupling.PS5000A_AC, Imports.Range.Range_200mV, 0);
+            //status = Imports.SetChannel(_handle, Imports.Channel.ChannelA, 1, Imports.Coupling.PS5000A_DC, Imports.Range.Range_200mV, 0);
+
+            short enable = 1;
+            uint delay = 0;
+            short threshold = 25000;
+            short auto = 22222;
+
+            status = Imports.SetBandwidthFilter(_handle, Imports.Channel.ChannelA, Imports.BandwidthLimiter.PS5000A_BW_20MHZ);
+            status = Imports.SetSimpleTrigger(_handle, enable, Imports.Channel.External, threshold, Imports.ThresholdDirection.Rising, delay, auto);
+            _ready = false;
+            _callbackDelegate = BlockCallback;
+            _channelCount = 1;
+            //string data;
+            int x;
+
+
+            bool retry;
+
+            PinnedArray<short>[] minPinned = new PinnedArray<short>[_channelCount];
+            PinnedArray<short>[] maxPinned = new PinnedArray<short>[_channelCount];
+
+            int timeIndisposed;
+            short[] minBuffersA = new short[all_];
+            short[] maxBuffersA = new short[all_];
+            minPinned[0] = new PinnedArray<short>(minBuffersA);
+            maxPinned[0] = new PinnedArray<short>(maxBuffersA);
+            status = Imports.SetDataBuffers(_handle, Imports.Channel.ChannelA, maxBuffersA, minBuffersA, (int)sampleCountAfter + (int)sampleCountBefore, 0, Imports.RatioMode.None);
+
+            //int timeInterval;
+            //int maxSamples;
+            //while (Imports.GetTimebase(_handle, _timebase, (int)sampleCount, out timeInterval, out maxSamples, 0) != 0)
+            //{
+            //    _timebase++;
+            //}
+            _ready = false;
+            _callbackDelegate = BlockCallback;
+            do
             {
-                uint all_ = sampleCountAfter + sampleCountBefore;
-                uint status;
-                int ms;
-                status = Imports.MemorySegments(_handle, 1, out ms);
-
-                Voltage_Range = 200;
-                status = Imports.SetChannel(_handle, Imports.Channel.ChannelA, 1, Imports.Coupling.PS5000A_AC, Imports.Range.Range_200mV, 0);
-                //status = Imports.SetChannel(_handle, Imports.Channel.ChannelA, 1, Imports.Coupling.PS5000A_DC, Imports.Range.Range_200mV, 0);
-
-                short enable = 1;
-                uint delay = 0;
-                short threshold = 25000;
-                short auto = 22222;
-
-                status = Imports.SetBandwidthFilter(_handle, Imports.Channel.ChannelA, Imports.BandwidthLimiter.PS5000A_BW_20MHZ);
-                status = Imports.SetSimpleTrigger(_handle, enable, Imports.Channel.External, threshold, Imports.ThresholdDirection.Rising, delay, auto);
-                _ready = false;
-                _callbackDelegate = BlockCallback;
-                _channelCount = 1;
-                //string data;
-                int x;
-
-
-                bool retry;
-
-                PinnedArray<short>[] minPinned = new PinnedArray<short>[_channelCount];
-                PinnedArray<short>[] maxPinned = new PinnedArray<short>[_channelCount];
-
-                int timeIndisposed;
-                short[] minBuffersA = new short[all_];
-                short[] maxBuffersA = new short[all_];
-                minPinned[0] = new PinnedArray<short>(minBuffersA);
-                maxPinned[0] = new PinnedArray<short>(maxBuffersA);
-                status = Imports.SetDataBuffers(_handle, Imports.Channel.ChannelA, maxBuffersA, minBuffersA, (int)sampleCountAfter + (int)sampleCountBefore, 0, Imports.RatioMode.None);
-
-                //int timeInterval;
-                //int maxSamples;
-                //while (Imports.GetTimebase(_handle, _timebase, (int)sampleCount, out timeInterval, out maxSamples, 0) != 0)
-                //{
-                //    _timebase++;
-                //}
-                _ready = false;
-                _callbackDelegate = BlockCallback;
-                do
+                retry = false;
+                status = Imports.RunBlock(_handle, (int)sampleCountBefore, (int)sampleCountAfter, _timebase, out timeIndisposed, 0, _callbackDelegate, IntPtr.Zero);
+                if (status == (short)StatusCodes.PICO_POWER_SUPPLY_CONNECTED || status == (short)StatusCodes.PICO_POWER_SUPPLY_NOT_CONNECTED || status == (short)StatusCodes.PICO_POWER_SUPPLY_UNDERVOLTAGE)
                 {
-                    retry = false;
-                    status = Imports.RunBlock(_handle, (int)sampleCountBefore, (int)sampleCountAfter, _timebase, out timeIndisposed, 0, _callbackDelegate, IntPtr.Zero);
-                    if (status == (short)StatusCodes.PICO_POWER_SUPPLY_CONNECTED || status == (short)StatusCodes.PICO_POWER_SUPPLY_NOT_CONNECTED || status == (short)StatusCodes.PICO_POWER_SUPPLY_UNDERVOLTAGE)
-                    {
-                        status = Imports.ChangePowerSource(_handle, status);
-                        retry = true;
-                    }
-                    else
-                    {
-                        //  textMessage.AppendText("Run Block Called\n");
-                    }
+                    status = Imports.ChangePowerSource(_handle, status);
+                    retry = true;
                 }
-                while (retry);
-                while (!_ready)
+                else
                 {
-                    Thread.Sleep(30);
-                }
-                Imports.Stop(_handle);
-                if (_ready)
-                {
-                    short overflow;
-                    status = Imports.GetValues(_handle, 0, ref all_, 1, Imports.RatioMode.None, 0, out overflow);
-
-                    if (status == (short)StatusCodes.PICO_OK)
-                    {
-                        for (x = 0; x < all_; x++)
-                            masA[x] += maxBuffersA[x] + minBuffersA[x];//=========================================================!
-                    }
-
-                }
-
-                Imports.Stop(_handle);
-                foreach (PinnedArray<short> p in minPinned)
-                {
-                    if (p != null)
-                        p.Dispose();
-                }
-                foreach (PinnedArray<short> p in maxPinned)
-                {
-                    if (p != null)
-                        p.Dispose();
+                    //  textMessage.AppendText("Run Block Called\n");
                 }
             }
+            while (retry);
+            while (!_ready)
+            {
+                Thread.Sleep(30);
+            }
+            Imports.Stop(_handle);
+            if (_ready)
+            {
+                short overflow;
+                status = Imports.GetValues(_handle, 0, ref all_, 1, Imports.RatioMode.None, 0, out overflow);
+
+                if (status == (short)StatusCodes.PICO_OK)
+                {
+                    for (x = 0; x < all_; x++)
+                        masA[x] += maxBuffersA[x] + minBuffersA[x];//=========================================================!
+                }
+
+            }
+
+            Imports.Stop(_handle);
+            foreach (PinnedArray<short> p in minPinned)
+            {
+                if (p != null)
+                    p.Dispose();
+            }
+            foreach (PinnedArray<short> p in maxPinned)
+            {
+                if (p != null)
+                    p.Dispose();
+            }
+
         }
         int countAfter = 100;
         int countBefore = 100;
@@ -679,6 +660,12 @@ namespace PS5000A
 
         }
 
+        /// <summary>
+        /// Отвечает за единичное преобразование Фурье из одного файла в другой
+        /// </summary>
+        /// <param name="from"></param>
+        /// <param name="to"></param>
+        /// <param name="progress"></param>
         private void MakeTransform(string from, string to, IProgress<int> progress)
         {
             FurierTransformer.LoadIn(from);
@@ -687,26 +674,10 @@ namespace PS5000A
             FurierTransformer.SaveOut(to);
         }
 
-        private void button1_Click_1(object sender, EventArgs e)
-        {
-
-        }
-
-        private void label18_Click(object sender, EventArgs e)
-        {
-
-        }
-
-        private void PS5000ABlockForm_Load(object sender, EventArgs e)
-        {
-
-        }
-
         private void button6_Click(object sender, EventArgs e)
         {
             Switch_ = new CSwitchInterface();
-            int dsd = listBox1.SelectedIndex;
-            Switch_.OpenPort(dsd);
+            Switch_.OpenPort(listBox1.SelectedIndex);
 
             Thread.Sleep(500);
             textBoxUnitInfo.AppendText(Switch_.GetAccepted() + "\n");
@@ -721,25 +692,13 @@ namespace PS5000A
         {
             names_ = SerialPort.GetPortNames();
             listBox1.Items.Clear();
-            for (int i = 0; i < names_.Length; i++)
-                listBox1.Items.Add(names_[i]);
+            listBox1.Items.AddRange(names_);
 
             if (listBox1.Items.Count > 0)
                 listBox1.SelectedIndex = listBox1.Items.Count - 1;
 
             listBox1.Show();
-            //label19.Show();
             button6.Show();
-        }
-
-        //private void label19_Click(object sender, EventArgs e)
-        //{
-
-        //}
-
-        private void textBox14_TextChanged(object sender, EventArgs e)
-        {
-
         }
 
         private void button1_Click(object sender, EventArgs e)
@@ -757,21 +716,6 @@ namespace PS5000A
             //Thread.Sleep(500);
             Switch_.SendCmd(1, listBox2.SelectedIndex);
             textBoxUnitInfo.AppendText(Switch_.GetAccepted() + "\n");
-        }
-
-        private void textBox9_TextChanged(object sender, EventArgs e)
-        {
-
-        }
-
-        private void textBox10_TextChanged(object sender, EventArgs e)
-        {
-
-        }
-
-        private void textBox8_TextChanged(object sender, EventArgs e)
-        {
-
         }
 
         private void RunAvg(ref double[] Array_, int wcount, int kernel_len = 20)
@@ -795,28 +739,21 @@ namespace PS5000A
         private string label1String;
         public async Task GetDataMiniAsync(int id, string filename_)
         {
-            int countSum = CountSum;
-            double[] Array = new double[countSum];
-            double[] arrA = new double[countSum];
-
             textBoxUnitInfo.AppendText(Switch_.GetAccepted() + "\n");
             Switch_.SendCmd(1, id);
             textBoxUnitInfo.AppendText(Switch_.GetAccepted() + "\n");
-            Application.DoEvents();
             Thread.Sleep(2000);
 
-            all = usred;
+            all = meansCount;
             save = 0;
             timer1.Start();
             //          await Task.Run(() => { 
-            for (int i = 0; i < usred; i++)//тут надо асинхронно
+            for (int i = 0; i < meansCount; i++)//тут надо асинхронно
             {
                 label1String = $"Замер {i + 1} выполняется";
                 start((uint)countAfter, (uint)countBefore, 250);
                 save = i + 1;
                 Timer1_Tick(new object(), new EventArgs());
-                Application.DoEvents();
-                Thread.Sleep(1);
             }
             //});
 
@@ -825,10 +762,18 @@ namespace PS5000A
             timer1.Stop();
             toolStripProgressBar1.Value = 0;
 
-            await Task.Run(() => {
+            await ProcessAndWrite(filename_);
+        }
+        private async Task ProcessAndWrite(string filename_)
+        {
+            int countSum = CountSum;
+            double[] Array = new double[countSum];
+            double[] arrA = new double[countSum];
 
+            await Task.Run(() =>
+            {
                 double middleA = 0;
-                double coef = Voltage_Range / ((double)usred) / 32767 / 2.0;
+                double coef = Voltage_Range / ((double)meansCount) / 32767 / 2.0;
                 for (int i = 0; i < countSum; i++)
                 {
                     arrA[i] = masA[i] * coef;
@@ -850,12 +795,10 @@ namespace PS5000A
 
                 using (StreamWriter fs = new StreamWriter(filename_))
                     for (int i = 0; i < countSum; i++)
-//                        fs.WriteLine(Array[i]);
-                        fs.WriteLine(Array[i].ToString().Replace(',','.')); //тут изменил
+                        fs.WriteLine(Array[i].ToString().Replace(",","."));
 
             });
         }
-
 
         public async Task GetDataAsync()
         {
@@ -874,7 +817,7 @@ namespace PS5000A
                     if (i != j)
                     {
                         await GetDataMiniAsync(j, Path.Combine(ItFolder(i), ArraysNames[j]));
-                        toolStripStatusLabel2.Text = $"Выполнено {++it} из {mx} ({Expendator.GetProcent(it, mx/*,2*/)}%)";
+                        toolStripStatusLabel2.Text = $"Выполнено {++it} из {mx} ({Expendator.GetProcent(it, mx, 2)}%)";
                     }
                 toolStripStatusLabel2.Text = "";
 
@@ -886,7 +829,7 @@ namespace PS5000A
         private async void buttonStart_Click(object sender, EventArgs e)
         {
             InitParams();
-            CreateFurierTransform(w0, w1, wcount);
+
             if (!SetGlobalBase())
                 return;
 
@@ -908,7 +851,7 @@ namespace PS5000A
         /// <returns></returns>
         private async Task FurierOrShowForm(Func<int, string> from, Func<int, string> to)
         {
-            CreateFurierTransform(w0, w1, wcount);
+            //CreateFurierTransform(w0, w1, wcount);
 
             for (int i = 0; i < sourcesCount; i++)
                 await FurierOrShowIteration(from(i), to(i), i);
@@ -928,7 +871,7 @@ namespace PS5000A
         private void SygnalOfEndCalc()
         {
             toolStripStatusLabel1.Text = $"Все вычисления завершены";
-            new System.Media.SoundPlayer(Properties.Resources.ВычисленияЗавершены).Play();
+            new System.Media.SoundPlayer(Properties.Resources.ВычисленияЗавершены).PlaySync();
         }
 
         private void button3_Click(object sender, EventArgs e)
@@ -989,7 +932,7 @@ namespace PS5000A
                 for (int j = 0; j < sourcesCount; j++)
                     if (i != j)
                     {
-                        st[index] = "from " + Symbols[i] + " to " + Symbols[j];
+                        st[index] =$"from {Symbols[i]} to {Symbols[j]}";
                         names[index] = Path.Combine(from, ArraysNames[j]);
                         index++;
                     }

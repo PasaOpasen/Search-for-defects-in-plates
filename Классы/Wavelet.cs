@@ -244,11 +244,11 @@ namespace МатКлассы
 
                     Complex sum0 = f[0].y * this.Mother((f[0].x - b) / a) + f[f.Length - 1].y * this.Mother((f[f.Length - 1].x - b) / a);
                     Complex sum = 0;
+                    int i2;
                     for (int i = 1; i <= n - 1; i++)
                     {
-                        sum += f[2 * i].y * this.Mother((f[2 * i].x - b) / a) + 2 * f[2 * i - 1].y * this.Mother((f[2 * i - 1].x - b) / a);
-
-                        //if (Double.IsNaN(sum.Abs)) throw new Exception($"Что-то здесь не так {f[2 * i].y} {this.Mother((f[2 * i].x - b) / a).Conjugate} {f[2 * i - 1].y} {this.Mother((f[2 * i - 1].x - b) / a).Conjugate}");
+                        i2 = 2 * i;
+                        sum += f[i2].y * this.Mother((f[i2].x - b) / a) + 2 * f[i2 - 1].y * this.Mother((f[i2 - 1].x - b) / a);                      
                     }
 
                     if (f.Length % 2 == 1)
