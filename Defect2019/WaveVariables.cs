@@ -925,7 +925,7 @@ public static class Functions
                 new StringsForGrafic
                 (
                     $"Wavelet-surface for {name}",
-                     "w‎", "time", "vals"
+                     "omega‎", "time", "vals"
                 ),
                 graficType: Create3DGrafics.GraficType.Pdf);
 

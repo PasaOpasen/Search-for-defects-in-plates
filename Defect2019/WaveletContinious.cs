@@ -160,7 +160,7 @@ namespace Работа2019
                     var tuple = await Functions.GetMaximunFromArea(
                         new NetOnDouble( W,40), new NetOnDouble(T,40), 
                         progress, new System.Threading.CancellationToken(),
-                        tmin, step, pcount, othernames[k], Path.Combine(dir, savename.Replace(" -> ", "to")),
+                        tmin, step, pcount, othernames[k], Path.Combine(Environment.CurrentDirectory, savename.Replace(" -> ", "to")),
                         Wavelet.Wavelets.LP, wheredata[i], 32, epsForWaveletValues);
                 }
                 SetDefaltProgressBar();
@@ -181,7 +181,7 @@ namespace Работа2019
                     L.Add($"{symbols[i]}to{symbols[j]}");
             var arrt = L.Where(s => s[0] != s[3]).ToArray();
 
-            var mas = Enumerable.Range(0, 15).Select(i => RandomNumbers.NextNumber(sources.Length * (sources.Length - 1))).Distinct().ToArray();
+            var mas = Enumerable.Range(0, 21).Select(i => RandomNumbers.NextNumber(sources.Length * (sources.Length - 1))).Distinct().ToArray();
             var arr = mas.Select(i => arrt[i]).ToArray();
 
             new Библиотека_графики.ManyDocumentsShower("Поверхности на негустой сетке", arr, arr.Select(i=>i+".pdf").ToArray()).Show();

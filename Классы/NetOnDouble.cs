@@ -51,6 +51,7 @@ namespace МатКлассы
             else
                 Step = (End - Begin) / Count;
         }
+
         /// <summary>
         /// Создать отрезок по концам и шагу
         /// </summary>
@@ -84,6 +85,10 @@ namespace МатКлассы
         public NetOnDouble(NetOnDouble netOnDouble,int newCount) : this(netOnDouble)
         {
             Count = newCount;
+            if (WithEnd)
+                Step = (End - Begin) / (Count - 1);
+            else
+                Step = (End - Begin) / Count;
         }
 
         private double[] arr = null;

@@ -6,6 +6,7 @@ using System.Threading.Tasks;
 using System.IO;
 using static МатКлассы.Number;
 using static МатКлассы.FuncMethods;
+using System.Text;
 
 namespace МатКлассы
 {
@@ -813,7 +814,7 @@ namespace МатКлассы
         /// <param name="withoutfromend">Определяет, сколько строк с конца добавлять не нужно</param>
         public static void WriteInFile(string filename, string[] word, int withoutfromend = 0)
         {
-            using (StreamWriter f = new StreamWriter(filename))
+            using (StreamWriter f = new StreamWriter(new FileStream(filename, FileMode.Create, FileAccess.Write), Encoding.UTF8))
                 for (int i = 0; i < word.Length - withoutfromend; i++)
                     f.WriteLine(word[i]);
         }
