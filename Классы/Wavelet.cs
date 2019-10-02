@@ -223,17 +223,24 @@ namespace МатКлассы
         /// <summary>
         /// Вейвлет-преобразование от массива точек по формулам Котеса
         /// </summary>
-        /// <param name="farr"></param>
-        /// <param name="epsForWaveletValues"></param>
+        /// <param name="farr">Временной ряд</param>
+        /// <param name="tmin">Минимум по времени</param>
+        /// <param name="tmax">Максимум по времени</param>
+        /// <param name="epsForWaveletValues">Ограничение на интегрирование</param>
         /// <returns></returns>
-        public Func<double, double, Complex> GetAnalys(Point[] farr, double epsForWaveletValues = 0)
+        public Func<double, double, Complex> GetAnalys(Point[] farr, double tmin = double.NaN, double tmax = double.NaN, double epsForWaveletValues = 0)
         {
+            var inds = GetMinMaxIndexies(farr, tmin, tmax);
+
             double h3 = Math.Abs(farr[1].x - farr[0].x) / 3;
 
             var ind = Array.IndexOf(farr, farr.First(point => point.y != 0));
-            var f = farr.Slice(ind == 0 ? 0 : ind - 1, farr.Length - 1);
+            var f = farr.Slice(
+                Math.Max(ind == 0 ? 0 : ind - 1, inds.Item1),
+               Math.Min(farr.Length - 1, inds.Item2));
             //var f = farr;
             int n = (f.Length - 1) / 2;
+
             //tex: $Wf(a,b) = \dfrac{1}{|a|^{0.5}} \int_{-\infty}^{\infty} f(t) {\bar \psi(\dfrac{t-b}{a}) dt}$, еще написано, что a>0, но тогда зачем модуль
             Func<double, double, Complex> s;
             if (epsForWaveletValues <= 0)
@@ -248,7 +255,7 @@ namespace МатКлассы
                     for (int i = 1; i <= n - 1; i++)
                     {
                         i2 = 2 * i;
-                        sum += f[i2].y * this.Mother((f[i2].x - b) / a) + 2 * f[i2 - 1].y * this.Mother((f[i2 - 1].x - b) / a);                      
+                        sum += f[i2].y * this.Mother((f[i2].x - b) / a) + 2 * f[i2 - 1].y * this.Mother((f[i2 - 1].x - b) / a);
                     }
 
                     if (f.Length % 2 == 1)
@@ -285,6 +292,26 @@ namespace МатКлассы
             return MemoizeAndReturn(s);
         }
         /// <summary>
+        /// Возвратить индексы элементов массива точек, в которых компонента x наиболее близка к указанным значениям
+        /// </summary>
+        /// <param name="farr"></param>
+        /// <param name="tmin"></param>
+        /// <param name="tmax"></param>
+        /// <returns></returns>
+        private static Tuple<int, int> GetMinMaxIndexies(Point[] farr, double tmin, double tmax)
+        {
+            if (double.IsNaN(tmin))
+                tmin = farr[0].x;
+            if (double.IsNaN(tmax))
+                tmax = farr.Last().x;
+            var tmpmas = farr.Select(p => p.x).ToArray();
+            var tmpvec = new Vectors(tmpmas);
+            int indmin = Array.IndexOf(tmpmas, tmpvec.BinaryApproxSearch(tmin));
+            int indmax = Array.IndexOf(tmpmas, tmpvec.BinaryApproxSearch(tmax));
+            return new Tuple<int, int>(indmin, indmax);
+        }
+
+        /// <summary>
         /// Вейвлет-преобразование от замера, записанного в файл
         /// </summary>
         /// <param name="begin"></param>
@@ -293,7 +320,7 @@ namespace МатКлассы
         /// <param name="filename"></param>
         /// <param name="path"></param>
         /// <returns></returns>
-        public Func<double, double, Complex> GetAnalys(double begin, double step, int count, string filename, string path, int byevery = 1, double epsForWaveletValues = 0) => GetAnalys(Point.CreatePointArray(begin, step, count, filename, path, byevery), epsForWaveletValues);
+        public Func<double, double, Complex> GetAnalys(double begin, double step, int count, double tmin, double tmax, string filename, string path, int byevery = 1, double epsForWaveletValues = 0) => GetAnalys(Point.CreatePointArray(begin, step, count, filename, path, byevery), tmin, tmax, epsForWaveletValues);
         private Func<double, double, Complex> MemoizeAndReturn(Func<double, double, Complex> s)
         {
             Resultmems = new Memoize<Point, Complex>((Point p) => s(p.x, p.y));
