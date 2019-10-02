@@ -166,7 +166,7 @@ namespace МатКлассы
                     this.FMother = (Complex w) => sigma(w) * sqrt2pi * Complex.Exp(-(w - this.w).Sqr() / 2);
                     break;
                 case Wavelets.Gabor:
-                    double w_0 = 2 * Math.PI;
+                   const double w_0 = 2 * Math.PI;
                     double gamma = Math.PI * Math.Sqrt(2.0 / Math.Log(2));
                     double fracw0gamma = Math.Sqrt(2 * Math.Log(2));
                     double fracgammaw0 = 1.0 / fracw0gamma;
@@ -175,8 +175,8 @@ namespace МатКлассы
                     double fracpis = Math.Pow(Math.PI, -0.25);
                     double sqrtfracw0gammapis = fracpis * Math.Sqrt(fracw0gamma);
                     double fracs2pipis = sqrt2pi / fracpis;
-
-                    this.Mother = t => sqrtfracw0gammapis * Math.Exp(-sqrfracw0gamma / 2 * t * t) * Complex.Expi(w_0 * t);
+                    double Gabortmp = -sqrfracw0gamma / 2;
+                    this.Mother = t => sqrtfracw0gammapis * Math.Exp(Gabortmp * t * t) * Complex.Expi(w_0 * t);
                     this.FMother = (Complex w) => fracs2pipis * Math.Sqrt(fracgammaw0) * Complex.Exp(-sqrfracgammaw0 / 2 * (w - w_0).Sqr());
                     break;
             }
