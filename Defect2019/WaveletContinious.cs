@@ -10,6 +10,7 @@ using System.Windows.Forms;
 using МатКлассы;
 using System.IO;
 using System.Diagnostics;
+using Accord.Math;
 
 namespace Работа2019
 {
@@ -258,9 +259,10 @@ namespace Работа2019
                 Directory.CreateDirectory(dir);
         }
 
-        private void TransformArea(string ABCfile)
+        private void TransformArea(string ABCfile,string Arrayfile,double tmin,double step)
         {
             TransformWariety(ABCfile);
+        //    TransformTime(Arrayfile,tmin,step);
 
             this.Refresh();
         }
@@ -289,6 +291,22 @@ namespace Работа2019
             textBox1.Text = (w - 5).ToString();
             textBox2.Text = (w + 5).ToString();
         }
+        private void TransformTime(string filename,double tmin, double step)
+        {
+            var arr = File.ReadLines(filename).Select(p => Convert.ToDouble(p.Replace('.', ','))).ToArray();
+            const int maxi= 16384;
+            int how = arr.Length / maxi;
+            double[] arr2 = new double[maxi];
+            for (int i = 0; i < arr2.Length; i++)
+                arr2[i] = arr[i * how];
+
+            Accord.Math.HilbertTransform.FHT(arr2, FourierTransform.Direction.Forward);
+
+            double t=tmin+ Array.IndexOf(arr2, arr2.Max())*how*step;
+            double dt = 0.0002;
+            textBox3.Text = (t - dt).ToString();
+            textBox4.Text = (t + dt).ToString();
+        }
 
         private async void button1_Click(object sender, EventArgs e)
         {
@@ -315,7 +333,7 @@ namespace Работа2019
                 timer1.Start();
                 for (int k = 0; k < otherSources.Length; k++)
                 {
-                    TransformArea(Path.Combine(wheredata[i],$"{snames[k]}.txt"));
+                    TransformArea(Path.Combine(wheredata[i],$"{snames[k]}.txt"), Path.Combine(wheredata[i], othernames[k]),tmin,step);
                     GetData();
                     string savename = $"{snames[k]} -> {symbols[i]}";
 
