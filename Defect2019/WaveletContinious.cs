@@ -9,6 +9,7 @@ using System.Threading.Tasks;
 using System.Windows.Forms;
 using МатКлассы;
 using System.IO;
+using System.Diagnostics;
 
 namespace Работа2019
 {
@@ -295,6 +296,8 @@ namespace Работа2019
 
                     ItElleps[k] = new EllipseParam(otherSources[k].Center, itSource.Center, Functions.GetFockS(tuple), Библиотека_графики.Other.colors[i], savename);
                     AddToScheme(ItElleps[k]);
+                    Debug.WriteLine(ItElleps[k]);
+                    
                 }
                 param.AddRange(ItElleps);
                 SetDefaltProgressBar();

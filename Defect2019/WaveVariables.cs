@@ -88,7 +88,7 @@ public static class РабКонсоль
     #endregion
 
     #region Параметры для вейвлетов
-    public static double timeshift = 0.000052;
+    public static double timeshift = 0.000052;// 0.000052;
     #endregion
 }
 
