@@ -135,6 +135,8 @@ namespace Работа2019
                 return;
 
             OtherMethods.PlaySound("Поехали");
+            SetDir();
+            SetSymbols();
             GetData();
 
             string[] names = Enumerable.Range(0, sources.Length).Select(i => $"Array{dataGridView1[1, i].Value}.txt").ToArray();
@@ -207,8 +209,7 @@ namespace Работа2019
             epsForWaveletValues = textBox5.Text.ToDouble();
 
             all = wcount * tcount;
-            SetDir();
-            SetSymbols();
+
         }
         private void SetSymbols()
         {
@@ -261,8 +262,8 @@ namespace Работа2019
         {
             OtherMethods.IlushaMethod(checkBox4);
             OtherMethods.PlaySound("Поехали");
-        
-            GetData();
+            SetDir();
+            SetSymbols();            
 
             string[] names = Enumerable.Range(0, sources.Length).Select(i => $"Array{symbols[i]}.txt").ToArray();
             string[] wheredata = Expendator.GetStringArrayFromFile("WhereData.txt").Select(s => Path.Combine(s, "Разница")).ToArray();
@@ -282,6 +283,7 @@ namespace Работа2019
                 timer1.Start();
                 for (int k = 0; k < otherSources.Length; k++)
                 {
+                    GetData();
                     string savename = $"{snames[k]} -> {symbols[i]}";
 
                     toolStripLabel1.Text = $"Замер {symbols[i]}, источник {snames[k]}, осталось {alles--}";

@@ -381,7 +381,7 @@
             this.numericUpDown3.TabIndex = 20;
             this.numericUpDown3.TextAlign = System.Windows.Forms.HorizontalAlignment.Center;
             this.numericUpDown3.Value = new decimal(new int[] {
-            16,
+            6,
             0,
             0,
             0});

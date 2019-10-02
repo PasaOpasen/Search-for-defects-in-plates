@@ -336,6 +336,7 @@ namespace PS5000A
         private async void button4_Click(object sender, EventArgs e)
         {
             InitParams();
+            FromDiff = true;
             if (!SetGlobalBase())
                 return;
 
@@ -633,6 +634,7 @@ namespace PS5000A
             string[] froms = new string[sourcesCount];
             string[] tosABS = new string[sourcesCount];
             string[] tos = new string[sourcesCount];
+            string[] tos2 = new string[sourcesCount];
 
             IProgress<int> progress = new Progress<int>((p) => { save = p; });
             all = sc;
@@ -647,8 +649,9 @@ namespace PS5000A
                     froms[i] = Path.Combine(from, ArraysNames[args[i]]);
                     tosABS[i] = Path.Combine(to, "Abs_" + filenames[args[i]]);
                     tos[i] = Path.Combine(to, filenames[args[i]]);
+                    tos2[i]= Path.Combine(to,"Разница", $"{Symbols[args[i]]}.txt");
 
-                    MakeTransform(froms[i], tos[i], progress);
+                    MakeTransform(froms[i], tos[i], progress,tos2[i]);
                     label2String = $"Выполнено {i + 1} из {sourcesCount - 1} для источника {Symbols[sourcenumber]}";
                 }
             });
@@ -660,18 +663,21 @@ namespace PS5000A
 
         }
 
+        private bool FromDiff = false;
         /// <summary>
         /// Отвечает за единичное преобразование Фурье из одного файла в другой
         /// </summary>
         /// <param name="from"></param>
         /// <param name="to"></param>
         /// <param name="progress"></param>
-        private void MakeTransform(string from, string to, IProgress<int> progress)
+        private void MakeTransform(string from, string to, IProgress<int> progress,string to2)
         {
             FurierTransformer.LoadIn(from);
             //FurierTransformer.GetSplainFT_old(progress);
             FurierTransformer.GetSplainFT_new(progress);
             FurierTransformer.SaveOut(to);
+            if(FromDiff)
+                FurierTransformer.SaveOut(to2);
         }
 
         private void button6_Click(object sender, EventArgs e)
@@ -829,6 +835,7 @@ namespace PS5000A
         private async void buttonStart_Click(object sender, EventArgs e)
         {
             InitParams();
+            FromDiff = false;
 
             if (!SetGlobalBase())
                 return;
