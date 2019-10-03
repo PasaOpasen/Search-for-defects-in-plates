@@ -104,6 +104,136 @@ log(p/(1-p))
 
 
 
+get_coefficients <- function(dataset){
+  
+  mod=glm(y~x,dataset,family="binomial")
+  
+  return(exp(mod$coefficients))
+  
+}
+
+centered <- function(test_data, var_names){
+  
+  library(dplyr)
+  p=test_data%>%mutate_at( var_names, function(x) x-mean(x))
+  
+  return(p)
+}
+test_data <- read.csv("https://stepic.org/media/attachments/course/524/cen_data.csv")
+test_data
+var_names = c("X4", "X2", "X1")
+centered(test_data, var_names)
+
+
+
+get_features <- function(dataset){
+  
+  fit <- glm(is_prohibited ~ weight+length+width+type, dataset, family = "binomial")
+  result <- anova(fit, test = "Chisq")$Pr
+  p=colnames(dataset)[!is.na(result) & result<0.05]
+  if(length(p)==0){
+    return("Prediction makes no sense")
+  }else{
+    return(p)
+  }
+  
+}
+test_data <- read.csv("https://stepic.org/media/attachments/course/524/test_luggage_2.csv")
+str(test_data)
+get_features(test_data)
+
+
+
+most_suspicious <- function(test_data, data_for_predict){
+  fit <- glm(is_prohibited ~ ., test_data, family = "binomial")
+  tmp=predict.glm(fit,newdata = data_for_predict[,1:4],type = "response")
+
+  pr=sapply(tmp, function(x) {
+    k=exp(x)
+    return(k/(1+k))
+  })
+  
+  
+  return(as.vector(data_for_predict[pr==max(pr),5]))
+  
+}
+
+test_data <- read.csv("https://stepic.org/media/attachments/course/524/test_data_passangers.csv")
+str(test_data)
+data_for_predict <-read.csv("https://stepic.org/media/attachments/course/524/predict_passangers.csv")
+str(data_for_predict)
+most_suspicious(test_data, data_for_predict)
+
+
+
+
+normality_test <- function(dataset){
+  
+  num=sapply(dataset,is.numeric)
+  
+  vec=sapply(dataset[,num], function(x) shapiro.test(x)$p.value)
+  
+  return( vec)
+  
+}
+normality_test(iris)
+
+
+
+smart_anova <- function(test_data){
+  
+  t1=shapiro.test(test_data[test_data$y=="A",]$x)$p.value
+  t2=shapiro.test(test_data[test_data$y=="B",]$x)$p.value
+  t3=shapiro.test(test_data[test_data$y=="C",]$x)$p.value
+  
+  sm=sum(c(t1,t2,t3)<0.05)+sum(bartlett.test(x~y,test_data)$p.value<0.05)
+  if(sm==0){
+    fit <- aov(x ~ y, test_data)
+    p_value <- summary(fit)[[1]]$'Pr(>F)'[1]
+    res=c(p_value)
+    names(res)=c("ANOVA")
+    return(res)
+  }else{
+    p_value <- kruskal.test(x ~ y, test_data)$p.value
+    res=c(p_value)
+    names(res)=c("KW")
+    return(res)
+  }
+}
+
+test_data <- read.csv("https://stepic.org/media/attachments/course/524/s_anova_test.csv")
+str(test_data)
+smart_anova(test_data)
+test_data <- as.data.frame(list(x = c(2.08, 0.82, -0.21, -0.74, -0.99, 0.86, 0.52, 0.39, -1.49, -0.17, -0.1, 0.08, -0.65, 1.03, 2.99, 0.09, 0.13, -0.53, 2.9, 0.38, 0.37, -1.46, -0.26, -0.35, -0.52, 0.17, 1.4, -1.16, -1.76, -1.68), y = c(1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 3, 3, 3, 3, 3, 3, 3, 3, 3, 3)))
+test_data$y <-  factor(test_data$y, labels = c('A', 'B', 'C'))
+
+smart_anova(test_data)
+
+
+
+library(dplyr)
+normality_by <- function(test){
+
+  tmp=test%>%group_by_(.dots=lapply(colnames(.)[2:3], as.symbol))%>%
+    summarise_if(is.numeric,function(x)shapiro.test(x)$p.value)
+
+  tmp=as.data.frame(tmp)
+  colnames(tmp)[length(colnames(tmp))]="p_value"
+  return(tmp)
+
+}
+normality_by(mtcars[, c("mpg", "am", "vs")])
+
+
+
+
+library(ggplot2)
+obj <- ggplot(iris,aes(x=Sepal.Length,fill=Species))+
+  geom_density(alpha = 0.2) 
+obj
+
+
+
 
 
 
