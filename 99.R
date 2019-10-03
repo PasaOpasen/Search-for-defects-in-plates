@@ -233,16 +233,48 @@ obj <- ggplot(iris,aes(x=Sepal.Length,fill=Species))+
 obj
 
 
+#кластерный анализ
+library(ggplot2)
+d <- iris[, c("Sepal.Length", "Petal.Width")]
+
+fit <- kmeans(d, 3)
+d$clusters <- factor(fit$cluster)
+
+ggplot(d, aes(Sepal.Length, Petal.Width, col = clusters))+
+  geom_point(size = 2)+
+  theme_bw() 
 
 
+library(ggplot2) 
+library(ggrepel) # для симпатичной подписи точек на графике
+
+x <- rnorm(20)
+y <- rnorm(20)
+test_data <- data.frame(x, y)
+test_data$labels <- 1:20
+
+ggplot(test_data, aes(x, y, label = labels))+
+  geom_point()+
+  geom_text_repel()
+
+d = dist(test_data)
+fit <- hclust(d, method = "single")
+plot(fit, labels = test_data$labels)
+rect.hclust(fit, 2) # укажите желаемое число кластеров, сейчас стоит 2
 
 
+library(ape)
+set.seed(222)
+tr <- rtree(20, tip.label = c("B","C","D","E","F","G","H","I","J","K","L","M","N","O","P","Q","R","S","T","U")) 
+#левое дерево
+plot.phylo(tr) 
+#правое дерево 
+plot.phylo(tr, use.edge.length=FALSE)
 
 
-
-
-
-
+#факторный анализ
+fit <- factanal(swiss, factors = 2, rotation = "varimax")
+print(fit)
 
 
 
