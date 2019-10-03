@@ -16,14 +16,15 @@ namespace Работа2019
 {
     public partial class WaveletContinious : Form
     {
-        private readonly double step = 16E-9;
+        private readonly double step = 16E-9, globaltmin = -0.0004;
         private readonly int pcount = 150000;
         private readonly string DefSymbols = "ABCDEFGH";
+        private readonly Wavelet.Wavelets MyWavelet = Wavelet.Wavelets.LP;
 
         private static string symbols;
         private Source[] sources;
         private double wmin, wmax, tmin, tmax, epsForWaveletValues = 1e-8;
-        private int wcount, tcount, byevery,pointcount,pointmax,pointmax2;
+        private int wcount, tcount, byevery, pointcount, pointmax, pointmax2;
         private NetOnDouble W, T;
 
         public WaveletContinious(Source[] array)
@@ -161,10 +162,10 @@ namespace Работа2019
                     toolStripLabel1.Text = $"Замер {symbols[i]}, источник {snames[k]}, осталось {alles--}";
 
                     var tuple = await Functions.GetMaximunFromArea(
-                        new NetOnDouble( W,40), new NetOnDouble(T,40), 
+                        new NetOnDouble(W, 40), new NetOnDouble(T, 40),
                         progress, new System.Threading.CancellationToken(),
-                        tmin, step, pcount, othernames[k], Path.Combine(Environment.CurrentDirectory, savename.Replace(" -> ", "to")),
-                        Wavelet.Wavelets.LP, wheredata[i], 32, epsForWaveletValues);
+                       globaltmin, step, pcount, othernames[k], Path.Combine(Environment.CurrentDirectory, savename.Replace(" -> ", "to")),
+                       MyWavelet, wheredata[i], 32, epsForWaveletValues);
                 }
                 SetDefaltProgressBar();
                 timer1.Stop();
@@ -187,7 +188,7 @@ namespace Работа2019
             var mas = Enumerable.Range(0, 28).Select(i => RandomNumbers.NextNumber(sources.Length * (sources.Length - 1))).Distinct().ToArray();
             var arr = mas.Select(i => arrt[i]).ToArray();
 
-            new Библиотека_графики.ManyDocumentsShower("Поверхности на негустой сетке", arr, arr.Select(i=>i+".pdf").ToArray()).Show();
+            new Библиотека_графики.ManyDocumentsShower("Поверхности на негустой сетке", arr, arr.Select(i => i + ".pdf").ToArray()).Show();
             button2_Click(new object(), new EventArgs());
         }
 
@@ -214,12 +215,12 @@ namespace Работа2019
         }
         private void SetSymbols()
         {
-            DialogResult MB(string text)=> MessageBox.Show(text, "Ошибка в именах", MessageBoxButtons.OK, MessageBoxIcon.Error);
+            DialogResult MB(string text) => MessageBox.Show(text, "Ошибка в именах", MessageBoxButtons.OK, MessageBoxIcon.Error);
 
             try
             {
-                symbols=new string(Enumerable.Range(0, sources.Length).Select(i =>Convert.ToChar( dataGridView1[1, i].Value)).ToArray());
-                if(symbols.Length != symbols.Distinct().Count())
+                symbols = new string(Enumerable.Range(0, sources.Length).Select(i => Convert.ToChar(dataGridView1[1, i].Value)).ToArray());
+                if (symbols.Length != symbols.Distinct().Count())
                 {
                     MB("Найдены совпадающие имена. Будут использованы имена по умолчанию");
                     symbols = DefSymbols;
@@ -228,7 +229,7 @@ namespace Работа2019
             catch
             {
                 MB("Минимум одно из заданных имён не является допустимым. Используйте только символы. Будут использованы имена по умолчанию");
-                symbols = new string( DefSymbols.ToCharArray());
+                symbols = new string(DefSymbols.ToCharArray());
             }
             finally
             {
@@ -259,18 +260,18 @@ namespace Работа2019
                 Directory.CreateDirectory(dir);
         }
 
-        private void TransformArea(string ABCfile,string Arrayfile,double tmin,double step)
+        private void TransformArea(string ABCfile, string Arrayfile, double tmin, double step)
         {
             TransformWariety(ABCfile);
-        //    TransformTime(Arrayfile,tmin,step);
+            TransformTime(Arrayfile, tmin, step);
 
             this.Refresh();
         }
         private void TransformWariety(string ABCfile)
         {
-            double w = 0, max = 0,tmp;
-            using(StreamReader r=new StreamReader(ABCfile))
-            {            
+            double w = 0, max = 0, tmp;
+            using (StreamReader r = new StreamReader(ABCfile))
+            {
                 string s = r.ReadLine();
                 string[] st;
                 while (true)
@@ -278,7 +279,7 @@ namespace Работа2019
                     s = r.ReadLine();
                     if (s == null)
                         break;
-                    st = s.Replace('.',',').Split(new char[] { ' ' }, StringSplitOptions.RemoveEmptyEntries);
+                    st = s.Replace('.', ',').Split(new char[] { ' ' }, StringSplitOptions.RemoveEmptyEntries);
                     tmp = new Number.Complex(Convert.ToDouble(st[1]), Convert.ToDouble(st[2])).Abs;
                     if (tmp > max)
                     {
@@ -291,10 +292,15 @@ namespace Работа2019
             textBox1.Text = (w - 5).ToString();
             textBox2.Text = (w + 5).ToString();
         }
-        private void TransformTime(string filename,double tmin, double step)
+        private void TransformTime(string filename, double tmin, double step)
         {
             var arr = File.ReadLines(filename).Select(p => Convert.ToDouble(p.Replace('.', ','))).ToArray();
-            const int maxi= 16384;
+            if (tmin < 0)
+            {
+                arr = arr.Slice(Math.Round((-tmin) / step).ToInt(), arr.Length - 1);
+                tmin = 0;
+            }
+            const int maxi = 16384;
             int how = arr.Length / maxi;
             double[] arr2 = new double[maxi];
             for (int i = 0; i < arr2.Length; i++)
@@ -302,8 +308,8 @@ namespace Работа2019
 
             Accord.Math.HilbertTransform.FHT(arr2, FourierTransform.Direction.Forward);
 
-            double t=tmin+ Array.IndexOf(arr2, arr2.Max())*how*step;
-            double dt = 0.0002;
+            double t = tmin + Array.IndexOf(arr2, arr2.Max()) * how * step;
+            const double dt = 5e-5;
             textBox3.Text = (t - dt).ToString();
             textBox4.Text = (t + dt).ToString();
         }
@@ -313,15 +319,15 @@ namespace Работа2019
             OtherMethods.IlushaMethod(checkBox4);
             OtherMethods.PlaySound("Поехали");
             SetDir();
-            SetSymbols();            
+            SetSymbols();
 
             string[] names = Enumerable.Range(0, sources.Length).Select(i => $"Array{symbols[i]}.txt").ToArray();
             string[] wheredata = Expendator.GetStringArrayFromFile("WhereData.txt").Select(s => Path.Combine(s, "Разница")).ToArray();
 
-            List<EllipseParam> param = new List<EllipseParam>();   
+            List<EllipseParam> param = new List<EllipseParam>();
             int alles = sources.Length * (sources.Length - 1);
             IProgress<int> progress = new Progress<int>((int val) => save = val);
-           
+
             for (int i = 0; i < sources.Length; i++)
             {
                 var itSource = sources[i];
@@ -333,24 +339,24 @@ namespace Работа2019
                 timer1.Start();
                 for (int k = 0; k < otherSources.Length; k++)
                 {
-                    TransformArea(Path.Combine(wheredata[i],$"{snames[k]}.txt"), Path.Combine(wheredata[i], othernames[k]),tmin,step);
+                    TransformArea(Path.Combine(wheredata[i], $"{snames[k]}.txt"), Path.Combine(wheredata[i], othernames[k]), globaltmin, step);
                     GetData();
                     string savename = $"{snames[k]} -> {symbols[i]}";
 
                     toolStripLabel1.Text = $"Замер {symbols[i]}, источник {snames[k]}, осталось {alles--}";
 
-                    var tuple =(radioButton1.Checked)? await Functions.GetMaximunFromArea(W, T, progress, new System.Threading.CancellationToken(),
-                        tmin, step, pcount, othernames[k], Path.Combine(dir, savename.Replace(" -> ", "to")),
-                        Wavelet.Wavelets.LP, wheredata[i], byevery, epsForWaveletValues):
-                       await Functions.GetMaximunFromArea(wmin,wmax, tmin,tmax,
-                        tmin, step, pcount, othernames[k], Path.Combine(dir, savename.Replace(" -> ", "to")),
-                        Wavelet.Wavelets.LP, wheredata[i], byevery, epsForWaveletValues,
-                        pointcount,pointmax,pointmax2);
+                    var tuple = (radioButton1.Checked) ? await Functions.GetMaximunFromArea(W, T, progress, new System.Threading.CancellationToken(),
+                        globaltmin, step, pcount, othernames[k], Path.Combine(dir, savename.Replace(" -> ", "to")),
+                        MyWavelet, wheredata[i], byevery, epsForWaveletValues) :
+                       await Functions.GetMaximunFromArea(wmin, wmax, tmin, tmax,
+                        globaltmin, step, pcount, othernames[k], Path.Combine(dir, savename.Replace(" -> ", "to")),
+                        MyWavelet, wheredata[i], byevery, epsForWaveletValues,
+                        pointcount, pointmax, pointmax2);
 
                     ItElleps[k] = new EllipseParam(otherSources[k].Center, itSource.Center, Functions.GetFockS(tuple), Библиотека_графики.Other.colors[i], savename);
                     AddToScheme(ItElleps[k]);
                     Debug.WriteLine(ItElleps[k]);
-                    
+
                 }
                 param.AddRange(ItElleps);
                 SetDefaltProgressBar();
