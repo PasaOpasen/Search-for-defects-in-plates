@@ -295,10 +295,11 @@ namespace Работа2019
         private void TransformTime(string filename, double tmin, double step)
         {
             var arr = File.ReadLines(filename).Select(p => Convert.ToDouble(p.Replace('.', ','))).ToArray();
-            if (tmin < 0)
+            const double crosstalk = 0.0001;
+            if (tmin < crosstalk)
             {
-                arr = arr.Slice(Math.Round((-tmin) / step).ToInt(), arr.Length - 1);
-                tmin = 0;
+                arr = arr.Slice(Math.Round((crosstalk - tmin) / step).ToInt(), arr.Length - 1);
+                tmin = crosstalk;
             }
             const int maxi = 16384;
             int how = arr.Length / maxi;
