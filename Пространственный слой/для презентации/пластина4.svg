@@ -1,0 +1,59 @@
+<?xml version="1.0" encoding="utf-8"?>
+<!-- Generator: Adobe Illustrator 23.0.2, SVG Export Plug-In . SVG Version: 6.00 Build 0)  -->
+<svg version="1.1" id="Слой_1" xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink" x="0px" y="0px"
+	 viewBox="0 0 538.58 283.46" style="enable-background:new 0 0 538.58 283.46;" xml:space="preserve">
+<style type="text/css">
+	.st0{fill:#EDEDED;stroke:#BC9999;stroke-width:25;stroke-linecap:round;stroke-linejoin:round;stroke-miterlimit:10;}
+	.st1{fill:#DADADA;}
+	.st2{fill:none;stroke:#000000;stroke-width:4;stroke-linecap:round;stroke-linejoin:round;}
+	.st3{fill:none;stroke:#000000;stroke-width:2;stroke-linecap:round;stroke-linejoin:round;}
+	.st4{fill:#AAD195;stroke:#000000;stroke-width:0.75;stroke-miterlimit:10;}
+	.st5{fill:#DADADA;stroke:#000000;stroke-width:0.75;stroke-miterlimit:10;}
+	.st6{font-family:'Arial-BoldMT';}
+	.st7{font-size:21.6001px;}
+	.st8{font-size:17.4643px;}
+	.st9{font-size:20.375px;}
+</style>
+<polygon class="st0" points="449.56,260.24 15.18,260.24 89.03,19.55 523.4,19.55 "/>
+<g>
+	<path class="st1" d="M15.18,259.66c50.84,0,101.68,0,152.52,0"/>
+	<g>
+		<path class="st2" d="M15.18,259.66c46.13,0,92.27,0,138.4,0"/>
+		<g>
+			<polygon points="167.7,259.66 147.81,267.79 152.53,259.66 147.81,251.53 			"/>
+		</g>
+	</g>
+</g>
+<g>
+	<path class="st1" d="M42.68,170.62c-9.17,29.68-18.33,59.36-27.5,89.04"/>
+	<g>
+		<path class="st2" d="M39.16,182.02c-7.99,25.88-15.98,51.76-23.97,77.63"/>
+		<g>
+			<polygon points="30.42,185.21 38.43,184.38 44.58,189.58 42.68,170.62 			"/>
+		</g>
+	</g>
+</g>
+<g>
+	<path class="st1" d="M303.65,248.07c-2.4,8.1-4.79,16.21-7.19,24.31"/>
+	<g>
+		<path class="st3" d="M301.62,254.95c-1.04,3.52-2.08,7.03-3.12,10.55"/>
+		<g>
+			<polygon points="296.42,254.93 303.65,248.07 305.98,257.76 			"/>
+		</g>
+		<g>
+			<polygon points="294.13,262.69 296.46,272.38 303.69,265.51 			"/>
+		</g>
+	</g>
+</g>
+<path class="st4" d="M369.58,143.07c-0.22,6.56-5.64,11.15-6.43,11.8c-4.93,4.06-7.57,1.16-13.16,4.72
+	c-6.45,4.11-5.1,9.35-11.02,12.71c-5.18,2.94-6.85-0.73-15.3,1.09c-8.89,1.91-9.98,6.6-16.37,6.17c-5.38-0.36-5.19-3.72-12.39-6.53
+	c-10.96-4.28-15.87,1.76-22.64-3.63c-3.26-2.59-1.72-3.67-7.65-10.89c-6.38-7.78-9.11-7.69-10.1-11.98
+	c-1.26-5.49,1.96-11.08,5.2-16.7c1.83-3.17,4.69-8.12,9.79-11.62c6.08-4.16,9.37-2.16,19.89-4.36c13.07-2.72,12.33-6.71,19.58-6.53
+	c9.89,0.24,10.46,7.64,24.17,12.71c12.25,4.52,15.65,0.05,24.79,6.17C360.41,127.84,369.88,134.19,369.58,143.07z"/>
+<path class="st5" d="M302.88,97.51"/>
+<text transform="matrix(0.8429 0 0 1 258.5706 107.3096)" class="st6 st7">q</text>
+<text transform="matrix(0.8429 0 0 1 274.9417 139.8975)" class="st6 st7">Ω </text>
+<text transform="matrix(0.8429 0 0 1 160.5354 244.2754)" class="st6 st8">x</text>
+<text transform="matrix(0.8429 0 0 1 57.3708 183.3477)" class="st6 st8">y</text>
+<text transform="matrix(0.8429 0 0 1 308.4167 269.6153)" class="st6 st9">h</text>
+</svg>

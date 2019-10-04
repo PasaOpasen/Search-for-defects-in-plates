@@ -1,0 +1,71 @@
+\documentclass[a4paper, 12pt]{article}
+\usepackage[utf8]{inputenc}
+\usepackage[T1, T2A]{fontenc}
+\usepackage[a4paper, top=2cm, bottom=2cm, left=1cm, right=1cm, marginparwidth=1.75cm]{geometry}
+\usepackage{graphicx}
+\usepackage{amsmath}
+\usepackage{indentfirst}
+\usepackage[english, russian]{babel}
+\usepackage[section,above,below]{placeins}
+\usepackage[noend]{algorithmic}
+\usepackage{amssymb}
+\usepackage{amsfonts}
+\usepackage{pdfpages} 
+
+\newcommand{\ww}{\omega}
+\newcommand{\dw}{\Delta \omega}
+
+\begin{document}
+    
+\begin{equation}
+    \int_{\ww_j-\dw}^{\ww_j} \left(1+ \frac{\ww-\ww_j}{\dw} \right) e^{- i \ww t}d\ww=
+\frac{i}{t} e^{- i \ww_j t}\left(1-\frac{i}{t\dw}\left( 1-e^{i \dw t} \right)  \right) 
+\end{equation}
+
+\begin{equation}
+    \int_{\ww_j}^{\ww_j+\dw} \left(1- \frac{\ww-\ww_j}{\dw} \right) e^{- i \ww t}d\ww=
+\frac{i}{t} e^{- i \ww_j t}\left(-1-\frac{i}{t\dw}\left( 1-e^{-i \dw t} \right)  \right)
+\end{equation}
+
+\begin{equation}
+    f_c=\frac{\ww_c}{2 \pi}
+\end{equation}
+\begin{equation}
+    T=\frac{1}{f_c}=\frac{2 \pi}{\ww_c}
+\end{equation}
+
+\begin{equation}
+    V_1(t)=\sin (2 \pi f_c t) \cdot \sin(\pi f_c \frac{t}{2})=\sin (\ww_c t) \cdot \sin(\ww_c \frac{t}{4})
+\end{equation}
+
+Для функции $f_1$ явные формулы:
+\begin{equation}
+    f_1(\ww)=i(e_1-e_2-e_3+e_4),
+\end{equation}
+\begin{equation}
+    e_i=\dfrac{e^{\frac{i \pi}{\ww_c} \ww_i} -1}{\ww_i}
+\end{equation}
+\begin{equation}
+    \ww_1=5\ww_c+4 \ww,\ww_2=3\ww_c+4 \ww,\ww_3=-3\ww_c+4 \ww,\ww_4=-5\ww_c+4 \ww
+\end{equation}
+Аналогично
+\begin{equation}
+    f_2(\ww)=s\left(\dfrac{2 \pi N}{\ww_c}\right) - s(0)
+\end{equation}
+\begin{equation}
+    s(t)=\frac{1}{8} \left(e_1+e_2-e_3-e_4-2(e_5-e_6)    \right)
+\end{equation}
+\begin{equation}
+    e_i=\dfrac{e^{i t \ww_i}}{\ww_i}
+\end{equation}
+\begin{multline}
+    \ww_1=\ww_c \dfrac{N+1}{N}+\ww,\\
+    \ww_2=\ww_c \dfrac{N-1}{N}+\ww,\\
+    \ww_3=\ww_c \dfrac{1-N}{N}+\ww,\\
+    \ww_4=-\ww_c\dfrac{N+1}{N}+\ww,\\
+    \ww_5=\ww_c +\ww,\\
+    \ww_6=-\ww_c +\ww
+\end{multline}
+
+
+\end{document}

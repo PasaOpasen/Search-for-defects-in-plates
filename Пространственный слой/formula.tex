@@ -1,0 +1,34 @@
+\documentclass[a4paper, 12pt]{article}
+\usepackage[utf8]{inputenc}
+\usepackage[T1, T2A]{fontenc}
+\usepackage[a4paper, top=2cm, bottom=2cm, left=1cm, right=1cm, marginparwidth=1.75cm]{geometry}
+\usepackage{graphicx}
+\usepackage{amsmath}
+\usepackage{indentfirst}
+\usepackage[english, russian]{babel}
+\usepackage[section,above,below]{placeins}
+\usepackage[noend]{algorithmic}
+\usepackage{amssymb}
+\usepackage{amsfonts}
+\usepackage{pdfpages}
+
+\begin{document}
+    
+Исходная функция возмущения от источника $j$:
+\begin{equation*}
+    {\bf u}_j({\bf x},t)=\dfrac{1}{\pi} \mathrm{Re} \int_{0}^{\infty} {\bf u}_j({\bf x},\omega) e^{- i \omega t}d\omega=\dfrac{1}{\pi} \mathrm{Re}\ {\bf w}_j ({\bf x},t),
+\end{equation*}
+где $j \in 1\dots N$, $N$--- число источников, $t \in \{T_1,\dots,T_n\}$, $T_i=t_{\min}+(i-1)\dfrac{t_{\max}-t_{\min}}{n-1}$.
+
+Возможные метрики:
+\begin{equation}
+    S_1({\bf x} )= \sum_{t \in \{T_1,\dots,T_n\}} \left(\sum_{j=1}^N {\bf u}_j ({\bf x},t)\right)^2 ,
+\end{equation}
+\begin{equation}
+    S_2({\bf x})= \sum_{t \in \{T_1,\dots,T_n\}} \left|\sum_{j=1}^N {\bf w}_j({\bf x},t)\right|,
+\end{equation}
+\begin{equation}
+    S_3({\bf x})= \max_{t \in \{T_1,\dots,T_n\}} \left|\sum_{j=1}^N {\bf u}_j ({\bf x},t)\right|.
+\end{equation}
+
+\end{document}
