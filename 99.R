@@ -280,5 +280,98 @@ print(fit)
 
 
 
+smart_hclust<-  function(test_data, cluster_number){
+  dist_matrix <- dist(test_data) # расчет матрицы расстояний
+  fit <- hclust(dist_matrix) # иерархическая кластеризация 
+  cluster <- cutree(fit, cluster_number) # номер кластера для каждого наблюдения
+test_data=cbind(test_data,factor(cluster))
+colnames( test_data)[ncol(test_data)]="cluster"
+return(test_data)
+}
+
+test_data <- read.csv("https://stepic.org/media/attachments/course/524/test_data_hclust.csv")
+str(test_data)
+smart_hclust(test_data, 3) # выделено три кластера
+
+
+get_difference<-  function(test_data, n_cluster){
+  tmp=smart_hclust(test_data,n_cluster)
+  tp=sapply(tmp[sapply(tmp, is.numeric)], 
+            function(x) anova(aov(x~ cluster, tmp))$P[1])
+  return(names(tp)[tp<0.05])
+}
+test_data <- read.csv("https://stepic.org/media/attachments/course/524/cluster_1.csv")
+get_difference(test_data, 2)
+
+
+
+
+get_pc <- function(test){    
+  fit <- prcomp(test)    
+  test<- cbind(test, fit$x[,1:2])    
+  return(test)    
+}
+test_data <- read.csv("https://stepic.org/media/attachments/course/524/pca_test.csv")
+get_pc(test_data)
+
+
+#добавляет главные компоненты, покрывающие 90% дисперсий
+#https://stepik.org/lesson/26672/step/4?unit=8484
+get_pca2 <- function(test){    
+  fit <- prcomp(test)  
+  s=summary(fit)$importance[3,] 
+  
+  k=length(s)-sum(s>0.9)+1
+  test<- cbind(test, fit$x[,1:k])    
+  return(test)    
+}
+get_pca2(swiss)
+
+fit <- prcomp(swiss)  
+
+fit$sdev
+
+
+# сначала создайте переменную cluster в данных swiss
+
+dist_matrix <- dist(swiss) # расчет матрицы расстояний
+fit <- hclust(dist_matrix) # иерархическая кластеризация 
+cluster <- cutree(fit, 2) # номер кластера для каждого наблюдения
+swiss$cluster=factor(cluster)
+# дополните код, чтобы получить график
+library(ggplot2)
+my_plot <- ggplot(swiss, aes(Education, Catholic, col = cluster))+
+  geom_point()+
+  geom_smooth(method = "lm",aes(col=cluster))
+my_plot
+
+
+
+
+
+library(dplyr)
+is_multicol <- function(d){
+  mat=cor(d)
+  diag(mat)=0
+  mat=near(abs(mat),1)
+  
+  if(sum(mat)==0){
+    return("There is no collinearity in the data")
+  }else{
+    nas=rep(colnames(mat),ncol(mat))
+    return(nas[which(mat)])
+  }
+  return(mat)
+}
+
+test_data <- read.csv("https://stepic.org/media/attachments/course/524/Norris_2.csv")
+is_multicol(test_data)
+
+test_data <- as.data.frame(list(V1 = c(30, 32, 9, 20, 9), V2 = c(1, 11, 13, 21, 31), V3 = c(21, 3, 25, 26, 16), V4 = c(24, 26, 3, 14, 3), V5 = c(-16, 2, -20, -21, -11)))
+is_multicol(test_data)
+
+
+
+
 
  
