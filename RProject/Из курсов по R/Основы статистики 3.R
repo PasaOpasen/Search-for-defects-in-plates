@@ -123,6 +123,50 @@ summary(fit_3)
 
 
 
+median_cl_boot <- function(x){
+  mb=median(x)*2
+  getv=function(t){
+    s=round(runif(length(t),1,length(t)))
+    return(t[s])
+  }
+  
+  vb=sapply(1:1000, function(t) median(getv(x)))
+  vb1=quantile(vb,0.05)
+  vb2=quantile(vb,0.95)
+  
+  return(c(mb-vb2,mb-vb1))
+  
+}
+
+vec=c(1,2,3,4,5,6,7,8,21,4,4,3,2,1,-5,9)
+median_cl_boot(vec)
+
+
+
+library(dplyr)
+slope_cl_boot <- function(x){
+  
+  mb=cor(x$y,x$x)*2
+  getv=function(t){
+    s=round(runif(nrow(t),1,nrow(t)))
+    return(t[s,])
+  }
+  
+  vb=sapply(1:1000, function(t) {
+    df=getv(x)
+    cor(df$y,df$x)
+        })
+  vb1=quantile(vb,0.05)
+  vb2=quantile(vb,0.95)
+  
+  return(c(mb-vb2,mb-vb1))
+  
+}
+
+cor(c(1,1,2,3,42,2,2),c(-1,2,4,6,4,0,2))
+
+
+
 
 
 
