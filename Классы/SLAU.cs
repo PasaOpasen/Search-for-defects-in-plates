@@ -434,10 +434,10 @@ namespace МатКлассы
         /// <param name="b"></param>
         public SLAU(SqMatrix M, Vectors b)
         {
-            Make(b.n);
-            for (int i = 0; i < b.n; i++)
+            Make(b.Deg);
+            for (int i = 0; i < b.Deg; i++)
             {
-                for (int j = 0; j < b.n; j++)
+                for (int j = 0; j < b.Deg; j++)
                     this.A[i, j] = M[i, j];
                 this.b[i] = b[i];
             }

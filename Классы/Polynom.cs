@@ -54,8 +54,8 @@ namespace МатКлассы
         /// <param name="v"></param>
         public Polynom(Vectors v)
         {
-            this.degree = v.n - 1;
-            this.coef = new double[v.n];
+            this.degree = v.Deg - 1;
+            this.coef = new double[v.Deg];
             for (int i = 0; i <= this.degree; i++) this.coef[i] = v[i];
         }
         /// <summary>

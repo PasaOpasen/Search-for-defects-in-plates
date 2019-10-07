@@ -95,10 +95,10 @@ namespace МатКлассы
             }
 
             for (int i = 0; i < values.Length; i++)
-                for (int j = 0; j < values[i].n; j++)
+                for (int j = 0; j < values[i].Deg; j++)
                     sheet.Range[CharForExcel('B', i) + (3 + j).ToString(), t].Value2 = (values[i][j]);
 
-            sheet.Range["A2", CharForExcel('B', values.Length) + (3 + values[0].n).ToString()].Activate();
+            sheet.Range["A2", CharForExcel('B', values.Length) + (3 + values[0].Deg).ToString()].Activate();
             application.Visible = true;
         }
         /// <summary>

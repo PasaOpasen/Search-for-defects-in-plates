@@ -10,26 +10,43 @@ namespace МатКлассы
     /// <summary>
     /// Обычные векторы
     /// </summary>
-    public class Vectors : Idup<Vectors>
+    public sealed class Vectors : Idup<Vectors>
     {
-        /// <summary>
-        /// Размерность вектора
-        /// </summary>
-        public int n;
         /// <summary>
         /// Массив, с которым отождествляется вектор
         /// </summary>
-        protected internal double[] vector;
+        internal double[] vector;
+
+        #region Свойства
+
         /// <summary>
         /// Размерность вектора
         /// </summary>
-        public int Deg => n;
+        public int Deg => vector.Length;
         /// <summary>
         /// Массив, соответствующий вектору
         /// </summary>
         public double[] DoubleMas => vector;
 
-        //Свойства-методы
+        /// <summary>
+        /// Евклидова норма вектора
+        /// </summary>
+        public double EuqlidNorm
+        {
+            get
+            {
+                double s = 0;
+                for (int i = 0; i < this.Deg; i++)
+                    s += vector[i] * vector[i];
+                return Math.Sqrt(s) / this.Deg;
+            }
+        }
+
+        /// <summary>
+        /// Возвращает нормированный вектор
+        /// </summary>
+        public Vectors Normalizing => this.dup / this.EuqlidNorm;
+
         /// <summary>
         /// Использование вектора как массива
         /// </summary>
@@ -47,9 +64,10 @@ namespace МатКлассы
         {
             get
             {
+                int n = this.Deg;
                 double sun = 0;
                 for (int i = 0; i < n; i++) sun += this[i];
-                return sun / this.n;
+                return sun / n;
             }
         }
         /// <summary>
@@ -64,27 +82,6 @@ namespace МатКлассы
         /// Сумма элементов вектора
         /// </summary>
         public double Sum => this.vector.Sum();
-
-        /// <summary>
-        /// Находятся ли все значения вектора в указанно промежутке
-        /// </summary>
-        /// <param name="beg"></param>
-        /// <param name="end"></param>
-        /// <returns></returns>
-        public bool IsIn(double beg,double end)
-        {
-            for (int i = 0; i < Deg; i++)
-                if (vector[i] < beg || vector[i] > end)
-                    return false;
-            return true;
-        }
-
-        /// <summary>
-        /// Отклонение элемента от среднего значения
-        /// </summary>
-        /// <param name="i">Номер элемента</param>
-        /// <returns></returns>
-        public double Av(int i) { return Math.Abs(this[i] - this.ArithmeticAv); }
         /// <summary>
         /// Среднее отклонение значений в векторе
         /// </summary>
@@ -93,8 +90,8 @@ namespace МатКлассы
             get
             {
                 double sun = 0;
-                for (int i = 0; i < n; i++) sun += this.Av(i);
-                return sun / this.n;
+                for (int i = 0; i < this.Deg; i++) sun += this.Av(i);
+                return sun / this.Deg;
             }
         }
         /// <summary>
@@ -111,8 +108,8 @@ namespace МатКлассы
         {
             get
             {
-                Vectors v = new Vectors(this.n);
-                for (int i = 0; i < v.n; i++) v[i] = this.Av(i);
+                Vectors v = new Vectors(this.Deg);
+                for (int i = 0; i < v.Deg; i++) v[i] = this.Av(i);
                 return v;
             }
         }
@@ -123,11 +120,241 @@ namespace МатКлассы
         {
             get
             {
-                Vectors v = new Vectors(this.n);
-                for (int i = 0; i < v.n; i++) v[i] = this.Av(i) * this.Av(i);
+                Vectors v = new Vectors(this.Deg);
+                for (int i = 0; i < v.Deg; i++) v[i] = this.Av(i) * this.Av(i);
                 return v;
             }
         }
+        /// <summary>
+        /// Максимальное значение
+        /// </summary>
+        public double Max
+        {
+            get
+            {
+                double t = vector[0];
+                for (int i = 1; i < this.Deg; i++)
+                    if (vector[i] > t) t = vector[i];
+                return t;
+            }
+        }
+        /// <summary>
+        /// Минимальное значение
+        /// </summary>
+        public double Min
+        {
+            get
+            {
+                double t = vector[0];
+                for (int i = 1; i < this.Deg; i++)
+                    if (vector[i] < t) t = vector[i];
+                return t;
+            }
+        }
+        /// <summary>
+        /// Отсортированный вектор
+        /// </summary>
+        public Vectors Sort
+        {
+            get
+            {
+                Vectors e = new Vectors(this);
+                Array.Sort(e.vector);
+                return e;
+            }
+        }
+        /// <summary>
+        /// Вектор модулей
+        /// </summary>
+        public Vectors AbsVector
+        {
+            get
+            {
+                Vectors r = new Vectors(this);
+                for (int i = 0; i < r.Deg; i++)
+                    r[i] = r[i].Abs();
+                return r;
+            }
+        }
+        /// <summary>
+        /// Максимальный элемент по модулю
+        /// </summary>
+        public double MaxAbs => AbsVector.Max;
+        /// <summary>
+        /// Минимальный элемент по модулю
+        /// </summary>
+        public double MinAbs => AbsVector.Min;
+        /// <summary>
+        /// Усреднённый вектор
+        /// </summary>
+        public Vectors ToAver
+        {
+            get
+            {
+                Vectors res = new Vectors(this);
+                double a = res.ArithmeticAv;
+                for (int i = 0; i < res.Deg; i++)
+                    res[i] -= a;
+                return res;
+            }
+        }
+        /// <summary>
+        /// Вектор, делённый на своё среднее
+        /// </summary>
+        public Vectors ToAverDel
+        {
+            get
+            {
+                Vectors res = new Vectors(this);
+                double a = res.ArithmeticAv;
+                for (int i = 0; i < res.Deg; i++)
+                    res[i] /= a;
+                return res;
+            }
+        }
+
+        /// <summary>
+        /// Последний элемент вектора
+        /// </summary>
+        public double LastElement => vector.Last();
+        /// <summary>
+        /// Дубликат вектора
+        /// </summary>
+        public Vectors dup => new Vectors(this);           
+        #endregion
+
+        #region Конструкторы
+        /// <summary>
+        /// Вектор (0)
+        /// </summary>
+        public Vectors()
+        {
+            this.vector = Array.Empty<double>();
+        }
+        /// <summary>
+        /// Нулевой вектор
+        /// </summary>
+        /// <param name="n">Размерность вектора</param>
+        public Vectors(int n)
+        {
+   this.vector = new double[n];
+        }
+        /// <summary>
+        /// Вектор, заполненный одинаковыми числами
+        /// </summary>
+        /// <param name="n">Размерность вектора</param>
+        /// <param name="c">Конпонент вектора</param>
+        public Vectors(int n, double c) : this(n)
+        {
+            for (int i = 0; i < n; i++) this[i] = c;
+        }
+        /// <summary>
+        /// Считать вектор из файла
+        /// </summary>
+        /// <param name="fs"></param>
+        public Vectors(StreamReader fs)
+        {
+            string s = fs.ReadLine();
+            string[] st = s.Split(' ');
+            this.vector = new double[st.Length];
+            for (int i = 0; i < this.Deg; i++) this.vector[i] = Convert.ToDouble(st[i]);
+            fs.Close();
+        }
+        /// <summary>
+        /// Конструктор копирования
+        /// </summary>
+        /// <param name="V"></param>
+        public Vectors(Vectors v)
+        {
+            this.vector = new double[v.Deg];
+            for (int i = 0; i < v.Deg; i++) this[i] = v[i];
+        }
+        /// <summary>
+        /// Задать вектор перечислением координат или массивом
+        /// </summary>
+        /// <param name="x"></param>
+        public Vectors(params double[] x)
+        {
+            vector = new double[x.Length];
+            for (int i = 0; i < x.Length; i++) this.vector[i] = x[i];
+        }
+        /// <summary>
+        /// Задать вектор массивом целых чисел
+        /// </summary>
+        /// <param name="c"></param>
+        public Vectors(int[] c)
+        {
+            vector = new double[c.Length];
+            for (int i = 0; i < c.Length; i++) this.vector[i] = c[i];
+        }
+        /// <summary>
+        /// Задать вектор по вектору-столбцу
+        /// </summary>
+        /// <param name="M"></param>
+        public Vectors(Matrix M)
+        {
+            this.vector = new double[M.n];
+            for (int i = 0; i < M.n; i++) this.vector[i] = M[i, 0];
+        }
+        /// <summary>
+        /// Вектор как кусок кругого вектора
+        /// </summary>
+        /// <param name="v">Образец</param>
+        /// <param name="a">Коэффициент начала из образца</param>
+        /// <param name="b">Коэффициент конца из образца</param>
+        public Vectors(Vectors v, int a, int b)
+        {
+            int n = b - a + 1;
+            this.vector = new double[n];
+            for (int i = 0; i < n; i++) this[i] = v[a + i];
+        }
+        /// <summary>
+        /// Метод, обратный ToString
+        /// </summary>
+        /// <param name="s"></param>
+        public Vectors(string s)
+        {
+            string[] st = s.Replace('(', ' ').Replace(')', ' ').Split(new char[] { ' ', '\t' }, StringSplitOptions.RemoveEmptyEntries);
+           int n = st.Length;
+            vector = new double[n];
+            for (int i = 0; i < n; i++)
+                vector[i] = st[i].ToDouble();
+        }
+        #endregion
+
+        #region Преобразования
+        public static implicit operator Vectors(double[] x) => new Vectors(x);
+        public static explicit operator double[] (Vectors v) => ToDoubleMas(v);
+        public static explicit operator Complex[] (Vectors v)
+        {
+            Complex[] res = new Complex[v.Deg];
+            for (int i = 0; i < res.Length; i++)
+                res[i] = new Complex(v[i]);
+            return res;
+        }
+        #endregion
+
+        #region Методы
+        /// <summary>
+        /// Находятся ли все значения вектора в указанно промежутке
+        /// </summary>
+        /// <param name="beg"></param>
+        /// <param name="end"></param>
+        /// <returns></returns>
+        public bool IsIn(double beg,double end)
+        {
+            for (int i = 0; i < Deg; i++)
+                if (vector[i] < beg || vector[i] > end)
+                    return false;
+            return true;
+        }
+        /// <summary>
+        /// Отклонение элемента от среднего значения
+        /// </summary>
+        /// <param name="i">Номер элемента</param>
+        /// <returns></returns>
+        public double Av(int i) { return Math.Abs(this[i] - this.ArithmeticAv); }
+
         /// <summary>
         /// Вывести истинное значение величины на консоль
         /// </summary>
@@ -148,170 +375,7 @@ namespace МатКлассы
             Console.WriteLine("Истинное значение величины:"); this.TrueValShow();
 
         }
-        /// <summary>
-        /// Максимальное значение
-        /// </summary>
-        public double Max
-        {
-            get
-            {
-                double t = vector[0];
-                for (int i = 1; i < n; i++)
-                    if (vector[i] > t) t = vector[i];
-                return t;
-            }
-        }
-        /// <summary>
-        /// Минимальное значение
-        /// </summary>
-        public double Min
-        {
-            get
-            {
-                double t = vector[0];
-                for (int i = 1; i < n; i++)
-                    if (vector[i] < t) t = vector[i];
-                return t;
-            }
-        }
-        /// <summary>
-        /// Отсортированный вектор
-        /// </summary>
-        public Vectors Sort
-        {
-            get
-            {
-                Vectors e = new Vectors(this);
-                Array.Sort(e.vector);
-                return e;
-            }
-        }
 
-        /// <summary>
-        /// Последний элемент вектора
-        /// </summary>
-        public double LastElement => vector.Last();
-
-        #region Конструкторы
-        /// <summary>
-        /// Вектор (0)
-        /// </summary>
-        public Vectors()
-        {
-            this.n = 0;
-            this.vector = new double[n];
-        }
-        /// <summary>
-        /// Нулевой вектор
-        /// </summary>
-        /// <param name="n">Размерность вектора</param>
-        public Vectors(int n)
-        {
-            this.n = n;
-            this.vector = new double[n];
-        }
-        /// <summary>
-        /// Вектор, заполненный одинаковыми числами
-        /// </summary>
-        /// <param name="n">Размерность вектора</param>
-        /// <param name="c">Конпонент вектора</param>
-        public Vectors(int n, double c) : this(n)
-        {
-            for (int i = 0; i < n; i++) this[i] = c;
-        }
-        /// <summary>
-        /// Считать вектор из файла
-        /// </summary>
-        /// <param name="fs"></param>
-        public Vectors(StreamReader fs)
-        {
-            string s = fs.ReadLine();
-            string[] st = s.Split(' ');
-            this.n = st.Length;
-            this.vector = new double[n];
-            for (int i = 0; i < this.n; i++) this.vector[i] = Convert.ToDouble(st[i]);
-            fs.Close();
-        }
-        /// <summary>
-        /// Конструктор копирования
-        /// </summary>
-        /// <param name="V"></param>
-        public Vectors(Vectors V)
-        {
-            this.n = V.n;
-            this.vector = new double[V.n];
-            for (int i = 0; i < V.n; i++) this[i] = V[i];
-        }
-        /// <summary>
-        /// Задать вектор перечислением координат или массивом
-        /// </summary>
-        /// <param name="x"></param>
-        public Vectors(params double[] x)
-        {
-            this.n = x.Length;
-            vector = new double[x.Length];
-            for (int i = 0; i < x.Length; i++) this.vector[i] = x[i];
-        }
-        /// <summary>
-        /// Задать вектор массивом целых чисел
-        /// </summary>
-        /// <param name="c"></param>
-        public Vectors(int[] c)
-        {
-            this.n = c.Length;
-            vector = new double[c.Length];
-            for (int i = 0; i < c.Length; i++) this.vector[i] = c[i];
-        }
-        /// <summary>
-        /// Задать вектор по вектору-столбцу
-        /// </summary>
-        /// <param name="M"></param>
-        public Vectors(Matrix M)
-        {
-            this.n = M.n;
-            this.vector = new double[this.n];
-            for (int i = 0; i < M.n; i++) this.vector[i] = M[i, 0];
-        }
-        /// <summary>
-        /// Вектор как кусок кругого вектора
-        /// </summary>
-        /// <param name="v">Образец</param>
-        /// <param name="a">Коэффициент начала из образца</param>
-        /// <param name="b">Коэффициент конца из образца</param>
-        public Vectors(Vectors v, int a, int b)
-        {
-            this.n = b - a + 1;
-            this.vector = new double[n];
-            for (int i = 0; i < n; i++) this[i] = v[a + i];
-        }
-        /// <summary>
-        /// Метод, обратный ToString
-        /// </summary>
-        /// <param name="s"></param>
-        public Vectors(string s)
-        {
-            string[] st = s.Replace('(', ' ').Replace(')', ' ').Split(new char[] { ' ', '\t' }, StringSplitOptions.RemoveEmptyEntries);
-            n = st.Length;
-            vector = new double[n];
-            for (int i = 0; i < n; i++)
-                vector[i] = st[i].ToDouble();
-        }
-        #endregion
-
-
-        public Vectors dup => new Vectors(this);
-
-        public static implicit operator Vectors(double[] x) => new Vectors(x);
-        public static explicit operator double[] (Vectors v) => ToDoubleMas(v);
-        public static explicit operator Complex[] (Vectors v)
-        {
-            Complex[] res = new Complex[v.Deg];
-            for (int i = 0; i < res.Length; i++)
-                res[i] = new Complex(v[i]);
-            return res;
-        }
-
-        //методы
         /// <summary>
         /// Перевести вектор в массив чисел
         /// </summary>
@@ -319,8 +383,8 @@ namespace МатКлассы
         /// <returns></returns>
         public static double[] ToDoubleMas(Vectors x)
         {
-            double[] r = new double[x.n];
-            for (int i = 0; i < x.n; i++) r[i] = x[i];
+            double[] r = new double[x.Deg];
+            for (int i = 0; i < x.Deg; i++) r[i] = x[i];
             return r;
         }
         /// <summary>
@@ -330,7 +394,7 @@ namespace МатКлассы
         /// <returns></returns>
         public bool Contain(double x)
         {
-            for (int i = 0; i < this.n; i++)
+            for (int i = 0; i < this.Deg; i++)
                 if (this[i] == x) return true;
             return false;
         }
@@ -342,16 +406,16 @@ namespace МатКлассы
         public static Vectors Merge(params Vectors[] v)
         {
             int l = 0;
-            for (int i = 0; i < v.Length; i++) l += v[i].n;
+            for (int i = 0; i < v.Length; i++) l += v[i].Deg;
             l -= v.Length - 1;
             Vectors r = new Vectors(l);
             r[0] = v[0].vector[0];
             int k = 0;
             for (int i = 0; i < v.Length; i++)
             {
-                for (int j = 1; j < v[i].n; j++)
+                for (int j = 1; j < v[i].Deg; j++)
                     r[k + j] = v[i].vector[j];
-                k += v[i].n - 1;
+                k += v[i].Deg - 1;
             }
 
             return r;
@@ -363,8 +427,8 @@ namespace МатКлассы
         /// <returns></returns>
         public static bool IsSimpleCycle(Vectors v)
         {
-            if (v[0] != v[v.n - 1]) return false;
-            double[] x = new double[v.n - 1];
+            if (v[0] != v[v.Deg - 1]) return false;
+            double[] x = new double[v.Deg - 1];
             for (int i = 0; i < x.Length; i++) x[i] = v[i + 1];
             Array.Sort(x);
             for (int i = 0; i < x.Length - 1; i++)
@@ -376,22 +440,20 @@ namespace МатКлассы
         /// <summary>
         /// Задать коэффициенты через консоль
         /// </summary>
-        public virtual void CreateMatrix()
+        public  void CreateMatrix()
         {
-
-            for (int i = 0; i < n; i++)
+            for (int i = 0; i < this.Deg; i++)
             {
                 Console.Write("Введите элемент [" + i.ToString() + "]" + "\t");
                 vector[i] = Convert.ToDouble(Console.ReadLine());
             }
-
         }
         /// <summary>
         /// Вывести вектор на консоль
         /// </summary>
-        public virtual void PrintMatrix()
+        public  void PrintMatrix()
         {
-            for (int i = 0; i < n; i++)
+            for (int i = 0; i < this.Deg; i++)
             {
                 Console.Write(vector[i].ToString() + " \t");
             }
@@ -401,13 +463,11 @@ namespace МатКлассы
         /// Нулевой ли вектор?
         /// </summary>
         /// <returns></returns>
-        public virtual bool Nulle()
+        public  bool Nulle()
         {
-            for (int i = 0; i < n; i++)
-            {
-                if (vector[i] != 0) return false;
-            }
-
+            for (int i = 0; i < this.Deg; i++)           
+               if (vector[i] != 0)
+                    return false;           
             return true;
         }
         /// <summary>
@@ -417,12 +477,10 @@ namespace МатКлассы
         public override string ToString()
         {
             string s = "( ";
-            for (int i = 0; i < this.n; i++) s += String.Format("\t{0} ", this[i].ToRString());
+            for (int i = 0; i < this.Deg; i++) s += String.Format("\t{0} ", this[i].ToRString());
             s += "\t)";
             return s;
         }
-
-
 
         /// <summary>
         /// Перевод вектора (все координаты которого увеличены на 1) в строку
@@ -431,7 +489,7 @@ namespace МатКлассы
         public string ToStringPlusOne()
         {
             string s = "( ";
-            for (int i = 0; i < this.n; i++) s += String.Format("\t{0} ", this[i] + 1);
+            for (int i = 0; i < this.Deg; i++) s += String.Format("\t{0} ", this[i] + 1);
             s += "\t)";
             return s;
         }
@@ -442,7 +500,7 @@ namespace МатКлассы
         public string ToRationalString()
         {
             string s = "( ";
-            for (int i = 0; i < this.n; i++) s += String.Format("{0} ", Number.Rational.ToRational(this[i]));
+            for (int i = 0; i < this.Deg; i++) s += String.Format("{0} ", Number.Rational.ToRational(this[i]));
             s += ")";
             return s;
         }
@@ -453,7 +511,7 @@ namespace МатКлассы
         public string ToRationalStringTab()
         {
             string s = "( ";
-            for (int i = 0; i < this.n; i++) s += String.Format("\t{0} ", Number.Rational.ToRational(this[i]));
+            for (int i = 0; i < this.Deg; i++) s += String.Format("\t{0} ", Number.Rational.ToRational(this[i]));
             s += "\t)";
             return s;
         }
@@ -482,7 +540,7 @@ namespace МатКлассы
         /// <param name="lines"></param>
         public static void Show(Vectors[] lines)
         {
-            Console.Write(" \t\tb "); for (int i = 1; i < lines[0].n; i++) Console.Write("\tx[{0}] ", i);
+            Console.Write(" \t\tb "); for (int i = 1; i < lines[0].Deg; i++) Console.Write("\tx[{0}] ", i);
             Console.WriteLine();
             for (int i = 0; i < lines.Length - 1; i++)
             {
@@ -498,7 +556,7 @@ namespace МатКлассы
         /// <param name="sf"></param>
         private static void Show(Vectors[] lines, StreamWriter sf)
         {
-            sf.Write(" \t\tb "); for (int i = 1; i < lines[0].n; i++) sf.Write("\tx[{0}] ", i);
+            sf.Write(" \t\tb "); for (int i = 1; i < lines[0].Deg; i++) sf.Write("\tx[{0}] ", i);
             sf.WriteLine();
             for (int i = 0; i < lines.Length - 1; i++)
             {
@@ -522,7 +580,7 @@ namespace МатКлассы
         }
         private static int NumberColumn(Vectors[] l, int k)
         {
-            for (int j = 1; j < l[0].n; j++)
+            for (int j = 1; j < l[0].Deg; j++)
                 if (l[k].vector[j] == 1)
                 {
                     int t = 0;
@@ -541,7 +599,7 @@ namespace МатКлассы
         public static void ShowRational(Vectors[] lines)
         {
             //for (int i = 0; i < lines.Length; i++) lines[i].ShowRational();
-            Console.Write(" \t\tb "); for (int i = 1; i < lines[0].n; i++) Console.Write("\tx[{0}] ", i);
+            Console.Write(" \t\tb "); for (int i = 1; i < lines[0].Deg; i++) Console.Write("\tx[{0}] ", i);
             Console.WriteLine();
             for (int i = 0; i < lines.Length - 1; i++)
             {
@@ -562,14 +620,14 @@ namespace МатКлассы
         {
             //чтение данных
             int k = 0;//число единиц
-            for (int i = 0; i < result.n; i++) if (result[i] != 0) k++;
+            for (int i = 0; i < result.Deg; i++) if (result[i] != 0) k++;
             Vectors[] lines = new Vectors[k + 1];
             for (int i = 0; i < k + 1; i++)
             {
-                lines[i] = new Vectors(result.n + 1);
+                lines[i] = new Vectors(result.Deg + 1);
                 string s = fs.ReadLine();
                 string[] st = s.Split(' ');
-                for (int j = 0; j < lines[i].n; j++) lines[i].vector[j] = Convert.ToDouble(st[j]);
+                for (int j = 0; j < lines[i].Deg; j++) lines[i].vector[j] = Convert.ToDouble(st[j]);
             }
             fs.Close();
             Console.WriteLine("Исходная сиплекс-таблица:");
@@ -599,7 +657,7 @@ namespace МатКлассы
             //отредактировать вектор решения
             //int t = 0;
 
-            //for (int j = 1; j < lines[0].n; j++)
+            //for (int j = 1; j < lines[0].Deg; j++)
             //{
             //    int zero = 0, one = 0;
             //    for (int i = 0; i < lines.Length; i++)
@@ -609,7 +667,7 @@ namespace МатКлассы
             //    else result[j - 1] = 0;
             //}
 
-            //for (int i = 0; i < result.n; i++) { if (result[i] != 0) { result[i] = lines[t].vector[0]; t++; } }
+            //for (int i = 0; i < result.Deg; i++) { if (result[i] != 0) { result[i] = lines[t].vector[0]; t++; } }
 
             result = new Vectors(Vectors.GetSolutionVec(lines));
             //result.Show();
@@ -658,7 +716,7 @@ namespace МатКлассы
             //отредактировать вектор решения
             //int t = 0;
 
-            //for (int j = 1; j < lines[0].n; j++)
+            //for (int j = 1; j < lines[0].Deg; j++)
             //{
             //    int zero = 0, one = 0;
             //    for (int i = 0; i < lines.Length; i++)
@@ -668,7 +726,7 @@ namespace МатКлассы
             //    else result[j - 1] = 0;
             //}
 
-            //for (int i = 0; i < result.n; i++) { if (result[i] != 0) { result[i] = lines[t].vector[0]; t++; } }
+            //for (int i = 0; i < result.Deg; i++) { if (result[i] != 0) { result[i] = lines[t].vector[0]; t++; } }
 
             result = new Vectors(Vectors.GetSolutionVec(lines));
 
@@ -689,7 +747,7 @@ namespace МатКлассы
         {
             int k = 0;
             double max = 0;
-            for (int j = 1; j < l[0].n; j++)
+            for (int j = 1; j < l[0].Deg; j++)
                 if (l[l.Length - 1].vector[j] < 0)
                     if (Math.Abs(l[l.Length - 1].vector[j]) > Math.Abs(max))
                     {
@@ -756,7 +814,7 @@ namespace МатКлассы
         private static int ExistInfinity(Vectors[] l)
         {
             int k = 0;
-            for (int j = 1; j < l[0].n; j++)
+            for (int j = 1; j < l[0].Deg; j++)
                 if (l[l.Length - 1].vector[j] < 0)
                 {
                     for (int i = 0; i < l.Length - 1; i++)
@@ -778,14 +836,14 @@ namespace МатКлассы
             //Считать таблицу
             //чтение данных
             int k = 0;//число единиц
-            for (int i = 0; i < result.n; i++) if (result[i] != 0) k++;
+            for (int i = 0; i < result.Deg; i++) if (result[i] != 0) k++;
             Vectors[] lines = new Vectors[k + 1];
             for (int i = 0; i < k + 1; i++)
             {
-                lines[i] = new Vectors(result.n + 1);
+                lines[i] = new Vectors(result.Deg + 1);
                 string s = fs.ReadLine();
                 string[] st = s.Split(' ');
-                for (int j = 0; j < lines[i].n; j++) lines[i].vector[j] = Convert.ToDouble(st[j]);
+                for (int j = 0; j < lines[i].Deg; j++) lines[i].vector[j] = Convert.ToDouble(st[j]);
             }
             fs.Close();
             //Найти решение обычным симплекс-методом
@@ -803,29 +861,29 @@ namespace МатКлассы
                 Vectors[] newlines = new Vectors[lines.Length + 1];
                 for (int i = 0; i < lines.Length - 1; i++)//Переписать строки до строки с функционалом
                 {
-                    newlines[i] = new Vectors(lines[0].n + 1);
-                    for (int j = 0; j < lines[0].n; j++) newlines[i].vector[j] = lines[i].vector[j];
-                    newlines[i].vector[lines[0].n] = 0;
+                    newlines[i] = new Vectors(lines[0].Deg + 1);
+                    for (int j = 0; j < lines[0].Deg; j++) newlines[i].vector[j] = lines[i].vector[j];
+                    newlines[i].vector[lines[0].Deg] = 0;
                 }
                 int tmp = Vectors.NumberOfNotIntDes(lines);//Номер строки, где решение не целочисленное
                 Console.WriteLine("----------За образец новой строки взята строка {0}", tmp + 1);
-                newlines[lines.Length - 1] = new Vectors(lines[0].n + 1);
-                newlines[lines.Length] = new Vectors(lines[0].n + 1);
+                newlines[lines.Length - 1] = new Vectors(lines[0].Deg + 1);
+                newlines[lines.Length] = new Vectors(lines[0].Deg + 1);
 
                 //Записать новую строку
-                for (int j = 0; j < lines[0].n; j++) newlines[lines.Length - 1].vector[j] = -(double)Number.Rational.ToRational(lines[tmp].vector[j]).FracPart;
-                newlines[lines.Length - 1].vector[lines[0].n] = 1;
+                for (int j = 0; j < lines[0].Deg; j++) newlines[lines.Length - 1].vector[j] = -(double)Number.Rational.ToRational(lines[tmp].vector[j]).FracPart;
+                newlines[lines.Length - 1].vector[lines[0].Deg] = 1;
                 //Переписать строку функции с изменением знака
-                for (int j = 0; j < lines[0].n; j++) newlines[lines.Length].vector[j] = -lines[lines.Length - 1].vector[j];
-                newlines[lines.Length].vector[lines[0].n] = 0;
+                for (int j = 0; j < lines[0].Deg; j++) newlines[lines.Length].vector[j] = -lines[lines.Length - 1].vector[j];
+                newlines[lines.Length].vector[lines[0].Deg] = 0;
                 //Записать новый вектор result
-                Vectors newresult = new Vectors(result.n + 1);
-                for (int i = 0; i < result.n; i++)
+                Vectors newresult = new Vectors(result.Deg + 1);
+                for (int i = 0; i < result.Deg; i++)
                 {
                     if (result[i] == 0) newresult[i] = result[i];
                     else newresult[i] = 1;
                 }
-                newresult[result.n] = /*newlines[lines.Length - 1].vector[0]*/1;
+                newresult[result.Deg] = /*newlines[lines.Length - 1].vector[0]*/1;
 
                 //Console.WriteLine("--------Новая таблица создана");
 
@@ -895,9 +953,9 @@ namespace МатКлассы
                 if (/*!*/Number.Rational.ToRational(l[i].vector[0]).IsFract())
                 {
                     int k = 1;
-                    for (int j = 1; j < l[0].n; j++)
+                    for (int j = 1; j < l[0].Deg; j++)
                         if (l[i].vector[j] == (int)l[i].vector[j]) k++;
-                    if (k == l[0].n) return true;
+                    if (k == l[0].Deg) return true;
                 }
             return false;
         }
@@ -910,10 +968,10 @@ namespace МатКлассы
         private static Vectors GetSolutionVec(Vectors[] lines)
         {
             //int t = 0;
-            Vectors r = new Vectors(lines[0].n - 1);
+            Vectors r = new Vectors(lines[0].Deg - 1);
             int ii = 0;
 
-            for (int j = 1; j < lines[0].n; j++)
+            for (int j = 1; j < lines[0].Deg; j++)
             {
                 int zero = 0, one = 0;
                 for (int i = 0; i < lines.Length; i++)
@@ -923,7 +981,7 @@ namespace МатКлассы
                 else r[j - 1] = 0;
             }
 
-            //for (int i = 0; i < r.n; i++)
+            //for (int i = 0; i < r.Deg; i++)
             //{
             //    if (r[i] != 0)
             //    {
@@ -947,7 +1005,7 @@ namespace МатКлассы
         private static void ShowRational(Vectors[] lines, StreamWriter sf)
         {
             //for (int i = 0; i < lines.Length; i++) lines[i].ShowRational();
-            sf.Write(" \t\tb "); for (int i = 1; i < lines[0].n; i++) sf.Write("\tx[{0}] ", i);
+            sf.Write(" \t\tb "); for (int i = 1; i < lines[0].Deg; i++) sf.Write("\tx[{0}] ", i);
             sf.WriteLine();
             for (int i = 0; i < lines.Length - 1; i++)
             {
@@ -968,14 +1026,14 @@ namespace МатКлассы
         {
             //чтение данных
             int k = 0;//число единиц
-            for (int i = 0; i < result.n; i++) if (result[i] != 0) k++;
+            for (int i = 0; i < result.Deg; i++) if (result[i] != 0) k++;
             Vectors[] lines = new Vectors[k + 1];
             for (int i = 0; i < k + 1; i++)
             {
-                lines[i] = new Vectors(result.n + 1);
+                lines[i] = new Vectors(result.Deg + 1);
                 string s = fs.ReadLine();
                 string[] st = s.Split(' ');
-                for (int j = 0; j < lines[i].n; j++) lines[i].vector[j] = Convert.ToDouble(st[j]);
+                for (int j = 0; j < lines[i].Deg; j++) lines[i].vector[j] = Convert.ToDouble(st[j]);
             }
             fs.Close();
             sf.WriteLine("Исходная сиплекс-таблица:");
@@ -1095,14 +1153,14 @@ namespace МатКлассы
             //Считать таблицу
             //чтение данных
             int k = 0;//число единиц
-            for (int i = 0; i < result.n; i++) if (result[i] != 0) k++;
+            for (int i = 0; i < result.Deg; i++) if (result[i] != 0) k++;
             Vectors[] lines = new Vectors[k + 1];
             for (int i = 0; i < k + 1; i++)
             {
-                lines[i] = new Vectors(result.n + 1);
+                lines[i] = new Vectors(result.Deg + 1);
                 string s = fs.ReadLine();
                 string[] st = s.Split(' ');
-                for (int j = 0; j < lines[i].n; j++) lines[i].vector[j] = Convert.ToDouble(st[j]);
+                for (int j = 0; j < lines[i].Deg; j++) lines[i].vector[j] = Convert.ToDouble(st[j]);
             }
             fs.Close();
             //Найти решение обычным симплекс-методом
@@ -1122,31 +1180,31 @@ namespace МатКлассы
                 Vectors[] newlines = new Vectors[lines.Length + 1];
                 for (int i = 0; i < lines.Length - 1; i++)//Переписать строки до строки с функционалом
                 {
-                    newlines[i] = new Vectors(lines[0].n + 1);
-                    for (int j = 0; j < lines[0].n; j++) newlines[i].vector[j] = lines[i].vector[j];
-                    newlines[i].vector[lines[0].n] = 0;
+                    newlines[i] = new Vectors(lines[0].Deg + 1);
+                    for (int j = 0; j < lines[0].Deg; j++) newlines[i].vector[j] = lines[i].vector[j];
+                    newlines[i].vector[lines[0].Deg] = 0;
                 }
                 int tmp = Vectors.NumberOfNotIntDes(lines);//Номер строки, где решение не целочисленное
                 sf.WriteLine("------------------------->За образец новой строки взята строка {0}", tmp + 1);
-                newlines[lines.Length - 1] = new Vectors(lines[0].n + 1);
-                newlines[lines.Length] = new Vectors(lines[0].n + 1);
+                newlines[lines.Length - 1] = new Vectors(lines[0].Deg + 1);
+                newlines[lines.Length] = new Vectors(lines[0].Deg + 1);
 
                 //Записать новую строку
-                for (int j = 0; j < lines[0].n; j++) newlines[lines.Length - 1].vector[j] = -(double)Number.Rational.ToRational(lines[tmp].vector[j]).FracPart;
-                newlines[lines.Length - 1].vector[lines[0].n] = 1;
+                for (int j = 0; j < lines[0].Deg; j++) newlines[lines.Length - 1].vector[j] = -(double)Number.Rational.ToRational(lines[tmp].vector[j]).FracPart;
+                newlines[lines.Length - 1].vector[lines[0].Deg] = 1;
                 //Переписать строку функции с изменением знака, если итерация первая (и без изменения знака в противном случае)
-                for (int j = 0; j < lines[0].n; j++)
+                for (int j = 0; j < lines[0].Deg; j++)
                     if (y + 1 == 1) newlines[lines.Length].vector[j] = -lines[lines.Length - 1].vector[j];
                     else newlines[lines.Length].vector[j] = lines[lines.Length - 1].vector[j];
-                newlines[lines.Length].vector[lines[0].n] = 0;
+                newlines[lines.Length].vector[lines[0].Deg] = 0;
                 //Записать новый вектор result
-                Vectors newresult = new Vectors(result.n + 1);
-                for (int i = 0; i < result.n; i++)
+                Vectors newresult = new Vectors(result.Deg + 1);
+                for (int i = 0; i < result.Deg; i++)
                 {
                     if (result[i] == 0) newresult[i] = result[i];
                     else newresult[i] = 1;
                 }
-                newresult[result.n] = /*newlines[lines.Length - 1].vector[0]*/1;
+                newresult[result.Deg] = /*newlines[lines.Length - 1].vector[0]*/1;
 
                 //sf.WriteLine("--------Новая таблица создана");
 
@@ -1225,7 +1283,7 @@ namespace МатКлассы
                         k = j;
                     }
             if (k >= 0)
-                for (int i = 1; i < l[0].n; i++)
+                for (int i = 1; i < l[0].Deg; i++)
                     if (l[k].vector[i] < 0) return k;
             return -1;
         }
@@ -1241,7 +1299,7 @@ namespace МатКлассы
             while (l[k].vector[t] >= 0) t++;
             double min = Math.Abs(l[l.Length - 1].vector[t] / l[k].vector[t]);//может возникнуть ошибка деления на 0
             int u = t;
-            for (int i = t + 1; i < l[0].n - 1; i++)
+            for (int i = t + 1; i < l[0].Deg - 1; i++)
             {
                 if (l[k].vector[i] < 0)
                 {
@@ -1294,7 +1352,7 @@ namespace МатКлассы
         {
             int k = 0;
             double max = 0;
-            for (int j = 1; j < l[0].n; j++)
+            for (int j = 1; j < l[0].Deg; j++)
                 if (l[l.Length - 1].vector[j] > 0)
                     if (Math.Abs(l[l.Length - 1].vector[j]) > Math.Abs(max))
                     {
@@ -1337,7 +1395,7 @@ namespace МатКлассы
         /// <remarks>Выбирается стобец с наибольшей по модулю отрицательной частью в конце</remarks>
         private static bool NotExistColumn(Vectors[] l)
         {
-            for (int j = 1; j < l[0].n; j++)
+            for (int j = 1; j < l[0].Deg; j++)
                 if (l[l.Length - 1].vector[j] > 0)
                 {
                     return false;
@@ -1353,7 +1411,7 @@ namespace МатКлассы
         /// <returns></returns>
         public static Matrix LinesToMatrix(Vectors[] l)
         {
-            Matrix A = new Matrix(l.Length, l[0].n);
+            Matrix A = new Matrix(l.Length, l[0].Deg);
             for (int i = 0; i < A.n; i++)
                 for (int j = 0; j < A.m; j++)
                     A[i, j] = l[i].vector[j];
@@ -1382,13 +1440,11 @@ namespace МатКлассы
         /// <returns></returns>
         public static bool ExistIntersection(Vectors a, Vectors b)
         {
-            for (int i = 0; i < a.n; i++)
-                for (int j = 0; j < b.n; j++)
+            for (int i = 0; i < a.Deg; i++)
+                for (int j = 0; j < b.Deg; j++)
                     if (a[i] == b[j]) return true;
             return false;
         }
-
-
         /// <summary>
         /// Быстрое прибавление вектора
         /// </summary>
@@ -1398,11 +1454,13 @@ namespace МатКлассы
             for (int i = 0; i < v.Deg; i++)
                 vector[i] += v[i];
         }
+        #endregion
 
+        #region Операторы
         public static Vectors operator +(Vectors A, Vectors B)
         {
-            Vectors C = new Vectors(A.n);
-            for (int i = 0; i < A.n; i++)
+            Vectors C = new Vectors(A.Deg);
+            for (int i = 0; i < A.Deg; i++)
             {
                 C[i] = A[i] + B[i];
             }
@@ -1411,13 +1469,13 @@ namespace МатКлассы
 
         public static Vectors operator +(Vectors a, Double b)
         {
-            return a + new Vectors(a.n, b);
+            return a + new Vectors(a.Deg, b);
         }
        
         public static Vectors operator -(Vectors A, Vectors B)
         {
-            Vectors R = new Vectors(A.n);
-            for (int i = 0; i < A.n; i++)
+            Vectors R = new Vectors(A.Deg);
+            for (int i = 0; i < A.Deg; i++)
             {
                 R[i] = A[i] - B[i];
             }
@@ -1426,8 +1484,8 @@ namespace МатКлассы
         }
         public static Vectors operator -(Vectors A)
         {
-            Vectors R = new Vectors(A.n);
-            for (int i = 0; i < A.n; i++)
+            Vectors R = new Vectors(A.Deg);
+            for (int i = 0; i < A.Deg; i++)
             {
                 R[i] = -A[i];
             }
@@ -1438,29 +1496,27 @@ namespace МатКлассы
         public static Vectors operator -(Vectors v, double c)
         {
             Vectors r = new Vectors(v);
-            for (int i = 0; i < r.n; i++)
+            for (int i = 0; i < r.Deg; i++)
                 r[i] -= c;
             return r;
         }
         public static Vectors operator -(double c, Vectors v) => -(v - c);
-
-        
+       
         public static double operator *(Vectors A, Vectors B)
         {
             double sum = 0;
-            for (int i = 0; i < A.n; i++)
+            for (int i = 0; i < A.Deg; i++)
             {
                 sum += A[i] * B[i];
 
             }
             return sum;
         }
-
-       
+      
         public static Vectors operator *(Vectors A, double Ch)
         {
-            Vectors q = new Vectors(A.n);
-            for (int i = 0; i < A.n; i++)
+            Vectors q = new Vectors(A.Deg);
+            for (int i = 0; i < A.Deg; i++)
             {
                 q[i] = A[i] * Ch;
             }
@@ -1476,8 +1532,8 @@ namespace МатКлассы
 
         //public static bool operator ==(Vectors a, Vectors b)
         //{
-        //    if (a.n != b.n) throw new Exception("Векторы не совпадают по длине!");
-        //    for (int i = 0; i < a.n; i++)
+        //    if (a.Deg != b.Deg) throw new Exception("Векторы не совпадают по длине!");
+        //    for (int i = 0; i < a.Deg; i++)
         //        if (a[i] != b[i]) return false;
         //    return true;
         //}
@@ -1491,51 +1547,57 @@ namespace МатКлассы
         /// <returns></returns>
         public static bool operator ==(Vectors a, double Ch)
         {
-            for (int i = 0; i < a.n; i++)
+            for (int i = 0; i < a.Deg; i++)
                 if (a[i] != Ch) return false;
             return true;
         }
         public static bool operator !=(Vectors a, double b) { return !(a == b); }
         public static bool operator >(Vectors a, double Ch)
         {
-            for (int i = 0; i < a.n; i++)
+            for (int i = 0; i < a.Deg; i++)
                 if (a[i] <= Ch) return false;
             return true;
         }
         public static bool operator <(Vectors a, double Ch)
         {
-            for (int i = 0; i < a.n; i++)
+            for (int i = 0; i < a.Deg; i++)
                 if (a[i] >= Ch) return false;
             return true;
         }
+        #endregion
 
-        public bool Equals(object vv)
+
+        public override bool Equals(object vv)
         {
             Vectors v = vv as Vectors;
-            if (this.n != v.n) return false;
-            for (int i = 0; i < v.n; i++)
+            if (this.Deg != v.Deg) return false;
+            for (int i = 0; i < v.Deg; i++)
                 if (this.vector[i] != v[i]) return false;
             return true;
         }
-
-        /// <summary>
-        /// Евклидова норма вектора
-        /// </summary>
-        public double EuqlidNorm
+        public override int GetHashCode()
         {
-            get
-            {
-                double s = 0;
-                for (int i = 0; i < this.n; i++)
-                    s += vector[i] * vector[i];
-                return Math.Sqrt(s) / this.Deg;
-            }
+            var hashCode = 1350185542;
+            hashCode = hashCode * -1521134295 + this.Deg.GetHashCode();
+            hashCode = hashCode * -1521134295 + EqualityComparer<double[]>.Default.GetHashCode(vector);
+            hashCode = hashCode * -1521134295 + Deg.GetHashCode();
+            hashCode = hashCode * -1521134295 + EqualityComparer<double[]>.Default.GetHashCode(DoubleMas);
+            hashCode = hashCode * -1521134295 + ArithmeticAv.GetHashCode();
+            hashCode = hashCode * -1521134295 + Average.GetHashCode();
+            hashCode = hashCode * -1521134295 + RelAc.GetHashCode();
+            hashCode = hashCode * -1521134295 + EqualityComparer<Vectors>.Default.GetHashCode(RelAcVec);
+            hashCode = hashCode * -1521134295 + EqualityComparer<Vectors>.Default.GetHashCode(RelAcSqr);
+            hashCode = hashCode * -1521134295 + Max.GetHashCode();
+            hashCode = hashCode * -1521134295 + Min.GetHashCode();
+            hashCode = hashCode * -1521134295 + EqualityComparer<Vectors>.Default.GetHashCode(Sort);
+            hashCode = hashCode * -1521134295 + EuqlidNorm.GetHashCode();
+            hashCode = hashCode * -1521134295 + EqualityComparer<Vectors>.Default.GetHashCode(AbsVector);
+            hashCode = hashCode * -1521134295 + MaxAbs.GetHashCode();
+            hashCode = hashCode * -1521134295 + MinAbs.GetHashCode();
+            hashCode = hashCode * -1521134295 + EqualityComparer<Vectors>.Default.GetHashCode(ToAver);
+            hashCode = hashCode * -1521134295 + EqualityComparer<Vectors>.Default.GetHashCode(ToAverDel);
+            return hashCode;
         }
-
-        /// <summary>
-        /// Возвращает нормированный вектор
-        /// </summary>
-        public Vectors Normalizing => this.dup / this.EuqlidNorm;
 
         /// <summary>
         /// Евклидово расстояние между векторами
@@ -1545,56 +1607,6 @@ namespace МатКлассы
         /// <returns></returns>
         public static double Distance(Vectors v1, Vectors v2) => (v1 - v2).EuqlidNorm;
 
-
-        /// <summary>
-        /// Вектор модулей
-        /// </summary>
-        public Vectors AbsVector
-        {
-            get
-            {
-                Vectors r = new Vectors(this);
-                for (int i = 0; i < r.n; i++)
-                    r[i] = r[i].Abs();
-                return r;
-            }
-        }
-        /// <summary>
-        /// Максимальный элемент по модулю
-        /// </summary>
-        public double MaxAbs => AbsVector.Max;
-        /// <summary>
-        /// Минимальный элемент по модулю
-        /// </summary>
-        public double MinAbs => AbsVector.Min;
-        /// <summary>
-        /// Усреднённый вектор
-        /// </summary>
-        public Vectors ToAver
-        {
-            get
-            {
-                Vectors res = new Vectors(this);
-                double a = res.ArithmeticAv;
-                for (int i = 0; i < res.n; i++)
-                    res[i] -= a;
-                return res;
-            }
-        }
-        /// <summary>
-        /// Вектор, делённый на своё среднее
-        /// </summary>
-        public Vectors ToAverDel
-        {
-            get
-            {
-                Vectors res = new Vectors(this);
-                double a = res.ArithmeticAv;
-                for (int i = 0; i < res.n; i++)
-                    res[i] /= a;
-                return res;
-            }
-        }
         /// <summary>
         /// Смешение векторов abcd и xyz в вектор axbyczd
         /// </summary>
@@ -1603,12 +1615,12 @@ namespace МатКлассы
         /// <returns></returns>
         public static Vectors Mix(Vectors a, Vectors b)
         {
-            Vectors v = new Vectors(a.n + b.n);
+            Vectors v = new Vectors(a.Deg + b.Deg);
             int aa = 0, bb = 0, i = 0;
-            while (i < v.n)
+            while (i < v.Deg)
             {
-                if (aa < a.n) { v[i] = a[aa++]; i++; }
-                if (bb < b.n) { v[i] = b[bb++]; i++; }
+                if (aa < a.Deg) { v[i] = a[aa++]; i++; }
+                if (bb < b.Deg) { v[i] = b[bb++]; i++; }
 
             }
             return v;
@@ -1622,8 +1634,7 @@ namespace МатКлассы
         {
             double[] mas = Expendator.Union(this.DoubleMas, v.DoubleMas);
             mas = mas.Distinct().ToArray();
-            Array.Sort(mas);//new Vectors(mas).Show();
-            this.n = mas.Length;
+            Array.Sort(mas);
             this.vector = new double[mas.Length];
             for (int i = 0; i < mas.Length; i++)
                 this.vector[i] = mas[i];
@@ -1671,30 +1682,7 @@ namespace МатКлассы
             return Union(mas);
         }
 
-        public override int GetHashCode()
-        {
-            var hashCode = 1350185542;
-            hashCode = hashCode * -1521134295 + n.GetHashCode();
-            hashCode = hashCode * -1521134295 + EqualityComparer<double[]>.Default.GetHashCode(vector);
-            hashCode = hashCode * -1521134295 + Deg.GetHashCode();
-            hashCode = hashCode * -1521134295 + EqualityComparer<double[]>.Default.GetHashCode(DoubleMas);
-            hashCode = hashCode * -1521134295 + ArithmeticAv.GetHashCode();
-            hashCode = hashCode * -1521134295 + Average.GetHashCode();
-            hashCode = hashCode * -1521134295 + RelAc.GetHashCode();
-            hashCode = hashCode * -1521134295 + EqualityComparer<Vectors>.Default.GetHashCode(RelAcVec);
-            hashCode = hashCode * -1521134295 + EqualityComparer<Vectors>.Default.GetHashCode(RelAcSqr);
-            hashCode = hashCode * -1521134295 + Max.GetHashCode();
-            hashCode = hashCode * -1521134295 + Min.GetHashCode();
-            hashCode = hashCode * -1521134295 + EqualityComparer<Vectors>.Default.GetHashCode(Sort);
-            hashCode = hashCode * -1521134295 + EuqlidNorm.GetHashCode();
-            hashCode = hashCode * -1521134295 + EqualityComparer<Vectors>.Default.GetHashCode(AbsVector);
-            hashCode = hashCode * -1521134295 + MaxAbs.GetHashCode();
-            hashCode = hashCode * -1521134295 + MinAbs.GetHashCode();
-            hashCode = hashCode * -1521134295 + EqualityComparer<Vectors>.Default.GetHashCode(ToAver);
-            hashCode = hashCode * -1521134295 + EqualityComparer<Vectors>.Default.GetHashCode(ToAverDel);
-            return hashCode;
-        }
-
+       
         /// <summary>
         /// Покомпонентное произведение векторов
         /// </summary>
@@ -1890,7 +1878,7 @@ namespace МатКлассы
             get
             {
                 double d = Math.Abs(this[1] - this[0]);
-                for(int i=2;i<n;i++)
+                for(int i=2;i< this.Deg; i++)
                 {
                     double c= Math.Abs(this[i] - this[i-1]);
                     if (c < d) d = c;
@@ -1929,7 +1917,6 @@ namespace МатКлассы
         public static Vectors CreateFast(double[] m)
         {
             Vectors r = new Vectors();
-            r.n = m.Length;
             r.vector = m;
             return r;
         }
@@ -1967,6 +1954,7 @@ namespace МатКлассы
 
 
         }
+
     }
 
     /// <summary>

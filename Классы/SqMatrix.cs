@@ -432,9 +432,9 @@ namespace МатКлассы
         public SqMatrix ColumnSwap(int ColumnNumber, Vectors NewColumn)
         {
             SqMatrix mat = new SqMatrix(this);
-            if (ColumnNumber > mat.ColCount || ColumnNumber <= 0 || NewColumn.n > mat.RowCount) throw new Exception("В матрице нет столбца с таким номером либо вектор слишком длинный");
+            if (ColumnNumber > mat.ColCount || ColumnNumber <= 0 || NewColumn.Deg > mat.RowCount) throw new Exception("В матрице нет столбца с таким номером либо вектор слишком длинный");
             ColumnNumber--;
-            for (int i = 0; i < NewColumn.n; i++)
+            for (int i = 0; i < NewColumn.Deg; i++)
                 mat[i, ColumnNumber] = NewColumn[i];
             return mat;
         }
@@ -520,11 +520,11 @@ namespace МатКлассы
         public static SqMatrix operator /(SqMatrix A, double Ch) { return A * (1 / Ch); }
         public static Vectors operator *(SqMatrix A, Vectors v)
         {
-            if (v.n != A.ColCount) v=Vectors.Union(new Vectors[] {v, new Vectors(A.ColCount - v.n, 0.0) });
+            if (v.Deg != A.ColCount) v=Vectors.Union(new Vectors[] {v, new Vectors(A.ColCount - v.Deg, 0.0) });
             Matrix V = new Matrix(v);
             Matrix res = A * V;
-            Vectors w = new Vectors(v.n);
-            for (int i = 0; i < v.n; i++)
+            Vectors w = new Vectors(v.Deg);
+            for (int i = 0; i < v.Deg; i++)
                 w[i] = res[i, 0];
             return w;
         }
