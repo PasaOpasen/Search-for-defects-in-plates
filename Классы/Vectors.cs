@@ -1388,8 +1388,17 @@ namespace МатКлассы
             return false;
         }
 
-        //операторы
-        //сложение
+
+        /// <summary>
+        /// Быстрое прибавление вектора
+        /// </summary>
+        /// <param name="v"></param>
+        public void FastAdd(Vectors v)
+        {
+            for (int i = 0; i < v.Deg; i++)
+                vector[i] += v[i];
+        }
+
         public static Vectors operator +(Vectors A, Vectors B)
         {
             Vectors C = new Vectors(A.n);
@@ -1404,7 +1413,7 @@ namespace МатКлассы
         {
             return a + new Vectors(a.n, b);
         }
-        //вычитание
+       
         public static Vectors operator -(Vectors A, Vectors B)
         {
             Vectors R = new Vectors(A.n);
@@ -1435,7 +1444,7 @@ namespace МатКлассы
         }
         public static Vectors operator -(double c, Vectors v) => -(v - c);
 
-        //произведение (скалярное)
+        
         public static double operator *(Vectors A, Vectors B)
         {
             double sum = 0;
@@ -1447,7 +1456,7 @@ namespace МатКлассы
             return sum;
         }
 
-        //Умножение на число
+       
         public static Vectors operator *(Vectors A, double Ch)
         {
             Vectors q = new Vectors(A.n);
@@ -1458,7 +1467,7 @@ namespace МатКлассы
             return q;
         }
         public static Vectors operator *(double Ch, Vectors A) { return A * Ch; }
-        //деление на число
+        
         public static Vectors operator /(Vectors A, double Ch)
         {
             if (Ch == 0) throw new DivideByZeroException("Деление на ноль!");

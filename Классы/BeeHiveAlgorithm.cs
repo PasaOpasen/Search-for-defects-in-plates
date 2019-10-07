@@ -200,23 +200,19 @@ namespace МатКлассы
             /// <param name="parallel"></param>
             public void MakeStep(double w=0.3, double fp=2, double fg=5,bool parallel=true)
             {
-                Parallel.For(0, bees.Length, (int i) => { 
-                //for(int i=0;i<bees.Length;i++)
-                //{
+                void Iter(int i)
+                {
                     bees[i].RecalcV(w, fp, fg, this.g);
                     bees[i].Move();
-                //}
-                });
-                if (!parallel)
-                    for (int i = 0; i < bees.Length; i++)
-                    {
-                        bees[i].ReCount();
-                    }
-                else
-                    Parallel.For(0, bees.Length, (int i) => {
-                        bees[i].ReCount();
-                    });
+                    bees[i].ReCount();
+                }
 
+                if (parallel)
+                    Parallel.For(0, bees.Length, (int i) => Iter(i));
+                else
+                    for (int i = 0; i < bees.Length; i++)
+                        Iter(i);
+                
                 ReCount();
             }
         }
@@ -318,16 +314,13 @@ namespace МатКлассы
                     rg[i] = r.NextDouble();
                 }
 
-                v =2*w * (v + fp * Vectors.CompMult(rp, p - x) + fg * Vectors.CompMult(rg, g - x))/Math.Abs(2-fi-Math.Sqrt(fi*(fi-4)));
+                v =2*w/Math.Abs(2-fi-Math.Sqrt(fi*(fi-4))) * (v + fp * Vectors.CompMult(rp, p - x) + fg * Vectors.CompMult(rg, g - x));
             }
 
             /// <summary>
             /// Сделать шаг по скорости
             /// </summary>
-            public void Move()
-            {
-                x =x+v;
-            }
+            public void Move() => x.FastAdd(v);
 
             /// <summary>
             /// Переопределить наилучшее положение частицы, если можно
