@@ -28,11 +28,6 @@ namespace Работа2019
         {
             name = Name;
 
-            if (Val == null)
-                GetValue = null;
-            else
-            GetValue = (Point p) => Val(Dist(p));
-
             L = Point.Eudistance(SourceCenter, SensorCenter);
             if (s < L)
                 throw new ArgumentException($"s < L !!! ({s} < {L})");
@@ -48,6 +43,12 @@ namespace Работа2019
             tau = Math.Atan((focSensor.y - focSource.y) / (focSensor.x - focSource.x));
             if (focSensor.x < focSource.x)
                 tau += Math.PI;
+
+
+            if (Val == null)
+                GetValue = null;
+            else
+            GetValue = (Point p) => Val(Dist(p));
         }
 
         public Point[] GetPointArray(int count)
@@ -74,14 +75,32 @@ namespace Работа2019
         /// <param name="list"></param>
         public static void WriteInFile(string filename, IEnumerable<EllipseParam> list) => Expendator.WriteInFile(filename, list.Select(l => l.ToString()).ToArray());
 
-
-        public static void GetSurfaces(EllipseParam[] array, NetOnDouble X,NetOnDouble Y)
+        /// <summary>
+        /// Создать графики по эллипсам
+        /// </summary>
+        /// <param name="array"></param>
+        /// <param name="X"></param>
+        /// <param name="Y"></param>
+        /// <param name="shortname"></param>
+        /// <returns></returns>
+        public async static Task GetSurfaces(EllipseParam[] array, NetOnDouble X,NetOnDouble Y, string shortname)
         {
             var mas = array.Where(e => e.GetValue != null).ToArray();
             if (mas.Length == 0)
                 return;
 
+            Func<double,double, double> S = (double x,double y) =>
+               {
+                   Point p = new Point(x, y);
+                   double sum = mas[0].GetValue(p);
+                   for (int i = 1; i < mas.Length; i++)
+                       sum += mas[i].GetValue(p);
+                   return sum;
+               };
 
+            await Библиотека_графики.Create3DGrafics.JustGetGraficInFiles(shortname, shortname, S, X, Y, 
+                new Progress<int>(), new System.Threading.CancellationToken(), 
+                new Библиотека_графики.StringsForGrafic("Gauss"), Библиотека_графики.Create3DGrafics.GraficType.Pdf, true);
         }
     }
 }
