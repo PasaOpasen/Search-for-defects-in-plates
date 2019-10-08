@@ -23,7 +23,7 @@ namespace Работа2019
 
         private static string symbols;
         private Source[] sources;
-        private double wmin, wmax, tmin, tmax, epsForWaveletValues = 1e-8;
+        private double wmin, wmax, tmin, tmax, epsForWaveletValues = 1e-8,sd;
         private int wcount, tcount, byevery, pointcount, pointmax, pointmax2;
         private NetOnDouble W, T;
 
@@ -209,6 +209,7 @@ namespace Работа2019
             W = new NetOnDouble(wmin, wmax, wcount);
             T = new NetOnDouble(tmin, tmax, tcount);
             epsForWaveletValues = textBox5.Text.ToDouble();
+            sd = textBox6.Text.ToDouble();
 
             all = wcount * tcount;
 
@@ -354,7 +355,8 @@ namespace Работа2019
                         MyWavelet, wheredata[i], byevery, epsForWaveletValues,
                         pointcount, pointmax, pointmax2);
 
-                    ItElleps[k] = new EllipseParam(otherSources[k].Center, itSource.Center, Functions.GetFockS(tuple), Библиотека_графики.Other.colors[i], savename);
+                    double s = Functions.GetFockS(tuple);
+                    ItElleps[k] = new EllipseParam(otherSources[k].Center, itSource.Center, s, Библиотека_графики.Other.colors[i], savename,FuncMethods.GaussBell(s,sd));
                     AddToScheme(ItElleps[k]);
                     Debug.WriteLine(ItElleps[k]);
 
@@ -392,6 +394,10 @@ namespace Работа2019
             EllipseParam.WriteInFile("Ellipses.txt", param);
             if (scheme.IsDisposed)
                 new Scheme(sources, param.ToArray(), "Схема для всех замеров").Show();
+
+            NetOnDouble XX = new NetOnDouble(textBox7.Text.ToDouble(), textBox8.Text.ToDouble(), numericUpDown7.Value.ToInt32());
+            NetOnDouble YY = new NetOnDouble(textBox9.Text.ToDouble(), textBox10.Text.ToDouble(), numericUpDown7.Value.ToInt32());
+            EllipseParam.GetSurfaces(param.ToArray(), XX, YY);
         }
     }
 }

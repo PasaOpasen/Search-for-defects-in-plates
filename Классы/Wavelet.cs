@@ -240,6 +240,7 @@ namespace МатКлассы
                Math.Min(farr.Length - 1, inds.Item2));
             //var f = farr;
             int n = (f.Length - 1) / 2;
+            int up = Math.Min( 150,n-1);
 
             //tex: $Wf(a,b) = \dfrac{1}{|a|^{0.5}} \int_{-\infty}^{\infty} f(t) {\bar \psi(\dfrac{t-b}{a}) dt}$, еще написано, что a>0, но тогда зачем модуль
             Func<double, double, Complex> s;
@@ -268,8 +269,7 @@ namespace МатКлассы
                 {
                     if (a == 0) return 0;
                     double con = h3 / Math.Sqrt(Math.Abs(a));
-                    int up = Math.Min( 150,n-1);
-
+                   
                     Complex sum0 = f[0].y * this.Mother((f[0].x - b) / a) + f[f.Length - 1].y * this.Mother((f[f.Length - 1].x - b) / a);
                     Complex sum = 0;
                     Complex tmp;

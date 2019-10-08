@@ -138,6 +138,21 @@ namespace МатКлассы
                 return val;
             };
         }
+
+        /// <summary>
+        /// Колокол Гаусса
+        /// </summary>
+        /// <param name="mean"></param>
+        /// <param name="sd"></param>
+        /// <returns></returns>
+        public static Func<double,double> GaussBell(double mean=0,double sd=1)
+        {
+            double a = 1.0 / (sd * Math.Sqrt(2 * Math.PI));
+            double s2 = -2 * sd * sd;
+            double sqr(double x) => x * x;
+            return (double t) => a * Math.Exp(sqr(t) * s2);
+
+        }
         #endregion
 
         /// <summary>
