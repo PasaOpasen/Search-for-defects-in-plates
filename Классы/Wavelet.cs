@@ -268,17 +268,26 @@ namespace МатКлассы
                 {
                     if (a == 0) return 0;
                     double con = h3 / Math.Sqrt(Math.Abs(a));
+                    int up = Math.Min( 150,n-1);
 
                     Complex sum0 = f[0].y * this.Mother((f[0].x - b) / a) + f[f.Length - 1].y * this.Mother((f[f.Length - 1].x - b) / a);
                     Complex sum = 0;
                     Complex tmp;
                     int i2;
-                    for (int i = 1; i <= n - 1; i++)
+                    void niter(int i)
                     {
                         i2 = 2 * i;
                         tmp = this.Mother((f[i2].x - b) / a);
                         sum += f[i2].y * tmp + 2.0 * f[i2 - 1].y * this.Mother((f[i2 - 1].x - b) / a);
-                        if (n > 1000 && tmp.Abs < epsForWaveletValues * sum.Abs && f[i2].x > 0)
+                    }
+
+                    for (int i = 1; i <= up; i++)
+                        niter(i);
+
+                    for (int i = up+1; i <= n - 1; i++)
+                    {
+                        niter(i);
+                        if (tmp.Abs < epsForWaveletValues * sum.Abs)
                             break;
                     }
 
