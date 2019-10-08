@@ -240,9 +240,9 @@ namespace МатКлассы
                     return (double x) =>
                 {
                     if (x < this.X[0]) return 0;
-                    if (x > this.X[p.n - 1]) return 1;
+                    if (x > this.X[p.Deg - 1]) return 1;
                     double k = this.p[0];
-                    for (int i = 1; i < this.p.n; i++)
+                    for (int i = 1; i < this.p.Deg; i++)
                     {
                         if (x <= this.X[i]) return k;
                         k += this.p[i];
@@ -300,7 +300,7 @@ namespace МатКлассы
             public static double MatExp(DisRandVal R)
             {
                 double sum = 0;
-                for (int i = 0; i < R.X.n; i++) sum += R.X[i] * R.p[i];
+                for (int i = 0; i < R.X.Deg; i++) sum += R.X[i] * R.p[i];
                 return sum;
             }
             /// <summary>
@@ -340,7 +340,7 @@ namespace МатКлассы
             public static DisRandVal operator -(DisRandVal A, double m)
             {
                 DisRandVal M = new DisRandVal(A);
-                for (int i = 0; i < M.X.n; i++) M.X[i] -= m;
+                for (int i = 0; i < M.X.Deg; i++) M.X[i] -= m;
                 return M;
             }
             /// <summary>
@@ -352,7 +352,7 @@ namespace МатКлассы
             public static DisRandVal operator ^(DisRandVal A, int n)
             {
                 DisRandVal M = new DisRandVal(A);
-                for (int i = 0; i < M.X.n; i++) M.X[i] = Math.Pow(M.X[i], n);
+                for (int i = 0; i < M.X.Deg; i++) M.X[i] = Math.Pow(M.X[i], n);
                 return M;
             }
         }

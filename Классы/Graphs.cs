@@ -588,7 +588,7 @@ namespace МатКлассы
                     M *= this.A;
                     t++;
                 }
-                //for (int i = 0; i < S.n; i++) S[i, i] = 0;
+                //for (int i = 0; i < S.Deg; i++) S[i, i] = 0;
                 return S;
             }
         }
@@ -652,7 +652,7 @@ namespace МатКлассы
             {
                 Vectors v = this.Eccentricity;
                 int min = (int)v[0];
-                for (int i = 1; i < v.n; i++)
+                for (int i = 1; i < v.Deg; i++)
                     if (v[i] < min) min = (int)v[i];
                 return min;
             }
@@ -666,7 +666,7 @@ namespace МатКлассы
             {
                 Vectors v = this.Eccentricity;
                 int max = (int)v[0];
-                for (int i = 1; i < v.n; i++)
+                for (int i = 1; i < v.Deg; i++)
                     if (v[i] > max) max = (int)v[i];
                 return max;
             }
@@ -681,7 +681,7 @@ namespace МатКлассы
                 Vectors v = this.Eccentricity;
                 int min = (int)v[0];
                 int k = 0;
-                for (int i = 1; i < v.n; i++)
+                for (int i = 1; i < v.Deg; i++)
                     if (v[i] < min) { min = (int)v[i]; k = i; }
                 return k + 1;
             }
@@ -935,7 +935,7 @@ namespace МатКлассы
             {
                 Matrix M = new Matrix(this.CliquesSubsets.Count, this.p);
                 for (int i = 0; i < M.n; i++)
-                    for (int j = 0; j < this.CliquesSubsets[i].n; j++)
+                    for (int j = 0; j < this.CliquesSubsets[i].Deg; j++)
                         M[i, (int)this.CliquesSubsets[i].vector[j] - 1] = 1;
                 return M;
             }
@@ -1275,9 +1275,9 @@ namespace МатКлассы
                 //{
                 //k = un.Count;
                 v = new Vectors(un.Count);
-                for (int i = 0; i < v.n; i++) v[i] = un[i] + 1;
+                for (int i = 0; i < v.Deg; i++) v[i] = un[i] + 1;
                 IndepSubsets.Add(v);
-                k = v.n;
+                k = v.Deg;
                 //}
             }
             k--;
@@ -1291,7 +1291,7 @@ namespace МатКлассы
                         if (i != c && this.IsNotRelated(un, i) && un.Count < k)//если вершина не смежная вершинам данного множества
                             un.Add(i);
                     v = new Vectors(un.Count);
-                    for (int i = 0; i < v.n; i++) v[i] = un[i] + 1;
+                    for (int i = 0; i < v.Deg; i++) v[i] = un[i] + 1;
                     IndepSubsets.Add(v);
                 }
                 k--;
@@ -1358,8 +1358,8 @@ namespace МатКлассы
             for (int i = 0; i < this.DominSubsets.Count; i++)//из доминирующих подмножеств выбираются независимые
             {
                 bool tmp = true;
-                for (int j = 0; j < this.DominSubsets[i].n - 1; j++)
-                    for (int k = j + 1; k < this.DominSubsets[i].n; k++)
+                for (int j = 0; j < this.DominSubsets[i].Deg - 1; j++)
+                    for (int k = j + 1; k < this.DominSubsets[i].Deg; k++)
                         if (this.A[(int)DominSubsets[i].vector[j] - 1, (int)DominSubsets[i].vector[k] - 1] != 0)
                         {
                             tmp = false;
@@ -1585,7 +1585,7 @@ namespace МатКлассы
                 //{
                 List<int> R = new List<int>(tmp[0]); //Console.WriteLine(R[0] + " " + R[1]);
                 Vectors v = Graphs.ToVectors(R);
-                if (v.n >= 2) this.CliquesSubsets.Add(v);//занести это множество в список клик; из-за какого-то бага сначала появляются векторы с менее чем двумя компонентами
+                if (v.Deg >= 2) this.CliquesSubsets.Add(v);//занести это множество в список клик; из-за какого-то бага сначала появляются векторы с менее чем двумя компонентами
                 int k = 0;
 
                 for (int i = 0; i < this.p; i++)//по очереди для каждой вершины в графе
@@ -1625,10 +1625,10 @@ namespace МатКлассы
             int t = 0;
             //выделить наибольшие клики
             for (int i = 0; i < this.MaximalCliquesSubsets.Count; i++)
-                if (MaximalCliquesSubsets[i].n > t) t = MaximalCliquesSubsets[i].n;
+                if (MaximalCliquesSubsets[i].Deg > t) t = MaximalCliquesSubsets[i].Deg;
             this.CliquesNumber = t;
             for (int i = 0; i < this.MaximalCliquesSubsets.Count; i++)
-                if (MaximalCliquesSubsets[i].n == t) GreatestCliquesSubsets.Add(MaximalCliquesSubsets[i]);
+                if (MaximalCliquesSubsets[i].Deg == t) GreatestCliquesSubsets.Add(MaximalCliquesSubsets[i]);
         }
 
         private static bool ContainEdge(Edge e, List<Edge> L)
@@ -1763,7 +1763,7 @@ namespace МатКлассы
         {
             int k = 0;
             Vectors v = g.Deg;
-            for (int i = 0; i < v.n; i++)
+            for (int i = 0; i < v.Deg; i++)
                 if (v[i] % 2 != 0) k++;
             return k;
         }
@@ -1812,7 +1812,7 @@ namespace МатКлассы
                 while ((int)v[k] != 2)
                 {
                     k++;
-                    if (k == v.n)
+                    if (k == v.Deg)
                     {
                         Console.WriteLine("Нельзя построить первообразный граф, так как исходный граф не содержит вершин степени 2 либо для всякой вершины степени 2 обе смежные ей смежны и друг другу.");
                         Console.WriteLine("В этом случае выводится исходных граф.");
@@ -1842,7 +1842,7 @@ namespace МатКлассы
         {
             //if (E.p <= 1) return false;
             Vectors r = E.Deg;
-            for (int i = 0; i < r.n; i++)
+            for (int i = 0; i < r.Deg; i++)
                 if (r[i] != E.p - 1) return false;
             return true;
         }
@@ -1855,7 +1855,7 @@ namespace МатКлассы
         {
             Vectors r = E.Deg;
             int t = (int)r[0];
-            for (int i = 1; i < r.n; i++)
+            for (int i = 1; i < r.Deg; i++)
                 if (r[i] != t) return false;
             return true;
         }
@@ -1870,7 +1870,7 @@ namespace МатКлассы
             Vectors two = new Vectors(E.Addition.Deg);
             Array.Sort(one.vector);
             Array.Sort(two.vector);
-            for (int i = 0; i < one.n; i++)
+            for (int i = 0; i < one.Deg; i++)
                 if (one[i] != two[i])
                 {
                     Console.WriteLine("Граф не самодополнительный, так как не выполняется необходимое условие: список валентностей его вершин не совпадает со списком валентности вершин дополнительного графа");
@@ -2069,13 +2069,13 @@ namespace МатКлассы
             //    {
             //        Vectors ij = this.Chain(i, j);//зафиксировать кратчайшую цепь между этими вершинами
             //        //ij.Show();
-            //        if ((ij.n - 1) + 2 <= t)//если цепь ij имеет не настолько большую длину, чтобы цикла не могло быть
+            //        if ((ij.Deg - 1) + 2 <= t)//если цепь ij имеет не настолько большую длину, чтобы цикла не могло быть
             //            for (int k = j + 1; k < this.p; k++)//по всем третьим вершинам
             //                if (!ij.Contain(k + 1))//если цепь ij не проходит через k (в Chain отчёт ведётся от 1, а не от 0) 
             //                {
             //                    Vectors jk = this.Chain(j, k);
             //                    Vectors ki = this.Chain(k, i);
-            //                    if (ij.n - 1 + jk.n - 1 + ki.n - 1 == t)//если число рёбер в их объединении равно указанной длине цикла
+            //                    if (ij.Deg - 1 + jk.Deg - 1 + ki.Deg - 1 == t)//если число рёбер в их объединении равно указанной длине цикла
             //                    {
             //                        Vectors v = Vectors.Merge(ij, jk, ki);//создать цикл
             //                        //v.ShowPlusOne();
@@ -2100,7 +2100,7 @@ namespace МатКлассы
             ////Vectors v = new Vectors(t+1);//вектор, отображающий цикл
             //Vectors color = new Vectors(this.p);//"цвета" вершин графа
             //Vectors r = new Vectors(this.p);//Вектор предшественников
-            //for (int i = 0; i < r.n; i++) r[i] = -1;//Изначально вершины не имеют предшественников
+            //for (int i = 0; i < r.Deg; i++) r[i] = -1;//Изначально вершины не имеют предшественников
 
             //for (int i = 0; i < this.p; i++)//цикл начинается по каждой вершине
             //{
@@ -2152,7 +2152,7 @@ namespace МатКлассы
         }
         private bool ExistC(Vectors c)
         {
-            for (int i = 0; i < c.n; i++)
+            for (int i = 0; i < c.Deg; i++)
                 if (c[i] == 0) return true;
             return false;
         }
@@ -2164,18 +2164,18 @@ namespace МатКлассы
         private void ShowCycles(Vectors c, Vectors r)
         {
             int max = (int)c[0], k = 0;
-            for (int i = 1; i < c.n; i++)
+            for (int i = 1; i < c.Deg; i++)
             {
                 if (c[i] > max) max = (int)c[i];//найти значение максимума в массиве цветов
                 if (c[i] == 1) k = i;//найти индекс корневого элемента
             }
-            for (int i = 0; i < c.n; i++)
+            for (int i = 0; i < c.Deg; i++)
                 if (c[i] == max && Related(i, k))//если вершина - самая крайняя и смежна с корневой (то цикл есть)
                 {
-                    Vectors v = new Vectors(c.n + 1);
-                    v[0] = v[c.n] = k;
-                    v[c.n - 1] = i;
-                    for (int j = c.n - 2; j > 0; j--)
+                    Vectors v = new Vectors(c.Deg + 1);
+                    v[0] = v[c.Deg] = k;
+                    v[c.Deg - 1] = i;
+                    for (int j = c.Deg - 2; j > 0; j--)
                         v[j] = r[(int)v[j + 1]];//восстановить вектор по массиву предшественников
                     v.Show();
                 }
@@ -2290,8 +2290,8 @@ namespace МатКлассы
         /// <returns></returns>
         public Graphs SubGraph(Vectors v)
         {
-            int[] k = new int[v.n];
-            for (int i = 0; i < v.n; i++) k[i] = (int)v[i];
+            int[] k = new int[v.Deg];
+            for (int i = 0; i < v.Deg; i++) k[i] = (int)v[i];
             return new Graphs(this.A.SubMatrix(k));
         }
 
@@ -2400,26 +2400,26 @@ namespace МатКлассы
         /// <returns></returns>
         public static Graphs PryuferUnpacking(Vectors v)
         {
-            Vectors count = new Vectors(v.n + 2);//массив вершин
-            for (int i = 0; i < count.n; i++) count[i] = i;
-            Edge[] edges = new Edge[v.n + 1];//массив рёбер
+            Vectors count = new Vectors(v.Deg + 2);//массив вершин
+            for (int i = 0; i < count.Deg; i++) count[i] = i;
+            Edge[] edges = new Edge[v.Deg + 1];//массив рёбер
 
             //распаковка вектора
             int ind = 0;
-            Console.WriteLine($"В пустой граф из {v.n + 2} вершин добавляются рёбра.");
+            Console.WriteLine($"В пустой граф из {v.Deg + 2} вершин добавляются рёбра.");
             Console.WriteLine($"Конец ребра - первая слева вершина в коде, ещё не бывшая концом ребра (не удалённая).");
             Console.WriteLine($"Начало ребра - минимальная по номеру вершина, не упоминающаяся в коде и ещё не бывшая началом ребра (не удалённая).");
-            while (ind < v.n)
+            while (ind < v.Deg)
             {
-                int k = (v.n + 3);
-                for (int i = 0; i < count.n; i++)
+                int k = (v.Deg + 3);
+                for (int i = 0; i < count.Deg; i++)
                     if (!v.Contain(count[i] + 1) && count[i] < k) { k = (int)count[i]; break; }
-                Console.Write($"Список доступных вершин ({3 * v.n + 1} - не доступна): "); count.ShowPlusOne();
+                Console.Write($"Список доступных вершин ({3 * v.Deg + 1} - не доступна): "); count.ShowPlusOne();
                 Console.Write($"Список неиспользованных вершин в коде ({-1} - использованная): "); v.Show();
 
                 Console.WriteLine($"----Добавление ребра {k + 1}-{(int)v[ind]}");
                 edges[ind] = new Edge(k, (int)v[ind] - 1);
-                count[k] = 3 * v.n;
+                count[k] = 3 * v.Deg;
                 v[ind] = -1;
                 ind++;
 
@@ -2431,14 +2431,14 @@ namespace МатКлассы
             //добавление последнего ребра
             int t = 0;
             Vectors m = new Vectors(2);
-            for (int i = 0; i < count.n; i++)
-                if (count[i] != 3 * v.n) { m[t] = count[i]; t++; }
+            for (int i = 0; i < count.Deg; i++)
+                if (count[i] != 3 * v.Deg) { m[t] = count[i]; t++; }
             //m.ShowPlusOne();
-            Console.Write($"Список доступных вершин ({3 * v.n + 1} - не доступна): "); count.ShowPlusOne();
+            Console.Write($"Список доступных вершин ({3 * v.Deg + 1} - не доступна): "); count.ShowPlusOne();
             Console.WriteLine($"----Добавление последнего ребра {(int)m[0] + 1}-{(int)m[1] + 1} (ребро между двумя доступными вершинами)");
             edges[ind] = new Edge((int)m[0], (int)m[1]);
 
-            return new Graphs(count.n, edges);
+            return new Graphs(count.Deg, edges);
         }
         /// <summary>
         /// Сожержится ли в графе заданное ребро
@@ -2622,12 +2622,12 @@ namespace МатКлассы
         /// <returns></returns>
         public Graphs JointBlock()
         {
-            if (this.JointVect.n == 0) return this;
+            if (this.JointVect.Deg == 0) return this;
             Graphs g = new Graphs(this);
             Vectors v = new Vectors(g.JointVect);
-            //for (int i = 0; i < v.n; i++) v[i] = (int)g.JointVect[i];
+            //for (int i = 0; i < v.Deg; i++) v[i] = (int)g.JointVect[i];
             for (int i = 0; i < g.p; i++)
-                for (int j = 0; j < v.n; j++)
+                for (int j = 0; j < v.Deg; j++)
                     g = g.DeleteEdges(new Edge((int)v[j] - 1, i));//удалить рёбра из точек сочленения
                                                                   //g = g.DeleteVertexes(v);
             Vectors s;
@@ -2637,10 +2637,10 @@ namespace МатКлассы
             int max = 0;
             double maxval = 0;
             //найти наибольшую компоненту
-            for (int i = 0; i < s.n - 1; i++)
+            for (int i = 0; i < s.Deg - 1; i++)
             {
                 int k = 1;
-                for (int j = i + 1; j < s.n; j++)
+                for (int j = i + 1; j < s.Deg; j++)
                     if (s[j] == s[i]) k++;
                 if (k > max)
                 {
@@ -2650,7 +2650,7 @@ namespace МатКлассы
             }
             //Console.WriteLine(max + " " + maxval);
             //найти вершины, которые не входят в наибольшую компоненту и не являются точками сочленения
-            int[] r = new int[this.p - v.n - max];
+            int[] r = new int[this.p - v.Deg - max];
             int t = 0;
             for (int i = 0; i < g.p; i++)
                 if (s[i] != maxval && !v.Contain(i + 1))
@@ -2661,7 +2661,7 @@ namespace МатКлассы
                 }
 
             Graphs w = this.DeleteVertexes(r);
-            if (w.JointVect.n == 0) return w;//если теперь нет точек сочленения, вернуть ответ
+            if (w.JointVect.Deg == 0) return w;//если теперь нет точек сочленения, вернуть ответ
             return w.JointBlock();//иначе рекурсия
         }
 
@@ -2794,7 +2794,7 @@ namespace МатКлассы
 
                 Vectors v = new Vectors(this.Deg);
                 int sum = 0, ind = 0;
-                for (int i = 0; i < v.n; i++) { sum += (int)v[i] % 2; ind++; }
+                for (int i = 0; i < v.Deg; i++) { sum += (int)v[i] % 2; ind++; }
                 if (sum == 0)
                 {
                     this.EulerChains = new List<string>();
@@ -2879,7 +2879,7 @@ namespace МатКлассы
         }
         private bool IsNotRelated(Vectors l, int p)
         {
-            for (int i = 0; i < l.n; i++)
+            for (int i = 0; i < l.Deg; i++)
                 if (this.A[(int)l[i] - 1, p] != 0) return false;
             return true;
         }
@@ -2905,10 +2905,10 @@ namespace МатКлассы
                 {
                     k = un.Count;
                     v = new Vectors(un.Count);
-                    for (int i = 0; i < v.n; i++) v[i] = un[i] + 1;
+                    for (int i = 0; i < v.Deg; i++) v[i] = un[i] + 1;
                 }
             }
-            return v.n;
+            return v.Deg;
         }
         /// <summary>
         /// Вывести все независимые подмножетсва вершин
@@ -3106,10 +3106,10 @@ namespace МатКлассы
             }
 
             v = new Vectors((int)(max - min) + 1);
-            for (int i = 0; i < v.n; i++) v[i] = (int)(min + i);
+            for (int i = 0; i < v.Deg; i++) v[i] = (int)(min + i);
             Console.Write("\t3.1) Тогда возможные значения Х: "); v.Show();
 
-            if (v.n == 1) Console.WriteLine("\t3.2) Значит, хроматическое число равно " + v[0]);
+            if (v.Deg == 1) Console.WriteLine("\t3.2) Значит, хроматическое число равно " + v[0]);
             else
             {
                 Vectors m = this.GetModifColouring();
@@ -3239,13 +3239,13 @@ namespace МатКлассы
         private bool IsDomination(List<int> L)
         {
             Vectors v = new Vectors(L.Count);
-            for (int i = 0; i < v.n; i++) v[i] = L[i];
+            for (int i = 0; i < v.Deg; i++) v[i] = L[i];
             //проверка для всех вершин
             for (int i = 0; i < this.p; i++)
                 if (!v.Contain(i))//если вершина не входит в множество
                 {
                     bool ret = false;
-                    for (int j = 0; j < v.n; j++)
+                    for (int j = 0; j < v.Deg; j++)
                         if (this.A[i, (int)v[j]] != 0)
                         {
                             ret = true;//вершина смежна какой-то вершине из множества
@@ -3277,13 +3277,13 @@ namespace МатКлассы
         /// </summary>
         public void ShowSmallestDominSub()
         {
-            int k = this.MinimalDominSubsets[0].n;
+            int k = this.MinimalDominSubsets[0].Deg;
             for (int i = 1; i < MinimalDominSubsets.Count; i++)
-                if (k > MinimalDominSubsets[i].n)
-                    k = MinimalDominSubsets[i].n;
+                if (k > MinimalDominSubsets[i].Deg)
+                    k = MinimalDominSubsets[i].Deg;
             this.DominationNumber = k;
             for (int i = 0; i < this.MinimalDominSubsets.Count; i++)
-                if (MinimalDominSubsets[i].n == k)
+                if (MinimalDominSubsets[i].Deg == k)
                     MinimalDominSubsets[i].Show();
         }
 
@@ -3327,13 +3327,13 @@ namespace МатКлассы
         /// </summary>
         public void ShowSmallestVCoatingSub()
         {
-            int k = this.MinimalVCoatingSubsets[0].n;
+            int k = this.MinimalVCoatingSubsets[0].Deg;
             for (int i = 1; i < MinimalVCoatingSubsets.Count; i++)
-                if (k > MinimalVCoatingSubsets[i].n)
-                    k = MinimalVCoatingSubsets[i].n;
+                if (k > MinimalVCoatingSubsets[i].Deg)
+                    k = MinimalVCoatingSubsets[i].Deg;
             this.VCoatingNumber = k;
             for (int i = 0; i < this.MinimalVCoatingSubsets.Count; i++)
-                if (MinimalVCoatingSubsets[i].n == k)
+                if (MinimalVCoatingSubsets[i].Deg == k)
                     MinimalVCoatingSubsets[i].Show();
         }
         /// <summary>
@@ -3418,8 +3418,8 @@ namespace МатКлассы
             Vectors v = this.Deg;
             string s = v[0].ToString();
             double sum = v[0];
-            if (v.n > 1)
-                for (int i = 1; i < v.n; i++)
+            if (v.Deg > 1)
+                for (int i = 1; i < v.Deg; i++)
                 {
                     s += String.Format(" + {0}", v[i]);
                     sum += v[i];
@@ -3450,7 +3450,7 @@ namespace МатКлассы
             Console.WriteLine();
             if (!(Graphs.IsFull(this)))
             {
-                Console.WriteLine("Дополнение графа содержит p(p-1)/2-q={1}*{2}/2-{3}={0} рёбер", this.Addition.Edges, this.Deg.n, this.Deg.n - 1, this.Edges);
+                Console.WriteLine("Дополнение графа содержит p(p-1)/2-q={1}*{2}/2-{3}={0} рёбер", this.Addition.Edges, this.Deg.Deg, this.Deg.Deg - 1, this.Edges);
                 Console.Write("Список валентностей вершин дополнения:"); this.Addition.Deg.Show();
                 Console.WriteLine("Матрица смежности дополнения:"); this.Addition.A.PrintMatrix();
             }

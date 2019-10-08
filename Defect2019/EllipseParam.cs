@@ -10,16 +10,28 @@ namespace Работа2019
     /// <summary>
     /// Параметры эллипса
     /// </summary>
-    public struct EllipseParam
+    public class EllipseParam
     {
         internal readonly string name;
         internal Point focSource, focSensor;
         internal readonly Point xM;
         internal double L, a, b, tau;
         public System.Drawing.Color Color;
-        public EllipseParam(Point SourceCenter, Point SensorCenter, double s, System.Drawing.Color color, string Name="")
+
+        private double Dist(Point p) => Point.Eudistance(focSensor, p) + Point.Eudistance(focSource, p);
+        /// <summary>
+        /// Функция, которая по точке находит расстояние эллипса (s) и от него возвращает значение
+        /// </summary>
+        public readonly Func<Point, double> GetValue;
+
+        public EllipseParam(Point SourceCenter, Point SensorCenter, double s, System.Drawing.Color color, string Name="", Func<double, double> Val=null)
         {
             name = Name;
+
+            if (Val == null)
+                GetValue = null;
+            else
+            GetValue = (Point p) => Val(Dist(p));
 
             L = Point.Eudistance(SourceCenter, SensorCenter);
             if (s < L)
@@ -61,5 +73,15 @@ namespace Работа2019
         /// <param name="filename"></param>
         /// <param name="list"></param>
         public static void WriteInFile(string filename, IEnumerable<EllipseParam> list) => Expendator.WriteInFile(filename, list.Select(l => l.ToString()).ToArray());
+
+
+        public static void GetSurfaces(EllipseParam[] array, NetOnDouble X,NetOnDouble Y)
+        {
+            var mas = array.Where(e => e.GetValue != null).ToArray();
+            if (mas.Length == 0)
+                return;
+
+
+        }
     }
 }

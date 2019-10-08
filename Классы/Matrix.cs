@@ -137,7 +137,7 @@ namespace МатКлассы
         /// <param name="l"></param>
         public Matrix(Vectors[] l)
         {
-            this.n = l.Length; this.m = l[0].n;
+            this.n = l.Length; this.m = l[0].Deg;
             for (int i = 0; i < this.n; i++)
                 for (int j = 0; j < this.m; j++)
                     this[i, j] = l[i].vector[j];
@@ -194,9 +194,9 @@ namespace МатКлассы
         /// Преобразовать вектор в матрицу
         /// </summary>
         /// <param name="v"></param>
-        public Matrix(Vectors v) : this(v.n, 1)
+        public Matrix(Vectors v) : this(v.Deg, 1)
         {
-            for (int i = 0; i < v.n; i++)
+            for (int i = 0; i < v.Deg; i++)
                 this[i, 0] = v[i];
         }
 
@@ -367,7 +367,7 @@ namespace МатКлассы
         public Vectors GetLine(int k)
         {
             Vectors v = new Vectors(this.m);
-            for (int j = 0; j < v.n; j++) v[j] = this[k, j];
+            for (int j = 0; j < v.Deg; j++) v[j] = this[k, j];
             return v;
         }
         /// <summary>

@@ -886,12 +886,12 @@ public static class Functions
         return 2 * ps / (PolesMasMemoized(w + ps).LastElement - PolesMasMemoized(w - ps).LastElement);
     };
 
-    private static Tuple< Wavelet, Func<double, double, double>> GetWavelet(double begin, double step, int valuescount, string filename,
+    private static Tuple<Wavelet, Func<double, double, double>> GetWavelet(double begin, double step, int valuescount, double tmin, double tmax, string filename,
     Wavelets wavelets = Wavelets.LP, string path = null, int byevery = 1, double epsForWaveletValues = 0)
     {
         path = path ?? Environment.NewLine;
         Wavelet wavelet = new Wavelet(wavelets);
-        Func<double, double, Complex> func = wavelet.GetAnalys(begin, step, valuescount, filename, path, byevery, epsForWaveletValues);
+        Func<double, double, Complex> func = wavelet.GetAnalys(begin, step, valuescount, tmin, tmax, filename, path, byevery, epsForWaveletValues);
         Func<double, double, double> F = (x, y) => func(x, y).Abs;
         return new Tuple<Wavelet, Func<double, double, double>>(wavelet, F);
     }
@@ -917,24 +917,24 @@ public static class Functions
     double begin, double step, int valuescount, string filename, string savename,
     Wavelets wavelets = Wavelets.LP, string path = null, int byevery = 1, double epsForWaveletValues = 0)
     {
-        var Wavelt = GetWavelet(begin, step, valuescount, filename, wavelets, path, byevery, epsForWaveletValues);
+        var Wavelt = GetWavelet(begin, step, valuescount, yy.Begin, yy.End, filename, wavelets, path, byevery, epsForWaveletValues);
 
-            string name = filename.Replace(".txt", "");
-            await Библиотека_графики.Create3DGrafics.JustGetGraficInFiles(name, savename, Wavelt.Item2, xx, yy,
-                progress, token,
-                new StringsForGrafic
-                (
-                    $"Wavelet-surface for {name}",
-                     "w‎", "time", "vals"
-                ),
-                graficType: Create3DGrafics.GraficType.Pdf);
+        string name = filename.Replace(".txt", "");
+        await Библиотека_графики.Create3DGrafics.JustGetGraficInFiles(name, savename, Wavelt.Item2, xx, yy,
+            progress, token,
+            new StringsForGrafic
+            (
+                $"Wavelet-surface for {name}",
+                 "variery", "time", "vals"
+            ),
+            graficType: Create3DGrafics.GraficType.Pdf);
 
-        var tmp = Expendator.GetStringArrayFromFile( savename + "(MaxCoordinate).txt")[1].Replace('.', ',').ToDoubleMas();
+        var tmp = Expendator.GetStringArrayFromFile(savename + "(MaxCoordinate).txt")[1].Replace('.', ',').ToDoubleMas();
 
         Wavelt.Item1.Dispose();
         return new Tuple<double, double>(tmp[0], tmp[1]);
     }
-  
+
     /// <summary>
     /// Возвращает координаты максимума от вейвлетной функции на указанном прямоугольнике
     /// </summary>
@@ -951,14 +951,13 @@ public static class Functions
     /// <param name="path"></param>
     /// <returns></returns>
     public static async Task<Tuple<double, double>> GetMaximunFromArea(
-        double xmin,double xmax,double ymin,double ymax,
+        double xmin, double xmax, double ymin, double ymax,
     double begin, double step, int valuescount, string filename, string savename,
     Wavelets wavelets = Wavelets.LP, string path = null, int byevery = 1, double epsForWaveletValues = 0,
-    int countpoint=250,int maxtit=200,int maxfit=60)
+    int countpoint = 250, int maxtit = 200, int maxfit = 60)
     {
-        var Wavelt = GetWavelet(begin, step, valuescount, filename, wavelets, path, byevery, epsForWaveletValues);
-        await BeeHiveSearch(Wavelt.Item2, savename, xmin, xmax, ymin, ymax, countpoint,maxtit, maxfit);
-        
+        var Wavelt = GetWavelet(begin, step, valuescount, ymin, ymax, filename, wavelets, path, byevery, epsForWaveletValues);
+        await BeeHiveSearch(Wavelt.Item2, savename, xmin, xmax, ymin, ymax, countpoint, maxtit, maxfit);
 
         var tmp = Expendator.GetStringArrayFromFile(/*Path.Combine(path,*/ savename + "(MaxCoordinate).txt")/*)*/[1].Replace('.', ',').ToDoubleMas();
 
@@ -977,14 +976,14 @@ public static class Functions
     /// <param name="ymax"></param>
     /// <param name="countpoint"></param>
     /// <returns></returns>
-    private static async Task BeeHiveSearch(Func<double, double, double> F, string savename, double xmin, double xmax, double ymin, double ymax, int countpoint,int maxtit= 280, int maxfit = 70)
+    private static async Task BeeHiveSearch(Func<double, double, double> F, string savename, double xmin, double xmax, double ymin, double ymax, int countpoint, int maxtit = 280, int maxfit = 70)
     {
         const double coef = -1000;
-        Func<Vectors, double> func = (Vectors v) => Math.Exp(coef*F(v[0], v[1]));
+        Func<Vectors, double> func = (Vectors v) => Math.Exp(coef * F(v[0], v[1]));
         Vectors min = new Vectors(xmin, ymin);
         Vectors max = new Vectors(xmax, ymax);
 
-        var res = await Task.Run(() => BeeHiveAlgorithm.GetGlobalMin(func, min, max, 1e-17, countpoint,  maxfit,maxtit));
+        var res = await Task.Run(() => BeeHiveAlgorithm.GetGlobalMin(func, min, max, 1e-17, countpoint, maxfit, maxtit));
 
         Expendator.WriteInFile(savename + "(MaxCoordinate).txt", new string[]
         {

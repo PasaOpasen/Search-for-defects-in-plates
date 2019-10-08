@@ -138,6 +138,21 @@ namespace МатКлассы
                 return val;
             };
         }
+
+        /// <summary>
+        /// Колокол Гаусса
+        /// </summary>
+        /// <param name="mean"></param>
+        /// <param name="sd"></param>
+        /// <returns></returns>
+        public static Func<double,double> GaussBell(double mean=0,double sd=1)
+        {
+            double a = 1.0 / (sd * Math.Sqrt(2 * Math.PI));
+            double s2 = -2 * sd * sd;
+            double sqr(double x) => x * x;
+            return (double t) => a * Math.Exp(sqr(t) * s2);
+
+        }
         #endregion
 
         /// <summary>
@@ -1727,7 +1742,7 @@ namespace МатКлассы
                             }
                             catch (Exception e) { throw new Exception(e.Message); }
                             Vectors v = new Vectors(N);
-                            for (int i = 0; i < v.n; i++) v[i] = Math.Abs((double)ret_arr_0[i]);
+                            for (int i = 0; i < v.Deg; i++) v[i] = Math.Abs((double)ret_arr_0[i]);
                             if ((v.Max) / norm_param < 2.5e-5) return;
                         }
                     }
@@ -1885,7 +1900,7 @@ namespace МатКлассы
                         GK_adaptive_int(int_func, t_x_a, t_x_b, int_h_1, eps, ref ret_arr_0, N);
                         Vectors v = new Vectors(N);
 
-                        for (int j = 0; j < v.n; j++) v[j] = Math.Abs((double)ret_arr_0[j /*+ 1*/]);
+                        for (int j = 0; j < v.Deg; j++) v[j] = Math.Abs((double)ret_arr_0[j /*+ 1*/]);
                         if ((v.Min < 1e-10) && (Math.Abs((double)t_x_a) > 50.0) && (v.Max < 1e-7)) return;
                         try
                         {
@@ -2084,7 +2099,7 @@ namespace МатКлассы
                             //LastListOfDINN5GK.Add($"\tНа участке [t4-tm*i,t4] GK_adaptive_int = {sb[0]}");
                         }
                         Vectors v = new Vectors(N);
-                        for (i = 0; i < v.n; i++)
+                        for (i = 0; i < v.Deg; i++)
                             v[i] = Math.Abs((double)Rd[i]);
                         norm_param = v.Max;
                         // Console.WriteLine(norm_param);

@@ -46,7 +46,7 @@ namespace МатКлассы
             get
             {
                 Vectors v = new Vectors(this.mas.Length);
-                for (int i = 0; i < v.n; i++)
+                for (int i = 0; i < v.Deg; i++)
                     v[i] = mas[i].Re;
                 return v;
             }
@@ -59,7 +59,7 @@ namespace МатКлассы
             get
             {
                 Vectors v = new Vectors(this.mas.Length);
-                for (int i = 0; i < v.n; i++)
+                for (int i = 0; i < v.Deg; i++)
                     v[i] = mas[i].Im;
                 return v;
             }
@@ -72,7 +72,7 @@ namespace МатКлассы
             get
             {
                 Vectors v = new Vectors(this.mas.Length);
-                for (int i = 0; i < v.n; i++)
+                for (int i = 0; i < v.Deg; i++)
                     v[i] = mas[i].Abs;
                 return v;
             }

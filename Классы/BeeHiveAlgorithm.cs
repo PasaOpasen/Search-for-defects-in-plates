@@ -9,6 +9,7 @@ namespace МатКлассы
     /// </summary>
     public static class BeeHiveAlgorithm
     {
+        #region Примеры тестовых функций
         /// <summary>
         /// Многомерная парабола
         /// </summary>
@@ -33,6 +34,9 @@ namespace МатКлассы
 
             return s;
         };
+        #endregion
+
+        #region Метод роя частиц
 
         /// <summary>
         /// Параметры шага для роя
@@ -49,7 +53,9 @@ namespace МатКлассы
         /// <param name="max">Максимальное возможное значение каждого аргумента</param>
         /// <param name="eps">Допустимая погрешность</param>
         /// <param name="countpoints">Количество пчёл в рое</param>
-        /// <param name="maxcountstep">Максимальное число итераций метода</param>
+        /// <param name="maxcountstep">Максимальное число неудачных итераций метода</param>
+        /// <param name="center">Центр распредления точек</param>
+        /// <param name="maxiter">Максимальное число итераций метода</param>
         /// <returns></returns>
         public static Tuple<Vectors,double> GetGlobalMin(Func<Vectors,double> f,int n=1,double min=-1e12,double max=1e12,double eps=1e-10,int countpoints=1000,int maxcountstep = 100,Vectors center=null,int maxiter=150)
         {
@@ -67,18 +73,27 @@ namespace МатКлассы
         /// Получить минимум функции, посчитанный роевым методом
         /// </summary>
         /// <param name="f">Целевая функция</param>
-        /// <param name="n">Размерность области определения целевой функции</param>
-        /// <param name="min">Минимальное возможное значение каждого аргумента</param>
-        /// <param name="max">Максимальное возможное значение каждого аргумента</param>
+        /// <param name="minimum">Вектор минимальных значений</param>
+        /// <param name="maximum">Вектор максимальных значений</param>
         /// <param name="eps">Допустимая погрешность</param>
         /// <param name="countpoints">Количество пчёл в рое</param>
-        /// <param name="maxcountstep">Максимальное число итераций метода</param>
+        /// <param name="maxcountstep">Максимальное число неудачных итераций метода</param>
+        /// <param name="maxiter">Максимальное число итераций метода</param>
         /// <returns></returns>
         public static Tuple<Vectors, double> GetGlobalMin(Func<Vectors, double> f, Vectors minimum,Vectors maximum, double eps = 1e-10, int countpoints = 1000, int maxcountstep = 100, int maxiter = 150)
         {
             return Gets(new Hive(minimum , maximum , f, countpoints),eps,maxcountstep,maxiter);
         }
-        public static Tuple<Vectors, double> Gets(Hive hive, double eps = 1e-10, int maxcountstep = 100, int maxiter = 150)
+
+        /// <summary>
+        /// Найти минимум функции уже по готовому рою
+        /// </summary>
+        /// <param name="hive"></param>
+        /// <param name="eps"></param>
+        /// <param name="maxcountstep"></param>
+        /// <param name="maxiter"></param>
+        /// <returns></returns>
+        private static Tuple<Vectors, double> Gets(Hive hive, double eps = 1e-10, int maxcountstep = 100, int maxiter = 150)
         {
             if (maxiter <= 0) maxiter = Int32.MaxValue;
             double e = hive.val;
@@ -106,7 +121,7 @@ namespace МатКлассы
         /// <summary>
         /// Рой пчёл
         /// </summary>
-        public sealed class Hive
+        private sealed class Hive
         {
             /// <summary>
             /// Массив пчёл
@@ -170,7 +185,7 @@ namespace МатКлассы
                 //for (int i = 0; i < count; i++)
                     Parallel.For(0, count, (int i) => 
                     { 
-                    bees[i] = new Bee(min, max, f);
+                        bees[i] = new Bee(min, max, f);
                     });
 
                 for (int i = count; i < count + v.Length; i++)
@@ -200,23 +215,19 @@ namespace МатКлассы
             /// <param name="parallel"></param>
             public void MakeStep(double w=0.3, double fp=2, double fg=5,bool parallel=true)
             {
-                Parallel.For(0, bees.Length, (int i) => { 
-                //for(int i=0;i<bees.Length;i++)
-                //{
+                void Iter(int i)
+                {
                     bees[i].RecalcV(w, fp, fg, this.g);
                     bees[i].Move();
-                //}
-                });
-                if (!parallel)
-                    for (int i = 0; i < bees.Length; i++)
-                    {
-                        bees[i].ReCount();
-                    }
-                else
-                    Parallel.For(0, bees.Length, (int i) => {
-                        bees[i].ReCount();
-                    });
+                    bees[i].ReCount();
+                }
 
+                if (parallel)
+                    Parallel.For(0, bees.Length, (int i) => Iter(i));
+                else
+                    for (int i = 0; i < bees.Length; i++)
+                        Iter(i);
+                
                 ReCount();
             }
         }
@@ -224,7 +235,7 @@ namespace МатКлассы
         /// <summary>
         /// Классы пчелы
         /// </summary>
-        public sealed class Bee
+        private sealed class Bee
         {
             /// <summary>
             /// Текущее положение частицы
@@ -306,7 +317,7 @@ namespace МатКлассы
             /// <param name="fp">Весовой коэффициент для p</param>
             /// <param name="fg">Весовой коэффициент для g</param>
             /// <param name="g">Наилучшее положение по рою</param>
-            public void RecalcV(double w, double fp,double fg,Vectors g)
+            public void RecalcVOld(double w, double fp,double fg,Vectors g)
             {
                 var r = new MathNet.Numerics.Random.CryptoRandomSource();
                 double fi = fg + fp;
@@ -318,16 +329,29 @@ namespace МатКлассы
                     rg[i] = r.NextDouble();
                 }
 
-                v =2*w * (v + fp * Vectors.CompMult(rp, p - x) + fg * Vectors.CompMult(rg, g - x))/Math.Abs(2-fi-Math.Sqrt(fi*(fi-4)));
+                v =2*w/Math.Abs(2-fi-Math.Sqrt(fi*(fi-4))) * (v + fp * Vectors.CompMult(rp, p - x) + fg * Vectors.CompMult(rg, g - x));
+            }
+            /// <summary>
+            /// Переопределить скорость
+            /// </summary>
+            /// <param name="w">Коэффициент инерции</param>
+            /// <param name="fp">Весовой коэффициент для p</param>
+            /// <param name="fg">Весовой коэффициент для g</param>
+            /// <param name="g">Наилучшее положение по рою</param>
+            public void RecalcV(double w, double fp, double fg, Vectors g)
+            {
+                var r = new MathNet.Numerics.Random.CryptoRandomSource();
+                double fi = fg + fp;
+                double coef = 2 * w / Math.Abs(2 - fi - Math.Sqrt(fi * (fi - 4)));
+
+                for (int i = 0; i < v.Deg; i++)
+                    v[i] = coef * (v[i] + fp * r.NextDouble() * (p[i] - x[i]) + fg * r.NextDouble() * (g[i] - x[i]));
             }
 
             /// <summary>
             /// Сделать шаг по скорости
             /// </summary>
-            public void Move()
-            {
-                x =x+v;
-            }
+            public void Move() => x.FastAdd(v);
 
             /// <summary>
             /// Переопределить наилучшее положение частицы, если можно
@@ -342,7 +366,10 @@ namespace МатКлассы
                 }
             }
         }
+        #endregion
 
+
+        #region Метод пчелиной колонии
 
         /// <summary>
         /// Оптимизация методом пчелиной колонии
@@ -388,7 +415,7 @@ namespace МатКлассы
         /// <summary>
         /// Класс упрощённой пчелы
         /// </summary>
-        private class SBee : IComparable
+        private sealed class SBee : IComparable
         {
             public Vectors x { get; private set; }
             public double v { get; private set; }
@@ -403,9 +430,10 @@ namespace МатКлассы
 
             public SBee(SBee be) : this(be.x, be.v) { }
 
-            public int CompareTo(object obj)
+            public int CompareTo(object obj) => this.CompareTo((SBee)obj);
+            public int CompareTo(SBee obj)
             {
-                return v.CompareTo(((SBee)(obj)).v);
+                return v.CompareTo(obj.v);
             }
 
             /// <summary>
@@ -415,9 +443,9 @@ namespace МатКлассы
             /// <returns></returns>
             public static SBee GetBest(SBee[] mas)
             {
-                int i = -1;
-                double d = Double.MaxValue;
-                for(int k=0;k<mas.Length;k++)
+                int i = 0;
+                double d = mas[0].v;
+                for(int k=1;k<mas.Length;k++)
                     if (mas[k].v < d)
                     {
                         d = mas[k].v;
@@ -442,7 +470,7 @@ namespace МатКлассы
 
                 Parallel.For(0, count, (int i) => {
                     tmp[i] = Vectors.Create(min, max);
- });
+                });
 
                 for (int i = 0; i < count; i++)
                 {
@@ -526,5 +554,6 @@ namespace МатКлассы
 
             }
         }
+        #endregion
     }
 }

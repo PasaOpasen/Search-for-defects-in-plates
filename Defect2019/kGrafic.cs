@@ -233,14 +233,14 @@ namespace Defect2019
             if (checkBox2.Checked)
                 for (int i = 0; i < k; i++)
                 {
-                    if (radioButton3.Checked) for (int j = 0; j < mas[i].n; j++) chart1.Series[0].Points.AddXY(args[i], mas[i][j]);
-                    if (radioButton4.Checked) for (int j = 0; j < mas[i].n; j++) chart1.Series[0].Points.AddXY(args[i], mas[i][j] / args[i]);
+                    if (radioButton3.Checked) for (int j = 0; j < mas[i].Deg; j++) chart1.Series[0].Points.AddXY(args[i], mas[i][j]);
+                    if (radioButton4.Checked) for (int j = 0; j < mas[i].Deg; j++) chart1.Series[0].Points.AddXY(args[i], mas[i][j] / args[i]);
                 }
             if (checkBox3.Checked)
                 for (int i = 0; i < k; i++)
                 {
-                    if (radioButton3.Checked) for (int j = 0; j < masN[i].n; j++) chart1.Series[1].Points.AddXY(args[i], masN[i][j]);
-                    if (radioButton4.Checked) for (int j = 0; j < masN[i].n; j++) chart1.Series[1].Points.AddXY(args[i], masN[i][j] / args[i]);
+                    if (radioButton3.Checked) for (int j = 0; j < masN[i].Deg; j++) chart1.Series[1].Points.AddXY(args[i], masN[i][j]);
+                    if (radioButton4.Checked) for (int j = 0; j < masN[i].Deg; j++) chart1.Series[1].Points.AddXY(args[i], masN[i][j] / args[i]);
                 }
             if (checkBox1.Checked)
                 for (int i = 0; i < Model.Length; i++)

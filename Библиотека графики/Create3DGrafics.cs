@@ -52,9 +52,9 @@ namespace Библиотека_графики
 
             var filenames = new string[]
             {
-                shortname + "(args).txt",
-                shortname + "(vals).txt",
-                shortname + "(info).txt"
+                $"{shortname}(args).txt",
+                $"{shortname}(vals).txt",
+                $"{shortname}(info).txt"
             };
             Expendator.WriteInFile("3D Grafics Data Adress.txt", filenames);
 

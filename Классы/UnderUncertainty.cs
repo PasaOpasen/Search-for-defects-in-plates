@@ -11,14 +11,14 @@ namespace МатКлассы
         {
             double m = v[0];
             k = 0;
-            for (int i = 1; i < v.n; i++)
+            for (int i = 1; i < v.Deg; i++)
                 if (v[i] > m) { m = v[i]; k = i; }
         }
         private static void MIN(Vectors v, out int k)
         {
             double m = v[0];
             k = 0;
-            for (int i = 1; i < v.n; i++)
+            for (int i = 1; i < v.Deg; i++)
                 if (v[i] < m) { m = v[i]; k = i; }
         }
 
@@ -34,8 +34,8 @@ namespace МатКлассы
             if (q == null)
             {
                 q = new Vectors(S.m);
-                double w = 1.0 / q.n;
-                for (int i = 0; i < q.n; i++) q[i] = w;
+                double w = 1.0 / q.Deg;
+                for (int i = 0; i < q.Deg; i++) q[i] = w;
             }
             for (int i = 0; i < S.n; i++)
             {
@@ -91,7 +91,7 @@ namespace МатКлассы
             v = new Vectors(S.n);
             Vectors q = new Vectors(S.n);
             double w = 1.0 / S.m;
-            for (int i = 0; i < q.n; i++) q[i] = w;
+            for (int i = 0; i < q.Deg; i++) q[i] = w;
 
             for (int i = 0; i < S.n; i++)
             {
@@ -185,8 +185,8 @@ namespace МатКлассы
             if (q == null)
             {
                 q = new Vectors(S.m);
-                double w = 1.0 / q.n;
-                for (int i = 0; i < q.n; i++) q[i] = w;
+                double w = 1.0 / q.Deg;
+                for (int i = 0; i < q.Deg; i++) q[i] = w;
             }
             Vectors l = new Vectors(v), r = new Vectors(v);
             for (int i = 0; i < S.n; i++)
@@ -213,8 +213,8 @@ namespace МатКлассы
             if (q == null)
             {
                 q = new Vectors(S.m);
-                double w = 1.0 / q.n;
-                for (int i = 0; i < q.n; i++) q[i] = w;
+                double w = 1.0 / q.Deg;
+                for (int i = 0; i < q.Deg; i++) q[i] = w;
             }
             for (int i = 0; i < S.n; i++)
             {
