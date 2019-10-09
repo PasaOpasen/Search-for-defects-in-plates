@@ -885,6 +885,7 @@ public static class Functions
         var ps = Eps(w);
         return 2 * ps / (PolesMasMemoized(w + ps).LastElement - PolesMasMemoized(w - ps).LastElement);
     };
+    public static readonly Func<double, double> Vg2 = (double w) => Vg(pimult2 / (w * 1e6)) * 1_000_000;
 
     private static Tuple<Wavelet, Func<double, double, double>> GetWavelet(double begin, double step, int valuescount, double tmin, double tmax, string filename,
     Wavelets wavelets = Wavelets.LP, string path = null, int byevery = 1, double epsForWaveletValues = 0)

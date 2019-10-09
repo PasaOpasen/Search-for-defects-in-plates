@@ -4,6 +4,7 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 using МатКлассы;
+using System.Diagnostics;
 
 namespace Работа2019
 {
@@ -17,6 +18,7 @@ namespace Работа2019
         internal readonly Point xM;
         internal double L, a, b, tau;
         public System.Drawing.Color Color;
+        public readonly bool right = true;
 
         private double Dist(Point p) => Point.Eudistance(focSensor, p) + Point.Eudistance(focSource, p);
         /// <summary>
@@ -30,7 +32,12 @@ namespace Работа2019
 
             L = Point.Eudistance(SourceCenter, SensorCenter);
             if (s < L)
-                throw new ArgumentException($"s < L !!! ({s} < {L})");
+            {
+                //throw new ArgumentException($"s < L !!! ({s} < {L})");
+                Debug.WriteLine($"s < L !!! ({s} < {L})");
+                right = false;
+            }
+                
 
             focSource = SourceCenter;
             focSensor = SensorCenter;

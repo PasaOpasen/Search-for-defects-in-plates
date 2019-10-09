@@ -238,6 +238,11 @@ namespace Работа2019
             }
         }
 
+        private void toolStripButton3_Click(object sender, EventArgs e)
+        {
+            MakeEllipses(Expendator.GetStringArrayFromFile(Path.Combine("Максимумы с эллипсов", "Params.txt"), true));
+        }
+
         private void radioButton1_CheckedChanged(object sender, EventArgs e)
         {
             groupBox3.Show();
@@ -353,7 +358,7 @@ namespace Работа2019
                         MyWavelet, wheredata[i], byevery, epsForWaveletValues,
                         pointcount, pointmax, pointmax2);
 
-                    pathellipse.Add($"{otherSources[k].Center.x} {otherSources[k].Center.y} {itSource.Center.x} {itSource.Center.y} {tuple.Item1.ToRString()} {tuple.Item2.ToRString()} {i} {savename}");
+                    pathellipse.Add($"{otherSources[k].Center.x} {otherSources[k].Center.y} {itSource.Center.x} {itSource.Center.y} {Functions.Vg2(tuple.Item1).ToRString()} {tuple.Item2.ToRString()} {i} {savename}");
                 }
                 Expendator.WriteInFile(Path.Combine("Максимумы с эллипсов", "Params.txt"), pathellipse.ToArray());
                 SetDefaltProgressBar();

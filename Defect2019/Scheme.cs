@@ -7,6 +7,7 @@ using System.Collections.Generic;
 using System.Linq;
 using МатКлассы;
 using System.Threading.Tasks;
+using System.Threading;
 
 namespace Работа2019
 {
@@ -29,6 +30,7 @@ namespace Работа2019
         private Source[] mas;
         private float rad;
         private EllipseParam[] ellipses;
+        private Tuple<double, double>[] Vgb;
 
         public Scheme(string title = "Схема эксперимента")
         {
@@ -49,6 +51,7 @@ namespace Работа2019
 
         public Scheme(Source[] mass, EllipseParam[] param, string title = "Схема эксперимента") : this(mass, title)
         {
+            ShowGR();
             DrawEllipses(param);
         }
         public void ShowGR()
@@ -59,10 +62,37 @@ namespace Работа2019
 
         public Scheme(string[] array, string title = "Схема эксперимента"):this(GetSources(array),title)
         {
-            var param = GetEllipses(array);
-            ellipses = param;
-            DrawEllipses(param);
+            JustDrawEllipses(array);
+            textBox1.TextChanged += (o, e) =>
+            {
+                try
+                {
+                   Convert.ToDouble( textBox1.Text);
+                }
+                catch
+                {
+                    textBox1.BackColor = Color.Yellow;
+                    return;
+                }
+
+                g.Clear(Color.White);
+                DrawFigures();
+
+                ellipses = GetEllipses(array);
+                DrawEllipses(ellipses);
+                if (ellipses.Select(el => el.right).Contains(false))
+                    textBox1.BackColor = Color.Red;
+                else
+                    textBox1.BackColor = Color.White;
+            };
         }
+        private void JustDrawEllipses(string[] array)
+        {
+            ShowGR();
+            ellipses = GetEllipses(array);
+            DrawEllipses(ellipses);
+        }
+
         private static Source[] GetSources(string[] array)
         {
             List<Point> plist = new List<Point>(array.Length * 2);
@@ -79,26 +109,29 @@ namespace Работа2019
         public EllipseParam[] GetEllipses(string[] array)
         {
             EllipseParam[] param = new EllipseParam[array.Length];
-            string[] st;
+            Vgb = new Tuple<double, double>[array.Length];
+
             double sd = textBox6.Text.ToDouble();
-            for(int i = 0; i < array.Length; i++)
-            {
-                st = array[i].Split(new char[] { ' ' }, StringSplitOptions.RemoveEmptyEntries);
-                double s = Functions.GetFockS(new Tuple<double, double>(st[4].ToDouble(), st[5].ToDouble()));
+            double ts = textBox1.Text.ToDouble();
+
+            Parallel.For(0, array.Length, (int i) => { 
+                string[] st = array[i].Split(new char[] { ' ' }, StringSplitOptions.RemoveEmptyEntries);
+
+                Vgb[i] = new Tuple<double, double>(st[4].ToDouble(), st[5].ToDouble());
+                double s = Vgb[i].Item1* (Vgb[i].Item2-ts);
                 param[i] = new EllipseParam(new Point(st[0].ToDouble(),st[1].ToDouble()),
                     new Point(st[2].ToDouble(), st[3].ToDouble()), s, 
                     Библиотека_графики.Other.colors[st[6].ToInt32()], $"{st[7]} {st[8]} {st[9]}", FuncMethods.GaussBell2(s, sd * s));
-            }
+            });
             return param;
         }
         public void DrawEllipses( EllipseParam[] param)
         {
-                       foreach (var p in param)
+            foreach (var p in param)
             {
                 this.Add(p);
             }
             DrawFigures();
-            ShowGR();
         }
 
         public Scheme(Source[] mass, Point beg, double lenx, double leny, string filename) : this(mass)
