@@ -992,7 +992,7 @@ public static class Functions
             $"{res.Item1[0]} {res.Item1[1]}",
             $"maximum is {Math.Log(res.Item2)/coef}",
             $"omega(кГц) = {1.0 / (res.Item1[0] * 1000)}",
-            $"Vg(a) = {Vg(res.Item1[0])}"
+            $"Vg(a) = {Vg(pimult2 / (res.Item1[0]* 1e6))}"
         });
     }
 
