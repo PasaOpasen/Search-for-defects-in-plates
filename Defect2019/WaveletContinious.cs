@@ -325,6 +325,7 @@ namespace Работа2019
 
             string[] names = Enumerable.Range(0, sources.Length).Select(i => $"Array{symbols[i]}.txt").ToArray();
             string[] wheredata = Expendator.GetStringArrayFromFile("WhereData.txt").Select(s => Path.Combine(s, "Разница")).ToArray();
+            List<string> pathellipse = new List<string>(sources.Length * (sources.Length - 1));
 
             List<EllipseParam> param = new List<EllipseParam>();
             int alles = sources.Length * (sources.Length - 1);
@@ -357,10 +358,11 @@ namespace Работа2019
 
                     double s = Functions.GetFockS(tuple);
                     ItElleps[k] = new EllipseParam(otherSources[k].Center, itSource.Center, s, Библиотека_графики.Other.colors[i], savename,FuncMethods.GaussBell2(s,sd*s));
+                    pathellipse.Add($"{otherSources[k].Center.x} {otherSources[k].Center.y} {itSource.Center.x} {itSource.Center.y} {tuple.Item1.ToRString()} {tuple.Item2.ToRString()} {i} {savename}");
                     AddToScheme(ItElleps[k]);
-                    Debug.WriteLine(ItElleps[k]);
 
                 }
+                Expendator.WriteInFile(Path.Combine("Максимумы с эллипсов", "Params.txt"), pathellipse.ToArray());
                 param.AddRange(ItElleps);
                 SetDefaltProgressBar();
                 timer1.Stop();
@@ -396,7 +398,6 @@ namespace Работа2019
             EllipseParam.WriteInFile("Ellipses.txt", param);
             if (scheme.IsDisposed)
                 new Scheme(sources, param.ToArray(), "Схема для всех замеров").Show();
-
 
         }
         private async Task MakeEllipses2(List<EllipseParam> param)
