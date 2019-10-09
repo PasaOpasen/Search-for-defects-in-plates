@@ -1,6 +1,12 @@
-﻿using System.Drawing;
+﻿using System;
+using System.Drawing;
 using System.Windows.Forms;
 using Point = МатКлассы.Point;
+using System.Collections;
+using System.Collections.Generic;
+using System.Linq;
+using МатКлассы;
+using System.Threading.Tasks;
 
 namespace Работа2019
 {
@@ -22,13 +28,15 @@ namespace Работа2019
         private Point center;
         private Source[] mas;
         private float rad;
+        private EllipseParam[] ellipses;
 
-        public Scheme(string title="Схема эксперимента")
+        public Scheme(string title = "Схема эксперимента")
         {
             InitializeComponent();
             saveFileDialog1.Filter = "Image files(*.png)|*.png|All files(*.*)|*.*";
             this.Text = title;
-           // SoundMethods.SetPositions();
+            // SoundMethods.SetPositions();
+            groupBox6.Hide();
         }
 
         public Scheme(Source[] mass, string title = "Схема эксперимента") : this(title)
@@ -39,13 +47,58 @@ namespace Работа2019
             DrawFigures();
         }
 
-        public Scheme(Source[] mass,EllipseParam[] param, string title = "Схема эксперимента") : this(mass,title)
+        public Scheme(Source[] mass, EllipseParam[] param, string title = "Схема эксперимента") : this(mass, title)
         {
-            foreach(var p in param)
+            DrawEllipses(param);
+        }
+        public void ShowGR()
+        {
+            groupBox6.Show();
+            textBox1.Text = РабКонсоль.timeshift.ToString();
+        }
+
+        public Scheme(string[] array, string title = "Схема эксперимента"):this(GetSources(array),title)
+        {
+            var param = GetEllipses(array);
+            ellipses = param;
+            DrawEllipses(param);
+        }
+        private static Source[] GetSources(string[] array)
+        {
+            List<Point> plist = new List<Point>(array.Length * 2);
+            string[] st;
+            for (int i = 0; i < array.Length; i++)
+            {
+                st = array[i].Split(new char[] { ' ' }, StringSplitOptions.RemoveEmptyEntries);
+                plist.Add(new Point(st[0].ToDouble(), st[1].ToDouble()));
+                plist.Add(new Point(st[2].ToDouble(), st[3].ToDouble()));
+            }
+            var centers = plist.Distinct().Select(p=>new Waves.Circle(p,8));
+            return centers.Select(p => new Source(p, p.GetNormalsOnCircle(30), Array.Empty<Number.Complex>())).ToArray();
+        }
+        public EllipseParam[] GetEllipses(string[] array)
+        {
+            EllipseParam[] param = new EllipseParam[array.Length];
+            string[] st;
+            double sd = textBox6.Text.ToDouble();
+            for(int i = 0; i < array.Length; i++)
+            {
+                st = array[i].Split(new char[] { ' ' }, StringSplitOptions.RemoveEmptyEntries);
+                double s = Functions.GetFockS(new Tuple<double, double>(st[4].ToDouble(), st[5].ToDouble()));
+                param[i] = new EllipseParam(new Point(st[0].ToDouble(),st[1].ToDouble()),
+                    new Point(st[2].ToDouble(), st[3].ToDouble()), s, 
+                    Библиотека_графики.Other.colors[st[6].ToInt32()], $"{st[7]} {st[8]} {st[9]}", FuncMethods.GaussBell2(s, sd * s));
+            }
+            return param;
+        }
+        public void DrawEllipses( EllipseParam[] param)
+        {
+                       foreach (var p in param)
             {
                 this.Add(p);
             }
             DrawFigures();
+            ShowGR();
         }
 
         public Scheme(Source[] mass, Point beg, double lenx, double leny, string filename) : this(mass)
@@ -54,8 +107,8 @@ namespace Работа2019
         }
         private void DrawImage(Point beg, double lenx, double leny, string filename)
         {
-          var p = MyPointToPointF(beg);
-            float cc = 15.0f / 11;
+            var p = MyPointToPointF(beg);
+            const float cc = 15.0f / 11;
             g.DrawImage(Image.FromFile(filename), p.X, p.Y, (float)(lenx / X * pictureBox1.BackgroundImage.Size.Width/*+ pictureBox1.BackgroundImage.Size.Width/14*0.5*/) * cc, (float)(leny / Y * pictureBox1.BackgroundImage.Size.Height/*- pictureBox1.BackgroundImage.Size.Height/14*0.5)*cc*/));
         }
 
@@ -79,7 +132,7 @@ namespace Работа2019
 
             var tp = МатКлассы.Point.GetBigRect(pmas);
             center = new Point((tp.Item1.x + tp.Item2.x) / 2, (tp.Item1.y + tp.Item2.y) / 2);
-       
+
             rad = (float)Source.GetMaxRadius(mas);
             double diam = rad * 2;
 
@@ -88,9 +141,9 @@ namespace Работа2019
             double xy = X / Y;
             X *= WindowCoef;
             Y *= WindowCoef;
-            
-            int c = 1000;
-            pictureBox1.BackgroundImage = new Bitmap((int)(xy * c),c);
+
+            const int c = 1000;
+            pictureBox1.BackgroundImage = new Bitmap((int)(xy * c), c);
             this.Size = new Size((int)(this.Size.Height * xy), this.Size.Height);
 
             g = Graphics.FromImage(pictureBox1.BackgroundImage);
@@ -106,9 +159,9 @@ namespace Работа2019
                 DrawSource(mas[i]);
                 var pp = MyPointToPointF(mas[i].Center);
                 g.DrawString(mas[i].Center.ToString(), font, Brushes.Blue, pp);
-                var step = rad/4.0f;
-                g.DrawLine(new Pen(Brushes.Black, 4), new PointF(pp.X -  step, pp.Y -  step), new PointF(pp.X +  step, pp.Y +  step));
-                g.DrawLine(new Pen(Brushes.Black, 4), new PointF(pp.X - step, pp.Y +  step), new PointF(pp.X +  step, pp.Y -  step));
+                var step = rad / 4.0f;
+                g.DrawLine(new Pen(Brushes.Black, 4), new PointF(pp.X - step, pp.Y - step), new PointF(pp.X + step, pp.Y + step));
+                g.DrawLine(new Pen(Brushes.Black, 4), new PointF(pp.X - step, pp.Y + step), new PointF(pp.X + step, pp.Y - step));
             }
 
             pictureBox1.Invalidate();
@@ -154,7 +207,7 @@ namespace Работа2019
         private PointF[] SourceToFpoint(Source ss)
         {
             var s = ss.NormsPositionArray;
-          return  PointArrayToPointF(s);
+            return PointArrayToPointF(s);
         }
 
         /// <summary>
@@ -179,6 +232,27 @@ namespace Работа2019
 
             mas[s.Length] = mas[0];
             return mas;
+        }
+
+        private void groupBox6_Enter(object sender, System.EventArgs e)
+        {
+
+        }
+        private async Task MakeEllipses(EllipseParam[] param)
+        {
+            NetOnDouble XX = new NetOnDouble(textBox7.Text.ToDouble(), textBox8.Text.ToDouble(), numericUpDown7.Value.ToInt32());
+            NetOnDouble YY = new NetOnDouble(textBox9.Text.ToDouble(), textBox10.Text.ToDouble(), numericUpDown7.Value.ToInt32());
+            await EllipseParam.GetSurfaces(param.ToArray(), XX, YY, "EllipseSurface");
+        }
+        private async void button1_Click(object sender, EventArgs e)
+        {
+            double sd = textBox6.Text.ToDouble();
+            for(int i=0;i<ellipses.Length;i++)
+                ellipses[i] = new EllipseParam(ellipses[i].focSensor,
+                    ellipses[i].focSource, ellipses[i].a*2,
+                    ellipses[i].Color, ellipses[i].name, FuncMethods.GaussBell2(2* ellipses[i].a, sd *2* ellipses[i].a));
+            await MakeEllipses(ellipses);
+            new Библиотека_графики.PdfOpen("Поверхность для эллипсов", "EllipseSurface.pdf").Show();
         }
     }
 }

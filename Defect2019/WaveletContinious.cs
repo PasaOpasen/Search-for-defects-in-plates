@@ -209,7 +209,6 @@ namespace Работа2019
             W = new NetOnDouble(wmin, wmax, wcount);
             T = new NetOnDouble(tmin, tmax, tcount);
             epsForWaveletValues = textBox5.Text.ToDouble();
-            sd = textBox6.Text.ToDouble();
 
             all = wcount * tcount;
 
@@ -327,7 +326,6 @@ namespace Работа2019
             string[] wheredata = Expendator.GetStringArrayFromFile("WhereData.txt").Select(s => Path.Combine(s, "Разница")).ToArray();
             List<string> pathellipse = new List<string>(sources.Length * (sources.Length - 1));
 
-            List<EllipseParam> param = new List<EllipseParam>();
             int alles = sources.Length * (sources.Length - 1);
             IProgress<int> progress = new Progress<int>((int val) => save = val);
 
@@ -337,7 +335,6 @@ namespace Работа2019
                 var otherSources = sources.Where(s => s != itSource).ToArray();
                 var othernames = names.Where(n => n != names[i]).ToArray();
                 var snames = symbols.Where(s => s != symbols[i]).ToArray();
-                var ItElleps = new EllipseParam[sources.Length - 1];
 
                 timer1.Start();
                 for (int k = 0; k < otherSources.Length; k++)
@@ -356,14 +353,9 @@ namespace Работа2019
                         MyWavelet, wheredata[i], byevery, epsForWaveletValues,
                         pointcount, pointmax, pointmax2);
 
-                    double s = Functions.GetFockS(tuple);
-                    ItElleps[k] = new EllipseParam(otherSources[k].Center, itSource.Center, s, Библиотека_графики.Other.colors[i], savename,FuncMethods.GaussBell2(s,sd*s));
                     pathellipse.Add($"{otherSources[k].Center.x} {otherSources[k].Center.y} {itSource.Center.x} {itSource.Center.y} {tuple.Item1.ToRString()} {tuple.Item2.ToRString()} {i} {savename}");
-                    AddToScheme(ItElleps[k]);
-
                 }
                 Expendator.WriteInFile(Path.Combine("Максимумы с эллипсов", "Params.txt"), pathellipse.ToArray());
-                param.AddRange(ItElleps);
                 SetDefaltProgressBar();
                 timer1.Stop();
                 OtherMethods.PlaySound("ЗамерОбработан");
@@ -371,9 +363,7 @@ namespace Работа2019
 
 
             OtherMethods.PlaySound("СоздаемЭллипсы");
-            MakeEllipses(param);
-            await MakeEllipses2(param);
-            new Библиотека_графики.PdfOpen("Поверхность для эллипсов", "EllipseSurface.pdf").Show();
+            MakeEllipses(pathellipse.ToArray());         
             SetDefaultStrip();
         }
 
@@ -393,18 +383,9 @@ namespace Работа2019
                 scheme.Refresh();
             }
         }
-        private void MakeEllipses(List<EllipseParam> param)
+        private void MakeEllipses(string[] param)
         {
-            EllipseParam.WriteInFile("Ellipses.txt", param);
-            if (scheme.IsDisposed)
-                new Scheme(sources, param.ToArray(), "Схема для всех замеров").Show();
-
-        }
-        private async Task MakeEllipses2(List<EllipseParam> param)
-        {
-            NetOnDouble XX = new NetOnDouble(textBox7.Text.ToDouble(), textBox8.Text.ToDouble(), numericUpDown7.Value.ToInt32());
-            NetOnDouble YY = new NetOnDouble(textBox9.Text.ToDouble(), textBox10.Text.ToDouble(), numericUpDown7.Value.ToInt32());
-            await  EllipseParam.GetSurfaces(param.ToArray(), XX, YY,"EllipseSurface");
+           new Scheme(param, "Схема для всех замеров").Show();
         }
     }
 }
