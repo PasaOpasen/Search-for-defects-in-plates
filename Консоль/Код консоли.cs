@@ -24,7 +24,9 @@ namespace Консоль
         static void Main(string[] args)
         {
             // WaveletCreateFromFunction();
-            WaveletCreateFromArray();
+            //WaveletCreateFromArray();
+
+            new MostSimpleGrafic(FuncMethods.GaussBell2(10, 6), new NetOnDouble(0, 20, 100)).ShowDialog();
 
             // Create3DGrafic();
         }

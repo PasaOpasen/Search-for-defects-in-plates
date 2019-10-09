@@ -148,9 +148,22 @@ namespace МатКлассы
         public static Func<double,double> GaussBell(double mean=0,double sd=1)
         {
             double a = 1.0 / (sd * Math.Sqrt(2 * Math.PI));
-            double s2 = -2 * sd * sd;
+            double s2 = -2 * sd;
             double sqr(double x) => x * x;
-            return (double t) => a * Math.Exp(sqr(t) * s2);
+            return (double t) => a * Math.Exp(sqr(t-mean) / s2);
+
+        }
+        /// <summary>
+        /// Нормированный колокол Гаусса
+        /// </summary>
+        /// <param name="mean"></param>
+        /// <param name="sd"></param>
+        /// <returns></returns>
+        public static Func<double, double> GaussBell2(double mean = 0, double sd = 1)
+        {
+            double s2 = -2 * sd;
+            double sqr(double x) => x * x;
+            return (double t) => Math.Exp(sqr(t - mean) / s2);
 
         }
         #endregion
