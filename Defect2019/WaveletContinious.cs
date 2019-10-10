@@ -318,7 +318,7 @@ namespace Работа2019
             Accord.Math.HilbertTransform.FHT(arr2, FourierTransform.Direction.Forward);
 
             double t = tmin + Array.IndexOf(arr2, arr2.Max()) * how * step;
-            const double dt = 5e-5;
+            const double dt = 3e-5;
             textBox3.Text = (t - dt).ToString();
             textBox4.Text = (t + dt).ToString();
         }
