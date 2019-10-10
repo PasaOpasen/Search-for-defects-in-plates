@@ -361,7 +361,7 @@ namespace Работа2019
                         MyWavelet, wheredata[i], byevery, epsForWaveletValues,
                         pointcount, pointmax, pointmax2);
 
-                    pathellipse.Add($"{otherSources[k].Center.x} {otherSources[k].Center.y} {itSource.Center.x} {itSource.Center.y} {Functions.Vg2(tuple.Item1).ToRString()} {tuple.Item2.ToRString()} {i} {savename}");
+                    pathellipse.Add($"{otherSources[k].Center.x} {otherSources[k].Center.y} {itSource.Center.x} {itSource.Center.y} {Functions.Vg2(tuple.Item1).ToRString()} {tuple.Item2.ToRString()} {i} {savename} {tuple.Item1}");
                 }
                 Expendator.WriteInFile(Path.Combine("Максимумы с эллипсов", "Params.txt"), pathellipse.ToArray());
                 SetDefaltProgressBar();

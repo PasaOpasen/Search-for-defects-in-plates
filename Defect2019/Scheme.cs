@@ -126,7 +126,7 @@ namespace Работа2019
                 string[] st = array[i].Split(new char[] { ' ' }, StringSplitOptions.RemoveEmptyEntries);
 
                 Vgb[i] = new Tuple<double, double>(st[4].ToDouble(), st[5].ToDouble());
-                double s = Vgb[i].Item1 * (Vgb[i].Item2 - ts);
+                double s = Vgb[i].Item1 * (Vgb[i].Item2 -ts /*(2.5*st[10].ToDouble()+5e-5)*/);
                 param[i] = new EllipseParam(new Point(st[0].ToDouble(), st[1].ToDouble()),
                     new Point(st[2].ToDouble(), st[3].ToDouble()), s,
                     Библиотека_графики.Other.colors[st[6].ToInt32()], $"{st[7]} {st[8]} {st[9]}", FuncMethods.GaussBell2(s, sd * s));
