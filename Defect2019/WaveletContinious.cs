@@ -301,11 +301,14 @@ namespace Работа2019
         {
             var arr = File.ReadLines(filename).Select(p => Convert.ToDouble(p.Replace('.', ','))).ToArray();
             const double crosstalk = 0.0001;
+            const double crosstalkend=0.45e-3;
             if (tmin < crosstalk)
             {
-                arr = arr.Slice(Math.Round((crosstalk - tmin) / step).ToInt(), arr.Length - 1);
+                arr = arr.Slice(Math.Round((crosstalk - tmin) / step).ToInt(), /*arr.Length - 1*/Math.Round((crosstalkend-tmin )/ step).ToInt());
                 tmin = crosstalk;
             }
+
+
             const int maxi = 16384;
             int how = arr.Length / maxi;
             double[] arr2 = new double[maxi];

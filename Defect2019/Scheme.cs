@@ -60,14 +60,23 @@ namespace Работа2019
             textBox1.Text = РабКонсоль.timeshift.ToString();
         }
 
-        public Scheme(string[] array, string title = "Схема эксперимента"):this(GetSources(array),title)
+        public Scheme(string[] array, string title = "Схема эксперимента") : this(GetSources(array), title)
         {
             JustDrawEllipses(array);
+
+            void ProoveEllipses()
+            {
+                if (ellipses.Select(el => el.right).Contains(false))
+                    textBox1.BackColor = Color.Red;
+                else
+                    textBox1.BackColor = Color.White;
+            }
+
             textBox1.TextChanged += (o, e) =>
             {
                 try
                 {
-                   Convert.ToDouble( textBox1.Text);
+                    Convert.ToDouble(textBox1.Text);
                 }
                 catch
                 {
@@ -80,11 +89,9 @@ namespace Работа2019
 
                 ellipses = GetEllipses(array);
                 DrawEllipses(ellipses);
-                if (ellipses.Select(el => el.right).Contains(false))
-                    textBox1.BackColor = Color.Red;
-                else
-                    textBox1.BackColor = Color.White;
+                ProoveEllipses();
             };
+            ProoveEllipses();
         }
         private void JustDrawEllipses(string[] array)
         {
@@ -103,7 +110,7 @@ namespace Работа2019
                 plist.Add(new Point(st[0].ToDouble(), st[1].ToDouble()));
                 plist.Add(new Point(st[2].ToDouble(), st[3].ToDouble()));
             }
-            var centers = plist.Distinct().Select(p=>new Waves.Circle(p,8));
+            var centers = plist.Distinct().Select(p => new Waves.Circle(p, 8));
             return centers.Select(p => new Source(p, p.GetNormalsOnCircle(30), Array.Empty<Number.Complex>())).ToArray();
         }
         public EllipseParam[] GetEllipses(string[] array)
@@ -114,18 +121,19 @@ namespace Работа2019
             double sd = textBox6.Text.ToDouble();
             double ts = textBox1.Text.ToDouble();
 
-            Parallel.For(0, array.Length, (int i) => { 
+            Parallel.For(0, array.Length, (int i) =>
+            {
                 string[] st = array[i].Split(new char[] { ' ' }, StringSplitOptions.RemoveEmptyEntries);
 
                 Vgb[i] = new Tuple<double, double>(st[4].ToDouble(), st[5].ToDouble());
-                double s = Vgb[i].Item1* (Vgb[i].Item2-ts);
-                param[i] = new EllipseParam(new Point(st[0].ToDouble(),st[1].ToDouble()),
-                    new Point(st[2].ToDouble(), st[3].ToDouble()), s, 
+                double s = Vgb[i].Item1 * (Vgb[i].Item2 - ts);
+                param[i] = new EllipseParam(new Point(st[0].ToDouble(), st[1].ToDouble()),
+                    new Point(st[2].ToDouble(), st[3].ToDouble()), s,
                     Библиотека_графики.Other.colors[st[6].ToInt32()], $"{st[7]} {st[8]} {st[9]}", FuncMethods.GaussBell2(s, sd * s));
             });
             return param;
         }
-        public void DrawEllipses( EllipseParam[] param)
+        public void DrawEllipses(EllipseParam[] param)
         {
             foreach (var p in param)
             {
@@ -279,13 +287,17 @@ namespace Работа2019
         }
         private async void button1_Click(object sender, EventArgs e)
         {
+            button1.Text = "Wait...";
+
             double sd = textBox6.Text.ToDouble();
-            for(int i=0;i<ellipses.Length;i++)
+            for (int i = 0; i < ellipses.Length; i++)
                 ellipses[i] = new EllipseParam(ellipses[i].focSensor,
-                    ellipses[i].focSource, ellipses[i].a*2,
-                    ellipses[i].Color, ellipses[i].name, FuncMethods.GaussBell2(2* ellipses[i].a, sd *2* ellipses[i].a));
+                    ellipses[i].focSource, ellipses[i].a * 2,
+                    ellipses[i].Color, ellipses[i].name, FuncMethods.GaussBell2(2 * ellipses[i].a, sd * 2 * ellipses[i].a));
             await MakeEllipses(ellipses);
             new Библиотека_графики.PdfOpen("Поверхность для эллипсов", "EllipseSurface.pdf").Show();
+
+            button1.Text = "Run";
         }
     }
 }
