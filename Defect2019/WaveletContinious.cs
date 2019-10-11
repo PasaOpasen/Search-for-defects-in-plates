@@ -386,7 +386,8 @@ namespace Работа2019
         //}
         private void MakeEllipses(string[] param)
         {
-           new Scheme(param, "Схема для всех замеров").Show();
+            Functions.SetMinTimeShift(textBox6.Text.ToDouble());
+            new Scheme(param, "Схема для всех замеров").Show();
         }
     }
 }

@@ -71,6 +71,8 @@
             this.numericUpDown4 = new System.Windows.Forms.NumericUpDown();
             this.groupBox3 = new System.Windows.Forms.GroupBox();
             this.groupBox5 = new System.Windows.Forms.GroupBox();
+            this.label10 = new System.Windows.Forms.Label();
+            this.textBox6 = new System.Windows.Forms.TextBox();
             ((System.ComponentModel.ISupportInitialize)(this.dataGridView1)).BeginInit();
             this.groupBox1.SuspendLayout();
             ((System.ComponentModel.ISupportInitialize)(this.numericUpDown2)).BeginInit();
@@ -459,7 +461,7 @@
             this.groupBox2.Controls.Add(this.groupBox4);
             this.groupBox2.Controls.Add(this.groupBox3);
             this.groupBox2.Dock = System.Windows.Forms.DockStyle.Bottom;
-            this.groupBox2.Location = new System.Drawing.Point(0, 468);
+            this.groupBox2.Location = new System.Drawing.Point(0, 504);
             this.groupBox2.Name = "groupBox2";
             this.groupBox2.Size = new System.Drawing.Size(622, 146);
             this.groupBox2.TabIndex = 23;
@@ -619,12 +621,35 @@
             this.groupBox5.TabStop = false;
             this.groupBox5.Text = "Интегрирование";
             // 
+            // label10
+            // 
+            this.label10.AutoSize = true;
+            this.label10.BackColor = System.Drawing.Color.FromArgb(((int)(((byte)(255)))), ((int)(((byte)(192)))), ((int)(((byte)(192)))));
+            this.label10.Location = new System.Drawing.Point(138, 482);
+            this.label10.Name = "label10";
+            this.label10.Size = new System.Drawing.Size(153, 19);
+            this.label10.TabIndex = 25;
+            this.label10.Text = "Частота (кГц) = ";
+            this.toolTip1.SetToolTip(this.label10, "Определяет подвыборку элементов сетки, чтобы ускорить интергирование в случае бол" +
+        "ьших сеток");
+            // 
+            // textBox6
+            // 
+            this.textBox6.Location = new System.Drawing.Point(297, 479);
+            this.textBox6.Name = "textBox6";
+            this.textBox6.Size = new System.Drawing.Size(122, 26);
+            this.textBox6.TabIndex = 26;
+            this.textBox6.Text = "40";
+            this.textBox6.TextAlign = System.Windows.Forms.HorizontalAlignment.Center;
+            // 
             // WaveletContinious
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(9F, 19F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
             this.BackColor = System.Drawing.Color.FromArgb(((int)(((byte)(255)))), ((int)(((byte)(224)))), ((int)(((byte)(192)))));
-            this.ClientSize = new System.Drawing.Size(622, 614);
+            this.ClientSize = new System.Drawing.Size(622, 650);
+            this.Controls.Add(this.textBox6);
+            this.Controls.Add(this.label10);
             this.Controls.Add(this.groupBox5);
             this.Controls.Add(this.groupBox2);
             this.Controls.Add(this.checkBox4);
@@ -704,5 +729,7 @@
         private System.Windows.Forms.ToolStripButton toolStripButton2;
         private System.Windows.Forms.GroupBox groupBox5;
         private System.Windows.Forms.ToolStripButton toolStripButton3;
+        private System.Windows.Forms.Label label10;
+        private System.Windows.Forms.TextBox textBox6;
     }
 }

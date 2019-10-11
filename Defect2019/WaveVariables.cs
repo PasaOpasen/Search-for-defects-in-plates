@@ -88,6 +88,7 @@ public static class РабКонсоль
     #endregion
 
     #region Параметры для вейвлетов
+    public static int cyclescount = 5;
     public static double timeshift = 0.0000615;// 0.000052;
     #endregion
 }
@@ -1010,6 +1011,12 @@ public static class Functions
     /// <param name="shift"></param>
     /// <returns></returns>
     public static double GetFockS(Tuple<double, double> wt,double shift)=> Vg(pimult2 / (wt.Item1 * 1e6)) * (wt.Item2 - shift) * 1_000_000;//из км/с перевел в мм/с;
+
+    /// <summary>
+    /// Задать сдвиг как его минимальную границу
+    /// </summary>
+    /// <param name="variety">Частота в кГц</param>
+    public static void SetMinTimeShift(double variety) => timeshift = 0.5 * cyclescount / (variety * 1e3);
 
     #endregion
 }
