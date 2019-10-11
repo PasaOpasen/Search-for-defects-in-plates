@@ -99,7 +99,7 @@
             this.dataGridView1.DefaultCellStyle = dataGridViewCellStyle1;
             this.dataGridView1.Location = new System.Drawing.Point(12, 37);
             this.dataGridView1.Name = "dataGridView1";
-            this.dataGridView1.Size = new System.Drawing.Size(595, 216);
+            this.dataGridView1.Size = new System.Drawing.Size(598, 216);
             this.dataGridView1.TabIndex = 0;
             // 
             // groupBox1
@@ -336,9 +336,9 @@
             this.button1.BackColor = System.Drawing.Color.FromArgb(((int)(((byte)(255)))), ((int)(((byte)(128)))), ((int)(((byte)(0)))));
             this.button1.FlatStyle = System.Windows.Forms.FlatStyle.Popup;
             this.button1.Font = new System.Drawing.Font("Consolas", 20.25F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(204)));
-            this.button1.Location = new System.Drawing.Point(339, 297);
+            this.button1.Location = new System.Drawing.Point(341, 297);
             this.button1.Name = "button1";
-            this.button1.Size = new System.Drawing.Size(271, 49);
+            this.button1.Size = new System.Drawing.Size(269, 49);
             this.button1.TabIndex = 3;
             this.button1.Text = "Пуск";
             this.button1.UseVisualStyleBackColor = false;
