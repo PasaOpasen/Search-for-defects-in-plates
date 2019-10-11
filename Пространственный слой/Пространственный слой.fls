@@ -1,7 +1,7 @@
-PWD c:\Users\крендель\Desktop\Статьи\Пространственный слой
+PWD c:\Users\крендель\Desktop\Code\Пространственный слой
 INPUT C:\Users\крендель\AppData\Local\MiKTeX\2.9\miktex\data\le\pdftex\pdflatex.fmt
-INPUT c:\Users\крендель\Desktop\Статьи\Пространственный слой\Пространственный слой.tex
-OUTPUT c:\Users\крендель\Desktop\Статьи\Пространственный слой\Пространственный слой.log
+INPUT c:\Users\крендель\Desktop\Code\Пространственный слой\Пространственный слой.tex
+OUTPUT c:\Users\крендель\Desktop\Code\Пространственный слой\Пространственный слой.log
 INPUT C:\Program Files\MiKTeX 2.9\tex\latex\base\article.cls
 INPUT C:\Program Files\MiKTeX 2.9\tex\latex\base\article.cls
 INPUT C:\Program Files\MiKTeX 2.9\tex\latex\base\size12.clo
@@ -94,9 +94,9 @@ INPUT C:\Program Files\MiKTeX 2.9\tex\latex\graphics-cfg\color.cfg
 INPUT C:\Program Files\MiKTeX 2.9\tex\latex\graphics-cfg\color.cfg
 INPUT C:\Program Files\MiKTeX 2.9\tex\latex\pdfpages\pppdftex.def
 INPUT C:\Program Files\MiKTeX 2.9\tex\latex\pdfpages\pppdftex.def
-INPUT c:\Users\крендель\Desktop\Статьи\Пространственный слой\Пространственный слой.aux
-INPUT c:\Users\крендель\Desktop\Статьи\Пространственный слой\Пространственный слой.aux
-OUTPUT c:\Users\крендель\Desktop\Статьи\Пространственный слой\Пространственный слой.aux
+INPUT c:\Users\крендель\Desktop\Code\Пространственный слой\Пространственный слой.aux
+INPUT c:\Users\крендель\Desktop\Code\Пространственный слой\Пространственный слой.aux
+OUTPUT c:\Users\крендель\Desktop\Code\Пространственный слой\Пространственный слой.aux
 INPUT C:\Program Files\MiKTeX 2.9\tex\context\base\supp-pdf.mkii
 INPUT C:\Program Files\MiKTeX 2.9\tex\context\base\supp-pdf.mkii
 INPUT C:\Program Files\MiKTeX 2.9\tex\latex\oberdiek\epstopdf-base.sty
@@ -146,31 +146,27 @@ INPUT C:\Program Files\MiKTeX 2.9\fonts\tfm\public\amsfonts\symbols\msbm7.tfm
 INPUT C:\Program Files\MiKTeX 2.9\fonts\tfm\public\cm\cmbx12.tfm
 INPUT C:\Program Files\MiKTeX 2.9\fonts\tfm\public\cm\cmbx8.tfm
 INPUT C:\Program Files\MiKTeX 2.9\fonts\tfm\public\cm\cmbx6.tfm
-OUTPUT c:\Users\крендель\Desktop\Статьи\Пространственный слой\Пространственный слой.pdf
+OUTPUT c:\Users\крендель\Desktop\Code\Пространственный слой\Пространственный слой.pdf
 INPUT C:\Users\крендель\AppData\Local\MiKTeX\2.9\pdftex\config\pdftex.map
 INPUT C:\Users\крендель\AppData\Local\MiKTeX\2.9\fonts\tfm\lh\lh-t2a\larm0800.tfm
 INPUT C:\Users\крендель\AppData\Local\MiKTeX\2.9\fonts\tfm\lh\lh-t2a\larm0600.tfm
-INPUT c:\Users\крендель\Desktop\Статьи\Пространственный слой\url.pdf
-INPUT c:\Users\крендель\Desktop\Статьи\Пространственный слой\url.pdf
-INPUT c:\Users\крендель\Desktop\Статьи\Пространственный слой\url.pdf
-INPUT c:\Users\крендель\Desktop\Статьи\Пространственный слой\url.pdf
-INPUT c:\Users\крендель\Desktop\Статьи\Пространственный слой\uzl.pdf
-INPUT c:\Users\крендель\Desktop\Статьи\Пространственный слой\uzl.pdf
-INPUT c:\Users\крендель\Desktop\Статьи\Пространственный слой\uzl.pdf
-INPUT c:\Users\крендель\Desktop\Статьи\Пространственный слой\uzl.pdf
-INPUT c:\Users\крендель\Desktop\Статьи\Пространственный слой\uzw.pdf
-INPUT c:\Users\крендель\Desktop\Статьи\Пространственный слой\uzw.pdf
-INPUT c:\Users\крендель\Desktop\Статьи\Пространственный слой\uzw.pdf
-INPUT c:\Users\крендель\Desktop\Статьи\Пространственный слой\uzw.pdf
-INPUT c:\Users\крендель\Desktop\Статьи\Пространственный слой\dats.pdf
-INPUT c:\Users\крендель\Desktop\Статьи\Пространственный слой\dats.pdf
-INPUT c:\Users\крендель\Desktop\Статьи\Пространственный слой\dats.pdf
-INPUT c:\Users\крендель\Desktop\Статьи\Пространственный слой\dats.pdf
-INPUT c:\Users\крендель\Desktop\Статьи\Пространственный слой\wind.pdf
-INPUT c:\Users\крендель\Desktop\Статьи\Пространственный слой\wind.pdf
-INPUT c:\Users\крендель\Desktop\Статьи\Пространственный слой\wind.pdf
-INPUT c:\Users\крендель\Desktop\Статьи\Пространственный слой\wind.pdf
-INPUT c:\Users\крендель\Desktop\Статьи\Пространственный слой\Пространственный слой.aux
+INPUT c:\Users\крендель\Desktop\Code\Пространственный слой\url.pdf
+INPUT c:\Users\крендель\Desktop\Code\Пространственный слой\url.pdf
+INPUT c:\Users\крендель\Desktop\Code\Пространственный слой\url.pdf
+INPUT c:\Users\крендель\Desktop\Code\Пространственный слой\url.pdf
+INPUT c:\Users\крендель\Desktop\Code\Пространственный слой\uzl.pdf
+INPUT c:\Users\крендель\Desktop\Code\Пространственный слой\uzl.pdf
+INPUT c:\Users\крендель\Desktop\Code\Пространственный слой\uzl.pdf
+INPUT c:\Users\крендель\Desktop\Code\Пространственный слой\uzl.pdf
+INPUT c:\Users\крендель\Desktop\Code\Пространственный слой\dats.pdf
+INPUT c:\Users\крендель\Desktop\Code\Пространственный слой\dats.pdf
+INPUT c:\Users\крендель\Desktop\Code\Пространственный слой\dats.pdf
+INPUT c:\Users\крендель\Desktop\Code\Пространственный слой\dats.pdf
+INPUT c:\Users\крендель\Desktop\Code\Пространственный слой\wind.pdf
+INPUT c:\Users\крендель\Desktop\Code\Пространственный слой\wind.pdf
+INPUT c:\Users\крендель\Desktop\Code\Пространственный слой\wind.pdf
+INPUT c:\Users\крендель\Desktop\Code\Пространственный слой\wind.pdf
+INPUT c:\Users\крендель\Desktop\Code\Пространственный слой\Пространственный слой.aux
 INPUT C:\Program Files\MiKTeX 2.9\fonts\tfm\jknappen\ec\ecrm1200.tfm
 INPUT C:\Users\крендель\AppData\Local\MiKTeX\2.9\fonts\pk\ljfour\lh\lh-t2a\dpi600\larm1200.pk
 INPUT C:\Users\крендель\AppData\Local\MiKTeX\2.9\fonts\pk\ljfour\lh\lh-t2a\dpi600\larm1200.pk
