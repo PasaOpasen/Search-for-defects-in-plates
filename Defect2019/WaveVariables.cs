@@ -885,6 +885,7 @@ public static class Functions
         var ps = Eps(w);
         return 2 * ps / (PolesMasMemoized(w + ps).LastElement - PolesMasMemoized(w - ps).LastElement);
     };
+    public static readonly Func<double, double> Vg2 = (double w) => Vg(pimult2 / (w * 1e6)) * 1_000_000;
 
     private static Tuple<Wavelet, Func<double, double, double>> GetWavelet(double begin, double step, int valuescount, double tmin, double tmax, string filename,
     Wavelets wavelets = Wavelets.LP, string path = null, int byevery = 1, double epsForWaveletValues = 0)
@@ -990,7 +991,8 @@ public static class Functions
             "a b",
             $"{res.Item1[0]} {res.Item1[1]}",
             $"maximum is {Math.Log(res.Item2)/coef}",
-            $"omega(кГц) = {1.0 / (res.Item1[0] * 1000)}"
+            $"omega(кГц) = {1.0 / (res.Item1[0] * 1000)}",
+            $"Vg(a) = {Vg(pimult2 / (res.Item1[0]* 1e6))}"
         });
     }
 
@@ -1000,7 +1002,14 @@ public static class Functions
     /// </summary>
     /// <param name="wt"></param>
     /// <returns></returns>
-    public static double GetFockS(Tuple<double, double> wt) => Vg(/*1.0*/pimult2 / (wt.Item1 * 1e6)) * (wt.Item2 - timeshift) * 1_000_000;//из км/с перевел в мм/с;
+    public static double GetFockS(Tuple<double, double> wt) => GetFockS(wt, timeshift);
+    /// <summary>
+    /// Возвращает параметры s для эллипса
+    /// </summary>
+    /// <param name="wt"></param>
+    /// <param name="shift"></param>
+    /// <returns></returns>
+    public static double GetFockS(Tuple<double, double> wt,double shift)=> Vg(pimult2 / (wt.Item1 * 1e6)) * (wt.Item2 - shift) * 1_000_000;//из км/с перевел в мм/с;
 
     #endregion
 }

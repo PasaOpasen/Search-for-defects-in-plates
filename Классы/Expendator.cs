@@ -174,7 +174,7 @@ namespace МатКлассы
             }
             catch (Exception e)
             {
-                s = s.Replace('.', ',');
+               s = s.Replace('.', ',');
                 try
                 {
                     return Convert.ToDouble(s);
