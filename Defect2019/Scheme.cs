@@ -36,7 +36,15 @@ namespace Работа2019
             InitializeComponent();
             saveFileDialog1.Filter = "Image files(*.png)|*.png|All files(*.*)|*.*";
             this.Text = title;
-            textBox1.Text = РабКонсоль.timeshift.ToString();
+
+            decimal shift = (decimal)РабКонсоль.timeshift;
+            numericUpDown1.Minimum = shift * 0.1m;
+            numericUpDown1.Maximum = shift * 10m;
+            numericUpDown1.Value = shift;
+            numericUpDown1.Increment = shift * 0.8m / 50;
+            numericUpDown1.DecimalPlaces = 12;
+
+
             // SoundMethods.SetPositions();
             groupBox6.Hide();
         }
@@ -60,20 +68,20 @@ namespace Работа2019
             void ProoveEllipses()
             {
                 if (ellipses.Select(el => el.right).Contains(false))
-                    textBox1.BackColor = Color.Red;
+                    numericUpDown1.BackColor = Color.Red;
                 else
-                    textBox1.BackColor = Color.White;
+                    numericUpDown1.BackColor = Color.White;
             }
 
-            textBox1.TextChanged += (o, e) =>
+            numericUpDown1.ValueChanged += (o, e) =>
             {
                 try
                 {
-                    Convert.ToDouble(textBox1.Text);
+                    Convert.ToDouble(numericUpDown1.Value);
                 }
                 catch
                 {
-                    textBox1.BackColor = Color.Yellow;
+                    numericUpDown1.BackColor = Color.Yellow;
                     return;
                 }
 
@@ -113,7 +121,7 @@ namespace Работа2019
             EllipseParam[] param = new EllipseParam[array.Length];
 
             double sd = textBox6.Text.ToDouble();
-            double ts = textBox1.Text.ToDouble();
+            double ts = (double)numericUpDown1.Value;
 
             Parallel.For(0, array.Length, (int i) =>
             {
