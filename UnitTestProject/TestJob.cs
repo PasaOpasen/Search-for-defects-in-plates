@@ -190,8 +190,8 @@ namespace UnitTestProject
         [TestMethod]
         public void BeeHiveVersNotBeeHive()
         {
-            string BeeHiveAdress = @"C:\Users\крендель\Desktop\Code\Defect2019\bin\Debug\Максимумы с эллипсов";
-            string NotBeeHiveAdress = @"C:\Users\крендель\Desktop\Code\Defect2019\bin\Release\Максимумы с эллипсов";
+            string BeeHiveAdress = @"C:\Users\крендель\Desktop\Code\Defect2019\bin\Debug\EllipseData";
+            string NotBeeHiveAdress = @"C:\Users\крендель\Desktop\Code\Defect2019\bin\Release\EllipseData";
             string Symbols = "ABCDEFGH";
 
             string[] files = new string[Symbols.Length * (Symbols.Length - 1)];
