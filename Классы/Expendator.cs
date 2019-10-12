@@ -307,6 +307,15 @@ namespace МатКлассы
             return res;
         }
 
+        /// <summary>
+        /// Возвращает исходный массив без указанного элемента
+        /// </summary>
+        /// <typeparam name="T"></typeparam>
+        /// <param name="array"></param>
+        /// <param name="elem"></param>
+        /// <returns></returns>
+        public static T[] Without<T>(this T[] array,T elem) => array.Where(s => !s.Equals(elem)).ToArray();
+
         public class Compar : Comparer<double>
         {
             /// <summary>

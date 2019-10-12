@@ -37,6 +37,7 @@ namespace Defect2019
             numericUpDown3.Value = РабКонсоль.animatime;
             numericUpDown4.Value = РабКонсоль.animacycles;
             numericUpDown5.Value = РабКонсоль.clastersCount;
+            numericUpDown6.Value = РабКонсоль.cyclescount;
 
             textBox7.Text = BeeHiveAlgorithm.w.ToRString();
             textBox13.Text = BeeHiveAlgorithm.fp.ToRString();
@@ -71,7 +72,7 @@ namespace Defect2019
             РабКонсоль.animatime = Convert.ToInt32(numericUpDown3.Value);
             РабКонсоль.animacycles = Convert.ToInt32(numericUpDown4.Value);
             РабКонсоль.clastersCount = Convert.ToInt32(numericUpDown5.Value);
-
+            РабКонсоль.cyclescount = Convert.ToInt32(numericUpDown6.Value);
 
             BeeHiveAlgorithm.w = textBox7.Text.ToDouble();
             BeeHiveAlgorithm.fp = textBox13.Text.ToDouble();

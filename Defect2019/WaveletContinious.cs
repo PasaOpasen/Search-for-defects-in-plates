@@ -16,8 +16,8 @@ namespace Работа2019
 {
     public partial class WaveletContinious : Form
     {
-        private readonly double step = 16E-9, globaltmin = -0.0004;
-        private readonly int pcount = 150000;
+        private readonly double timestep = 16E-9, globalTimeMin = -0.0004;
+        private readonly int tickCount = 150000;
         private readonly string DefSymbols = "ABCDEFGH";
         private readonly Wavelet.Wavelets MyWavelet = Wavelet.Wavelets.LP;
 
@@ -25,7 +25,7 @@ namespace Работа2019
         private Source[] sources;
         private double wmin, wmax, tmin, tmax, epsForWaveletValues = 1e-8,sd;
         private int wcount, tcount, byevery, pointcount, pointmax, pointmax2;
-        private NetOnDouble W, T;
+        private NetOnDouble Wnet, Tnet;
 
         public WaveletContinious(Source[] array)
         {
@@ -81,26 +81,6 @@ namespace Работа2019
                 //Добавляем строку, указывая значения колонок поочереди слева направо
                 dataGridView1.Rows.Add(sources[i].ToShortString(), DefSymbols[i]);
             }
-
-            //for (int i = 0; i < 5; ++i)
-            //{
-            //    //Добавляем строку, указывая значения каждой ячейки по имени (можно использовать индекс 0, 1, 2 вместо имен)
-            //    dataGridView1.Rows.Add();
-            //    dataGridView1["name", dataGridView1.Rows.Count - 1].Value = "Пример 2, Товар " + i;
-            //    dataGridView1["price", dataGridView1.Rows.Count - 1].Value = i * 1000;
-            //    dataGridView1["count", dataGridView1.Rows.Count - 1].Value = i;
-            //}
-
-            ////А теперь простой пройдемся циклом по всем ячейкам
-            //for (int i = 0; i < dataGridView1.Rows.Count; ++i)
-            //{
-            //    for (int j = 0; j < dataGridView1.Columns.Count; ++j)
-            //    {
-            //        //Значения ячеек хряняться в типе object
-            //        //это позволяет хранить любые данные в таблице
-            //        object o = dataGridView1[j, i].Value;
-            //    }
-            //}
         }
 
         private void toolStripButton1_Click(object sender, EventArgs e)
@@ -111,7 +91,7 @@ namespace Работа2019
         private void button2_Click(object sender, EventArgs e)
         {
             GetData();
-            var form = new R2Area(W, T);
+            var form = new R2Area(Wnet, Tnet);
             form.FormClosing += (o, s) =>
             {
                 if (form.OK)
@@ -133,7 +113,10 @@ namespace Работа2019
 
         private async void toolStripButton2_Click(object sender, EventArgs e)
         {
-            if (MessageBox.Show("Для текущего прямоугольника будут произведены все построения на сетке 40*40, затем будут показаны некоторые результаты в случайном порядке. Это займёт время. Взглянув на результаты, пользователь должен сам обрезать исходный прямоугольник. Выполнить?", "Тестирование для опеределения области", MessageBoxButtons.YesNo, MessageBoxIcon.Information) == DialogResult.No)
+            const int howmany = 40;
+
+            if (MessageBox.Show($"Для текущего прямоугольника будут произведены все построения на сетке {howmany}*{howmany}, затем будут показаны некоторые результаты в случайном порядке. Это займёт время. Взглянув на результаты, пользователь должен сам обрезать исходный прямоугольник. Выполнить?",
+                "Тестирование для опеределения области", MessageBoxButtons.YesNo, MessageBoxIcon.Information) == DialogResult.No)
                 return;
 
             OtherMethods.PlaySound("Поехали");
@@ -141,18 +124,20 @@ namespace Работа2019
             SetSymbols();
             GetData();
 
-            string[] names = Enumerable.Range(0, sources.Length).Select(i => $"Array{dataGridView1[1, i].Value}.txt").ToArray();
-            string[] wheredata = Expendator.GetStringArrayFromFile("WhereData.txt").Select(s => Path.Combine(s, "Разница")).ToArray();
-            all = 40 * 40;
+            var tmp = GetDataPaths();
+            string[] names = tmp.Item1;
+            string[] wheredata = tmp.Item2;
+
+            all = howmany * howmany;
             int alles = sources.Length * (sources.Length - 1);
             IProgress<int> progress = new Progress<int>((int val) => save = val);
 
             for (int i = 0; i < sources.Length; i++)
             {
                 var itSource = sources[i];
-                var otherSources = sources.Where(s => s != itSource).ToArray();
-                var othernames = names.Where(n => n != names[i]).ToArray();
-                var snames = symbols.Where(s => s != symbols[i]).ToArray();
+                var otherSources = sources.Without(itSource);
+                var othernames = names.Without(names[i]);
+                var snames = new string(symbols.ToCharArray().Without(symbols[i]));
 
                 timer1.Start();
                 for (int k = 0; k < otherSources.Length; k++)
@@ -162,9 +147,9 @@ namespace Работа2019
                     toolStripLabel1.Text = $"Замер {symbols[i]}, источник {snames[k]}, осталось {alles--}";
 
                     var tuple = await Functions.GetMaximunFromArea(
-                        new NetOnDouble(W, 40), new NetOnDouble(T, 40),
+                        new NetOnDouble(Wnet, 40), new NetOnDouble(Tnet, 40),
                         progress, new System.Threading.CancellationToken(),
-                       globaltmin, step, pcount, othernames[k], Path.Combine(Environment.CurrentDirectory, savename.Replace(" -> ", "to")),
+                       globalTimeMin, timestep, tickCount, othernames[k], Path.Combine(Environment.CurrentDirectory, savename.Replace(" -> ", "to")),
                        MyWavelet, wheredata[i], 32, epsForWaveletValues);
                 }
                 SetDefaltProgressBar();
@@ -177,6 +162,14 @@ namespace Работа2019
             SetDefaultStrip();
             OtherMethods.PlaySound("ТестированиеОкончено");
         }
+
+        private Tuple<string[], string[]> GetDataPaths()
+        {
+            string[] names = Enumerable.Range(0, sources.Length).Select(i => $"Array{dataGridView1[1, i].Value}.txt").ToArray();
+            string[] wheredata = Expendator.GetStringArrayFromFile("WhereData.txt").Select(s => Path.Combine(s, "Разница")).ToArray();
+            return new Tuple<string[], string[]>(names, wheredata);
+        }
+
         private void ShowPdfs()
         {
             List<string> L = new List<string>();
@@ -195,8 +188,8 @@ namespace Работа2019
 
         private void GetData()
         {
-            wmin = 1.0 / textBox2.Text.ToDouble() / 1000;//(2000*Math.PI);
-            wmax = 1.0 / textBox1.Text.ToDouble() / 1000; //(2000 * Math.PI);
+            wmin = 1.0 / textBox2.Text.ToDouble() / 1000;
+            wmax = 1.0 / textBox1.Text.ToDouble() / 1000;
             tmin = textBox3.Text.ToDouble();
             tmax = textBox4.Text.ToDouble();
             wcount = numericUpDown1.Value.ToInt32();
@@ -206,12 +199,11 @@ namespace Работа2019
             pointmax = numericUpDown5.Value.ToInt32();
             pointmax2 = numericUpDown6.Value.ToInt32();
 
-            W = new NetOnDouble(wmin, wmax, wcount);
-            T = new NetOnDouble(tmin, tmax, tcount);
+            Wnet = new NetOnDouble(wmin, wmax, wcount);
+            Tnet = new NetOnDouble(tmin, tmax, tcount);
             epsForWaveletValues = textBox5.Text.ToDouble();
 
             all = wcount * tcount;
-
         }
         private void SetSymbols()
         {
@@ -228,7 +220,7 @@ namespace Работа2019
             }
             catch
             {
-                MB("Минимум одно из заданных имён не является допустимым. Используйте только символы. Будут использованы имена по умолчанию");
+                MB("Минимум одно из заданных имён не является допустимым. Используйте только символы. Сейчас будут использованы имена по умолчанию");
                 symbols = new string(DefSymbols.ToCharArray());
             }
             finally
@@ -308,7 +300,6 @@ namespace Работа2019
                 tmin = crosstalk;
             }
 
-
             const int maxi = 16384;
             int how = arr.Length / maxi;
             double[] arr2 = new double[maxi];
@@ -330,8 +321,10 @@ namespace Работа2019
             SetDir();
             SetSymbols();
 
-            string[] names = Enumerable.Range(0, sources.Length).Select(i => $"Array{symbols[i]}.txt").ToArray();
-            string[] wheredata = Expendator.GetStringArrayFromFile("WhereData.txt").Select(s => Path.Combine(s, "Разница")).ToArray();
+            var tmp = GetDataPaths();
+            string[] names = tmp.Item1;
+            string[] wheredata = tmp.Item2;
+
             List<string> pathellipse = new List<string>(sources.Length * (sources.Length - 1));
 
             int alles = sources.Length * (sources.Length - 1);
@@ -340,24 +333,24 @@ namespace Работа2019
             for (int i = 0; i < sources.Length; i++)
             {
                 var itSource = sources[i];
-                var otherSources = sources.Where(s => s != itSource).ToArray();
-                var othernames = names.Where(n => n != names[i]).ToArray();
-                var snames = symbols.Where(s => s != symbols[i]).ToArray();
+                var otherSources = sources.Without(itSource);
+                var othernames = names.Without(names[i]);
+                var snames = new string(symbols.ToCharArray().Without(symbols[i]));
 
                 timer1.Start();
                 for (int k = 0; k < otherSources.Length; k++)
                 {
-                    TransformArea(Path.Combine(wheredata[i], $"{snames[k]}.txt"), Path.Combine(wheredata[i], othernames[k]), globaltmin, step);
+                    TransformArea(Path.Combine(wheredata[i], $"{snames[k]}.txt"), Path.Combine(wheredata[i], othernames[k]), globalTimeMin, timestep);
                     GetData();
                     string savename = $"{snames[k]} -> {symbols[i]}";
 
                     toolStripLabel1.Text = $"Замер {symbols[i]}, источник {snames[k]}, осталось {alles--}";
 
-                    var tuple = (radioButton1.Checked) ? await Functions.GetMaximunFromArea(W, T, progress, new System.Threading.CancellationToken(),
-                        globaltmin, step, pcount, othernames[k], Path.Combine(dir, savename.Replace(" -> ", "to")),
+                    var tuple = (radioButton1.Checked) ? await Functions.GetMaximunFromArea(Wnet, Tnet, progress, new System.Threading.CancellationToken(),
+                        globalTimeMin, timestep, tickCount, othernames[k], Path.Combine(dir, savename.Replace(" -> ", "to")),
                         MyWavelet, wheredata[i], byevery, epsForWaveletValues) :
                        await Functions.GetMaximunFromArea(wmin, wmax, tmin, tmax,
-                        globaltmin, step, pcount, othernames[k], Path.Combine(dir, savename.Replace(" -> ", "to")),
+                        globalTimeMin, timestep, tickCount, othernames[k], Path.Combine(dir, savename.Replace(" -> ", "to")),
                         MyWavelet, wheredata[i], byevery, epsForWaveletValues,
                         pointcount, pointmax, pointmax2);
 
@@ -376,24 +369,25 @@ namespace Работа2019
         }
 
 
-        Scheme scheme = null;
-        private void AddToScheme(EllipseParam p)
-        {
-            if (scheme == null)
-            {
-                scheme = new Scheme(sources, new EllipseParam[] { p });
-                scheme.StartPosition = FormStartPosition.CenterScreen;
-                scheme.Show();
-            }
-            else
-            {
-                scheme.Add(p);
-                scheme.Refresh();
-            }
-        }
+        //Scheme scheme = null;
+        //private void AddToScheme(EllipseParam p)
+        //{
+        //    if (scheme == null)
+        //    {
+        //        scheme = new Scheme(sources, new EllipseParam[] { p });
+        //        scheme.StartPosition = FormStartPosition.CenterScreen;
+        //        scheme.Show();
+        //    }
+        //    else
+        //    {
+        //        scheme.Add(p);
+        //        scheme.Refresh();
+        //    }
+        //}
         private void MakeEllipses(string[] param)
         {
-           new Scheme(param, "Схема для всех замеров").Show();
+            Functions.SetMinTimeShift(textBox6.Text.ToDouble());
+            new Scheme(param, "Схема для всех замеров").Show();
         }
     }
 }

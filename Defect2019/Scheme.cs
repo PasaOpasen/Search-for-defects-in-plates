@@ -30,13 +30,13 @@ namespace Работа2019
         private Source[] mas;
         private float rad;
         private EllipseParam[] ellipses;
-        private Tuple<double, double>[] Vgb;
 
         public Scheme(string title = "Схема эксперимента")
         {
             InitializeComponent();
             saveFileDialog1.Filter = "Image files(*.png)|*.png|All files(*.*)|*.*";
             this.Text = title;
+            textBox1.Text = РабКонсоль.timeshift.ToString();
             // SoundMethods.SetPositions();
             groupBox6.Hide();
         }
@@ -45,19 +45,12 @@ namespace Работа2019
         {
             mas = mass;
             CreateEmptyImageAndSetParams();
-
             DrawFigures();
         }
 
         public Scheme(Source[] mass, EllipseParam[] param, string title = "Схема эксперимента") : this(mass, title)
         {
-            ShowGR();
-            DrawEllipses(param);
-        }
-        public void ShowGR()
-        {
-            groupBox6.Show();
-            textBox1.Text = РабКонсоль.timeshift.ToString();
+            JustDrawEllipses(param);
         }
 
         public Scheme(string[] array, string title = "Схема эксперимента") : this(GetSources(array), title)
@@ -91,12 +84,14 @@ namespace Работа2019
                 DrawEllipses(ellipses);
                 ProoveEllipses();
             };
+
             ProoveEllipses();
         }
-        private void JustDrawEllipses(string[] array)
+        private void JustDrawEllipses(string[] array) => JustDrawEllipses(GetEllipses(array));
+        private void JustDrawEllipses(EllipseParam[] array)
         {
-            ShowGR();
-            ellipses = GetEllipses(array);
+            ellipses = array;
+            groupBox6.Show();          
             DrawEllipses(ellipses);
         }
 
@@ -116,7 +111,6 @@ namespace Работа2019
         public EllipseParam[] GetEllipses(string[] array)
         {
             EllipseParam[] param = new EllipseParam[array.Length];
-            Vgb = new Tuple<double, double>[array.Length];
 
             double sd = textBox6.Text.ToDouble();
             double ts = textBox1.Text.ToDouble();
@@ -125,8 +119,8 @@ namespace Работа2019
             {
                 string[] st = array[i].Split(new char[] { ' ' }, StringSplitOptions.RemoveEmptyEntries);
 
-                Vgb[i] = new Tuple<double, double>(st[4].ToDouble(), st[5].ToDouble());
-                double s = Vgb[i].Item1 * (Vgb[i].Item2 -ts /*(2.5*st[10].ToDouble()+5e-5)*/);
+                var Vgb= new Tuple<double, double>(st[4].ToDouble(), st[5].ToDouble());
+                double s = Vgb.Item1 * (Vgb.Item2 -ts /*(2.5*st[10].ToDouble()+5e-5)*/);
                 param[i] = new EllipseParam(new Point(st[0].ToDouble(), st[1].ToDouble()),
                     new Point(st[2].ToDouble(), st[3].ToDouble()), s,
                     Библиотека_графики.Other.colors[st[6].ToInt32()], $"{st[7]} {st[8]} {st[9]}", FuncMethods.GaussBell2(s, sd * s));
@@ -139,7 +133,8 @@ namespace Работа2019
             {
                 this.Add(p);
             }
-            DrawFigures();
+            
+            DrawFigures();//так сделано, чтобы эллипсы не накрывали источники и информацию о них
         }
 
         public Scheme(Source[] mass, Point beg, double lenx, double leny, string filename) : this(mass)
