@@ -43,13 +43,14 @@
             this.textBox7 = new System.Windows.Forms.TextBox();
             this.groupBox6 = new System.Windows.Forms.GroupBox();
             this.button1 = new System.Windows.Forms.Button();
-            this.textBox1 = new System.Windows.Forms.TextBox();
             this.numericUpDown7 = new System.Windows.Forms.NumericUpDown();
             this.textBox6 = new System.Windows.Forms.TextBox();
+            this.numericUpDown1 = new System.Windows.Forms.NumericUpDown();
             ((System.ComponentModel.ISupportInitialize)(this.pictureBox1)).BeginInit();
             this.contextMenuStrip1.SuspendLayout();
             this.groupBox6.SuspendLayout();
             ((System.ComponentModel.ISupportInitialize)(this.numericUpDown7)).BeginInit();
+            ((System.ComponentModel.ISupportInitialize)(this.numericUpDown1)).BeginInit();
             this.SuspendLayout();
             // 
             // pictureBox1
@@ -154,8 +155,8 @@
             // groupBox6
             // 
             this.groupBox6.BackColor = System.Drawing.Color.Transparent;
+            this.groupBox6.Controls.Add(this.numericUpDown1);
             this.groupBox6.Controls.Add(this.button1);
-            this.groupBox6.Controls.Add(this.textBox1);
             this.groupBox6.Controls.Add(this.label1);
             this.groupBox6.Controls.Add(this.textBox10);
             this.groupBox6.Controls.Add(this.textBox9);
@@ -185,16 +186,6 @@
             this.button1.Text = "Run";
             this.button1.UseVisualStyleBackColor = true;
             this.button1.Click += new System.EventHandler(this.button1_Click);
-            // 
-            // textBox1
-            // 
-            this.textBox1.Location = new System.Drawing.Point(115, 36);
-            this.textBox1.Name = "textBox1";
-            this.textBox1.Size = new System.Drawing.Size(123, 26);
-            this.textBox1.TabIndex = 28;
-            this.textBox1.Text = "0,03";
-            this.textBox1.TextAlign = System.Windows.Forms.HorizontalAlignment.Center;
-            this.toolTip1.SetToolTip(this.textBox1, "Белый -- допустимое число, красный -- недопустимое число, жёлтый -- не число");
             // 
             // numericUpDown7
             // 
@@ -234,6 +225,14 @@
             this.textBox6.Text = "0,03";
             this.textBox6.TextAlign = System.Windows.Forms.HorizontalAlignment.Center;
             // 
+            // numericUpDown1
+            // 
+            this.numericUpDown1.Location = new System.Drawing.Point(95, 37);
+            this.numericUpDown1.Name = "numericUpDown1";
+            this.numericUpDown1.Size = new System.Drawing.Size(143, 26);
+            this.numericUpDown1.TabIndex = 30;
+            this.numericUpDown1.TextAlign = System.Windows.Forms.HorizontalAlignment.Center;
+            // 
             // Scheme
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(9F, 19F);
@@ -252,6 +251,7 @@
             this.groupBox6.ResumeLayout(false);
             this.groupBox6.PerformLayout();
             ((System.ComponentModel.ISupportInitialize)(this.numericUpDown7)).EndInit();
+            ((System.ComponentModel.ISupportInitialize)(this.numericUpDown1)).EndInit();
             this.ResumeLayout(false);
 
         }
@@ -264,7 +264,6 @@
         private System.Windows.Forms.SaveFileDialog saveFileDialog1;
         private System.Windows.Forms.ToolTip toolTip1;
         private System.Windows.Forms.GroupBox groupBox6;
-        private System.Windows.Forms.TextBox textBox1;
         private System.Windows.Forms.Label label1;
         private System.Windows.Forms.TextBox textBox10;
         private System.Windows.Forms.TextBox textBox9;
@@ -275,5 +274,6 @@
         private System.Windows.Forms.Label label10;
         private System.Windows.Forms.Button button1;
         internal System.Windows.Forms.TextBox textBox6;
+        private System.Windows.Forms.NumericUpDown numericUpDown1;
     }
 }
