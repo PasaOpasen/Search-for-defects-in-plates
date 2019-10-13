@@ -8,6 +8,7 @@ using System.Linq;
 using МатКлассы;
 using System.Threading.Tasks;
 using System.Threading;
+using JR.Utils.GUI.Forms;
 
 namespace Работа2019
 {
@@ -38,8 +39,8 @@ namespace Работа2019
             this.Text = title;
 
             decimal shift = (decimal)РабКонсоль.timeshift;
-            numericUpDown1.Minimum = shift * 0.01m;
-            numericUpDown1.Maximum = shift * 30m;
+            numericUpDown1.Minimum = shift * 0.001m;
+            numericUpDown1.Maximum = shift * 50m;
             numericUpDown1.Value = shift;
             numericUpDown1.Increment = shift / 70;
             numericUpDown1.DecimalPlaces = 12;
@@ -303,6 +304,13 @@ namespace Работа2019
             new Библиотека_графики.PdfOpen("Поверхность для эллипсов", "EllipseSurface.pdf").Show();
 
             button1.Text = "Run";
+        }
+
+        private void подробнееToolStripMenuItem_Click(object sender, EventArgs e)
+        {
+            var arr = ellipses.Where(el => !el.right).Select(s=>s.ToString()).ToArray();
+            var ss = Expendator.StringArrayToString(arr);
+            FlexibleMessageBox.Show(ss, "Информация о неудавшихся эллипсах");
         }
     }
 }
