@@ -452,7 +452,7 @@ namespace PS5000A
                            "Analogue Hardware "
                          };
 
-            Imports.DeviceResolution resolution = Imports.DeviceResolution.PS5000A_DR_16BIT;
+            const Imports.DeviceResolution resolution = Imports.DeviceResolution.PS5000A_DR_16BIT;
             //Imports.DeviceResolution resolution = Imports.DeviceResolution.PS5000A_DR_8BIT;
 
 
@@ -511,10 +511,10 @@ namespace PS5000A
             status = Imports.SetChannel(_handle, Imports.Channel.ChannelA, 1, Imports.Coupling.PS5000A_AC, Imports.Range.Range_200mV, 0);
             //status = Imports.SetChannel(_handle, Imports.Channel.ChannelA, 1, Imports.Coupling.PS5000A_DC, Imports.Range.Range_200mV, 0);
 
-            short enable = 1;
-            uint delay = 0;
-            short threshold = 25000;
-            short auto = 22222;
+            const short enable = 1;
+            const uint delay = 0;
+            const short threshold = 25000;
+            const short auto = 22222;
 
             status = Imports.SetBandwidthFilter(_handle, Imports.Channel.ChannelA, Imports.BandwidthLimiter.PS5000A_BW_20MHZ);
             status = Imports.SetSimpleTrigger(_handle, enable, Imports.Channel.External, threshold, Imports.ThresholdDirection.Rising, delay, auto);
@@ -680,12 +680,12 @@ namespace PS5000A
                 FurierTransformer.SaveOut(to2);
         }
 
-        private void button6_Click(object sender, EventArgs e)
+        private async void button6_Click(object sender, EventArgs e)
         {
             Switch_ = new CSwitchInterface();
             Switch_.OpenPort(listBox1.SelectedIndex);
 
-            Thread.Sleep(500);
+            await Task.Delay(500);
             textBoxUnitInfo.AppendText(Switch_.GetAccepted() + "\n");
 
             groupBox3.Show();
@@ -710,16 +710,16 @@ namespace PS5000A
         private void button1_Click(object sender, EventArgs e)
         {
             textBoxUnitInfo.AppendText(Switch_.GetAccepted() + "\n");
-            // Thread.Sleep(500);
+            // await Task.Delay(500);
             Switch_.SendCmd(0, listBox2.SelectedIndex);
-            //Thread.Sleep(500);
+            //await Task.Delay(500);
             textBoxUnitInfo.AppendText(Switch_.GetAccepted() + "\n");
         }
 
         private void button5_Click(object sender, EventArgs e)
         {
             textBoxUnitInfo.AppendText(Switch_.GetAccepted() + "\n");
-            //Thread.Sleep(500);
+            //await Task.Delay(500);
             Switch_.SendCmd(1, listBox2.SelectedIndex);
             textBoxUnitInfo.AppendText(Switch_.GetAccepted() + "\n");
         }
@@ -748,7 +748,7 @@ namespace PS5000A
             textBoxUnitInfo.AppendText(Switch_.GetAccepted() + "\n");
             Switch_.SendCmd(1, id);
             textBoxUnitInfo.AppendText(Switch_.GetAccepted() + "\n");
-            Thread.Sleep(2000);
+            await Task.Delay(2000);
 
             all = meansCount;
             save = 0;
@@ -801,7 +801,7 @@ namespace PS5000A
 
                 using (StreamWriter fs = new StreamWriter(filename_))
                     for (int i = 0; i < countSum; i++)
-                        fs.WriteLine(Array[i].ToString().Replace(",","."));
+                        fs.WriteLine(Array[i].ToString().Replace(',','.'));
 
             });
         }
@@ -817,7 +817,7 @@ namespace PS5000A
                 textBoxUnitInfo.AppendText(Switch_.GetAccepted() + "\n");
                 Switch_.SendCmd(0, i);
                 textBoxUnitInfo.AppendText(Switch_.GetAccepted() + "\n");
-                Thread.Sleep(2000);
+                await Task.Delay(2000);
 
                 for (int j = 0; j < sourcesCount; j++)
                     if (i != j)
