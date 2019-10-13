@@ -42,15 +42,16 @@
             this.textBox8 = new System.Windows.Forms.TextBox();
             this.textBox7 = new System.Windows.Forms.TextBox();
             this.groupBox6 = new System.Windows.Forms.GroupBox();
+            this.numericUpDown1 = new System.Windows.Forms.NumericUpDown();
             this.button1 = new System.Windows.Forms.Button();
             this.numericUpDown7 = new System.Windows.Forms.NumericUpDown();
             this.textBox6 = new System.Windows.Forms.TextBox();
-            this.numericUpDown1 = new System.Windows.Forms.NumericUpDown();
+            this.label2 = new System.Windows.Forms.Label();
             ((System.ComponentModel.ISupportInitialize)(this.pictureBox1)).BeginInit();
             this.contextMenuStrip1.SuspendLayout();
             this.groupBox6.SuspendLayout();
-            ((System.ComponentModel.ISupportInitialize)(this.numericUpDown7)).BeginInit();
             ((System.ComponentModel.ISupportInitialize)(this.numericUpDown1)).BeginInit();
+            ((System.ComponentModel.ISupportInitialize)(this.numericUpDown7)).BeginInit();
             this.SuspendLayout();
             // 
             // pictureBox1
@@ -84,7 +85,7 @@
             // label11
             // 
             this.label11.AutoSize = true;
-            this.label11.Location = new System.Drawing.Point(17, 121);
+            this.label11.Location = new System.Drawing.Point(17, 137);
             this.label11.Name = "label11";
             this.label11.Size = new System.Drawing.Size(36, 19);
             this.label11.TabIndex = 22;
@@ -94,7 +95,7 @@
             // label10
             // 
             this.label10.AutoSize = true;
-            this.label10.Location = new System.Drawing.Point(10, 90);
+            this.label10.Location = new System.Drawing.Point(10, 106);
             this.label10.Name = "label10";
             this.label10.Size = new System.Drawing.Size(45, 19);
             this.label10.TabIndex = 0;
@@ -105,7 +106,7 @@
             // label1
             // 
             this.label1.AutoSize = true;
-            this.label1.Location = new System.Drawing.Point(8, 39);
+            this.label1.Location = new System.Drawing.Point(8, 27);
             this.label1.Name = "label1";
             this.label1.Size = new System.Drawing.Size(90, 19);
             this.label1.TabIndex = 27;
@@ -114,7 +115,7 @@
             // 
             // textBox10
             // 
-            this.textBox10.Location = new System.Drawing.Point(133, 195);
+            this.textBox10.Location = new System.Drawing.Point(133, 211);
             this.textBox10.Name = "textBox10";
             this.textBox10.Size = new System.Drawing.Size(105, 26);
             this.textBox10.TabIndex = 26;
@@ -124,7 +125,7 @@
             // 
             // textBox9
             // 
-            this.textBox9.Location = new System.Drawing.Point(12, 195);
+            this.textBox9.Location = new System.Drawing.Point(12, 211);
             this.textBox9.Name = "textBox9";
             this.textBox9.Size = new System.Drawing.Size(105, 26);
             this.textBox9.TabIndex = 25;
@@ -134,7 +135,7 @@
             // 
             // textBox8
             // 
-            this.textBox8.Location = new System.Drawing.Point(133, 164);
+            this.textBox8.Location = new System.Drawing.Point(133, 180);
             this.textBox8.Name = "textBox8";
             this.textBox8.Size = new System.Drawing.Size(105, 26);
             this.textBox8.TabIndex = 24;
@@ -144,7 +145,7 @@
             // 
             // textBox7
             // 
-            this.textBox7.Location = new System.Drawing.Point(12, 163);
+            this.textBox7.Location = new System.Drawing.Point(12, 179);
             this.textBox7.Name = "textBox7";
             this.textBox7.Size = new System.Drawing.Size(105, 26);
             this.textBox7.TabIndex = 23;
@@ -155,6 +156,7 @@
             // groupBox6
             // 
             this.groupBox6.BackColor = System.Drawing.Color.Transparent;
+            this.groupBox6.Controls.Add(this.label2);
             this.groupBox6.Controls.Add(this.numericUpDown1);
             this.groupBox6.Controls.Add(this.button1);
             this.groupBox6.Controls.Add(this.label1);
@@ -167,19 +169,27 @@
             this.groupBox6.Controls.Add(this.textBox6);
             this.groupBox6.Controls.Add(this.label10);
             this.groupBox6.FlatStyle = System.Windows.Forms.FlatStyle.Popup;
-            this.groupBox6.Location = new System.Drawing.Point(12, 264);
+            this.groupBox6.Location = new System.Drawing.Point(12, 248);
             this.groupBox6.Name = "groupBox6";
-            this.groupBox6.Size = new System.Drawing.Size(249, 227);
+            this.groupBox6.Size = new System.Drawing.Size(249, 243);
             this.groupBox6.TabIndex = 26;
             this.groupBox6.TabStop = false;
             this.groupBox6.Text = "Эллипсы и их карта";
             this.groupBox6.Enter += new System.EventHandler(this.groupBox6_Enter);
             // 
+            // numericUpDown1
+            // 
+            this.numericUpDown1.Location = new System.Drawing.Point(95, 25);
+            this.numericUpDown1.Name = "numericUpDown1";
+            this.numericUpDown1.Size = new System.Drawing.Size(143, 26);
+            this.numericUpDown1.TabIndex = 30;
+            this.numericUpDown1.TextAlign = System.Windows.Forms.HorizontalAlignment.Center;
+            // 
             // button1
             // 
             this.button1.FlatStyle = System.Windows.Forms.FlatStyle.Popup;
             this.button1.Font = new System.Drawing.Font("Consolas", 14.25F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(204)));
-            this.button1.Location = new System.Drawing.Point(137, 87);
+            this.button1.Location = new System.Drawing.Point(137, 103);
             this.button1.Name = "button1";
             this.button1.Size = new System.Drawing.Size(101, 58);
             this.button1.TabIndex = 29;
@@ -195,7 +205,7 @@
             0,
             0,
             0});
-            this.numericUpDown7.Location = new System.Drawing.Point(59, 119);
+            this.numericUpDown7.Location = new System.Drawing.Point(59, 135);
             this.numericUpDown7.Maximum = new decimal(new int[] {
             400,
             0,
@@ -218,20 +228,22 @@
             // 
             // textBox6
             // 
-            this.textBox6.Location = new System.Drawing.Point(59, 87);
+            this.textBox6.Location = new System.Drawing.Point(59, 103);
             this.textBox6.Name = "textBox6";
             this.textBox6.Size = new System.Drawing.Size(72, 26);
             this.textBox6.TabIndex = 1;
             this.textBox6.Text = "0,03";
             this.textBox6.TextAlign = System.Windows.Forms.HorizontalAlignment.Center;
             // 
-            // numericUpDown1
+            // label2
             // 
-            this.numericUpDown1.Location = new System.Drawing.Point(95, 37);
-            this.numericUpDown1.Name = "numericUpDown1";
-            this.numericUpDown1.Size = new System.Drawing.Size(143, 26);
-            this.numericUpDown1.TabIndex = 30;
-            this.numericUpDown1.TextAlign = System.Windows.Forms.HorizontalAlignment.Center;
+            this.label2.AutoSize = true;
+            this.label2.BackColor = System.Drawing.Color.FromArgb(((int)(((byte)(192)))), ((int)(((byte)(255)))), ((int)(((byte)(192)))));
+            this.label2.Location = new System.Drawing.Point(26, 66);
+            this.label2.Name = "label2";
+            this.label2.Size = new System.Drawing.Size(63, 19);
+            this.label2.TabIndex = 31;
+            this.label2.Text = "label2";
             // 
             // Scheme
             // 
@@ -250,8 +262,8 @@
             this.contextMenuStrip1.ResumeLayout(false);
             this.groupBox6.ResumeLayout(false);
             this.groupBox6.PerformLayout();
-            ((System.ComponentModel.ISupportInitialize)(this.numericUpDown7)).EndInit();
             ((System.ComponentModel.ISupportInitialize)(this.numericUpDown1)).EndInit();
+            ((System.ComponentModel.ISupportInitialize)(this.numericUpDown7)).EndInit();
             this.ResumeLayout(false);
 
         }
@@ -275,5 +287,6 @@
         private System.Windows.Forms.Button button1;
         internal System.Windows.Forms.TextBox textBox6;
         private System.Windows.Forms.NumericUpDown numericUpDown1;
+        private System.Windows.Forms.Label label2;
     }
 }

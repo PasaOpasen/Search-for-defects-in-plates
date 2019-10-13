@@ -38,10 +38,10 @@ namespace Работа2019
             this.Text = title;
 
             decimal shift = (decimal)РабКонсоль.timeshift;
-            numericUpDown1.Minimum = shift * 0.1m;
-            numericUpDown1.Maximum = shift * 10m;
+            numericUpDown1.Minimum = shift * 0.01m;
+            numericUpDown1.Maximum = shift * 30m;
             numericUpDown1.Value = shift;
-            numericUpDown1.Increment = shift * 0.8m / 50;
+            numericUpDown1.Increment = shift / 70;
             numericUpDown1.DecimalPlaces = 12;
 
 
@@ -67,10 +67,12 @@ namespace Работа2019
 
             void ProoveEllipses()
             {
-                if (ellipses.Select(el => el.right).Contains(false))
-                    numericUpDown1.BackColor = Color.Red;
+                var arr = ellipses.Select(el => el.right).ToArray();
+                if (arr.Contains(false))               
+                      numericUpDown1.BackColor = Color.Red;                                  
                 else
                     numericUpDown1.BackColor = Color.White;
+                label2.Text = $"Сломалось: {arr.Count(i=>!i)} из {arr.Length}";
             }
 
             numericUpDown1.ValueChanged += (o, e) =>
