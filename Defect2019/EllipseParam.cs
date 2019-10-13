@@ -105,7 +105,7 @@ namespace Работа2019
                    return sum;
                };
 
-            await Библиотека_графики.Create3DGrafics.JustGetGraficInFiles(shortname, shortname, S, X, Y, 
+            await Библиотека_графики.Create3DGrafics.JustGetGraficInFilesAsync(shortname, shortname, S, X, Y, 
                 new Progress<int>(), new System.Threading.CancellationToken(), 
                 new Библиотека_графики.StringsForGrafic("Gauss"), Библиотека_графики.Create3DGrafics.GraficType.Pdf, true);
         }

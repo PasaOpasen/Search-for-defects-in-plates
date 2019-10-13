@@ -30,7 +30,7 @@ namespace Консоль
 
             // Create3DGrafic();
 
-           Expendator.DirectoryCopy(@"C:\Users\крендель\Desktop\Code\Консоль\bin\Debug\Макс и", @"C:\Users\крендель\Desktop\OKT\Макс и").GetAwaiter().GetResult();
+           Expendator.DirectoryCopyAsync(@"C:\Users\крендель\Desktop\Code\Консоль\bin\Debug\Макс и", @"C:\Users\крендель\Desktop\OKT\Макс и").GetAwaiter().GetResult();
         }
 
         static void WaveletCreateFromFunction()

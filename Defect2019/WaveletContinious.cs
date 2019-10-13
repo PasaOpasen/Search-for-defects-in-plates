@@ -146,7 +146,7 @@ namespace Работа2019
 
                     toolStripLabel1.Text = $"Замер {symbols[i]}, источник {snames[k]}, осталось {alles--}";
 
-                    var tuple = await Functions.GetMaximunFromArea(
+                    var tuple = await Functions.GetMaximunFromAreaAsync(
                         new NetOnDouble(Wnet, 40), new NetOnDouble(Tnet, 40),
                         progress, new System.Threading.CancellationToken(),
                        globalTimeMin, timestep, tickCount, othernames[k], Path.Combine(Environment.CurrentDirectory, savename.Replace(" -> ", "to")),
@@ -370,10 +370,10 @@ namespace Работа2019
 
                     toolStripLabel1.Text = $"Замер {symbols[i]}, источник {snames[k]}, осталось {alles--}";
 
-                    var tuple = (radioButton1.Checked) ? await Functions.GetMaximunFromArea(Wnet, Tnet, progress, new System.Threading.CancellationToken(),
+                    var tuple = (radioButton1.Checked) ? await Functions.GetMaximunFromAreaAsync(Wnet, Tnet, progress, new System.Threading.CancellationToken(),
                         globalTimeMin, timestep, tickCount, othernames[k], Path.Combine(dir, savename.Replace(" -> ", "to")),
                         MyWavelet, wheredata[i], byevery, epsForWaveletValues) :
-                       await Functions.GetMaximunFromArea(wmin, wmax, tmin, tmax,
+                       await Functions.GetMaximunFromAreaAsync(wmin, wmax, tmin, tmax,
                         globalTimeMin, timestep, tickCount, othernames[k], Path.Combine(dir, savename.Replace(" -> ", "to")),
                         MyWavelet, wheredata[i], byevery, epsForWaveletValues,
                         pointcount, pointmax, pointmax2);
@@ -387,7 +387,7 @@ namespace Работа2019
             }
 
             string where = Path.GetDirectoryName(Path.GetDirectoryName(wheredata[0]));
-            await Expendator.DirectoryCopy(
+            await Expendator.DirectoryCopyAsync(
                 Path.Combine(Environment.CurrentDirectory, "EllipseData"),
                 Path.Combine(where, "EllipseData")
                 );

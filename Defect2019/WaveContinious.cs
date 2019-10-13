@@ -202,7 +202,7 @@ namespace Defect2019
             for (int i = 0; i < dir.Length; i++)//между циклами можно включить задержку на время выбора параметров, хотя лучше не надо
                 await UxtIterationAsync(dir[i], i, dir.Length);
 
-            await AfterLoopsAct();
+            await AfterLoopsActAsync();
         }
         private async Task UxtIterationAsync(string dir, int i, int len)
         {
@@ -250,7 +250,7 @@ namespace Defect2019
             };
             string filename = "3D ur, uz.txt";
 
-            async Task SlowUxt()
+            async Task SlowUxtAsync()
             {
                 double[,] ur = new double[count, count], uz = new double[count, count];
                 for (int i = 0; i < tcount; i++)
@@ -289,7 +289,7 @@ namespace Defect2019
 
                 ur = null; uz = null;
             }
-            async Task FastUxt()
+            async Task FastUxtAsync()
             {
                 save = 0;
                 string[] tsmas = new string[tcount], pdsmas = new string[tcount];
@@ -341,8 +341,8 @@ namespace Defect2019
             WriteXY(filename, path, xmas, ymas);
             //выбор параллельного или последовательного методов
             if (даToolStripMenuItem.Checked)
-                await FastUxt();
-            else await SlowUxt();
+                await FastUxtAsync();
+            else await SlowUxtAsync();
 
             Timer1_Tick(new object(), new EventArgs());
             checkBox1.Hide();
@@ -352,9 +352,9 @@ namespace Defect2019
             pds.Close();
             button2.Hide();
 
-            await Animate(gl, path);
+            await AnimateAsync(gl, path);
         }
-        private async Task Animate(string gl, string path)
+        private async Task AnimateAsync(string gl, string path)
         {
             toolStripStatusLabel1.Text = $"Запущено построение поверхностей";
             toolStripStatusLabel2.Text = $"";
@@ -389,7 +389,7 @@ namespace Defect2019
         /// Суммирование замеров, построение анимации и прочие заключительные действия
         /// </summary>
         /// <returns></returns>
-        private async Task AfterLoopsAct()
+        private async Task AfterLoopsActAsync()
         {
             label9.Show();
             label9.Text = $"Суммирование{Environment.NewLine}по замерам";
@@ -539,7 +539,7 @@ namespace Defect2019
         {
             BeforeGenerateUXW();
 
-            await GenerateUXW();
+            await GenerateUXWAsync();
 
             button2.Show();
             toolStripStatusLabel1.Text = "Начинается построение";
@@ -566,7 +566,7 @@ namespace Defect2019
             checkBox3.Hide();
             groupBox1.Hide();
         }
-        private async Task GenerateUXW()
+        private async Task GenerateUXWAsync()
         {
             OtherMethods.PlaySound("ГенерацияДанных");
             timer2.Start();
@@ -726,7 +726,7 @@ namespace Defect2019
         {
             GetFields();
             checkBox4.Hide();
-            await AfterLoopsAct();
+            await AfterLoopsActAsync();
             AfterGenerate();
         }
 

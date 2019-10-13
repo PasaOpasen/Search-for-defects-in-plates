@@ -129,7 +129,11 @@ namespace МатКлассы
                     };
                     break;
                 case Wavelets.LP:
-                    this.Mother = t => { double pt = t * Math.PI; return /*(pt == 0) ? 1 :*/ (Math.Sin(2 * pt) - Math.Sin(pt)) / pt; };
+                    this.Mother = t => 
+                    {
+                        double pt = t * Math.PI;
+                        return (2.0*Math.Cos(pt) - 1.0)*Math.Sin(pt) / pt;
+                    };
                     this.FMother = (Complex w) =>
                     {
                         double tmp = w.Abs;

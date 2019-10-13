@@ -1001,7 +1001,7 @@ namespace МатКлассы
         /// </summary>
         /// <param name="from"></param>
         /// <param name="to"></param>
-        public static async Task DirectoryCopy(string from,string to)
+        public static async Task DirectoryCopyAsync(string from,string to)
         {
             Process proc = new Process();
             proc.StartInfo.UseShellExecute = true;

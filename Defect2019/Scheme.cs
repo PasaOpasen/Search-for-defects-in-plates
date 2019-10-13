@@ -282,7 +282,7 @@ namespace Работа2019
         {
 
         }
-        private async Task MakeEllipses(EllipseParam[] param)
+        private async Task MakeEllipsesAsync(EllipseParam[] param)
         {
             NetOnDouble XX = new NetOnDouble(textBox7.Text.ToDouble(), textBox8.Text.ToDouble(), numericUpDown7.Value.ToInt32());
             NetOnDouble YY = new NetOnDouble(textBox9.Text.ToDouble(), textBox10.Text.ToDouble(), numericUpDown7.Value.ToInt32());
@@ -297,7 +297,7 @@ namespace Работа2019
                 ellipses[i] = new EllipseParam(ellipses[i].focSensor,
                     ellipses[i].focSource, ellipses[i].a * 2,
                     ellipses[i].Color, ellipses[i].name, FuncMethods.GaussBell2(2 * ellipses[i].a, sd * 2 * ellipses[i].a));
-            await MakeEllipses(ellipses);
+            await MakeEllipsesAsync(ellipses);
             new Библиотека_графики.PdfOpen("Поверхность для эллипсов", "EllipseSurface.pdf").Show();
 
             button1.Text = "Run";

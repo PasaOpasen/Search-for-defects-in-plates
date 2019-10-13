@@ -16,7 +16,7 @@ namespace Библиотека_графики
     public static class Create3DGrafics
     {
 
-        private static async Task GetDataToFile(string shortname, string savename, Func<double, double, double> F, double[] x, double[] y, IProgress<int> progress, System.Threading.CancellationToken token, StringsForGrafic forGrafic, bool parallel = true)
+        private static async Task GetDataToFileAsync(string shortname, string savename, Func<double, double, double> F, double[] x, double[] y, IProgress<int> progress, System.Threading.CancellationToken token, StringsForGrafic forGrafic, bool parallel = true)
         {
             int lenx = x.Length;
             int leny = y.Length;
@@ -101,9 +101,9 @@ namespace Библиотека_графики
             }
         }
 
-        private static async Task GetDataToFile(string shortname, Func<double, double, double> F, double xmin, NetOnDouble x, NetOnDouble y, IProgress<int> progress, System.Threading.CancellationToken token, StringsForGrafic forGrafic, bool parallel = true)
+        private static async Task GetDataToFileAsync(string shortname, Func<double, double, double> F, double xmin, NetOnDouble x, NetOnDouble y, IProgress<int> progress, System.Threading.CancellationToken token, StringsForGrafic forGrafic, bool parallel = true)
         {
-            await GetDataToFile(shortname,shortname, F, x.Array, y.Array, progress, token, forGrafic, parallel);
+            await GetDataToFileAsync(shortname,shortname, F, x.Array, y.Array, progress, token, forGrafic, parallel);
         }
 
         /// <summary>
@@ -160,7 +160,7 @@ namespace Библиотека_графики
             }
             else
             {
-                JustGetGraficInFiles(shortname, shortname, F, x, y, progress, token,forGrafic, graficType,  parallel).GetAwaiter().GetResult();
+                JustGetGraficInFilesAsync(shortname, shortname, F, x, y, progress, token,forGrafic, graficType,  parallel).GetAwaiter().GetResult();
                 GetForm(shortname);
             }
         }
@@ -182,9 +182,9 @@ namespace Библиотека_графики
         /// <param name="ylab"></param>
         /// <param name="zlab"></param>
         /// <param name="parallel"></param>
-        public static async Task JustGetGraficInFiles(string shortname,string savename, Func<double, double, double> F, NetOnDouble x, NetOnDouble y, IProgress<int> progress, System.Threading.CancellationToken token, StringsForGrafic forGrafic, GraficType graficType = GraficType.PdfPngHtml, bool parallel = true)
+        public static async Task JustGetGraficInFilesAsync(string shortname,string savename, Func<double, double, double> F, NetOnDouble x, NetOnDouble y, IProgress<int> progress, System.Threading.CancellationToken token, StringsForGrafic forGrafic, GraficType graficType = GraficType.PdfPngHtml, bool parallel = true)
         {
-            await GetDataToFile(shortname, savename, F, x.Array, y.Array, progress, token, forGrafic, parallel);
+            await GetDataToFileAsync(shortname, savename, F, x.Array, y.Array, progress, token, forGrafic, parallel);
             GraficTypeToFile(graficType);
             RemoveOlds(shortname);
             if (x.Count == y.Count)

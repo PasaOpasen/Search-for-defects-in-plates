@@ -77,12 +77,12 @@ namespace Defect2019
 
             if (radioButton1.Checked)
             {
-                await rad1();
+                await rad1Async();
                 may = true;
             }
             else
             {
-                await rad2();
+                await rad2Async();
                 may = false;
             }
         }
@@ -169,7 +169,7 @@ namespace Defect2019
             if (radioButton4.Checked) chart1.Titles[0].Text = "График ζn(ω)/ω";
         }
 
-        private async Task rad1()
+        private async Task rad1Async()
         {
             SimpleBeginAboutChart();
             progressBar1.Value = 0;
@@ -251,7 +251,7 @@ namespace Defect2019
 
             Библиотека_графики.ForChart.SetToolTips(ref chart1);
         }
-        private async Task rad2()
+        private async Task rad2Async()
         {
             chart1.Series.Clear();
             double wold = Convert.ToDouble(textBox13.Text);

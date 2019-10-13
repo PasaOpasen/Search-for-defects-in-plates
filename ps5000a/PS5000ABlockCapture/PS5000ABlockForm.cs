@@ -346,7 +346,7 @@ namespace PS5000A
             await MakeDiffAsync(Normalize: true);
             new System.Media.SoundPlayer(Properties.Resources.РазницаГотова).Play();
 
-            await FurierOrShowForm(i => fdiff[i], i => folderbase[i]);
+            await FurierOrShowFormAsync(i => fdiff[i], i => folderbase[i]);
             SygnalOfEndCalc();
 
             this.Close();
@@ -768,9 +768,9 @@ namespace PS5000A
             timer1.Stop();
             toolStripProgressBar1.Value = 0;
 
-            await ProcessAndWrite(filename_);
+            await ProcessAndWriteAsync(filename_);
         }
-        private async Task ProcessAndWrite(string filename_)
+        private async Task ProcessAndWriteAsync(string filename_)
         {
             int countSum = CountSum;
             double[] Array = new double[countSum];
@@ -827,7 +827,7 @@ namespace PS5000A
                     }
                 toolStripStatusLabel2.Text = "";
 
-                FurierOrShowIteration(ItFolder(i), null, i);
+                FurierOrShowIterationAsync(ItFolder(i), null, i);
             }
 
         }
@@ -856,14 +856,14 @@ namespace PS5000A
         /// <param name="from"></param>
         /// <param name="to"></param>
         /// <returns></returns>
-        private async Task FurierOrShowForm(Func<int, string> from, Func<int, string> to)
+        private async Task FurierOrShowFormAsync(Func<int, string> from, Func<int, string> to)
         {
             //CreateFurierTransform(w0, w1, wcount);
 
             for (int i = 0; i < sourcesCount; i++)
-                await FurierOrShowIteration(from(i), to(i), i);
+                await FurierOrShowIterationAsync(from(i), to(i), i);
         }
-        private async Task FurierOrShowIteration(string from, string to, int number)
+        private async Task FurierOrShowIterationAsync(string from, string to, int number)
         {
             if (checkBox2.Checked && !checkBox3.Checked)
                 await FurierAsync(from, to, number);
