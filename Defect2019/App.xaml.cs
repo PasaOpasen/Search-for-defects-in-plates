@@ -26,6 +26,7 @@ namespace Defect2019
             App app = new App();
             MainWindow window = new MainWindow();
             window.WindowStartupLocation = System.Windows.WindowStartupLocation.CenterScreen;
+            window.Title = $"Время последней компиляции: {DateTime.Now}";
 
             SetExeptions();
             app.Run(window);

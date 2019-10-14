@@ -40,7 +40,7 @@ namespace Работа2019
             ur = new double[tcount]; uz = new double[tcount];
             urs = new double[sources.Length, tcount]; uzs = new double[sources.Length, tcount];
         }
-        private async Task ReadFws()
+        private async Task ReadFwsAsync()
         {
             if (checkBox1.Checked)
             {
@@ -61,13 +61,13 @@ namespace Работа2019
 
         private async void button1_Click(object sender, EventArgs e)
         {
-            await ReadFws();
+            await ReadFwsAsync();
             ReadData();
 
             toolStripStatusLabel1.Text = "Вычисляет u(x,t)";
 
             timer1.Start();
-            await CalcUxt();
+            await CalcUxtAsync();
             toolStripProgressBar1.Value = toolStripProgressBar1.Maximum;
             timer1.Stop();
 
@@ -75,7 +75,7 @@ namespace Работа2019
 
             toolStripStatusLabel1.Text = "Вычисляет u(x,w)";
 
-            await CalcUxw();
+            await CalcUxwAsync();
 
             toolStripStatusLabel1.Text = "Запускает скрипт";
             await Task.Run(() => OtherMethods.StartProcess2("OnePoint.r"));
@@ -93,7 +93,7 @@ namespace Работа2019
             new UxtInfo(tmin, th, ur, uz, names, filenames, s + ".pdf").Show();
         }
 
-        private async Task CalcUxt()
+        private async Task CalcUxtAsync()
         {
             all = tcount;
             save = 0;
@@ -176,7 +176,7 @@ namespace Работа2019
                 });
         }
 
-        private async Task CalcUxw()
+        private async Task CalcUxwAsync()
         {
             await Task.Run(() =>
             {

@@ -23,7 +23,7 @@ namespace Работа2019
 
         private static string symbols;
         private Source[] sources;
-        private double wmin, wmax, tmin, tmax, epsForWaveletValues = 1e-8,sd;
+        private double wmin, wmax, tmin, tmax, epsForWaveletValues = 1e-8, sd;
         private int wcount, tcount, byevery, pointcount, pointmax, pointmax2;
         private NetOnDouble Wnet, Tnet;
 
@@ -146,7 +146,7 @@ namespace Работа2019
 
                     toolStripLabel1.Text = $"Замер {symbols[i]}, источник {snames[k]}, осталось {alles--}";
 
-                    var tuple = await Functions.GetMaximunFromArea(
+                    var tuple = await Functions.GetMaximunFromAreaAsync(
                         new NetOnDouble(Wnet, 40), new NetOnDouble(Tnet, 40),
                         progress, new System.Threading.CancellationToken(),
                        globalTimeMin, timestep, tickCount, othernames[k], Path.Combine(Environment.CurrentDirectory, savename.Replace(" -> ", "to")),
@@ -157,10 +157,32 @@ namespace Работа2019
                 OtherMethods.PlaySound("ЗамерОбработан");
             }
 
-            ShowPdfs();
+            string where = Path.GetDirectoryName(Path.GetDirectoryName(wheredata[0]));
+            CopyAtoA(where);
+            ShowPdfs(where);
+            
 
             SetDefaultStrip();
             OtherMethods.PlaySound("ТестированиеОкончено");
+        }
+        /// <summary>
+        /// Переносит рисунки на маленькой сетке в папку замеров и удаляет в исходной папке
+        /// </summary>
+        /// <param name="where"></param>
+        private void CopyAtoA(string where)
+        {
+            //List<string> arr = new List<string>(symbols.Length * (symbols.Length - 1));
+            string tmp;
+            for (int i=0;i<symbols.Length;i++)
+                for(int j=0;j<symbols.Length;j++)
+                    if (i != j)
+                    {
+                        tmp = $"{symbols[i]}to{symbols[j]}";
+                        File.Copy(tmp + ".pdf", Path.Combine(where, tmp + ".pdf"),true);
+                        File.Delete(tmp + ".pdf");
+                        File.Delete(tmp + "(MaxCoordinate).txt");
+                    }
+
         }
 
         private Tuple<string[], string[]> GetDataPaths()
@@ -170,18 +192,19 @@ namespace Работа2019
             return new Tuple<string[], string[]>(names, wheredata);
         }
 
-        private void ShowPdfs()
+        private void ShowPdfs(string where)
         {
             List<string> L = new List<string>();
             for (int i = 0; i < symbols.Length; i++)
                 for (int j = 0; j < symbols.Length; j++)
-                    L.Add($"{symbols[i]}to{symbols[j]}");
-            var arrt = L.Where(s => s[0] != s[3]).ToArray();
+                    if(i!=j)
+                    L.Add(Path.Combine(where, $"{symbols[i]}to{symbols[j]}"));
+            var arrt = L.ToArray();
 
             var mas = Enumerable.Range(0, 28).Select(i => RandomNumbers.NextNumber(sources.Length * (sources.Length - 1))).Distinct().ToArray();
             var arr = mas.Select(i => arrt[i]).ToArray();
 
-            new Библиотека_графики.ManyDocumentsShower("Поверхности на негустой сетке", arr, arr.Select(i => i + ".pdf").ToArray()).Show();
+            new Библиотека_графики.ManyDocumentsShower("Поверхности на негустой сетке", arr.Select(n=>Path.GetFileNameWithoutExtension(n)).ToArray(), arr.Select(i => i + ".pdf").ToArray()).Show();
             button2_Click(new object(), new EventArgs());
         }
 
@@ -232,7 +255,8 @@ namespace Работа2019
 
         private void toolStripButton3_Click(object sender, EventArgs e)
         {
-            MakeEllipses(Expendator.GetStringArrayFromFile(Path.Combine("Максимумы с эллипсов", "Params.txt"), true));
+            string where = Path.GetExtension(Expendator.GetWordFromFile("WhereData.txt"));
+            MakeEllipses(Expendator.GetStringArrayFromFile(Path.Combine(where, Path.Combine("EllipseData", "Params.txt")), true));
         }
 
         private void radioButton1_CheckedChanged(object sender, EventArgs e)
@@ -252,7 +276,7 @@ namespace Работа2019
 
         private void SetDir()
         {
-            dir = Path.Combine(Environment.CurrentDirectory, "Максимумы с эллипсов");
+            dir = Path.Combine(Environment.CurrentDirectory, "EllipseData");
             if (!Directory.Exists(dir))
                 Directory.CreateDirectory(dir);
         }
@@ -293,10 +317,10 @@ namespace Работа2019
         {
             var arr = File.ReadLines(filename).Select(p => Convert.ToDouble(p.Replace('.', ','))).ToArray();
             const double crosstalk = 0.0001;
-            const double crosstalkend=0.45e-3;
+            const double crosstalkend = 0.45e-3;
             if (tmin < crosstalk)
             {
-                arr = arr.Slice(Math.Round((crosstalk - tmin) / step).ToInt(), /*arr.Length - 1*/Math.Round((crosstalkend-tmin )/ step).ToInt());
+                arr = arr.Slice(Math.Round((crosstalk - tmin) / step).ToInt(), /*arr.Length - 1*/Math.Round((crosstalkend - tmin) / step).ToInt());
                 tmin = crosstalk;
             }
 
@@ -346,25 +370,30 @@ namespace Работа2019
 
                     toolStripLabel1.Text = $"Замер {symbols[i]}, источник {snames[k]}, осталось {alles--}";
 
-                    var tuple = (radioButton1.Checked) ? await Functions.GetMaximunFromArea(Wnet, Tnet, progress, new System.Threading.CancellationToken(),
+                    var tuple = (radioButton1.Checked) ? await Functions.GetMaximunFromAreaAsync(Wnet, Tnet, progress, new System.Threading.CancellationToken(),
                         globalTimeMin, timestep, tickCount, othernames[k], Path.Combine(dir, savename.Replace(" -> ", "to")),
                         MyWavelet, wheredata[i], byevery, epsForWaveletValues) :
-                       await Functions.GetMaximunFromArea(wmin, wmax, tmin, tmax,
+                       await Functions.GetMaximunFromAreaAsync(wmin, wmax, tmin, tmax,
                         globalTimeMin, timestep, tickCount, othernames[k], Path.Combine(dir, savename.Replace(" -> ", "to")),
                         MyWavelet, wheredata[i], byevery, epsForWaveletValues,
                         pointcount, pointmax, pointmax2);
 
                     pathellipse.Add($"{otherSources[k].Center.x} {otherSources[k].Center.y} {itSource.Center.x} {itSource.Center.y} {Functions.Vg2(tuple.Item1).ToRString()} {tuple.Item2.ToRString()} {i} {savename} {tuple.Item1}");
                 }
-                Expendator.WriteInFile(Path.Combine("Максимумы с эллипсов", "Params.txt"), pathellipse.ToArray());
+                Expendator.WriteInFile(Path.Combine("EllipseData", "Params.txt"), pathellipse.ToArray());
                 SetDefaltProgressBar();
                 timer1.Stop();
                 OtherMethods.PlaySound("ЗамерОбработан");
             }
 
+            string where = Path.GetDirectoryName(Path.GetDirectoryName(wheredata[0]));
+            await Expendator.DirectoryCopyAsync(
+                Path.Combine(Environment.CurrentDirectory, "EllipseData"),
+                Path.Combine(where, "EllipseData")
+                );
 
             OtherMethods.PlaySound("СоздаемЭллипсы");
-            MakeEllipses(pathellipse.ToArray());         
+            MakeEllipses(pathellipse.ToArray());
             SetDefaultStrip();
         }
 

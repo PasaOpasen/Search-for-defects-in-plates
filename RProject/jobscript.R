@@ -71,12 +71,19 @@ ggplot(data = d3, aes(x = x, y = value, colour = variable)) + geom_line(lwd = 1.
       scale_colour_discrete(name = "", labels = c("Im ur","Re uz", "Im uz", "Re uz (res)","Im uz (res)", "Im ur (res)")) + theme(legend.text = element_text(size = 16), axis.text = element_text(size = 14), axis.title = element_text(size = 14))
 
 
-#îêíî Õàííà
+#Hann window
 library(data.table)
-p = fread("hann.txt", header = FALSE, dec = ",")
-px = p[[1]]
-py = p[[2]]
-plot(px, py, type = "l", lty = "solid", xlab = "âðåìÿ, 100ìêñ", ylab = "íàïðÿæåíèå, 1Â", main = "Îêíî Õàííà", col = "red", lwd = 3)
+fc = 1e5
+pfc = pi * fc
+n = c(2, 3, 5, 8)
+par(mfrow = c(2, 2))
+for (i in seq_along(n)) {
+    x = seq(0, n[i] / fc, length.out= 100)
+    f = 10 * sin(2 * pfc * x) * sin(pfc * x/ n[i]) ^ 2
+    plot(x, f, type = "l", lty = "solid", xlab = "time, 100usec", ylab = "voltage 1A", main = paste("Hann window, n =",n[i]), col = "red", lwd = 3)
+}
+
+
 
 
 

@@ -994,6 +994,27 @@ namespace МатКлассы
             process.WaitForExit();
 
         }
+
+
+        /// <summary>
+        /// Осуществить копирование папки
+        /// </summary>
+        /// <param name="from"></param>
+        /// <param name="to"></param>
+        public static async Task DirectoryCopyAsync(string from,string to)
+        {
+            Process proc = new Process();
+            proc.StartInfo.UseShellExecute = true;
+            proc.StartInfo.FileName = @"C:\WINDOWS\system32\xcopy.exe";
+            proc.StartInfo.Arguments = $"{from} {to} /E /I /C /Y"; //https://ab57.ru/cmdlist/xcopy.html
+            // /E = скопировать подпапки(пустые в том числе!).
+            // /I = если дестинейшн не существует, создать папку с нужным именем. 
+            await Task.Run(() =>
+            {
+                proc.Start();
+                proc.WaitForExit();
+            });
+        }
     }
 
 }

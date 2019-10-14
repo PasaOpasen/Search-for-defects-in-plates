@@ -129,7 +129,11 @@ namespace МатКлассы
                     };
                     break;
                 case Wavelets.LP:
-                    this.Mother = t => { double pt = t * Math.PI; return /*(pt == 0) ? 1 :*/ (Math.Sin(2 * pt) - Math.Sin(pt)) / pt; };
+                    this.Mother = t => 
+                    {
+                        double pt = t * Math.PI;
+                        return (2.0*Math.Cos(pt) - 1.0)*Math.Sin(pt) / pt;
+                    };
                     this.FMother = (Complex w) =>
                     {
                         double tmp = w.Abs;
@@ -269,16 +273,21 @@ namespace МатКлассы
                 {
                     if (a == 0) return 0;
                     double con = h3 / Math.Sqrt(Math.Abs(a));
+                    double arev = 1.0 / a;
                    
-                    Complex sum0 = f[0].y * this.Mother((f[0].x - b) / a) + f[f.Length - 1].y * this.Mother((f[f.Length - 1].x - b) / a);
+                    Complex sum0 = f[0].y * this.Mother((f[0].x - b)*arev) + f[f.Length - 1].y * this.Mother((f[f.Length - 1].x - b)*arev);
                     Complex sum = 0;
                     Complex tmp;
                     int i2;
+                    Point p1, p2;
+
                     void niter(int i)
                     {
                         i2 = 2 * i;
-                        tmp = this.Mother((f[i2].x - b) / a);
-                        sum += f[i2].y * tmp + 2.0 * f[i2 - 1].y * this.Mother((f[i2 - 1].x - b) / a);
+                        p1 = f[i2 - 1];
+                        p2 = f[i2];
+                        tmp = this.Mother((p2.x - b)*arev);
+                        sum += p2.y * tmp + 2.0 * p1.y * this.Mother((p1.x - b)*arev);
                     }
 
                     for (int i = 1; i <= up; i++)
@@ -287,13 +296,13 @@ namespace МатКлассы
                     for (int i = up+1; i <= n - 1; i++)
                     {
                         niter(i);
-                        if (tmp.Abs < epsForWaveletValues * sum.Abs)
+                        if (tmp.Re < epsForWaveletValues * sum.Re)//так будет быстрее
                             break;
                     }
 
 
                     if (f.Length % 2 == 1)
-                        sum0 += 4 * f[f.Length - 2].y * this.Mother((f[f.Length - 2].x - b) / a);
+                        sum0 += 4 * f[f.Length - 2].y * this.Mother((f[f.Length - 2].x - b)*arev);
 
                     return con * (2 * sum + sum0).Conjugate;
                 };

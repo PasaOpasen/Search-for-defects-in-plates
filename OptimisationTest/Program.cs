@@ -13,8 +13,8 @@ namespace OptimisationTest
     {
         static void Main(string[] args)
         {
-            string BeeHiveAdress = @"C:\Users\user1\source\repos\CodeIt\Defect2019\bin\Release\Максимумы с эллипсов";
-            string NotBeeHiveAdress = @"C:\Users\user1\Desktop\Максимумы с эллипсов";
+            string BeeHiveAdress = @"C:\Users\user1\source\repos\CodeIt\Defect2019\bin\Release\EllipseData";
+            string NotBeeHiveAdress = @"C:\Users\user1\Desktop\EllipseData";
             string Symbols = "ABCDEFGH";
 
             string[] files = new string[Symbols.Length * (Symbols.Length - 1)];

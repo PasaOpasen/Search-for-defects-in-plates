@@ -249,6 +249,11 @@ namespace МатКлассы
             /// Текущая скорость частицы
             /// </summary>
             Vectors v;
+            /// <summary>
+            /// Генератор случайных чисел
+            /// </summary>
+            MathNet.Numerics.Random.CryptoRandomSource random=new MathNet.Numerics.Random.CryptoRandomSource();
+
 
             /// <summary>
             /// Значение целевой функции в наилучшем положении
@@ -340,12 +345,11 @@ namespace МатКлассы
             /// <param name="g">Наилучшее положение по рою</param>
             public void RecalcV(double w, double fp, double fg, Vectors g)
             {
-                var r = new MathNet.Numerics.Random.CryptoRandomSource();
                 double fi = fg + fp;
                 double coef = 2 * w / Math.Abs(2 - fi - Math.Sqrt(fi * (fi - 4)));
 
                 for (int i = 0; i < v.Deg; i++)
-                    v[i] = coef * (v[i] + fp * r.NextDouble() * (p[i] - x[i]) + fg * r.NextDouble() * (g[i] - x[i]));
+                    v[i] = coef * (v[i] + fp * random.NextDouble() * (p[i] - x[i]) + fg * random.NextDouble() * (g[i] - x[i]));
             }
 
             /// <summary>

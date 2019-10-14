@@ -26,9 +26,11 @@ namespace Консоль
             // WaveletCreateFromFunction();
             //WaveletCreateFromArray();
 
-            new MostSimpleGrafic(FuncMethods.GaussBell2(10, 6), new NetOnDouble(0, 20, 100)).ShowDialog();
+            //new MostSimpleGrafic(FuncMethods.GaussBell2(10, 6), new NetOnDouble(0, 20, 100)).ShowDialog();
 
             // Create3DGrafic();
+
+           Expendator.DirectoryCopyAsync(@"C:\Users\крендель\Desktop\Code\Консоль\bin\Debug\Макс и", @"C:\Users\крендель\Desktop\OKT\Макс и").GetAwaiter().GetResult();
         }
 
         static void WaveletCreateFromFunction()
