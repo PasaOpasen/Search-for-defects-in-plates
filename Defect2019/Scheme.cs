@@ -9,6 +9,7 @@ using МатКлассы;
 using System.Threading.Tasks;
 using System.Threading;
 using JR.Utils.GUI.Forms;
+using System.Diagnostics;
 
 namespace Работа2019
 {
@@ -31,6 +32,7 @@ namespace Работа2019
         private Source[] mas;
         private float rad;
         private EllipseParam[] ellipses;
+        private string[] ellipseArray;
 
         public Scheme(string title = "Схема эксперимента")
         {
@@ -39,8 +41,8 @@ namespace Работа2019
             this.Text = title;
 
             decimal shift = (decimal)РабКонсоль.timeshift;
-            numericUpDown1.Minimum = shift * 0.001m;
-            numericUpDown1.Maximum = shift * 50m;
+            numericUpDown1.Minimum = shift * 0.01m;
+            numericUpDown1.Maximum = shift * 5m;
             numericUpDown1.Value = shift;
             numericUpDown1.Increment = shift / 70;
             numericUpDown1.DecimalPlaces = 12;
@@ -64,6 +66,7 @@ namespace Работа2019
 
         public Scheme(string[] array, string title = "Схема эксперимента") : this(GetSources(array), title)
         {
+            ellipseArray = array;
             JustDrawEllipses(array);
 
             void ProoveEllipses()
@@ -119,25 +122,26 @@ namespace Работа2019
             var centers = plist.Distinct().Select(p => new Waves.Circle(p, 8));
             return centers.Select(p => new Source(p, p.GetNormalsOnCircle(30), Array.Empty<Number.Complex>())).ToArray();
         }
-        public EllipseParam[] GetEllipses(string[] array)
+        public EllipseParam[] GetEllipses(string[] array) => GetEllipses(array, (double)numericUpDown1.Value);
+        public EllipseParam[] GetEllipses(string[] array,double ts)
         {
             EllipseParam[] param = new EllipseParam[array.Length];
 
             double sd = textBox6.Text.ToDouble();
-            double ts = (double)numericUpDown1.Value;
 
             Parallel.For(0, array.Length, (int i) =>
             {
                 string[] st = array[i].Split(new char[] { ' ' }, StringSplitOptions.RemoveEmptyEntries);
 
-                var Vgb= new Tuple<double, double>(st[4].ToDouble(), st[5].ToDouble());
-                double s = Vgb.Item1 * (Vgb.Item2 -ts /*(2.5*st[10].ToDouble()+5e-5)*/);
+                var Vgb = new Tuple<double, double>(st[4].ToDouble(), st[5].ToDouble());
+                double s = Vgb.Item1 * (Vgb.Item2 - ts /*(2.5*st[10].ToDouble()+5e-5)*/);
                 param[i] = new EllipseParam(new Point(st[0].ToDouble(), st[1].ToDouble()),
                     new Point(st[2].ToDouble(), st[3].ToDouble()), s,
                     Библиотека_графики.Other.colors[st[6].ToInt32()], $"{st[7]} {st[8]} {st[9]}", FuncMethods.GaussBell2(s, sd * s));
             });
             return param;
         }
+
         public void DrawEllipses(EllipseParam[] param)
         {
             foreach (var p in param)
@@ -287,9 +291,15 @@ namespace Работа2019
         }
         private async Task MakeEllipsesAsync(EllipseParam[] param)
         {
+            var tmp = GetTwoNets();
+
+            await EllipseParam.GetSurfaces(param.ToArray(), tmp.Item1, tmp.Item2, "EllipseSurface");
+        }
+        private Tuple<NetOnDouble,NetOnDouble> GetTwoNets()
+        {
             NetOnDouble XX = new NetOnDouble(textBox7.Text.ToDouble(), textBox8.Text.ToDouble(), numericUpDown7.Value.ToInt32());
             NetOnDouble YY = new NetOnDouble(textBox9.Text.ToDouble(), textBox10.Text.ToDouble(), numericUpDown7.Value.ToInt32());
-            await EllipseParam.GetSurfaces(param.ToArray(), XX, YY, "EllipseSurface");
+            return new Tuple<NetOnDouble, NetOnDouble>(XX, YY);
         }
         private async void button1_Click(object sender, EventArgs e)
         {
@@ -311,6 +321,53 @@ namespace Работа2019
             var arr = ellipses.Where(el => !el.right).Select(s=>s.ToString()).ToArray();
             var ss = Expendator.StringArrayToString(arr);
             FlexibleMessageBox.Show(ss, "Информация о неудавшихся эллипсах");
+        }
+
+
+        private double GetOptimumShift(string[] array)
+        {
+            var tmp = GetTwoNets();
+            var xmas = tmp.Item1.Array;
+            var ymas = tmp.Item2.Array;
+            int count = xmas.Length;
+            double[,] net = new double[count, count];
+            const double coef = -10;
+
+            Func<Vectors, double> func = (Vectors shift) =>
+               {
+                   var p = GetEllipses(array, shift[0]);
+                   if (p.Count(ps => !ps.right) > 18)//условие, чтобы много элиипсов всё же не сломались
+                       return Double.MaxValue;
+
+                   Func<double, double, double> func2 = EllipseParam.GetGaussFunc(p);
+                   //Parallel.For(0, count, (int i) => {
+                   for (int i = 0; i < count; i++)
+                       for (int j = 0; j < count; j++)
+                           net[i, j] = func2(xmas[i], ymas[j]);
+                   //});
+                   return Math.Exp(coef* net.Max());
+               };
+
+            var tmpp = BeeHiveAlgorithm.GetGlobalMin(func,
+                n: 1,
+                min: (double)numericUpDown1.Minimum,
+                max: (double)numericUpDown1.Maximum,
+                eps: 1e-10,
+                countpoints: 120,
+                maxcountstep: 50,
+                maxiter: 120);
+            Debug.WriteLine($"Максимум функции на сетке: {Math.Log(tmpp.Item2) / coef}");
+
+            return tmpp.Item1[0];
+        }
+
+        private async void button2_Click(object sender, EventArgs e)
+        {
+            button2.Text = "Ищется...";
+            double t = await Task.Run(() => GetOptimumShift(ellipseArray));
+            numericUpDown1.Value = (decimal)t;
+            button2.Text = "Поискать сдвиг";
+            this.Refresh();
         }
     }
 }
