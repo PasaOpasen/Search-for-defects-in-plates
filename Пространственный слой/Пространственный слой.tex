@@ -239,11 +239,11 @@ $\delta$ --- дельта-функция, определяемая соотно�
 \section{Полный алгоритм вычисления ${\bf u}({\bf x},\omega)$}
 
 \section{Новые формулы}
-Исходная функция возмущения от источника $j$:
+Исходная функция возмущения от источника $s$ представляется в виде:
 \begin{equation*}
-    {\bf u}_j({\bf x},t)=\dfrac{1}{\pi} \mathrm{Re} \int_{0}^{\infty} {\bf u}_j({\bf x},\omega) e^{- i \omega t}d\omega=\dfrac{1}{\pi} \mathrm{Re}\ {\bf w}_j ({\bf x},t)\approx \sum_{\omega} f(\omega) \cdot {\bf u}_j({\bf x},\omega) \cdot \varphi (\omega, t) ,
+    {\bf u}_s({\bf x},t)=\dfrac{1}{\pi} \mathrm{Re} \int_{0}^{\infty} {\bf u}_s({\bf x},\omega) e^{- i \omega t}d\omega=\dfrac{1}{\pi} \mathrm{Re}\ {\bf w}_s ({\bf x},t)\approx \sum_{\omega} f(\omega) \cdot {\bf u}_s({\bf x},\omega) \cdot \varphi (\omega, t) ,
 \end{equation*}
-где $j \in 1\dots N$, $N$--- число источников, $t \in \{T_1,\dots,T_n\}$, $T_i=t_{\min}+(i-1)\dfrac{t_{\max}-t_{\min}}{n-1}$, $\varphi(\omega_j,t)=\varphi^+(\omega_j,t)+\varphi^-(\omega_j,t)$,
+где $s \in 1\dots N$, $N$--- число источников, $t \in \{T_1,\dots,T_n\}$, $T_i=t_{\min}+(i-1)\dfrac{t_{\max}-t_{\min}}{n-1}$, $\omega$ -- частоты из некоторой сетки, $\varphi(\omega_j,t)=\varphi^+(\omega_j,t)+\varphi^-(\omega_j,t)$,
 \begin{equation}
     \varphi^-(\omega_j,t)=  \int_{\ww_j-\dw}^{\ww_j} \left(1+ \frac{\ww-\ww_j}{\dw} \right) e^{- i \ww t}d\ww=
     \frac{i}{t} e^{- i \ww_j t}\left(1-\frac{i}{t\dw}\left( 1-e^{i \dw t} \right)  \right), 
@@ -256,13 +256,13 @@ $\delta$ --- дельта-функция, определяемая соотно�
 
 Возможные метрики:
 \begin{equation}
-    S_1({\bf x} )= \sum_{t \in \{T_1,\dots,T_n\}} \left(\sum_{j=1}^N {\bf u}_j ({\bf x},t)\right)^2 ,
+    S_1({\bf x} )= \sum_{t \in \{T_1,\dots,T_n\}} \left(\sum_{s=1}^N {\bf u}_s ({\bf x},t)\right)^2 ,
 \end{equation}
 \begin{equation}
-    S_2({\bf x})= \sum_{t \in \{T_1,\dots,T_n\}} \left|\sum_{j=1}^N {\bf w}_j({\bf x},t)\right|,
+    S_2({\bf x})= \sum_{t \in \{T_1,\dots,T_n\}} \left|\sum_{s=1}^N {\bf w}_s({\bf x},t)\right|,
 \end{equation}
 \begin{equation}
-    S_3({\bf x})= \max_{t \in \{T_1,\dots,T_n\}} \left|\sum_{j=1}^N {\bf u}_j ({\bf x},t)\right|.
+    S_3({\bf x})= \max_{t \in \{T_1,\dots,T_n\}} \left|\sum_{s=1}^N {\bf u}_s ({\bf x},t)\right|.
 \end{equation}
 
 
