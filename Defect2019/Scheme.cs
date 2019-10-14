@@ -41,11 +41,11 @@ namespace Работа2019
             this.Text = title;
 
             decimal shift = (decimal)РабКонсоль.timeshift;
-            numericUpDown1.Minimum = shift * 0.01m;
-            numericUpDown1.Maximum = shift * 5m;
+            numericUpDown1.Minimum = shift * 0.75m;
+            numericUpDown1.Maximum = shift * 1.5m;
             numericUpDown1.Value = shift;
             numericUpDown1.Increment = shift / 70;
-            numericUpDown1.DecimalPlaces = 12;
+            numericUpDown1.DecimalPlaces = 15;
 
 
             // SoundMethods.SetPositions();
