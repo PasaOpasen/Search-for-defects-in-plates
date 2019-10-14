@@ -159,7 +159,7 @@ namespace Работа2019
         private void DrawImage(Point beg, double lenx, double leny, string filename)
         {
             var p = MyPointToPointF(beg);
-            const float cc = 15.0f / 11;
+            const float cc = 13.0f / 11;
             g.DrawImage(Image.FromFile(filename), p.X, p.Y, (float)(lenx / X * pictureBox1.BackgroundImage.Size.Width/*+ pictureBox1.BackgroundImage.Size.Width/14*0.5*/) * cc, (float)(leny / Y * pictureBox1.BackgroundImage.Size.Height/*- pictureBox1.BackgroundImage.Size.Height/14*0.5)*cc*/));
         }
 
