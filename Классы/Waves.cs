@@ -493,11 +493,12 @@ namespace МатКлассы
             public static void FieldToFile(string path, Func<double, double, Tuple<double, double>> F, double[] x, double[] y, System.Threading.CancellationToken token, Func<Point, bool> Filter, string title = "")
             {
                 int xcount = x.Length;
+                int ycount = y.Length;
                 Tuple<double, double> tmp;
 
                 using (StreamWriter fur = new StreamWriter(Path.Combine(path, title + " (ur).txt")))
                 using (StreamWriter fuz = new StreamWriter(Path.Combine(path, title + " (uz).txt")))               
-                    for (int j = 0; j < xcount; j++)
+                    for (int j = 0; j < ycount; j++)
                         for (int i = 0; i < xcount; i++)
                         {
                             if (token.IsCancellationRequested) return;
