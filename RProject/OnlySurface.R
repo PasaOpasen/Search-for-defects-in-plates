@@ -6,6 +6,7 @@ xx = fread("3D ur, uz(x).txt", header = TRUE, dec = ",")
 yy = fread("3D ur, uz(y).txt", header = TRUE, dec = ",")
 x = xx$x
 y = yy$y
+xy =(max(x) - min(x))/(max(y) - min(y))  
 
 s = readLines("SurfaceMain.txt")[[1]]
 cat(paste(s, "\n"))
@@ -80,16 +81,19 @@ library(plotly)
 len = length(x)
 cat(paste("Maps...", "\n"))
 
-png(filename = paste(s, "(heatmap).png"), height = 600, width = 750)
+height = 500; width = height*xy
+
+png(filename = paste(s, "(heatmap).png"), height = height, width = width)
 par(cex = 1.0, cex.sub = 1.3, col.sub = "blue")
 urt <- data.frame(ur.abs = c(abs(urr)), x = rep(x, len), y = rep(y, each = len))
 
 ggplot(urt, aes(x, y, fill = ur.abs)) +
     scale_x_continuous(breaks = seq(min(x), max(x), length.out = 9)) +
-    # scale_y_continuous(breaks = seq(max(y), min(y), length.out = 10)) +
+    #scale_y_continuous(breaks = seq(max(y), min(y), length.out = 4)) +
     geom_raster(interpolate = TRUE) +
     coord_fixed(expand = FALSE) +
-    scale_fill_viridis() + theme(axis.title.x = element_text(size = 25), axis.title.y = element_text(size = 25), text = element_text(size = 22)) +
+    scale_fill_viridis(option = "A", name = "|ur|") +
+    theme(axis.title.x = element_text(size = 22), axis.title.y = element_text(size = 22), text = element_text(size = 19)) +
     scale_y_reverse()
 dev.off()
 
@@ -111,7 +115,7 @@ p1 = plot_ly(x = x, y = y, z = ~ur.Abs, type = "surface", contours = list(
         )
       ))
 
-png(filename = paste(s, "(heatmap_uz).png"), height = 600, width = 750)
+png(filename = paste(s, "(heatmap_uz).png"), height = height, width = width)
 par(cex = 1.0, cex.sub = 1.3, col.sub = "blue")
 urt <- data.frame(uz.abs = c(abs(uzz)), x = rep(x, len), y = rep(y, each = len))
 
@@ -120,7 +124,8 @@ ggplot(urt, aes(x, y, fill = uz.abs)) +
     # scale_y_continuous(breaks = seq(max(y), min(y), length.out = 10)) +
     geom_raster(interpolate = TRUE) +
     coord_fixed(expand = FALSE) +
-    scale_fill_viridis() + theme(axis.title.x = element_text(size = 25), axis.title.y = element_text(size = 25), text = element_text(size = 22)) +
+    scale_fill_viridis(option = "D", name = "|uz|") +
+    theme(axis.title.x = element_text(size = 22), axis.title.y = element_text(size = 22), text = element_text(size = 19)) +
     scale_y_reverse()
 dev.off()
 
@@ -141,7 +146,11 @@ p2 = plot_ly(x = x, y = y, z = ~uz.Abs, type = "surface", contours = list(
         )
       ))
 
+
+
+
 library(htmlwidgets)
 
 saveWidget(as.widget(p1),paste(s, "(ur).html"), FALSE)
 saveWidget(as.widget(p2), paste(s, "(uz).html"), FALSE)
+

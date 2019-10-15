@@ -109,5 +109,19 @@ namespace Работа2019
                 new Progress<int>(), new System.Threading.CancellationToken(), 
                 new Библиотека_графики.StringsForGrafic("Gauss"), Библиотека_графики.Create3DGrafics.GraficType.Pdf, true);
         }
+
+        public static Func<double, double, double> GetGaussFunc(EllipseParam[] array)
+        {
+            var mas = array.Where(e => e.GetValue != null).ToArray();
+
+            return (double x, double y) =>
+            {
+                Point p = new Point(x, y);
+                double sum = mas[0].GetValue(p);
+                for (int i = 1; i < mas.Length; i++)
+                    sum += mas[i].GetValue(p);
+                return sum;
+            };
+        }
     }
 }

@@ -255,7 +255,7 @@ namespace Работа2019
 
         private void toolStripButton3_Click(object sender, EventArgs e)
         {
-            string where = Path.GetExtension(Expendator.GetWordFromFile("WhereData.txt"));
+            string where = Path.GetDirectoryName(Expendator.GetWordFromFile("WhereData.txt"));
             MakeEllipses(Expendator.GetStringArrayFromFile(Path.Combine(where, Path.Combine("EllipseData", "Params.txt")), true));
         }
 

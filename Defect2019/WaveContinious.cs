@@ -248,7 +248,7 @@ namespace Defect2019
                         return true;
                 return false;
             };
-            string filename = "3D ur, uz.txt";
+            const string filename = "3D ur, uz.txt";
 
             async Task SlowUxtAsync()
             {

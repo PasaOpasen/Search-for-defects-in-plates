@@ -42,19 +42,20 @@
             this.textBox8 = new System.Windows.Forms.TextBox();
             this.textBox7 = new System.Windows.Forms.TextBox();
             this.groupBox6 = new System.Windows.Forms.GroupBox();
+            this.label2 = new System.Windows.Forms.Label();
+            this.contextMenuStrip2 = new System.Windows.Forms.ContextMenuStrip(this.components);
+            this.подробнееToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.numericUpDown1 = new System.Windows.Forms.NumericUpDown();
             this.button1 = new System.Windows.Forms.Button();
             this.numericUpDown7 = new System.Windows.Forms.NumericUpDown();
             this.textBox6 = new System.Windows.Forms.TextBox();
-            this.label2 = new System.Windows.Forms.Label();
-            this.contextMenuStrip2 = new System.Windows.Forms.ContextMenuStrip(this.components);
-            this.подробнееToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
+            this.button2 = new System.Windows.Forms.Button();
             ((System.ComponentModel.ISupportInitialize)(this.pictureBox1)).BeginInit();
             this.contextMenuStrip1.SuspendLayout();
             this.groupBox6.SuspendLayout();
+            this.contextMenuStrip2.SuspendLayout();
             ((System.ComponentModel.ISupportInitialize)(this.numericUpDown1)).BeginInit();
             ((System.ComponentModel.ISupportInitialize)(this.numericUpDown7)).BeginInit();
-            this.contextMenuStrip2.SuspendLayout();
             this.SuspendLayout();
             // 
             // pictureBox1
@@ -159,6 +160,7 @@
             // groupBox6
             // 
             this.groupBox6.BackColor = System.Drawing.Color.Transparent;
+            this.groupBox6.Controls.Add(this.button2);
             this.groupBox6.Controls.Add(this.label2);
             this.groupBox6.Controls.Add(this.numericUpDown1);
             this.groupBox6.Controls.Add(this.button1);
@@ -172,13 +174,38 @@
             this.groupBox6.Controls.Add(this.textBox6);
             this.groupBox6.Controls.Add(this.label10);
             this.groupBox6.FlatStyle = System.Windows.Forms.FlatStyle.Popup;
-            this.groupBox6.Location = new System.Drawing.Point(12, 248);
+            this.groupBox6.Location = new System.Drawing.Point(12, 211);
             this.groupBox6.Name = "groupBox6";
-            this.groupBox6.Size = new System.Drawing.Size(249, 243);
+            this.groupBox6.Size = new System.Drawing.Size(249, 280);
             this.groupBox6.TabIndex = 26;
             this.groupBox6.TabStop = false;
             this.groupBox6.Text = "Эллипсы и их карта";
             this.groupBox6.Enter += new System.EventHandler(this.groupBox6_Enter);
+            // 
+            // label2
+            // 
+            this.label2.AutoSize = true;
+            this.label2.BackColor = System.Drawing.Color.FromArgb(((int)(((byte)(192)))), ((int)(((byte)(255)))), ((int)(((byte)(192)))));
+            this.label2.ContextMenuStrip = this.contextMenuStrip2;
+            this.label2.Location = new System.Drawing.Point(26, 66);
+            this.label2.Name = "label2";
+            this.label2.Size = new System.Drawing.Size(63, 19);
+            this.label2.TabIndex = 31;
+            this.label2.Text = "label2";
+            // 
+            // contextMenuStrip2
+            // 
+            this.contextMenuStrip2.Items.AddRange(new System.Windows.Forms.ToolStripItem[] {
+            this.подробнееToolStripMenuItem});
+            this.contextMenuStrip2.Name = "contextMenuStrip2";
+            this.contextMenuStrip2.Size = new System.Drawing.Size(140, 26);
+            // 
+            // подробнееToolStripMenuItem
+            // 
+            this.подробнееToolStripMenuItem.Name = "подробнееToolStripMenuItem";
+            this.подробнееToolStripMenuItem.Size = new System.Drawing.Size(139, 22);
+            this.подробнееToolStripMenuItem.Text = "Подробнее!";
+            this.подробнееToolStripMenuItem.Click += new System.EventHandler(this.подробнееToolStripMenuItem_Click);
             // 
             // numericUpDown1
             // 
@@ -238,30 +265,17 @@
             this.textBox6.Text = "0,03";
             this.textBox6.TextAlign = System.Windows.Forms.HorizontalAlignment.Center;
             // 
-            // label2
+            // button2
             // 
-            this.label2.AutoSize = true;
-            this.label2.BackColor = System.Drawing.Color.FromArgb(((int)(((byte)(192)))), ((int)(((byte)(255)))), ((int)(((byte)(192)))));
-            this.label2.ContextMenuStrip = this.contextMenuStrip2;
-            this.label2.Location = new System.Drawing.Point(26, 66);
-            this.label2.Name = "label2";
-            this.label2.Size = new System.Drawing.Size(63, 19);
-            this.label2.TabIndex = 31;
-            this.label2.Text = "label2";
-            // 
-            // contextMenuStrip2
-            // 
-            this.contextMenuStrip2.Items.AddRange(new System.Windows.Forms.ToolStripItem[] {
-            this.подробнееToolStripMenuItem});
-            this.contextMenuStrip2.Name = "contextMenuStrip2";
-            this.contextMenuStrip2.Size = new System.Drawing.Size(140, 26);
-            // 
-            // подробнееToolStripMenuItem
-            // 
-            this.подробнееToolStripMenuItem.Name = "подробнееToolStripMenuItem";
-            this.подробнееToolStripMenuItem.Size = new System.Drawing.Size(180, 22);
-            this.подробнееToolStripMenuItem.Text = "Подробнее!";
-            this.подробнееToolStripMenuItem.Click += new System.EventHandler(this.подробнееToolStripMenuItem_Click);
+            this.button2.Dock = System.Windows.Forms.DockStyle.Bottom;
+            this.button2.FlatStyle = System.Windows.Forms.FlatStyle.Popup;
+            this.button2.Location = new System.Drawing.Point(3, 243);
+            this.button2.Name = "button2";
+            this.button2.Size = new System.Drawing.Size(243, 34);
+            this.button2.TabIndex = 32;
+            this.button2.Text = "Поискать сдвиг";
+            this.button2.UseVisualStyleBackColor = true;
+            this.button2.Click += new System.EventHandler(this.button2_Click);
             // 
             // Scheme
             // 
@@ -279,9 +293,9 @@
             this.contextMenuStrip1.ResumeLayout(false);
             this.groupBox6.ResumeLayout(false);
             this.groupBox6.PerformLayout();
+            this.contextMenuStrip2.ResumeLayout(false);
             ((System.ComponentModel.ISupportInitialize)(this.numericUpDown1)).EndInit();
             ((System.ComponentModel.ISupportInitialize)(this.numericUpDown7)).EndInit();
-            this.contextMenuStrip2.ResumeLayout(false);
             this.ResumeLayout(false);
 
         }
@@ -308,5 +322,6 @@
         private System.Windows.Forms.Label label2;
         private System.Windows.Forms.ContextMenuStrip contextMenuStrip2;
         private System.Windows.Forms.ToolStripMenuItem подробнееToolStripMenuItem;
+        private System.Windows.Forms.Button button2;
     }
 }

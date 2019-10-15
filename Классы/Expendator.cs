@@ -112,6 +112,15 @@ namespace МатКлассы
             return -Min(e);
         }
 
+        public static double Max(this double[,] mas)
+        {
+            double d = Double.NegativeInfinity;
+            for (int i = 0; i < mas.GetLength(0); i++)
+                for (int j = 0; j < mas.GetLength(1); j++)
+                    if (mas[i, j] > d)
+                        d = mas[i, j];
+            return d;
+        }
 
         /// <summary>
         /// Вывести строковое предаставление типа на консоль
