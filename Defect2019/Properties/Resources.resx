@@ -181,4 +181,34 @@
   <data name="gamestartup" type="System.Resources.ResXFileRef, System.Windows.Forms">
     <value>..\Resources\gamestartup.wav;System.IO.MemoryStream, mscorlib, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
   </data>
+  <data name="Magic3Dscript" type="System.Resources.ResXFileRef, System.Windows.Forms">
+    <value>..\Resources\Magic3Dscript.R;System.Byte[], mscorlib, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
+  </data>
+  <data name="OnePoint" type="System.Resources.ResXFileRef, System.Windows.Forms">
+    <value>..\Resources\OnePoint.R;System.Byte[], mscorlib, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
+  </data>
+  <data name="OnlySurface" type="System.Resources.ResXFileRef, System.Windows.Forms">
+    <value>..\Resources\OnlySurface.R;System.Byte[], mscorlib, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
+  </data>
+  <data name="ReDraw3Duxt2" type="System.Resources.ResXFileRef, System.Windows.Forms">
+    <value>..\Resources\ReDraw3Duxt2.R;System.Byte[], mscorlib, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
+  </data>
+  <data name="Truezlims" type="System.Resources.ResXFileRef, System.Windows.Forms">
+    <value>..\Resources\Truezlims.R;System.Byte[], mscorlib, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
+  </data>
+  <data name="WavesSurface" type="System.Resources.ResXFileRef, System.Windows.Forms">
+    <value>..\Resources\WavesSurface.R;System.Byte[], mscorlib, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
+  </data>
+  <data name="_3Duruz" type="System.Resources.ResXFileRef, System.Windows.Forms">
+    <value>..\Resources\3Duruz.R;System.Byte[], mscorlib, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
+  </data>
+  <data name="_3Duxt" type="System.Resources.ResXFileRef, System.Windows.Forms">
+    <value>..\Resources\3Duxt.R;System.Byte[], mscorlib, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
+  </data>
+  <data name="_3Duxt_better_" type="System.Resources.ResXFileRef, System.Windows.Forms">
+    <value>..\Resources\3Duxt(better).R;System.Byte[], mscorlib, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
+  </data>
+  <data name="_3Duxt_without_pdf_" type="System.Resources.ResXFileRef, System.Windows.Forms">
+    <value>..\Resources\3Duxt(without pdf).R;System.Byte[], mscorlib, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
+  </data>
 </root>

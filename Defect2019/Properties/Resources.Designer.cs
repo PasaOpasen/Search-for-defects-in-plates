@@ -61,6 +61,46 @@ namespace Работа2019.Properties {
         }
         
         /// <summary>
+        ///   Поиск локализованного ресурса типа System.Byte[].
+        /// </summary>
+        public static byte[] _3Duruz {
+            get {
+                object obj = ResourceManager.GetObject("_3Duruz", resourceCulture);
+                return ((byte[])(obj));
+            }
+        }
+        
+        /// <summary>
+        ///   Поиск локализованного ресурса типа System.Byte[].
+        /// </summary>
+        public static byte[] _3Duxt {
+            get {
+                object obj = ResourceManager.GetObject("_3Duxt", resourceCulture);
+                return ((byte[])(obj));
+            }
+        }
+        
+        /// <summary>
+        ///   Поиск локализованного ресурса типа System.Byte[].
+        /// </summary>
+        public static byte[] _3Duxt_better_ {
+            get {
+                object obj = ResourceManager.GetObject("_3Duxt_better_", resourceCulture);
+                return ((byte[])(obj));
+            }
+        }
+        
+        /// <summary>
+        ///   Поиск локализованного ресурса типа System.Byte[].
+        /// </summary>
+        public static byte[] _3Duxt_without_pdf_ {
+            get {
+                object obj = ResourceManager.GetObject("_3Duxt_without_pdf_", resourceCulture);
+                return ((byte[])(obj));
+            }
+        }
+        
+        /// <summary>
         ///   Поиск локализованного ресурса типа System.IO.UnmanagedMemoryStream, аналогичного System.IO.MemoryStream.
         /// </summary>
         public static System.IO.UnmanagedMemoryStream achievement_earned {
@@ -126,12 +166,52 @@ namespace Работа2019.Properties {
         }
         
         /// <summary>
+        ///   Поиск локализованного ресурса типа System.Byte[].
+        /// </summary>
+        public static byte[] Magic3Dscript {
+            get {
+                object obj = ResourceManager.GetObject("Magic3Dscript", resourceCulture);
+                return ((byte[])(obj));
+            }
+        }
+        
+        /// <summary>
+        ///   Поиск локализованного ресурса типа System.Byte[].
+        /// </summary>
+        public static byte[] OnePoint {
+            get {
+                object obj = ResourceManager.GetObject("OnePoint", resourceCulture);
+                return ((byte[])(obj));
+            }
+        }
+        
+        /// <summary>
+        ///   Поиск локализованного ресурса типа System.Byte[].
+        /// </summary>
+        public static byte[] OnlySurface {
+            get {
+                object obj = ResourceManager.GetObject("OnlySurface", resourceCulture);
+                return ((byte[])(obj));
+            }
+        }
+        
+        /// <summary>
         ///   Поиск локализованного ресурса типа System.Drawing.Icon, аналогичного (Значок).
         /// </summary>
         public static System.Drawing.Icon po_with_scuter {
             get {
                 object obj = ResourceManager.GetObject("po_with_scuter", resourceCulture);
                 return ((System.Drawing.Icon)(obj));
+            }
+        }
+        
+        /// <summary>
+        ///   Поиск локализованного ресурса типа System.Byte[].
+        /// </summary>
+        public static byte[] ReDraw3Duxt2 {
+            get {
+                object obj = ResourceManager.GetObject("ReDraw3Duxt2", resourceCulture);
+                return ((byte[])(obj));
             }
         }
         
@@ -145,11 +225,31 @@ namespace Работа2019.Properties {
         }
         
         /// <summary>
+        ///   Поиск локализованного ресурса типа System.Byte[].
+        /// </summary>
+        public static byte[] Truezlims {
+            get {
+                object obj = ResourceManager.GetObject("Truezlims", resourceCulture);
+                return ((byte[])(obj));
+            }
+        }
+        
+        /// <summary>
         ///   Поиск локализованного ресурса типа System.IO.UnmanagedMemoryStream, аналогичного System.IO.MemoryStream.
         /// </summary>
         public static System.IO.UnmanagedMemoryStream Uxt {
             get {
                 return ResourceManager.GetStream("Uxt", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Поиск локализованного ресурса типа System.Byte[].
+        /// </summary>
+        public static byte[] WavesSurface {
+            get {
+                object obj = ResourceManager.GetObject("WavesSurface", resourceCulture);
+                return ((byte[])(obj));
             }
         }
         

@@ -5,6 +5,7 @@ using System.Data;
 using System.Linq;
 using System.Threading.Tasks;
 using System.Windows;
+using System.IO;
 
 namespace Defect2019
 {
@@ -29,6 +30,7 @@ namespace Defect2019
             window.Title = $"Время последней компиляции: {DateTime.Now}";
 
             SetExeptions();
+            CopyFiles();
             app.Run(window);
         }
 
@@ -46,6 +48,30 @@ namespace Defect2019
                 }
 
             };
+        }
+
+        private static void CopyFiles()
+        {
+            string dir = Path.GetDirectoryName(Path.GetDirectoryName(Environment.CurrentDirectory));
+            dir = Path.Combine(dir, "Resources");
+
+            string name;
+            void Make(string file)
+            {
+                name = Path.GetFileName(file);
+                if (!File.Exists(name) || new System.IO.FileInfo(name).LastWriteTime < new System.IO.FileInfo(file).LastWriteTime)
+                    File.Copy(file, name, true);
+            }
+
+            foreach (string file in Directory.EnumerateFiles(dir, "*.r"))
+            {
+                Make(file);
+            }
+            //foreach (string file in Directory.EnumerateFiles(dir, "*.txt"))
+            //{
+            //    Make(file);
+            //}
+
         }
     }
 }
