@@ -80,6 +80,7 @@
             this.label9 = new System.Windows.Forms.Label();
             this.checkBox4 = new System.Windows.Forms.CheckBox();
             this.openFileDialog1 = new System.Windows.Forms.OpenFileDialog();
+            this.button1 = new System.Windows.Forms.Button();
             this.groupBox1.SuspendLayout();
             ((System.ComponentModel.ISupportInitialize)(this.numericUpDown3)).BeginInit();
             ((System.ComponentModel.ISupportInitialize)(this.numericUpDown1)).BeginInit();
@@ -92,8 +93,8 @@
             // 
             // groupBox1
             // 
+            this.groupBox1.Controls.Add(this.button1);
             this.groupBox1.Controls.Add(this.numericUpDown3);
-            this.groupBox1.Controls.Add(this.label5);
             this.groupBox1.Controls.Add(this.numericUpDown1);
             this.groupBox1.Controls.Add(this.textBox4);
             this.groupBox1.Controls.Add(this.label4);
@@ -103,9 +104,10 @@
             this.groupBox1.Controls.Add(this.label2);
             this.groupBox1.Controls.Add(this.textBox1);
             this.groupBox1.Controls.Add(this.label1);
+            this.groupBox1.Controls.Add(this.label5);
             this.groupBox1.Location = new System.Drawing.Point(12, 20);
             this.groupBox1.Name = "groupBox1";
-            this.groupBox1.Size = new System.Drawing.Size(322, 123);
+            this.groupBox1.Size = new System.Drawing.Size(336, 123);
             this.groupBox1.TabIndex = 0;
             this.groupBox1.TabStop = false;
             this.groupBox1.Text = "Параметры прямоугольника (мм)";
@@ -117,7 +119,7 @@
             0,
             0,
             0});
-            this.numericUpDown3.Location = new System.Drawing.Point(206, 91);
+            this.numericUpDown3.Location = new System.Drawing.Point(152, 90);
             this.numericUpDown3.Maximum = new decimal(new int[] {
             160,
             0,
@@ -132,6 +134,7 @@
             this.numericUpDown3.Size = new System.Drawing.Size(78, 26);
             this.numericUpDown3.TabIndex = 10;
             this.numericUpDown3.TextAlign = System.Windows.Forms.HorizontalAlignment.Center;
+            this.toolTip1.SetToolTip(this.numericUpDown3, "по Y");
             this.numericUpDown3.Value = new decimal(new int[] {
             50,
             0,
@@ -141,7 +144,7 @@
             // label5
             // 
             this.label5.AutoSize = true;
-            this.label5.Location = new System.Drawing.Point(38, 92);
+            this.label5.Location = new System.Drawing.Point(14, 92);
             this.label5.Name = "label5";
             this.label5.Size = new System.Drawing.Size(63, 19);
             this.label5.TabIndex = 9;
@@ -154,7 +157,7 @@
             0,
             0,
             0});
-            this.numericUpDown1.Location = new System.Drawing.Point(107, 90);
+            this.numericUpDown1.Location = new System.Drawing.Point(68, 90);
             this.numericUpDown1.Maximum = new decimal(new int[] {
             140,
             0,
@@ -169,6 +172,7 @@
             this.numericUpDown1.Size = new System.Drawing.Size(78, 26);
             this.numericUpDown1.TabIndex = 8;
             this.numericUpDown1.TextAlign = System.Windows.Forms.HorizontalAlignment.Center;
+            this.toolTip1.SetToolTip(this.numericUpDown1, "по X");
             this.numericUpDown1.Value = new decimal(new int[] {
             50,
             0,
@@ -257,7 +261,7 @@
             this.groupBox2.Controls.Add(this.label7);
             this.groupBox2.Controls.Add(this.textBox5);
             this.groupBox2.Controls.Add(this.label6);
-            this.groupBox2.Location = new System.Drawing.Point(340, 21);
+            this.groupBox2.Location = new System.Drawing.Point(354, 21);
             this.groupBox2.Name = "groupBox2";
             this.groupBox2.Size = new System.Drawing.Size(284, 122);
             this.groupBox2.TabIndex = 1;
@@ -627,6 +631,16 @@
             // 
             this.openFileDialog1.FileName = "openFileDialog1";
             // 
+            // button1
+            // 
+            this.button1.Location = new System.Drawing.Point(236, 90);
+            this.button1.Name = "button1";
+            this.button1.Size = new System.Drawing.Size(94, 27);
+            this.button1.TabIndex = 11;
+            this.button1.Text = "уравнять";
+            this.button1.UseVisualStyleBackColor = true;
+            this.button1.Click += new System.EventHandler(this.button1_Click);
+            // 
             // WaveContinious
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(9F, 19F);
@@ -724,5 +738,6 @@
         public System.Windows.Forms.RadioButton radioButton7;
         public System.Windows.Forms.CheckBox checkBox4;
         public System.Windows.Forms.NumericUpDown numericUpDown3;
+        private System.Windows.Forms.Button button1;
     }
 }

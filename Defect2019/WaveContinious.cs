@@ -778,6 +778,11 @@ namespace Defect2019
             }
         }
 
+        private void button1_Click(object sender, EventArgs e)
+        {
+            numericUpDown3.Value = numericUpDown1.Value;
+        }
+
         private void numericUpDown1_ValueChanged(object sender, EventArgs e)
         {
             GetFields();
