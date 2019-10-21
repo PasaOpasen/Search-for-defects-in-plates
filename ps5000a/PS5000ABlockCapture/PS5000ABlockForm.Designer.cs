@@ -134,6 +134,8 @@ namespace PS5000A
             this.toolStripStatusLabel2 = new System.Windows.Forms.ToolStripStatusLabel();
             this.timer1 = new System.Windows.Forms.Timer(this.components);
             this.folderBrowserDialog1 = new System.Windows.Forms.FolderBrowserDialog();
+            this.groupBox6 = new System.Windows.Forms.GroupBox();
+            this.textBox23 = new System.Windows.Forms.TextBox();
             this.tabControl.SuspendLayout();
             this.tabUnit.SuspendLayout();
             this.tabAbout.SuspendLayout();
@@ -145,6 +147,7 @@ namespace PS5000A
             this.groupBox3.SuspendLayout();
             this.groupBox2.SuspendLayout();
             this.statusStrip1.SuspendLayout();
+            this.groupBox6.SuspendLayout();
             this.SuspendLayout();
             // 
             // buttonOpen
@@ -990,6 +993,7 @@ namespace PS5000A
             // 
             // tabGetData
             // 
+            this.tabGetData.Controls.Add(this.groupBox6);
             this.tabGetData.Controls.Add(this.groupBox5);
             this.tabGetData.Controls.Add(this.groupBox3);
             this.tabGetData.Controls.Add(this.checkBox3);
@@ -1008,9 +1012,9 @@ namespace PS5000A
             // groupBox5
             // 
             this.groupBox5.Controls.Add(this.textBox12);
-            this.groupBox5.Location = new System.Drawing.Point(38, 219);
+            this.groupBox5.Location = new System.Drawing.Point(29, 186);
             this.groupBox5.Name = "groupBox5";
-            this.groupBox5.Size = new System.Drawing.Size(512, 90);
+            this.groupBox5.Size = new System.Drawing.Size(512, 65);
             this.groupBox5.TabIndex = 9;
             this.groupBox5.TabStop = false;
             this.groupBox5.Text = "Директория с замерами";
@@ -1018,11 +1022,11 @@ namespace PS5000A
             // textBox12
             // 
             this.textBox12.Dock = System.Windows.Forms.DockStyle.Fill;
-            this.textBox12.Font = new System.Drawing.Font("Microsoft Sans Serif", 12F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(204)));
+            this.textBox12.Font = new System.Drawing.Font("Microsoft Sans Serif", 11.25F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(204)));
             this.textBox12.Location = new System.Drawing.Point(3, 22);
             this.textBox12.Multiline = true;
             this.textBox12.Name = "textBox12";
-            this.textBox12.Size = new System.Drawing.Size(506, 65);
+            this.textBox12.Size = new System.Drawing.Size(506, 40);
             this.textBox12.TabIndex = 2;
             this.textBox12.TextAlign = System.Windows.Forms.HorizontalAlignment.Center;
             // 
@@ -1030,7 +1034,7 @@ namespace PS5000A
             // 
             this.groupBox3.Controls.Add(this.buttonStart);
             this.groupBox3.Controls.Add(this.groupBox2);
-            this.groupBox3.Location = new System.Drawing.Point(52, 31);
+            this.groupBox3.Location = new System.Drawing.Point(29, 8);
             this.groupBox3.Name = "groupBox3";
             this.groupBox3.Size = new System.Drawing.Size(192, 172);
             this.groupBox3.TabIndex = 8;
@@ -1088,7 +1092,7 @@ namespace PS5000A
             // checkBox3
             // 
             this.checkBox3.AutoSize = true;
-            this.checkBox3.Location = new System.Drawing.Point(305, 135);
+            this.checkBox3.Location = new System.Drawing.Point(248, 70);
             this.checkBox3.Name = "checkBox3";
             this.checkBox3.Size = new System.Drawing.Size(163, 24);
             this.checkBox3.TabIndex = 7;
@@ -1100,7 +1104,7 @@ namespace PS5000A
             this.checkBox2.AutoSize = true;
             this.checkBox2.Checked = true;
             this.checkBox2.CheckState = System.Windows.Forms.CheckState.Checked;
-            this.checkBox2.Location = new System.Drawing.Point(305, 165);
+            this.checkBox2.Location = new System.Drawing.Point(248, 100);
             this.checkBox2.Name = "checkBox2";
             this.checkBox2.Size = new System.Drawing.Size(275, 24);
             this.checkBox2.TabIndex = 6;
@@ -1112,7 +1116,7 @@ namespace PS5000A
             this.button4.BackColor = System.Drawing.Color.FromArgb(((int)(((byte)(192)))), ((int)(((byte)(255)))), ((int)(((byte)(255)))));
             this.button4.FlatStyle = System.Windows.Forms.FlatStyle.Popup;
             this.button4.Font = new System.Drawing.Font("Microsoft Sans Serif", 14.25F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(204)));
-            this.button4.Location = new System.Drawing.Point(541, 33);
+            this.button4.Location = new System.Drawing.Point(541, 65);
             this.button4.Name = "button4";
             this.button4.Size = new System.Drawing.Size(147, 91);
             this.button4.TabIndex = 5;
@@ -1123,7 +1127,7 @@ namespace PS5000A
             // button2
             // 
             this.button2.Font = new System.Drawing.Font("Microsoft Sans Serif", 14.25F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(204)));
-            this.button2.Location = new System.Drawing.Point(573, 241);
+            this.button2.Location = new System.Drawing.Point(573, 193);
             this.button2.Name = "button2";
             this.button2.Size = new System.Drawing.Size(115, 54);
             this.button2.TabIndex = 3;
@@ -1163,6 +1167,26 @@ namespace PS5000A
             this.toolStripStatusLabel2.Size = new System.Drawing.Size(118, 17);
             this.toolStripStatusLabel2.Text = "toolStripStatusLabel2";
             // 
+            // groupBox6
+            // 
+            this.groupBox6.Controls.Add(this.textBox23);
+            this.groupBox6.Location = new System.Drawing.Point(29, 253);
+            this.groupBox6.Name = "groupBox6";
+            this.groupBox6.Size = new System.Drawing.Size(659, 65);
+            this.groupBox6.TabIndex = 10;
+            this.groupBox6.TabStop = false;
+            this.groupBox6.Text = "Описание замера";
+            // 
+            // textBox23
+            // 
+            this.textBox23.Dock = System.Windows.Forms.DockStyle.Fill;
+            this.textBox23.Font = new System.Drawing.Font("Microsoft Sans Serif", 11.25F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(204)));
+            this.textBox23.Location = new System.Drawing.Point(3, 22);
+            this.textBox23.Multiline = true;
+            this.textBox23.Name = "textBox23";
+            this.textBox23.Size = new System.Drawing.Size(653, 40);
+            this.textBox23.TabIndex = 2;
+            // 
             // PS5000ABlockForm
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(9F, 20F);
@@ -1194,6 +1218,8 @@ namespace PS5000A
             this.groupBox2.PerformLayout();
             this.statusStrip1.ResumeLayout(false);
             this.statusStrip1.PerformLayout();
+            this.groupBox6.ResumeLayout(false);
+            this.groupBox6.PerformLayout();
             this.ResumeLayout(false);
             this.PerformLayout();
 
@@ -1294,6 +1320,8 @@ namespace PS5000A
         private System.Windows.Forms.Label label6;
         private System.Windows.Forms.GroupBox groupBox4;
         private System.Windows.Forms.GroupBox groupBox5;
+        private System.Windows.Forms.GroupBox groupBox6;
+        private System.Windows.Forms.TextBox textBox23;
     }
 }
 

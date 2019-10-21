@@ -90,10 +90,12 @@ namespace PS5000A
 
             SetDirects();
             SetParams();
+            InfoGet();
 
             this.FormClosing += (object o, FormClosingEventArgs aa) =>
               {
                   GetParams();
+                  Expendator.WriteStringInFile(Path.Combine(globalbase, "Описание.txt"), textBox23.Text);
               };
 
             this.FormClosed += new FormClosedEventHandler((object o, FormClosedEventArgs a) =>
@@ -307,7 +309,18 @@ namespace PS5000A
                 textBox12.Text = folderBrowserDialog1.SelectedPath;
                 globalbase = textBox12.Text;
                 SetForlders();
+
+                InfoGet();
             }
+        }
+        /// <summary>
+        /// Читает файл описания и закидывает в нужное поле
+        /// </summary>
+        private void InfoGet()
+        {
+                string name = Path.Combine(globalbase, "Описание.txt");
+                if (File.Exists(name))
+                    textBox23.Text = Expendator.GetWordFromFile(name);
         }
 
         private bool SetGlobalBase()
