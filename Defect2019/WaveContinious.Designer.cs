@@ -79,6 +79,7 @@
             this.label9 = new System.Windows.Forms.Label();
             this.checkBox4 = new System.Windows.Forms.CheckBox();
             this.openFileDialog1 = new System.Windows.Forms.OpenFileDialog();
+            this.numericUpDown3 = new System.Windows.Forms.NumericUpDown();
             this.groupBox1.SuspendLayout();
             ((System.ComponentModel.ISupportInitialize)(this.numericUpDown1)).BeginInit();
             this.groupBox2.SuspendLayout();
@@ -86,10 +87,12 @@
             this.statusStrip1.SuspendLayout();
             this.groupBox6.SuspendLayout();
             this.menuStrip1.SuspendLayout();
+            ((System.ComponentModel.ISupportInitialize)(this.numericUpDown3)).BeginInit();
             this.SuspendLayout();
             // 
             // groupBox1
             // 
+            this.groupBox1.Controls.Add(this.numericUpDown3);
             this.groupBox1.Controls.Add(this.label5);
             this.groupBox1.Controls.Add(this.numericUpDown1);
             this.groupBox1.Controls.Add(this.textBox4);
@@ -110,7 +113,7 @@
             // label5
             // 
             this.label5.AutoSize = true;
-            this.label5.Location = new System.Drawing.Point(89, 91);
+            this.label5.Location = new System.Drawing.Point(38, 92);
             this.label5.Name = "label5";
             this.label5.Size = new System.Drawing.Size(63, 19);
             this.label5.TabIndex = 9;
@@ -123,7 +126,7 @@
             0,
             0,
             0});
-            this.numericUpDown1.Location = new System.Drawing.Point(158, 89);
+            this.numericUpDown1.Location = new System.Drawing.Point(107, 90);
             this.numericUpDown1.Maximum = new decimal(new int[] {
             140,
             0,
@@ -143,6 +146,7 @@
             0,
             0,
             0});
+            this.numericUpDown1.ValueChanged += new System.EventHandler(this.numericUpDown1_ValueChanged);
             // 
             // textBox4
             // 
@@ -595,6 +599,34 @@
             // 
             this.openFileDialog1.FileName = "openFileDialog1";
             // 
+            // numericUpDown3
+            // 
+            this.numericUpDown3.Increment = new decimal(new int[] {
+            5,
+            0,
+            0,
+            0});
+            this.numericUpDown3.Location = new System.Drawing.Point(206, 91);
+            this.numericUpDown3.Maximum = new decimal(new int[] {
+            140,
+            0,
+            0,
+            0});
+            this.numericUpDown3.Minimum = new decimal(new int[] {
+            6,
+            0,
+            0,
+            0});
+            this.numericUpDown3.Name = "numericUpDown3";
+            this.numericUpDown3.Size = new System.Drawing.Size(78, 26);
+            this.numericUpDown3.TabIndex = 10;
+            this.numericUpDown3.TextAlign = System.Windows.Forms.HorizontalAlignment.Center;
+            this.numericUpDown3.Value = new decimal(new int[] {
+            50,
+            0,
+            0,
+            0});
+            // 
             // WaveContinious
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(9F, 19F);
@@ -633,6 +665,7 @@
             this.groupBox6.PerformLayout();
             this.menuStrip1.ResumeLayout(false);
             this.menuStrip1.PerformLayout();
+            ((System.ComponentModel.ISupportInitialize)(this.numericUpDown3)).EndInit();
             this.ResumeLayout(false);
             this.PerformLayout();
 
@@ -690,5 +723,6 @@
         public System.Windows.Forms.RadioButton radioButton8;
         public System.Windows.Forms.RadioButton radioButton7;
         public System.Windows.Forms.CheckBox checkBox4;
+        public System.Windows.Forms.NumericUpDown numericUpDown3;
     }
 }

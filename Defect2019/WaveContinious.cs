@@ -61,6 +61,7 @@ namespace Defect2019
                     textBox2.Text = f.ReadLine().Replace('.', ',').Split(' ')[1];
                     textBox4.Text = f.ReadLine().Replace('.', ',').Split(' ')[1];
                     numericUpDown1.Value = f.ReadLine().Replace('.', ',').Split(' ')[1].ToInt32();
+                    numericUpDown3.Value = f.ReadLine().Replace('.', ',').Split(' ')[1].ToInt32();
                 }
             if (File.Exists("LastTimeConfig.txt"))
                 using (StreamReader f = new StreamReader("LastTimeConfig.txt"))
@@ -102,7 +103,7 @@ namespace Defect2019
         }
 
         public double xmin, xmax, ymin, ymax, tmin, tmax;
-        public int count, tcount;
+        public int count, tcount,count2;
         /// <summary>
         /// Имена png файлов
         /// </summary>
@@ -163,7 +164,8 @@ namespace Defect2019
             tmax = textBox6.Text.ToDouble();
             count = numericUpDown1.Value.ToInt32();
             tcount = numericUpDown2.Value.ToInt32();
-            all = count * count;
+            count2 = numericUpDown3.Value.ToInt32();
+            all = count * count2;
             filenames = new string[tcount];
         }
 
@@ -239,7 +241,7 @@ namespace Defect2019
             Expendator.WriteStringInFile(Path.Combine(path, "SurfaceMain.txt"), gl);
 
             double[] xmas = Expendator.Seq(xmin, xmax, count);
-            double[] ymas = Expendator.Seq(ymin, ymax, count);
+            double[] ymas = Expendator.Seq(ymin, ymax, count2);
 
             Func<Point, bool> Filt = (Point point) =>
             {
@@ -252,7 +254,7 @@ namespace Defect2019
 
             async Task SlowUxtAsync()
             {
-                double[,] ur = new double[count, count], uz = new double[count, count];
+                double[,] ur = new double[count, count2], uz = new double[count, count2];
                 for (int i = 0; i < tcount; i++)
                 {
                     double t = tmin + i * th;
@@ -499,7 +501,7 @@ namespace Defect2019
                     fnames[k][i] = Path.Combine(p[k], tmp[i]);
             }
 
-            int len = count * count;
+            int len = count * count2;
             Parallel.For(0, names.Length, (int i) =>
             {
                 Vectors v = new Vectors(len);
@@ -579,7 +581,7 @@ namespace Defect2019
             //        )
             //    );
 
-            Task tt = Task.Run(() => OtherMethods.Saveuxw3(xmin, xmax, count, ymin, ymax, sourcesArray));
+            Task tt = Task.Run(() => OtherMethods.Saveuxw3(xmin, xmax, count,count2, ymin, ymax, sourcesArray));
             OtherMethods.IlushaMethod(checkBox4);
             //Task.WaitAll(tt);
             await tt;
@@ -765,6 +767,11 @@ namespace Defect2019
             }
         }
 
+        private void numericUpDown1_ValueChanged(object sender, EventArgs e)
+        {
+            numericUpDown3.Value = numericUpDown1.Value;
+        }
+
         private void высчитатьИИспользоватьНовыеЗначенияToolStripMenuItem_Click(object sender, EventArgs e)
         {
             if (высчитатьИИспользоватьНовыеЗначенияToolStripMenuItem.Checked)
@@ -814,6 +821,9 @@ namespace Defect2019
             for (int i = 0; i < count; i++)
             {
                 xs.WriteLine(xmas[i]);
+            }
+            for (int i = 0; i < count2; i++)
+            {
                 ys.WriteLine(ymas[i]);
             }
             xs.Close();

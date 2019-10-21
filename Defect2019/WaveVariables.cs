@@ -1074,9 +1074,9 @@ public static class OtherMethods
     /// <param name="Y"></param>
     /// <param name="ycount"></param>
     /// <param name="smas"></param>
-    public static void Saveuxw3(double x0, double X, int xcount, double y0, double Y, Source[] smas)
+    public static void Saveuxw3(double x0, double X, int xcount, int ycount, double y0, double Y, Source[] smas)
     {
-        bool notEqualConfig = !EqualConfigs(x0, X, xcount, y0, Y, smas, out Source[] arr);
+        bool notEqualConfig = !EqualConfigs(x0, X, xcount,ycount, y0, Y, smas, out Source[] arr);
 
         if (notEqualConfig)
         {
@@ -1085,11 +1085,11 @@ public static class OtherMethods
             info = "Происходит запись вспомогательных файлов";
 
             Centers(smas);
-            Space(x0, X, xcount, y0, Y, smas);
+            Space(x0, X, xcount,ycount, y0, Y, smas);
 
             info = "Файлы записаны";
             info = null;
-            CalcD(x0, X, xcount, y0, Y, smas);
+            CalcD(x0, X, xcount,ycount, y0, Y, smas);
             info = "Происходит сохранение результата, чтобы в другой раз избежать повторных вычислений";
             WriteData(smas);
             info = "Результат записан";
@@ -1099,14 +1099,14 @@ public static class OtherMethods
             if (arr.Length > 0)
             {
                 info = "Создание недостающих файлов";
-                CalcD(x0, X, xcount, y0, Y, arr);
+                CalcD(x0, X, xcount,ycount, y0, Y, arr);
                 info = "Происходит сохранение результата, чтобы в другой раз избежать повторных вычислений";
                 WriteData(arr);
                 info = "Результат записан";
             }
 
             info = "Считываются данные с сохранённых источников";
-            ReadData(x0, X, xcount, y0, Y, smas.Where(p => !arr.Contains(p)).ToArray());
+            ReadData(x0, X, xcount,ycount, y0, Y, smas.Where(p => !arr.Contains(p)).ToArray());
             info = "Данные считаны";
         }
         info = null;
@@ -1121,16 +1121,16 @@ public static class OtherMethods
     /// <param name="Y"></param>
     /// <param name="ycount"></param>
     /// <param name="smas"></param>
-    public static void CalcD(double x0, double X, int xcount, double y0, double Y, Source[] smas)
+    public static void CalcD(double x0, double X, int xcount, int ycount, double y0, double Y, Source[] smas)
     {
         Saved = 0;
-        SaveCount = xcount * xcount * smas.Length;
+        SaveCount = xcount * ycount * smas.Length;
         var w = wmas;
         byte scount = (byte)smas.Length;
         int numberofs;
 
         double x, y;
-        double xh = (X - x0) / (xcount - 1), yh = (Y - y0) / (xcount - 1);
+        double xh = (X - x0) / (xcount - 1), yh = (Y - y0) / (ycount - 1);
 
         bool b;
         Point xy;
@@ -1210,7 +1210,7 @@ public static class OtherMethods
         for (int i = 0; i < xcount; i++)
         {
             x = x0 + i * xh;
-            for (int j = 0; j < xcount; j++)
+            for (int j = 0; j < ycount; j++)
             {
                 y = y0 + j * yh;
                 xy = new Point(x, y);
@@ -1264,11 +1264,12 @@ public static class OtherMethods
     public static void CalcUXT(double[] xmas, double[] ymas, Source[] sources)
     {
         int count = xmas.Length;
+        int count2 = ymas.Length;
         Tuple<Complex, Complex>[] tmp;
         for (int ss = 0; ss < sources.Length; ss++)
             Parallel.For(0, count, (int xi) =>
             {
-                for (int yi = 0; yi < count; yi++)
+                for (int yi = 0; yi < count2; yi++)
                     tmp = Functions.CMAS_Memoized(xmas[xi], ymas[yi], sources[ss]);
             }
             );
@@ -1303,7 +1304,7 @@ public static class OtherMethods
 
         }
     }
-    private static void Space(double x0, double X, int xcount, double y0, double Y, Source[] smas)
+    private static void Space(double x0, double X, int xcount, int ycount, double y0, double Y, Source[] smas)
     {
         using (StreamWriter f = new StreamWriter("Space.txt"))
         {
@@ -1312,6 +1313,7 @@ public static class OtherMethods
             f.WriteLine($"xmax= {X.ToRString()}");
             f.WriteLine($"ymax= {Y.ToRString()}");
             f.WriteLine($"countS= {xcount}");
+            f.WriteLine($"countS2= {ycount}");
             f.WriteLine($"countW= {wcount}");
             f.WriteLine($"wbeg= {wbeg.ToRString()}");
             f.WriteLine($"wend= {wend.ToRString()}");
@@ -1344,14 +1346,14 @@ public static class OtherMethods
                     f.WriteLine($"{i + 1} {mas[i].Norms[j].Position.x.ToRString()} {mas[i].Norms[j].Position.y.ToRString()} {mas[i].Norms[j].n.x.ToRString()} {mas[i].Norms[j].n.y.ToRString()}".Replace(',', '.'));
         }
     }
-    private static void ReadData(double x0, double X, int xcount, double y0, double Y, Source[] mas)
+    private static void ReadData(double x0, double X, int xcount, int ycount, double y0, double Y, Source[] mas)
     {
         if (mas.Length == 0) return;
-        SaveCount = xcount * xcount * wcount * mas.Length;
+        SaveCount = xcount * ycount * wcount * mas.Length;
         Saved = 0;
         int[] saves = new int[mas.Length];
         Vectors xx = new Vectors(SeqWMemoized(x0, X, xcount));
-        Vectors yy = new Vectors(SeqWMemoized(y0, Y, xcount));
+        Vectors yy = new Vectors(SeqWMemoized(y0, Y, ycount));
         Vectors w = new Vectors(SeqWMemoized(wbeg, wend, wcount));
 
         Parallel.For(0, mas.Length, (int i) =>
@@ -1417,7 +1419,7 @@ public static class OtherMethods
         Saved = 0;
     }
 
-    private static bool EqualConfigs(double x0, double X, int xcount, double y0, double Y, Source[] smas, out Source[] emptymas)
+    private static bool EqualConfigs(double x0, double X, int xcount, int ycount, double y0, double Y, Source[] smas, out Source[] emptymas)
     {
         List<Source> list = new List<Source>();
         List<string> names = new List<string>();
@@ -1438,6 +1440,7 @@ public static class OtherMethods
             if (X != f.ReadLine().Split(' ')[1].ToDouble()) return false;
             if (Y != f.ReadLine().Split(' ')[1].ToDouble()) return false;
             if (xcount != f.ReadLine().Split(' ')[1].ToInt32()) return false;
+            if (ycount != f.ReadLine().Split(' ')[1].ToInt32()) return false;
             if (wcount != f.ReadLine().Split(' ')[1].ToInt32()) return false;
             if (wbeg != f.ReadLine().Split(' ')[1].ToDouble()) return false;
             if (wend != f.ReadLine().Split(' ')[1].ToDouble()) return false;
