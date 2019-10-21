@@ -103,7 +103,7 @@ namespace Defect2019
         }
 
         public double xmin, xmax, ymin, ymax, tmin, tmax;
-        public int count, tcount,count2;
+        public int count, tcount, count2;
         /// <summary>
         /// Имена png файлов
         /// </summary>
@@ -447,24 +447,28 @@ namespace Defect2019
 
             OtherMethods.PlaySound("ПоверхностиПостроены");
 
-            if (MessageBox.Show("Создавать анимацию? (может занять до 15 минут)", "Анимация", MessageBoxButtons.YesNo, MessageBoxIcon.Question) == System.Windows.Forms.DialogResult.Yes)
+            if (count == count2)
             {
-                toolStripStatusLabel1.Text = $"Построены u-surface. Создаётся массив кадров";
-                await Task.Run(() => Expendator.StartProcessOnly("ReDraw3Duxt2.r", true));
+                if (MessageBox.Show("Создавать анимацию? (может занять до 15 минут)", "Анимация", MessageBoxButtons.YesNo, MessageBoxIcon.Question) == System.Windows.Forms.DialogResult.Yes)
+                {
+                    toolStripStatusLabel1.Text = $"Построены u-surface. Создаётся массив кадров";
+                    await Task.Run(() => Expendator.StartProcessOnly("ReDraw3Duxt2.r", true));
 
-                if (source.IsCancellationRequested) return;
-                OtherMethods.PlaySound("АнимацияГотова");
-                new Anima(filenames).ShowDialog();
+                    if (source.IsCancellationRequested) return;
+                    OtherMethods.PlaySound("АнимацияГотова");
+                    new Anima(filenames).ShowDialog();
+                }
+
+                new Scheme(sourcesArray, new Point(xmin, ymin), xmax - xmin, ymax - ymin, gl + " (heatmap).png").Show();
+                OtherMethods.PlaySound("ВычисленияЗавершены");
             }
 
             toolStripStatusLabel1.Text = $"Операции закончены";
-            new Scheme(sourcesArray, new Point(xmin, ymin), xmax - xmin, ymax - ymin, gl + " (heatmap).png").Show();
-            OtherMethods.PlaySound("ВычисленияЗавершены");
         }
 
         private void ShowImages(string name)
         {
-            string main = "Полученные u-surfaces";
+            const string main = "Полученные u-surfaces";
             var titles = new string[]
             {
                 "ur, uz в pdf",
@@ -481,6 +485,13 @@ namespace Defect2019
                 $"{name} (ur).html",
                 $"{name} (uz).html"
             };
+
+            if (count != count2)
+            {
+                docs = new string[] { docs[0],docs[3], docs[4] };
+                titles = new string[] { titles[0], titles[3], titles[4] };
+            }
+
             new Библиотека_графики.ManyDocumentsShower(main, titles, docs).Show();
         }
 
@@ -581,7 +592,7 @@ namespace Defect2019
             //        )
             //    );
 
-            Task tt = Task.Run(() => OtherMethods.Saveuxw3(xmin, xmax, count,count2, ymin, ymax, sourcesArray));
+            Task tt = Task.Run(() => OtherMethods.Saveuxw3(xmin, xmax, count, count2, ymin, ymax, sourcesArray));
             OtherMethods.IlushaMethod(checkBox4);
             //Task.WaitAll(tt);
             await tt;

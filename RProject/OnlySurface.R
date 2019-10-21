@@ -78,14 +78,17 @@ library(gridExtra)
 library(fields)
 library(plotly)
 
-len = length(x)
+lenx = length(x)
+leny = length(y)
 cat(paste("Maps...", "\n"))
 
-height = 500; width = height*xy
+height = 500;
+width = height * xy
 
+if (lenx == leny) {
 png(filename = paste(s, "(heatmap).png"), height = height, width = width)
 par(cex = 1.0, cex.sub = 1.3, col.sub = "blue")
-urt <- data.frame(ur.abs = c(abs(urr)), x = rep(x, len), y = rep(y, each = len))
+urt <- data.frame(ur.abs = c(abs(urr)), x = rep(x, lenx), y = rep(y, each = leny))
 
 ggplot(urt, aes(x, y, fill = ur.abs)) +
     scale_x_continuous(breaks = seq(min(x), max(x), length.out = 9)) +
@@ -96,8 +99,10 @@ ggplot(urt, aes(x, y, fill = ur.abs)) +
     theme(axis.title.x = element_text(size = 22), axis.title.y = element_text(size = 22), text = element_text(size = 19)) +
     scale_y_reverse()
 dev.off()
+}
 
-ur.Abs=matrix(abs(urr),len,len)
+
+ur.Abs=matrix(abs(urr),lenx,leny)
 
 p1 = plot_ly(x = x, y = y, z = ~ur.Abs, type = "surface", contours = list(
     z = list(
@@ -115,9 +120,10 @@ p1 = plot_ly(x = x, y = y, z = ~ur.Abs, type = "surface", contours = list(
         )
       ))
 
+if (lenx == leny) {
 png(filename = paste(s, "(heatmap_uz).png"), height = height, width = width)
 par(cex = 1.0, cex.sub = 1.3, col.sub = "blue")
-urt <- data.frame(uz.abs = c(abs(uzz)), x = rep(x, len), y = rep(y, each = len))
+urt <- data.frame(uz.abs = c(abs(uzz)), x = rep(x, lenx), y = rep(y, each = leny))
 
 ggplot(urt, aes(x, y, fill = uz.abs)) +
     scale_x_continuous(breaks = seq(min(x), max(x), length.out = 9)) +
@@ -128,8 +134,9 @@ ggplot(urt, aes(x, y, fill = uz.abs)) +
     theme(axis.title.x = element_text(size = 22), axis.title.y = element_text(size = 22), text = element_text(size = 19)) +
     scale_y_reverse()
 dev.off()
+}
 
-uz.Abs=matrix(abs(uzz),len,len)
+uz.Abs=matrix(abs(uzz),lenx,leny)
 p2 = plot_ly(x = x, y = y, z = ~uz.Abs, type = "surface", contours = list(
     z = list(
       show = TRUE,
