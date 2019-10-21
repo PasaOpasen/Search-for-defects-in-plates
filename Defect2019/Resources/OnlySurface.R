@@ -80,29 +80,12 @@ library(plotly)
 
 lenx = length(x)
 leny = length(y)
-cat(paste("Maps...", "\n"))
 
 height = 500;
 width = height * xy
 
-if (lenx == leny) {
-    png(filename = paste(s, "(heatmap).png"), height = height, width = width)
-    par(cex = 1.0, cex.sub = 1.3, col.sub = "blue")
-    urt <- data.frame(ur.abs = c(abs(urr)), x = rep(x, lenx), y = rep(y, each = leny))
-
-    ggplot(urt, aes(x, y, fill = ur.abs)) +
-    scale_x_continuous(breaks = seq(min(x), max(x), length.out = 9)) +
-    #scale_y_continuous(breaks = seq(max(y), min(y), length.out = 4)) +
-    geom_raster(interpolate = TRUE) +
-    coord_fixed(expand = FALSE) +
-    scale_fill_viridis(option = "A", name = "|ur|") +
-    theme(axis.title.x = element_text(size = 22), axis.title.y = element_text(size = 22), text = element_text(size = 19)) +
-    scale_y_reverse()
-    dev.off()
-}
-
-
-ur.Abs = matrix(abs(urr), lenx, leny)
+ur.Abs = matrix(abs(urr), leny,lenx, T)
+#print(ur.Abs)
 
 p1 = plot_ly(x = x, y = y, z = ~ur.Abs, type = "surface", contours = list(
     z = list(
@@ -120,23 +103,7 @@ p1 = plot_ly(x = x, y = y, z = ~ur.Abs, type = "surface", contours = list(
         )
       ))
 
-if (lenx == leny) {
-    png(filename = paste(s, "(heatmap_uz).png"), height = height, width = width)
-    par(cex = 1.0, cex.sub = 1.3, col.sub = "blue")
-    urt <- data.frame(uz.abs = c(abs(uzz)), x = rep(x, lenx), y = rep(y, each = leny))
-
-    ggplot(urt, aes(x, y, fill = uz.abs)) +
-    scale_x_continuous(breaks = seq(min(x), max(x), length.out = 9)) +
-    # scale_y_continuous(breaks = seq(max(y), min(y), length.out = 10)) +
-    geom_raster(interpolate = TRUE) +
-    coord_fixed(expand = FALSE) +
-    scale_fill_viridis(option = "D", name = "|uz|") +
-    theme(axis.title.x = element_text(size = 22), axis.title.y = element_text(size = 22), text = element_text(size = 19)) +
-    scale_y_reverse()
-    dev.off()
-}
-
-uz.Abs = matrix(abs(uzz), lenx, leny)
+uz.Abs = matrix(abs(uzz), leny,lenx,  T)
 p2 = plot_ly(x = x, y = y, z = ~uz.Abs, type = "surface", contours = list(
     z = list(
       show = TRUE,
@@ -154,9 +121,42 @@ p2 = plot_ly(x = x, y = y, z = ~uz.Abs, type = "surface", contours = list(
       ))
 
 
-
-
 library(htmlwidgets)
 
 saveWidget(as.widget(p1), paste(s, "(ur).html"), FALSE)
 saveWidget(as.widget(p2), paste(s, "(uz).html"), FALSE)
+
+
+#тут сделано так, потому что нельзя как бы вызвать отрисовку ggplot внутри цикла
+if (lenx != leny) {
+    stop("x.len != y.len")
+}
+cat(paste("Maps...", "\n"))
+
+png(filename = paste(s, "(heatmap).png"), height = height, width = width)
+par(cex = 1.0, cex.sub = 1.3, col.sub = "blue")
+urt <- data.frame(ur.abs = c(abs(urr)), x = rep(x, lenx), y = rep(y, each = leny))
+
+ggplot(urt, aes(x, y, fill = ur.abs)) +
+    scale_x_continuous(breaks = seq(min(x), max(x), length.out = 9)) +
+    #scale_y_continuous(breaks = seq(max(y), min(y), length.out = 4)) +
+    geom_raster(interpolate = TRUE) +
+    coord_fixed(expand = FALSE) +
+    scale_fill_viridis(option = "A", name = "|ur|") +
+    theme(axis.title.x = element_text(size = 22), axis.title.y = element_text(size = 22), text = element_text(size = 19)) +
+    scale_y_reverse()
+dev.off()
+
+png(filename = paste(s, "(heatmap_uz).png"), height = height, width = width)
+par(cex = 1.0, cex.sub = 1.3, col.sub = "blue")
+urt <- data.frame(uz.abs = c(abs(uzz)), x = rep(x, lenx), y = rep(y, each = leny))
+
+ggplot(urt, aes(x, y, fill = uz.abs)) +
+    scale_x_continuous(breaks = seq(min(x), max(x), length.out = 9)) +
+    # scale_y_continuous(breaks = seq(max(y), min(y), length.out = 10)) +
+    geom_raster(interpolate = TRUE) +
+    coord_fixed(expand = FALSE) +
+    scale_fill_viridis(option = "D", name = "|uz|") +
+    theme(axis.title.x = element_text(size = 22), axis.title.y = element_text(size = 22), text = element_text(size = 19)) +
+    scale_y_reverse()
+dev.off()

@@ -550,13 +550,13 @@ public static class Functions
 
         res[0] = ((Mi1 * jxx1 + Ni1 * jyy1) - (Mi2 * jxx2 + Ni2 * jyy2)) / r2;
         res[1] = K12;
-        res[2] = P * jx;
-        res[3] = K12;
-        res[4] = ((Mi1 * jyy1 + Ni1 * jxx1) - (Mi2 * jyy2 + Ni2 * jxx2)) / r2;
-        res[5] = P * jy;
-        res[6] = Si * jx;
-        res[7] = Si * jy;
-        res[8] = R1 * j0ara1 - R2 * j0ara2;
+      //  res[2] = P * jx;
+        res[/*3*/2] = K12;
+        res[/*4*/3] = ((Mi1 * jyy1 + Ni1 * jxx1) - (Mi2 * jyy2 + Ni2 * jxx2)) / r2;
+       // res[5] = P * jy;
+        res[/*6*/4] = Si * jx;
+        res[/*7*/5] = Si * jy;
+       // res[8] = R1 * j0ara1 - R2 * j0ara2;
     }
 
     /// <summary>
@@ -1188,7 +1188,7 @@ public static class OtherMethods
 
         Tuple<Complex, Complex> CALC(Source s, int snumber, int ii)
         {
-            Complex[] res = new Complex[9];
+            Complex[] res = new Complex[/*9*/6];
             Complex s1 = 0, s2 = 0, s3 = 0;
             Point QQs;
             for (int k = 0; k < poles[ii].Deg; k++)
@@ -1197,10 +1197,11 @@ public static class OtherMethods
                 {
                     QQs = QQ[snumber][ii][i];
 
+                    //третий столбец не считается (чтоб было быстрее)
                     InKtwiceFast(plus[ii][k], pminus[ii][k], c1[ii][k], c2[ii][k], HankelTuple(poles[ii][k] * ros[i]), xp[i], yp[i], ref res);
                     s1 += res[0] * QQs.x + res[1] * QQs.y;
-                    s2 += res[3] * QQs.x + res[4] * QQs.y;
-                    s3 += res[6] * QQs.x + res[7] * QQs.y;
+                    s2 += res[/*3*/2] * QQs.x + res[/*4*/3] * QQs.y;
+                    s3 += res[/*6*/4] * QQs.x + res[/*7*/5] * QQs.y;
                 }
             }
             return new Tuple<Complex, Complex>((s1 * cos + s2 * sin) * I2, s3 * I2);

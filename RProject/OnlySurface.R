@@ -137,7 +137,7 @@ ggplot(urt, aes(x, y, fill = uz.abs)) +
 dev.off()
 }
 
-uz.Abs=matrix(abs(uzz),lenx,leny)
+uz.Abs = matrix(abs(uzz), lenx, leny)
 p2 = plot_ly(x = x, y = y, z = ~uz.Abs, type = "surface", contours = list(
     z = list(
       show = TRUE,
