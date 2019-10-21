@@ -305,4 +305,9 @@ public struct Source : Idup<Source>, IEquatable<Source>, IComparable<Source>
     {
         return this.Center.Swap.CompareTo(other.Center.Swap);
     }
+
+    public void MoveTo(Source t)
+    {
+        throw new NotImplementedException();
+    }
 }

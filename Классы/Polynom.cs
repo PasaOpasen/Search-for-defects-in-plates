@@ -1102,6 +1102,11 @@ namespace МатКлассы
 
         }
 
+        public void MoveTo(Polynom t)
+        {
+            for (int i = 0; i < this.coef.Length; i++)
+                coef[i] = t.coef[i];
+        }
     }
 }
 

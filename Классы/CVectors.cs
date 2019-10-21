@@ -198,6 +198,12 @@ namespace МатКлассы
                 mas[i] -= v[i];
         }
 
+        public void MoveTo(CVectors t)
+        {
+            for (int i = 0; i < this.mas.Length; i++)
+                mas[i] = t.mas[i];
+        }
+
         /// <summary>
         /// Нормализованный вектор
         /// </summary>

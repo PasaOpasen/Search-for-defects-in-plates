@@ -165,7 +165,7 @@ namespace МатКлассы
                 if (v < val)
                 {
                     val = v;
-                    g = gnew.dup;
+                    g.MoveTo(gnew);
                 }
             }
 
@@ -366,7 +366,7 @@ namespace МатКлассы
                 if(t<bestval)
                 {
                     bestval = t;
-                    p = x.dup;
+                    p.MoveTo(x);
                 }
             }
         }

@@ -1955,6 +1955,15 @@ namespace МатКлассы
 
         }
 
+        /// <summary>
+        /// Перенести вектор без создания новых векторов
+        /// </summary>
+        /// <param name="t"></param>
+        public void MoveTo(Vectors t)
+        {
+            for (int i = 0; i < vector.Length; i++)
+                vector[i] = t.vector[i];
+        }
     }
 
     /// <summary>

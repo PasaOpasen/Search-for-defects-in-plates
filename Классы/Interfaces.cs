@@ -12,5 +12,6 @@ namespace МатКлассы
    public interface Idup<T>
     {
        T dup { get; }
+        void MoveTo(T t);
     }
 }

@@ -497,5 +497,11 @@ namespace МатКлассы
         {
             return String.Format("({0} , {1})", this.x, this.y);
         }
+
+        public void MoveTo(Point t)
+        {
+            x = t.x;
+            y = t.y;
+        }
     }
 }

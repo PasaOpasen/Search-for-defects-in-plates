@@ -116,5 +116,10 @@ namespace МатКлассы
         /// Середина отрезка
         /// </summary>
         public double Center => (Begin + End) / 2;
+
+        public void MoveTo(NetOnDouble t)
+        {
+            throw new NotImplementedException();
+        }
     }
 }

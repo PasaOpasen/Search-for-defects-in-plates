@@ -261,6 +261,10 @@ namespace МатКлассы
                 hashCode = hashCode * -1521134295 + EqualityComparer<Rational>.Default.GetHashCode(FracPart);
                 return hashCode;
             }
+
+            public void MoveTo(Rational t)
+            {
+            }
             #endregion
 
             #region Операторы
@@ -720,6 +724,11 @@ namespace МатКлассы
                 this.Im -= c.Im;
             }
 
+            public void MoveTo(Complex t)
+            {
+                Re = t.Re;
+                Im = t.Im;
+            }
         }
 
         /// <summary>

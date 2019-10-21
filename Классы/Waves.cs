@@ -702,6 +702,11 @@ namespace МатКлассы
                 }
                 return res;
             }
+
+            public void MoveTo(DCircle t)
+            {
+                throw new NotImplementedException();
+            }
         }
 
         /// <summary>

@@ -697,6 +697,11 @@ namespace МатКлассы
 
             return res;
         }
+
+        public void MoveTo(Matrix t)
+        {
+            throw new NotImplementedException();
+        }
     }
 }
 

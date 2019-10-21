@@ -727,6 +727,11 @@ namespace МатКлассы
                     this.matr[i, j].FastAdd(M[i, j]);
         }
 
+        public void MoveTo(CSqMatrix t)
+        {
+            throw new NotImplementedException();
+        }
+
         public static implicit operator CSqMatrix(SqMatrix sq)
         {
             CSqMatrix res = new CSqMatrix(sq.matrix);
