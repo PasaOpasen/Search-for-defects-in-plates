@@ -780,7 +780,8 @@ namespace Defect2019
 
         private void numericUpDown1_ValueChanged(object sender, EventArgs e)
         {
-            numericUpDown3.Value = numericUpDown1.Value;
+            GetFields();
+            numericUpDown3.Value = numericUpDown1.Value*(decimal)Math.Abs((ymax-ymin)/(xmax-xmin));
         }
 
         private void высчитатьИИспользоватьНовыеЗначенияToolStripMenuItem_Click(object sender, EventArgs e)
