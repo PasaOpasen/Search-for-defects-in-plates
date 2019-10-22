@@ -54,6 +54,7 @@
             this.groupBox2 = new System.Windows.Forms.GroupBox();
             this.radioButton2 = new System.Windows.Forms.RadioButton();
             this.radioButton1 = new System.Windows.Forms.RadioButton();
+            this.текущиеИсточникиполумесяцыToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.menuStrip1.SuspendLayout();
             this.contextMenuStrip1.SuspendLayout();
             this.groupBox1.SuspendLayout();
@@ -146,9 +147,10 @@
             this.реверсироватьToolStripMenuItem,
             this.сортироватьToolStripMenuItem,
             this.вставитьГотовыйПримерToolStripMenuItem,
-            this.текущиеИсточникиToolStripMenuItem});
+            this.текущиеИсточникиToolStripMenuItem,
+            this.текущиеИсточникиполумесяцыToolStripMenuItem});
             this.contextMenuStrip1.Name = "contextMenuStrip1";
-            this.contextMenuStrip1.Size = new System.Drawing.Size(242, 158);
+            this.contextMenuStrip1.Size = new System.Drawing.Size(267, 202);
             // 
             // добавитьToolStripMenuItem
             // 
@@ -156,7 +158,7 @@
             this.toolStripMenuItem1,
             this.полумесяцToolStripMenuItem});
             this.добавитьToolStripMenuItem.Name = "добавитьToolStripMenuItem";
-            this.добавитьToolStripMenuItem.Size = new System.Drawing.Size(241, 22);
+            this.добавитьToolStripMenuItem.Size = new System.Drawing.Size(266, 22);
             this.добавитьToolStripMenuItem.Text = "Добавить";
             this.добавитьToolStripMenuItem.ToolTipText = "Добавить источник в список";
             // 
@@ -177,7 +179,7 @@
             // очиститьToolStripMenuItem
             // 
             this.очиститьToolStripMenuItem.Name = "очиститьToolStripMenuItem";
-            this.очиститьToolStripMenuItem.Size = new System.Drawing.Size(241, 22);
+            this.очиститьToolStripMenuItem.Size = new System.Drawing.Size(266, 22);
             this.очиститьToolStripMenuItem.Text = "Очистить";
             this.очиститьToolStripMenuItem.ToolTipText = "Удалить все источники";
             this.очиститьToolStripMenuItem.Click += new System.EventHandler(this.очиститьToolStripMenuItem_Click);
@@ -185,7 +187,7 @@
             // удалитьПоследнееВхождениеToolStripMenuItem
             // 
             this.удалитьПоследнееВхождениеToolStripMenuItem.Name = "удалитьПоследнееВхождениеToolStripMenuItem";
-            this.удалитьПоследнееВхождениеToolStripMenuItem.Size = new System.Drawing.Size(241, 22);
+            this.удалитьПоследнееВхождениеToolStripMenuItem.Size = new System.Drawing.Size(266, 22);
             this.удалитьПоследнееВхождениеToolStripMenuItem.Text = "Удалить последнее вхождение";
             this.удалитьПоследнееВхождениеToolStripMenuItem.ToolTipText = "Удалить последний элемент";
             this.удалитьПоследнееВхождениеToolStripMenuItem.Click += new System.EventHandler(this.удалитьПоследнееВхождениеToolStripMenuItem_Click);
@@ -193,14 +195,14 @@
             // реверсироватьToolStripMenuItem
             // 
             this.реверсироватьToolStripMenuItem.Name = "реверсироватьToolStripMenuItem";
-            this.реверсироватьToolStripMenuItem.Size = new System.Drawing.Size(241, 22);
+            this.реверсироватьToolStripMenuItem.Size = new System.Drawing.Size(266, 22);
             this.реверсироватьToolStripMenuItem.Text = "Реверсировать";
             this.реверсироватьToolStripMenuItem.Click += new System.EventHandler(this.реверсироватьToolStripMenuItem_Click);
             // 
             // сортироватьToolStripMenuItem
             // 
             this.сортироватьToolStripMenuItem.Name = "сортироватьToolStripMenuItem";
-            this.сортироватьToolStripMenuItem.Size = new System.Drawing.Size(241, 22);
+            this.сортироватьToolStripMenuItem.Size = new System.Drawing.Size(266, 22);
             this.сортироватьToolStripMenuItem.Text = "Сортировать";
             this.сортироватьToolStripMenuItem.ToolTipText = "Сортировать источники по их центрам, сначала по ординатам, затем по абциссам";
             this.сортироватьToolStripMenuItem.Click += new System.EventHandler(this.сортироватьToolStripMenuItem_Click);
@@ -208,15 +210,15 @@
             // вставитьГотовыйПримерToolStripMenuItem
             // 
             this.вставитьГотовыйПримерToolStripMenuItem.Name = "вставитьГотовыйПримерToolStripMenuItem";
-            this.вставитьГотовыйПримерToolStripMenuItem.Size = new System.Drawing.Size(241, 22);
+            this.вставитьГотовыйПримерToolStripMenuItem.Size = new System.Drawing.Size(266, 22);
             this.вставитьГотовыйПримерToolStripMenuItem.Text = "Вставить готовый пример";
             this.вставитьГотовыйПримерToolStripMenuItem.Click += new System.EventHandler(this.вставитьГотовыйПримерToolStripMenuItem_Click);
             // 
             // текущиеИсточникиToolStripMenuItem
             // 
             this.текущиеИсточникиToolStripMenuItem.Name = "текущиеИсточникиToolStripMenuItem";
-            this.текущиеИсточникиToolStripMenuItem.Size = new System.Drawing.Size(241, 22);
-            this.текущиеИсточникиToolStripMenuItem.Text = "Текущие источники";
+            this.текущиеИсточникиToolStripMenuItem.Size = new System.Drawing.Size(266, 22);
+            this.текущиеИсточникиToolStripMenuItem.Text = "Текущие источники (круги)";
             this.текущиеИсточникиToolStripMenuItem.Click += new System.EventHandler(this.текущиеИсточникиToolStripMenuItem_Click);
             // 
             // groupBox1
@@ -278,6 +280,13 @@
             this.radioButton1.Text = "Интегральный";
             this.radioButton1.UseVisualStyleBackColor = true;
             // 
+            // текущиеИсточникиполумесяцыToolStripMenuItem
+            // 
+            this.текущиеИсточникиполумесяцыToolStripMenuItem.Name = "текущиеИсточникиполумесяцыToolStripMenuItem";
+            this.текущиеИсточникиполумесяцыToolStripMenuItem.Size = new System.Drawing.Size(266, 22);
+            this.текущиеИсточникиполумесяцыToolStripMenuItem.Text = "Текущие источники (полумесяцы)";
+            this.текущиеИсточникиполумесяцыToolStripMenuItem.Click += new System.EventHandler(this.текущиеИсточникиполумесяцыToolStripMenuItem_Click);
+            // 
             // Uxt
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(9F, 19F);
@@ -331,5 +340,6 @@
         private System.Windows.Forms.RadioButton radioButton2;
         private System.Windows.Forms.RadioButton radioButton1;
         private System.Windows.Forms.ToolStripMenuItem сортироватьToolStripMenuItem;
+        private System.Windows.Forms.ToolStripMenuItem текущиеИсточникиполумесяцыToolStripMenuItem;
     }
 }

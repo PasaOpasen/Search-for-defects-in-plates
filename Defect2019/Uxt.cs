@@ -28,7 +28,7 @@ namespace Defect2019
 
             FillExamples();
         }
-        public List<Source> examples = new List<Source>(), examples2 = new List<Source>();
+        public List<Source> examples = new List<Source>(), examples2 = new List<Source>(), examples3 = new List<Source>();
         public Point[] centers = new Point[]
         {
             new Point(-150),
@@ -57,8 +57,8 @@ namespace Defect2019
         };
         private void FillExamples()
         {
-            int n = 40;
-            double r = 8;
+            const int n = 40;
+            const double r = 8;
 
             void CentersToExapmles(Point[] Centers, ref List<Source> expls)
             {
@@ -70,9 +70,20 @@ namespace Defect2019
                     expls.Add(new Source(c, norm, fw));
                 }
             }
+            void CentersToExapmlesDcircle(Point[] Centers, ref List<Source> expls)
+            {
+                for (int i = 0; i < Centers.Length; i++)
+                {
+                    Waves.DCircle c = new Waves.DCircle(Centers[i],16,5,arg:(135*Math.PI/180));
+                  //  Waves.Normal2D[] norm = c.GetNormalsOnDCircle();
+                    var fw = GetFmas();
+                    expls.Add(new Source(c, fw));
+                }
+            }
 
             CentersToExapmles(centers, ref examples);
             CentersToExapmles(centers2, ref examples2);
+            CentersToExapmlesDcircle(centers2, ref examples3);
         }
         /// <summary>
         /// Передел чек-листа
@@ -181,14 +192,12 @@ namespace Defect2019
                 else
                     new WaveletContinious(smas).Show();
             }
-                
+
         }
 
         private void вставитьГотовыйПримерToolStripMenuItem_Click(object sender, EventArgs e)
         {
-            for (int i = 0; i < examples.Count; i++)
-                sources.Add(examples[i]);
-            Recostract();
+            AddExamples(examples.ToArray());
         }
 
         private void посмотретьПолучающуюсяСхемуToolStripMenuItem_Click(object sender, EventArgs e)
@@ -238,13 +247,13 @@ namespace Defect2019
 
         private async void загрузитьНеобходимыеПакетыRToolStripMenuItem_Click(object sender, EventArgs e)
         {
-            string mess = "Требуется подключение к Интернету. Будут загружены все пакеты R, необходимые программе. Загрузка может занимать несколько минут, по окончанию загрузки консоль закроется. Уже установленные пакеты могут загрузиться заново либо обновиться. Выполнить действие?";
+            const string mess = "Требуется подключение к Интернету. Будут загружены все пакеты R, необходимые программе. Загрузка может занимать несколько минут, по окончанию загрузки консоль закроется. Уже установленные пакеты могут загрузиться заново либо обновиться. Выполнить действие?";
 
             if (MessageBox.Show(mess, "Требуется подтверждение", MessageBoxButtons.YesNo, MessageBoxIcon.Question) == DialogResult.Yes)
             {
                 SoundMethods.OK();
-await Task.Run(() => Expendator.StartProcessOnly(OtherMethods.GetResource("InstallPackages.r"), true));
-            }               
+                await Task.Run(() => Expendator.StartProcessOnly(OtherMethods.GetResource("InstallPackages.r"), true));
+            }
         }
 
         private void сортироватьToolStripMenuItem_Click(object sender, EventArgs e)
@@ -258,10 +267,20 @@ await Task.Run(() => Expendator.StartProcessOnly(OtherMethods.GetResource("Insta
             SoundMethods.SetPositions();
         }
 
+        private void текущиеИсточникиполумесяцыToolStripMenuItem_Click(object sender, EventArgs e)
+        {
+            AddExamples(examples3.ToArray());
+        }
+
         private void текущиеИсточникиToolStripMenuItem_Click(object sender, EventArgs e)
         {
-            for (int i = 0; i < examples2.Count; i++)
-                sources.Add(examples2[i]);
+            AddExamples(examples2.ToArray());
+        }
+
+        private void AddExamples(Source[] array)
+        {
+            for (int i = 0; i < array.Length; i++)
+                sources.Add(array[i]);
             Recostract();
             SoundMethods.TukTuk();
         }
