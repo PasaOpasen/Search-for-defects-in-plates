@@ -392,10 +392,18 @@ namespace МатКлассы
         /// <returns></returns>
         public static Complex MyBessel(double a, Complex x)
         {
-            if (x.Im.Abs() < 1e-16) return Computator.NET.Core.Functions.SpecialFunctions.BesselJν(a, x.Re);
+            if (x.Im.Abs() < 1e-16) return MyBessel(a, x.Re);
             ComplexFunc f = (Complex c) => Complex.Cos(a * c - x * Complex.Sin(c));
             return FuncMethods.DefInteg.GaussKronrod.MySimpleGaussKronrod(f, 0, Math.PI, 61, true, 5) / Math.PI;
         }
+        /// <summary>
+        /// Функция Бесселя
+        /// </summary>
+        /// <param name="a">Порядок</param>
+        /// <param name="x">Аргумент</param>
+        /// <returns></returns>
+        public static double MyBessel(double a, double x)=> Computator.NET.Core.Functions.SpecialFunctions.BesselJν(a, x);
+        
 
         /// <summary>
         /// Функция Ханкеля первого рода
@@ -404,6 +412,8 @@ namespace МатКлассы
         /// <param name="z"></param>
         /// <returns></returns>
         public static Complex Hankel(double a, double z) => Computator.NET.Core.Functions.SpecialFunctions.Hankel1(a, z);
+
+       // public static Complex HankelApprox()
     }
 
     /// <summary>

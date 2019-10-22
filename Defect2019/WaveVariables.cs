@@ -189,7 +189,7 @@ public static class Functions
     }
     private static void ReadParams()
     {
-        string filename = "LastParamsConfig.txt";
+        const string filename = "LastParamsConfig.txt";
 
         if (File.Exists(filename))
             using (StreamReader f = new StreamReader(filename))
@@ -238,7 +238,7 @@ public static class Functions
     };
     public static Func<double, Complex> F2 = (double w) =>
     {
-        int N = 7;
+        const int N = 7;
 
         double w1 = wc * (N + 1) / N + w, w2 = wc * (N - 1) / N + w, w3 = wc * (1 - N) / N + w, w4 = 2 - wc * (N + 1) / N, w5 = wc + w, w6 = w - wc;
         Complex ew(double t, double ww) => Complex.Exp(Complex.I * t * ww) / ww;
@@ -347,7 +347,7 @@ public static class Functions
     /// <summary>
     /// Возвращает массив полюсов при такой-то частоте
     /// </summary>
-    private static Func<double, Vectors> PolesMas = (double w) =>
+    private static readonly Func<double, Vectors> PolesMas = (double w) =>
        {
            ComplexFunc del = (Complex a) => Deltass(a, w);
            Vectors v1 = w < 0.1 ? Roots.OtherMethod(del, РабКонсоль.polesBeg, РабКонсоль.polesEnd, РабКонсоль.steproot / 200, 1e-12, Roots.MethodRoot.Bisec, false) : Roots.OtherMethod(del, РабКонсоль.polesBeg, РабКонсоль.polesEnd, РабКонсоль.steproot / 40, 1e-7, Roots.MethodRoot.Broyden, false);
@@ -386,9 +386,10 @@ public static class Functions
 
            for (int i = 0; i < nd.Length; i++)
            {
-               ar = a * Point.Eudistance(nd[i].Position, xy);
+               ref Normal2D nds = ref nd[i];
+               ar = a * Point.Eudistance(nds.Position, xy);
                tup = new Tuple<Complex, Complex>(МатКлассы.SpecialFunctions.MyBessel(1, ar), МатКлассы.SpecialFunctions.MyBessel(0, ar));
-               mat.FastAdd(InK(a, c, tup, x - nd[i].Position.x, y - nd[i].Position.y) * Q(nd[i].n));
+               mat.FastAdd(InK(a, c, tup, x - nds.Position.x, y - nds.Position.y) * Q(nds.n));
            }
            return mat;
        };
@@ -550,13 +551,13 @@ public static class Functions
 
         res[0] = ((Mi1 * jxx1 + Ni1 * jyy1) - (Mi2 * jxx2 + Ni2 * jyy2)) / r2;
         res[1] = K12;
-      //  res[2] = P * jx;
+        //  res[2] = P * jx;
         res[/*3*/2] = K12;
         res[/*4*/3] = ((Mi1 * jyy1 + Ni1 * jxx1) - (Mi2 * jyy2 + Ni2 * jxx2)) / r2;
-       // res[5] = P * jy;
+        // res[5] = P * jy;
         res[/*6*/4] = Si * jx;
         res[/*7*/5] = Si * jy;
-       // res[8] = R1 * j0ara1 - R2 * j0ara2;
+        // res[8] = R1 * j0ara1 - R2 * j0ara2;
     }
 
     /// <summary>
@@ -1010,7 +1011,7 @@ public static class Functions
     /// <param name="wt"></param>
     /// <param name="shift"></param>
     /// <returns></returns>
-    public static double GetFockS(Tuple<double, double> wt,double shift)=> Vg(pimult2 / (wt.Item1 * 1e6)) * (wt.Item2 - shift) * 1_000_000;//из км/с перевел в мм/с;
+    public static double GetFockS(Tuple<double, double> wt, double shift) => Vg(pimult2 / (wt.Item1 * 1e6)) * (wt.Item2 - shift) * 1_000_000;//из км/с перевел в мм/с;
 
     /// <summary>
     /// Задать сдвиг как его минимальную границу
@@ -1076,7 +1077,7 @@ public static class OtherMethods
     /// <param name="smas"></param>
     public static void Saveuxw3(double x0, double X, int xcount, int ycount, double y0, double Y, Source[] smas)
     {
-        bool notEqualConfig = !EqualConfigs(x0, X, xcount,ycount, y0, Y, smas, out Source[] arr);
+        bool notEqualConfig = !EqualConfigs(x0, X, xcount, ycount, y0, Y, smas, out Source[] arr);
 
         if (notEqualConfig)
         {
@@ -1085,11 +1086,11 @@ public static class OtherMethods
             info = "Происходит запись вспомогательных файлов";
 
             Centers(smas);
-            Space(x0, X, xcount,ycount, y0, Y, smas);
+            Space(x0, X, xcount, ycount, y0, Y, smas);
 
             info = "Файлы записаны";
             info = null;
-            CalcD(x0, X, xcount,ycount, y0, Y, smas);
+            CalcD(x0, X, xcount, ycount, y0, Y, smas);
             info = "Происходит сохранение результата, чтобы в другой раз избежать повторных вычислений";
             WriteData(smas);
             info = "Результат записан";
@@ -1099,14 +1100,14 @@ public static class OtherMethods
             if (arr.Length > 0)
             {
                 info = "Создание недостающих файлов";
-                CalcD(x0, X, xcount,ycount, y0, Y, arr);
+                CalcD(x0, X, xcount, ycount, y0, Y, arr);
                 info = "Происходит сохранение результата, чтобы в другой раз избежать повторных вычислений";
                 WriteData(arr);
                 info = "Результат записан";
             }
 
             info = "Считываются данные с сохранённых источников";
-            ReadData(x0, X, xcount,ycount, y0, Y, smas.Where(p => !arr.Contains(p)).ToArray());
+            ReadData(x0, X, xcount, ycount, y0, Y, smas.Where(p => !arr.Contains(p)).ToArray());
             info = "Данные считаны";
         }
         info = null;
@@ -1143,6 +1144,8 @@ public static class OtherMethods
         double[][] plus, pminus;
         Vectors[] poles = new Vectors[wcount];
         double cor, sin, cos;
+        Complex hankelconst = Complex.Sqrt(2.0 / (Math.PI * new Complex(0, 1)));
+
 
         void firstpolescalc()
         {
@@ -1206,6 +1209,31 @@ public static class OtherMethods
             }
             return new Tuple<Complex, Complex>((s1 * cos + s2 * sin) * I2, s3 * I2);
         }
+        Tuple<Complex, Complex> CALCfast(Source s, int snumber, int ii)
+        {
+            Complex ur = 0, uz = 0;
+            Complex Mn, Sn, P, Htmp;
+            double r = Point.Eudistance(xy, s.Center);
+            double pr,polus,sqr;
+            const double p0 = 1.0;
+            Complex vch(Complex p, Complex m) => (p - m) / (4*eps2[ii]);
+            
+            for (int k = 0; k < poles[ii].Deg; k++)
+            {
+                polus = poles[ii][k];
+                sqr = polus * polus;
+                pr = polus * r;
+                Htmp = Complex.Expi(pr);
+                Mn = vch(c1[ii][k][2], c2[ii][k][2]);
+                Sn = vch(c1[ii][k][3], c2[ii][k][3]);
+                P = new Complex(0, p0/ 2) * МатКлассы.SpecialFunctions.MyBessel(1, polus * s.radius);
+
+                uz += Sn * P * Htmp*sqr;
+                ur += polus * Mn * Htmp * sqr;      
+            }
+
+            return new Tuple<Complex, Complex>(-ur*hankelconst, -uz*hankelconst);
+        }
 
         firstpolescalc();
         for (int i = 0; i < xcount; i++)
@@ -1245,7 +1273,10 @@ public static class OtherMethods
                             ros[ii] = Point.Eudistance(s.Norms[ii].Position, xy);
                         }
 
-                        Parallel.For(0, wcount, (int k) => ur.OnlyAdd(new Tuple<double, double, double, Source>(x, y, w[k], s), CALC(s, numberofs, k)));
+                        if (s.MeType == Type.DCircle)
+                            Parallel.For(0, wcount, (int k) => ur.OnlyAdd(new Tuple<double, double, double, Source>(x, y, w[k], s), CALC(s, numberofs, k)));
+                       else
+                          Parallel.For(0, wcount, (int k) => ur.OnlyAdd(new Tuple<double, double, double, Source>(x, y, w[k], s), CALCfast(s, numberofs, k)));
                         numberofs++;
                         Saved++;
                     }
