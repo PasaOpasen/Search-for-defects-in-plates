@@ -1144,8 +1144,9 @@ public static class OtherMethods
         double[][] plus, pminus;
         Vectors[] poles = new Vectors[wcount];
         double cor, sin, cos;
-        Complex hankelconst = Complex.Sqrt(2.0 / (Math.PI * new Complex(0, 1)));
-
+        const double p0 = 1.0;
+        Complex hankelconst = Complex.Sqrt(2.0 / (Math.PI * new Complex(0, 1))) * new Complex(0, -p0 / 2);
+        double centerdist;
 
         void firstpolescalc()
         {
@@ -1209,30 +1210,33 @@ public static class OtherMethods
             }
             return new Tuple<Complex, Complex>((s1 * cos + s2 * sin) * I2, s3 * I2);
         }
-        Tuple<Complex, Complex> CALCfast(Source s, int snumber, int ii)
+        Tuple<Complex, Complex> CALCfast(Source s, int ii)
         {
             Complex ur = 0, uz = 0;
             Complex Mn, Sn, P, Htmp;
-            double r = Point.Eudistance(xy, s.Center);
-            double pr,polus,sqr;
-            const double p0 = 1.0;
-            Complex vch(Complex p, Complex m) => (p - m) / (4*eps2[ii]);
-            
+            double r = centerdist;
+            double pr, polus;
+
+            Complex vch(Complex p, Complex m) => (p - m) * eps2[ii];
+
+            ref Vectors pols = ref poles[ii];
+            ref Complex[][] cc1 = ref c1[ii];
+            ref Complex[][] cc2 = ref c2[ii];
+
             for (int k = 0; k < poles[ii].Deg; k++)
             {
-                polus = poles[ii][k];
-                sqr = polus * polus;
+                polus = pols[k];
                 pr = polus * r;
-                Htmp = Complex.Expi(pr);
-                Mn = vch(c1[ii][k][2], c2[ii][k][2]);
-                Sn = vch(c1[ii][k][3], c2[ii][k][3]);
-                P = new Complex(0, p0/ 2) * МатКлассы.SpecialFunctions.MyBessel(1, polus * s.radius);
+                Htmp = Complex.Expi(pr) * (polus * polus);
+                Mn = vch(cc1[k][2], cc2[k][2]);
+                Sn = vch(cc1[k][3], cc2[k][3]);
+                P = МатКлассы.SpecialFunctions.MyBessel(1.0, polus * s.radius) * Htmp;
 
-                uz += Sn * P * Htmp*sqr;
-                ur += polus * Mn * Htmp * sqr;      
+                uz += Sn * P;
+                ur += polus * Mn * P;
             }
 
-            return new Tuple<Complex, Complex>(-ur*hankelconst, -uz*hankelconst);
+            return new Tuple<Complex, Complex>(ur * hankelconst, uz * hankelconst);
         }
 
         firstpolescalc();
@@ -1261,6 +1265,7 @@ public static class OtherMethods
                         cor = new Number.Complex(x - s.Center.x, y - s.Center.y).Arg;
                         sin = Math.Sin(cor);
                         cos = Math.Cos(cor);
+                        centerdist = Point.Eudistance(xy, s.Center);
 
                         //заполнить массив расстояний, уникальный для источника и точки, но одинаковый при любых нормалях
                         xp = new double[s.Norms.Length];
@@ -1275,8 +1280,8 @@ public static class OtherMethods
 
                         if (s.MeType == Type.DCircle)
                             Parallel.For(0, wcount, (int k) => ur.OnlyAdd(new Tuple<double, double, double, Source>(x, y, w[k], s), CALC(s, numberofs, k)));
-                       else
-                          Parallel.For(0, wcount, (int k) => ur.OnlyAdd(new Tuple<double, double, double, Source>(x, y, w[k], s), CALCfast(s, numberofs, k)));
+                        else
+                            Parallel.For(0, wcount, (int k) => ur.OnlyAdd(new Tuple<double, double, double, Source>(x, y, w[k], s), CALCfast(s, k)));
                         numberofs++;
                         Saved++;
                     }
