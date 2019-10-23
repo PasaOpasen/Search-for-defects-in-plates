@@ -16,7 +16,7 @@ namespace PS5000A
 {
     public static class FurierTransformer
     {
-        static readonly double _2PI = 2 * Math.PI;
+        const double _2PI = 2 * Math.PI;
         static string InFile;
         static string CfgFile;
         public static double dt;
@@ -242,14 +242,14 @@ namespace PS5000A
 
 
         static Memoize<Tuple<int, int>, Complex> Dictionary;
-        static Func<int, int, Complex> Fury = (int i, int j) =>
+        static readonly Func<int, int, Complex> Fury = (int i, int j) =>
              {
                  double w = (dw * i + w_0);
                  return Expi(w * (dt * j + t_0)) * AAMemoized(i);
              };
         static Func<int, int, Complex> FuryMemoized;
         static Memoize<int, double> DictionaryA;
-        static Func<int, double> AA = (int i) =>
+        static readonly Func<int, double> AA = (int i) =>
          {
              double w = (dw * i + w_0);
              double dtw = dt * w;
@@ -365,15 +365,17 @@ namespace PS5000A
             string[] ports = SerialPort.GetPortNames();
             try
             {
-                port = new SerialPort();
-                // настройки порта
-                port.PortName = ports[num];
-                port.BaudRate = 57600;
-                port.DataBits = 8;
-                port.Parity = System.IO.Ports.Parity.None;
-                port.StopBits = System.IO.Ports.StopBits.One;
-                port.ReadTimeout = 1000;
-                port.WriteTimeout = 1000;
+                port = new SerialPort
+                {
+                    // настройки порта
+                    PortName = ports[num],
+                    BaudRate = 57600,
+                    DataBits = 8,
+                    Parity = System.IO.Ports.Parity.None,
+                    StopBits = System.IO.Ports.StopBits.One,
+                    ReadTimeout = 1000,
+                    WriteTimeout = 1000
+                };
                 port.Open();
             }
             catch (Exception e)

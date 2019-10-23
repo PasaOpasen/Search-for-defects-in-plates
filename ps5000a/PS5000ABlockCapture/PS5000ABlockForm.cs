@@ -448,12 +448,28 @@ namespace PS5000A
         private void buttonOpen_Click(object sender, EventArgs e)
         {
             InitParams();
-
-            StringBuilder UnitInfo = new StringBuilder(80);
-
+           
             short handle;
 
-            string[] description = {
+
+
+            const Imports.DeviceResolution resolution = Imports.DeviceResolution.PS5000A_DR_16BIT;
+            //Imports.DeviceResolution resolution = Imports.DeviceResolution.PS5000A_DR_8BIT;
+
+            if (_handle > 0)
+            {
+                Imports.CloseUnit(_handle);
+                _handle = 0;
+                buttonOpen.Text = "Open";
+            }
+            else
+            {             
+                uint status = Imports.OpenUnit(out handle, null, resolution);
+
+                if (handle > 0)
+                {
+                    StringBuilder UnitInfo = new StringBuilder(80);
+                    string[] description = {
                            "Driver Version    ",
                            "USB Version       ",
                            "Hardware Version  ",
@@ -465,22 +481,6 @@ namespace PS5000A
                            "Analogue Hardware "
                          };
 
-            const Imports.DeviceResolution resolution = Imports.DeviceResolution.PS5000A_DR_16BIT;
-            //Imports.DeviceResolution resolution = Imports.DeviceResolution.PS5000A_DR_8BIT;
-
-
-            if (_handle > 0)
-            {
-                Imports.CloseUnit(_handle);
-                _handle = 0;
-                buttonOpen.Text = "Open";
-            }
-            else
-            {
-                uint status = Imports.OpenUnit(out handle, null, resolution);
-
-                if (handle > 0)
-                {
                     _handle = handle;
 
                     if (status == StatusCodes.PICO_POWER_SUPPLY_NOT_CONNECTED || status == StatusCodes.PICO_USB3_0_DEVICE_NON_USB3_0_PORT)
@@ -621,7 +621,7 @@ namespace PS5000A
         {
             FurierTransformer.w_0 = f0 * 1e6;
             FurierTransformer.w_m = f1 * 1e6;
-            double Freq(double w) => w / 2.0 / Math.PI * 1.0E6;
+            double Freq(double w) => w  * (1e6/ 2.0 / Math.PI);
 
             f0 = Freq(f0); f1 = Freq(f1);
             int count_approx = sc;
@@ -737,7 +737,7 @@ namespace PS5000A
             textBoxUnitInfo.AppendText(Switch_.GetAccepted() + "\n");
         }
 
-        private void RunAvg(ref double[] Array_, int wcount, int kernel_len = 20)
+        private static void RunAvg(ref double[] Array_, int wcount, int kernel_len = 20)
         {
             double kl = kernel_len;
             double[] Array_buf = new double[wcount];
@@ -792,7 +792,7 @@ namespace PS5000A
             await Task.Run(() =>
             {
                 double middleA = 0;
-                double coef = Voltage_Range / ((double)meansCount) / 32767 / 2.0;
+                double coef = Voltage_Range / (meansCount) / (32767 * 2.0);
                 for (int i = 0; i < countSum; i++)
                 {
                     arrA[i] = masA[i] * coef;
