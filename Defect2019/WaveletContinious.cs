@@ -58,18 +58,22 @@ namespace Работа2019
         {
             dataGridView1.RowHeadersVisible = false;
 
-            var column1 = new DataGridViewColumn();
-            column1.HeaderText = "Источник"; //текст в шапке
-            column1.Width = 450; //ширина колонки
-            column1.ReadOnly = true; //значение в этой колонке нельзя править
-            column1.Name = "source"; //текстовое имя колонки, его можно использовать вместо обращений по индексу
-            column1.Frozen = true; //флаг, что данная колонка всегда отображается на своем месте
-            column1.CellTemplate = new DataGridViewTextBoxCell(); //тип нашей колонки
+            var column1 = new DataGridViewColumn
+            {
+                HeaderText = "Источник", //текст в шапке
+                Width = 450, //ширина колонки
+                ReadOnly = true, //значение в этой колонке нельзя править
+                Name = "source", //текстовое имя колонки, его можно использовать вместо обращений по индексу
+                Frozen = true, //флаг, что данная колонка всегда отображается на своем месте
+                CellTemplate = new DataGridViewTextBoxCell() //тип нашей колонки
+            };
 
-            var column2 = new DataGridViewColumn();
-            column2.HeaderText = "Имя";
-            column2.Name = "name";
-            column2.CellTemplate = new DataGridViewTextBoxCell();
+            var column2 = new DataGridViewColumn
+            {
+                HeaderText = "Имя",
+                Name = "name",
+                CellTemplate = new DataGridViewTextBoxCell()
+            };
 
             dataGridView1.Columns.Add(column1);
             dataGridView1.Columns.Add(column2);
@@ -169,7 +173,7 @@ namespace Работа2019
         /// Переносит рисунки на маленькой сетке в папку замеров и удаляет в исходной папке
         /// </summary>
         /// <param name="where"></param>
-        private void CopyAtoA(string where)
+        private static void CopyAtoA(string where)
         {
             //List<string> arr = new List<string>(symbols.Length * (symbols.Length - 1));
             string tmp;
@@ -194,7 +198,7 @@ namespace Работа2019
 
         private void ShowPdfs(string where)
         {
-            List<string> L = new List<string>();
+            List<string> L = new List<string>(symbols.Length*(symbols.Length-1));
             for (int i = 0; i < symbols.Length; i++)
                 for (int j = 0; j < symbols.Length; j++)
                     if(i!=j)

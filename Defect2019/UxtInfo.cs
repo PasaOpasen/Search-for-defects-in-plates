@@ -25,10 +25,13 @@ namespace Работа2019
 
             for (int i = 0; i < f1names.Length; i++)
             {
-                Tmas[i] = new TabPage();
-                Tmas[i].Text = f1names[i];
+                ref TabPage page = ref Tmas[i];
+                page = new TabPage
+                {
+                    Text = f1names[i]
+                };
                 WebBrowser wb = new WebBrowser();
-                Tmas[i].Controls.Add(wb);
+                page.Controls.Add(wb);
                 wb.Dock = DockStyle.Fill;
                 wb.Navigate(f1filenames[i]);
             }

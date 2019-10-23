@@ -126,7 +126,7 @@ namespace Defect2019
             toolStripStatusLabel2.Text = "";
             toolStripProgressBar1.Value = 0;
             button2.Hide();
-            KillR();
+            //KillR();
 
             FilenamesArrayToFile("");
 
@@ -134,22 +134,22 @@ namespace Defect2019
             EndShows();
 
         }
-        private void KillR()
-        {
-            List<string> name = new List<string> { "rterm", "Rscript" };//процесс, который нужно убить
-            System.Diagnostics.Process[] etc = System.Diagnostics.Process.GetProcesses();//получим процессы
-            foreach (System.Diagnostics.Process anti in etc)//обойдем каждый процесс
-            {
-                foreach (string s in name)
-                {
-                    if (anti.ProcessName.ToLower().Contains(s.ToLower())) //найдем нужный и убьем
-                    {
-                        anti.Kill();
-                        name.Remove(s);
-                    }
-                }
-            }
-        }
+        //private void KillR()
+        //{
+        //    List<string> name = new List<string> { "rterm", "Rscript" };//процесс, который нужно убить
+        //    System.Diagnostics.Process[] etc = System.Diagnostics.Process.GetProcesses();//получим процессы
+        //    foreach (System.Diagnostics.Process anti in etc)//обойдем каждый процесс
+        //    {
+        //        foreach (string s in name)
+        //        {
+        //            if (anti.ProcessName.ToLower().Contains(s.ToLower())) //найдем нужный и убьем
+        //            {
+        //                anti.Kill();
+        //                name.Remove(s);
+        //            }
+        //        }
+        //    }
+        //}
 
         /// <summary>
         /// Считать боксы
@@ -614,7 +614,7 @@ namespace Defect2019
         /// <summary>
         /// Записать f(w) от всех источников в файлы
         /// </summary>
-        public void FilesFromSources(Source[] sources) => Source.FilesFromSources(sources, "WhereData.txt");
+        public static void FilesFromSources(Source[] sources) => Source.FilesFromSources(sources, "WhereData.txt");
 
         /// <summary>
         /// Задание пределов по осям
@@ -819,7 +819,7 @@ namespace Defect2019
         /// Задать параметры метрики в файл
         /// </summary>
         /// <param name="s"></param>
-        private void MetricSet(string s = "max", string path = null)
+        private static void MetricSet(string s = "max", string path = null)
         {
             path = path ?? Environment.CurrentDirectory;
 

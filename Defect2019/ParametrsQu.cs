@@ -29,8 +29,8 @@ namespace Defect2019
             textBox12.Text = РабКонсоль.polesEnd.ToString();
             numericUpDown1.Value = РабКонсоль.countroot;
 
-            textBox4.Text = (wbeg / 2 / Math.PI * 1e6).ToString();
-            textBox10.Text = (wend / 2 / Math.PI * 1e6).ToString();
+            textBox4.Text = (wbeg * (1e6 / (2 * Math.PI))).ToString();
+            textBox10.Text = (wend * (1e6 / (2 * Math.PI))).ToString();
             textBox11.Text = wc.ToString();
             numericUpDown2.Value = wcount;
 
@@ -45,7 +45,7 @@ namespace Defect2019
 
             this.FormClosing += (o, e) =>
             {
-                if(!UGrafic.wchange)
+                if (!UGrafic.wchange)
                     Работа2019.SoundMethods.Back();
             };
         }

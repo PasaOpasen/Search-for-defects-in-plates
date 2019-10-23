@@ -94,8 +94,8 @@ namespace Работа2019
             Библиотека_графики.ForChart.SetToolTips(ref chart1);
         }
 
-        private int GetTrack(TrackBar t, double val) => GetTrack(t.Minimum, t.Maximum, t.Maximum - t.Minimum + 1, val);
-        private int GetTrack(int min, int max, int count, double val)
+        private static int GetTrack(TrackBar t, double val) => GetTrack(t.Minimum, t.Maximum, t.Maximum - t.Minimum + 1, val);
+        private static int GetTrack(int min, int max, int count, double val)
         {
             val = min + (max - min) * val;
 
@@ -138,6 +138,6 @@ namespace Работа2019
             trackBar4.ValueChanged += (o, e) => textBox4.BackColor = Color.White;
 
         }
-        private double GetVal(TrackBar t, double maxval) => t.Value * maxval / t.Maximum;
+        private static double GetVal(TrackBar t, double maxval) => t.Value * maxval / t.Maximum;
     }
 }

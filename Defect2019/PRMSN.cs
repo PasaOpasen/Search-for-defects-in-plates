@@ -200,17 +200,16 @@ namespace Defect2019
             {
                 chart1.Titles[0].Text = "Re";
                 for (int i = 0; i < arg.Length; i++)
-                {
-                    double a = arg[i].Re;
                     if (arg[i].Abs != 0)
                     {
+                        double a = arg[i].Re;
                         if (checkBox1.Checked) chart1.Series[0].Points.AddXY(a, P[i].Re);
                         if (checkBox2.Checked) chart1.Series[1].Points.AddXY(a, R[i].Re);
                         if (checkBox3.Checked) chart1.Series[2].Points.AddXY(a, M[i].Re);
                         if (checkBox4.Checked) chart1.Series[3].Points.AddXY(a, S[i].Re);
                         if (checkBox5.Checked) chart1.Series[4].Points.AddXY(a, N[i].Re);
                     }
-                }
+                
 
                 if (checkBox6.Checked)
                     for (int i = 0; i < Model.Length; i++)
@@ -225,17 +224,16 @@ namespace Defect2019
             {
                 chart1.Titles[0].Text = "Im";
                 for (int i = 0; i < arg.Length; i++)
-                {
-                    double a = arg[i].Re;
                     if (arg[i].Abs != 0)
                     {
+                        double a = arg[i].Re;
                         if (checkBox1.Checked) chart1.Series[0].Points.AddXY(a, P[i].Im);
                         if (checkBox2.Checked) chart1.Series[1].Points.AddXY(a, R[i].Im);
                         if (checkBox3.Checked) chart1.Series[2].Points.AddXY(a, M[i].Im);
                         if (checkBox4.Checked) chart1.Series[3].Points.AddXY(a, S[i].Im);
                         if (checkBox5.Checked) chart1.Series[4].Points.AddXY(a, N[i].Im);
                     }
-                }
+                
                 if (checkBox6.Checked)
                     for (int i = 0; i < Model.Length; i++)
                     {
@@ -248,18 +246,17 @@ namespace Defect2019
             else
             {
                 chart1.Titles[0].Text = "Abs";
-                for (int i = 0; i < arg.Length; i++)
-                {
-                    double a = arg[i].Re;
+                for (int i = 0; i < arg.Length; i++)                           
                     if (arg[i].Abs != 0)
                     {
+                        double a = arg[i].Re;
                         if (checkBox1.Checked) chart1.Series[0].Points.AddXY(a, P[i].Abs);
                         if (checkBox2.Checked) chart1.Series[1].Points.AddXY(a, R[i].Abs);
                         if (checkBox3.Checked) chart1.Series[2].Points.AddXY(a, M[i].Abs);
                         if (checkBox4.Checked) chart1.Series[3].Points.AddXY(a, S[i].Abs);
                         if (checkBox5.Checked) chart1.Series[4].Points.AddXY(a, N[i].Abs);
                     }
-                }
+                
                 if (checkBox6.Checked)
                     for (int i = 0; i < Model.Length; i++)
                     {
@@ -307,7 +304,7 @@ namespace Defect2019
         private void ModelRead()
         {
             StreamReader fs = new StreamReader("GM_test.dat");
-            List<Complex[]> list = new List<Complex[]>();
+            List<Complex[]> list = new List<Complex[]>(100);
             Complex Ar, P, R, M, S, N;
 
             string s = fs.ReadLine();
@@ -328,7 +325,7 @@ namespace Defect2019
                 s = fs.ReadLine();
             }
 
-            var l2 = new List<Tuple<double, Complex[]>>();
+            var l2 = new List<Tuple<double, Complex[]>>(list[0].Length);
             int k = 0;
             while (list[k][0].Im == 0)
             {

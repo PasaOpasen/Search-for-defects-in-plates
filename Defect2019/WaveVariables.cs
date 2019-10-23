@@ -240,8 +240,8 @@ public static class Functions
     {
         const int N = 7;
 
-        double w1 = wc * (N + 1) / N + w, w2 = wc * (N - 1) / N + w, w3 = wc * (1 - N) / N + w, w4 = 2 - wc * (N + 1) / N, w5 = wc + w, w6 = w - wc;
-        Complex ew(double t, double ww) => Complex.Exp(Complex.I * t * ww) / ww;
+        double w1 = wc * ((N + 1.0) / N) + w, w2 = wc * ((N - 1.0) / N) + w, w3 = wc * ((1.0 - N) / N) + w, w4 = 2 - wc * ((N + 1.0) / N), w5 = wc + w, w6 = w - wc;
+        Complex ew(double t, double ww) => Complex.Expi(t * ww) / ww;
         Complex perv(double t) => ew(t, w1) + ew(t, w2) - ew(t, w3) - ew(t, w4) - 2 * (ew(t, w5) - ew(t, w6));
 
         return (perv(pimult2 * N / wc) - perv(0)) / 8;
@@ -330,7 +330,7 @@ public static class Functions
     /// <returns></returns>
     public static Vectors DeltassNPosRoots(double omega, double tmin, double tmax)
     {
-        List<double> list = new List<double>();
+        List<double> list = new List<double>(4);
         double alp, pi2 = (Math.PI / h).Sqr(), kappa = k2(omega), s = kappa;//kappa.Show();
         int k = 1;
         do
@@ -1458,8 +1458,8 @@ public static class OtherMethods
 
     private static bool EqualConfigs(double x0, double X, int xcount, int ycount, double y0, double Y, Source[] smas, out Source[] emptymas)
     {
-        List<Source> list = new List<Source>();
-        List<string> names = new List<string>();
+        List<Source> list = new List<Source>(smas.Length);
+        List<string> names = new List<string>(smas.Length);
         foreach (var s in smas)
         {
             list.Add(s.dup);

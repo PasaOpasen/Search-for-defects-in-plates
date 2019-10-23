@@ -449,7 +449,7 @@ namespace Практика_с_фортрана
             new Anima(st).Show();
         }
 
-        private bool FilesUrUzExist(string[] pngnames)
+        private static bool FilesUrUzExist(string[] pngnames)
         {
             string s;
             for (int i = 0; i < pngnames.Length; i++)
@@ -488,14 +488,16 @@ namespace Практика_с_фортрана
         private void сохранитьИзображениеToolStripMenuItem_Click(object sender, EventArgs e)
         {
             string name = $"Функции ur,uz";
-            SaveFileDialog savedialog = new SaveFileDialog();
-            savedialog.Title = "Сохранить рисунок как...";
-            savedialog.FileName = name;
-            savedialog.Filter = "Image files (*.png)|*.png|All files (*.*)|*.*";
+            SaveFileDialog savedialog = new SaveFileDialog
+            {
+                Title = "Сохранить рисунок как...",
+                FileName = name,
+                Filter = "Image files (*.png)|*.png|All files (*.*)|*.*",
 
-            savedialog.OverwritePrompt = true;
-            savedialog.CheckPathExists = true;
-            savedialog.ShowHelp = true;
+                OverwritePrompt = true,
+                CheckPathExists = true,
+                ShowHelp = true
+            };
             if (savedialog.ShowDialog() == DialogResult.OK)
             {
                Работа2019.SoundMethods.OK();
@@ -546,7 +548,7 @@ namespace Практика_с_фортрана
                 chart1.Series[i].IsVisibleInLegend = false;
             }
         }
-        private double GetCorner() => textBox6.Text.ToDouble() * Math.PI / 180;
+        private double GetCorner() => textBox6.Text.ToDouble() * (Math.PI / 180);
         private Tuple<Complex[], Complex[]> GetTupF(double x, double y, double w, Normal2D[] n) => new Tuple<Complex[], Complex[]>(U(x, y, w, n), UResMemoized(x, y, w, n));
         private void CreateArrays(int k)
         {
@@ -661,7 +663,7 @@ namespace Практика_с_фортрана
         {
             ClearSeries();
 
-            var list = new List<double>();
+            var list = new List<double>(uRval.Length);
             if (checkBox1.Checked) { chart1.Series[0].Points.DataBindXY(xval, uRval); chart1.Series[0].IsVisibleInLegend = true; list.AddRange(uRval); }
             if (checkBox2.Checked) { chart1.Series[2].Points.DataBindXY(xval, umodval); chart1.Series[2].IsVisibleInLegend = true; list.AddRange(umodval); }
             if (checkBox3.Checked) { chart1.Series[1].Points.DataBindXY(xval, uIval); chart1.Series[1].IsVisibleInLegend = true; list.AddRange(uIval); }
@@ -742,7 +744,7 @@ namespace Практика_с_фортрана
         }
 
 
-        private void Setzlim(double[] rmas, double[] zmas)
+        private static void Setzlim(double[] rmas, double[] zmas)
         {
             using (StreamWriter f = new StreamWriter("zlims.txt"))
             {

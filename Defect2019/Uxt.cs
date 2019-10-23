@@ -164,8 +164,9 @@ namespace Defect2019
         {
             if (checkedListBox1.Items.Count > 0)
             {
-                List<Source> list = new List<Source>();
                 var ind = checkedListBox1.CheckedIndices;
+                List<Source> list = new List<Source>(ind.Count);
+              
                 for (int i = 0; i < ind.Count; i++)
                     list.Add(sources[ind[i]]);
                 if (list.Count == 0)
