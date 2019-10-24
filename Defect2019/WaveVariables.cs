@@ -982,19 +982,19 @@ public static class Functions
     private static async Task BeeHiveSearchAsync(Func<double, double, double> F, string savename, double xmin, double xmax, double ymin, double ymax, int countpoint, int maxtit = 280, int maxfit = 70)
     {
         const double coef = -1000;
-        Func<Vectors, double> func = (Vectors v) => Math.Exp(coef * F(v[0], v[1]));
-        Vectors min = new Vectors(xmin, ymin);
-        Vectors max = new Vectors(xmax, ymax);
+        Func<Point, double> func = (Point v) => Math.Exp(coef * F(v.x, v.y));
+        Point min = new Point(xmin, ymin);
+        Point max = new Point(xmax, ymax);
 
         var res = await Task.Run(() => BeeHiveAlgorithm.GetGlobalMin(func, min, max, 1e-17, countpoint, maxfit, maxtit));
 
         Expendator.WriteInFile(savename + "(MaxCoordinate).txt", new string[]
         {
             "a b",
-            $"{res.Item1[0]} {res.Item1[1]}",
+            $"{res.Item1.x} {res.Item1.y}",
             $"maximum is {Math.Log(res.Item2)/coef}",
-            $"omega(кГц) = {1.0 / (res.Item1[0] * 1000)}",
-            $"Vg(a) = {Vg(pimult2 / (res.Item1[0]* 1e6))}"
+            $"omega(кГц) = {1.0 / (res.Item1.x * 1000)}",
+            $"Vg(a) = {Vg(pimult2 / (res.Item1.x* 1e6))}"
         });
     }
 

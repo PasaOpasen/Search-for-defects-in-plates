@@ -333,9 +333,9 @@ namespace Работа2019
             double[,] net = new double[count, count];
             const double coef = -10;
 
-            Func<Vectors, double> func = (Vectors shift) =>
+            Func<double, double> func = (double shift) =>
                {
-                   var p = GetEllipses(array, shift[0]);
+                   var p = GetEllipses(array, shift);
                    if (p.Count(ps => !ps.right) > 18)//условие, чтобы много элиипсов всё же не сломались
                        return Double.MaxValue;
 
@@ -349,7 +349,6 @@ namespace Работа2019
                };
 
             var tmpp = BeeHiveAlgorithm.GetGlobalMin(func,
-                n: 1,
                 min: (double)numericUpDown1.Minimum,
                 max: (double)numericUpDown1.Maximum,
                 eps: 1e-10,
@@ -358,7 +357,7 @@ namespace Работа2019
                 maxiter: 120);
             Debug.WriteLine($"Максимум функции на сетке: {Math.Log(tmpp.Item2) / coef}");
 
-            return tmpp.Item1[0];
+            return tmpp.Item1;
         }
 
         private async void button2_Click(object sender, EventArgs e)

@@ -13,11 +13,12 @@ namespace МатКлассы
         /// <summary>
         /// Многомерная парабола
         /// </summary>
-        public static readonly Func<Vectors, double> Parabol = (Vectors v) =>v.DistNorm; 
+        public static readonly Func<Vectors, double> Parabol = (Vectors v) => v.DistNorm;
         /// <summary>
         /// Функция Растригина
         /// </summary>
-        public static readonly Func<Vectors, double> Rastr = (Vectors v) => {
+        public static readonly Func<Vectors, double> Rastr = (Vectors v) =>
+        {
             double s = 10 * v.Deg;
             for (int i = 0; i < v.Deg; i++)
                 s += v[i] * v[i] - 10 * Math.Cos(2 * Math.PI * v[i]);
@@ -27,7 +28,8 @@ namespace МатКлассы
         /// <summary>
         /// Функция Швеля
         /// </summary>
-        public static readonly Func<Vectors, double> Shvel = (Vectors v) => {
+        public static readonly Func<Vectors, double> Shvel = (Vectors v) =>
+        {
             double s = 0;
             for (int i = 0; i < v.Deg; i++)
                 s += -v[i] * Math.Sin(Math.Sqrt(v[i].Abs()));
@@ -42,7 +44,7 @@ namespace МатКлассы
         /// Параметры шага для роя
         /// </summary>
         //tex:Каждая частица в рое делает примерно следующий шаг: $v_{i+1} = w v_i + \varphi_p \cdot random_1 (p_i - x_i) + \varphi_g \cdot random_2 (g_i - x_i)$
-        public static double w=0.3, fp=2, fg=5;
+        public static double w = 0.3, fp = 2, fg = 5;
 
         /// <summary>
         /// Получить минимум функции, посчитанный роевым методом
@@ -57,14 +59,14 @@ namespace МатКлассы
         /// <param name="center">Центр распредления точек</param>
         /// <param name="maxiter">Максимальное число итераций метода</param>
         /// <returns></returns>
-        public static Tuple<Vectors,double> GetGlobalMin(Func<Vectors,double> f,int n=1,double min=-1e12,double max=1e12,double eps=1e-10,int countpoints=1000,int maxcountstep = 100,Vectors center=null,int maxiter=150)
+        public static Tuple<Vectors, double> GetGlobalMin(Func<Vectors, double> f, int n = 1, double min = -1e12, double max = 1e12, double eps = 1e-10, int countpoints = 1000, int maxcountstep = 100, Vectors center = null, int maxiter = 150)
         {
             Vectors minimum = new Vectors(n, min);
             Vectors maximum = new Vectors(n, max);
-           
+
             Hive hive;
-                if(center==null) hive=new Hive(minimum, maximum, f, countpoints);
-                else hive = new Hive(minimum+center, maximum+center, f, countpoints,center);
+            if (center == null) hive = new Hive(minimum, maximum, f, countpoints);
+            else hive = new Hive(minimum + center, maximum + center, f, countpoints, center);
 
             return Gets(hive, eps, maxcountstep, maxiter);
 
@@ -80,9 +82,9 @@ namespace МатКлассы
         /// <param name="maxcountstep">Максимальное число неудачных итераций метода</param>
         /// <param name="maxiter">Максимальное число итераций метода</param>
         /// <returns></returns>
-        public static Tuple<Vectors, double> GetGlobalMin(Func<Vectors, double> f, Vectors minimum,Vectors maximum, double eps = 1e-10, int countpoints = 1000, int maxcountstep = 100, int maxiter = 150)
+        public static Tuple<Vectors, double> GetGlobalMin(Func<Vectors, double> f, Vectors minimum, Vectors maximum, double eps = 1e-10, int countpoints = 1000, int maxcountstep = 100, int maxiter = 150)
         {
-            return Gets(new Hive(minimum , maximum , f, countpoints),eps,maxcountstep,maxiter);
+            return Gets(new Hive(minimum, maximum, f, countpoints), eps, maxcountstep, maxiter);
         }
 
         /// <summary>
@@ -97,21 +99,21 @@ namespace МатКлассы
         {
             if (maxiter <= 0) maxiter = Int32.MaxValue;
             double e = hive.val;
-            int c = maxcountstep,k=0;
+            int c = maxcountstep, k = 0;
 
             Debug.WriteLine($"Погрешность после инициализации пчёл:  {e}");
-            while (e>eps && maxcountstep > 0 && hive.Radius>eps)
+            while (e > eps && maxcountstep > 0 && hive.Radius > eps)
             {
-                hive.MakeStep(w,fp,fg);
+                hive.MakeStep(w, fp, fg);
                 k++;
                 if (hive.val < e)
                 {
                     Debug.WriteLine($"Hive method (iter {k}):  {e} ---> {hive.val}");
-                    e = hive.val;                   
+                    e = hive.val;
                     maxcountstep = c;
                 }
                 else
-                maxcountstep--;
+                    maxcountstep--;
                 //Debug.WriteLine( $"c = {maxcountstep}  val = {hive.val}");
                 if (k == maxiter) break;
             }
@@ -130,7 +132,7 @@ namespace МатКлассы
             /// <summary>
             /// Наилучшее положение в рое
             /// </summary>
-            public Vectors g { get;private set;  }
+            public Vectors g { get; private set; }
             /// <summary>
             /// Значение целевой функции в наилучшем положении
             /// </summary>
@@ -143,8 +145,8 @@ namespace МатКлассы
             {
                 get
                 {
-                    double d = 0,di;
-                    for(int i=0;i<bees.Length;i++)
+                    double d = 0, di;
+                    for (int i = 0; i < bees.Length; i++)
                     {
                         di = (g - bees[i].p).EuqlidNorm;
                         if (di > d)
@@ -177,19 +179,19 @@ namespace МатКлассы
             /// <param name="f"></param>
             /// <param name="count"></param>
             /// <param name="v"></param>
-            public Hive(Vectors min, Vectors max, Func<Vectors, double> f,int count = 1000,params Vectors[] v)
+            public Hive(Vectors min, Vectors max, Func<Vectors, double> f, int count = 1000, params Vectors[] v)
             {
                 this.func = new Func<Vectors, double>(f);
 
-                bees = new Bee[count+v.Length];
+                bees = new Bee[count + v.Length];
                 //for (int i = 0; i < count; i++)
-                    Parallel.For(0, count, (int i) => 
-                    { 
-                        bees[i] = new Bee(min, max, f);
-                    });
+                Parallel.For(0, count, (int i) =>
+                {
+                    bees[i] = new Bee(min, max, f);
+                });
 
                 for (int i = count; i < count + v.Length; i++)
-                    bees[i] = new Bee(v[i-count],min,max,f);
+                    bees[i] = new Bee(v[i - count], min, max, f);
 
                 g = bees[0].p.dup;
                 val = bees[0].bestval;
@@ -198,7 +200,7 @@ namespace МатКлассы
 
             private void ReCount()
             {
-                for(int i=0;i<bees.Length;i++)
+                for (int i = 0; i < bees.Length; i++)
                     if (bees[i].bestval < val)
                     {
                         val = bees[i].bestval;
@@ -213,7 +215,7 @@ namespace МатКлассы
             /// <param name="fp"></param>
             /// <param name="fg"></param>
             /// <param name="parallel"></param>
-            public void MakeStep(double w=0.3, double fp=2, double fg=5,bool parallel=true)
+            public void MakeStep(double w = 0.3, double fp = 2, double fg = 5, bool parallel = true)
             {
                 void Iter(int i)
                 {
@@ -227,7 +229,7 @@ namespace МатКлассы
                 else
                     for (int i = 0; i < bees.Length; i++)
                         Iter(i);
-                
+
                 ReCount();
             }
         }
@@ -252,7 +254,7 @@ namespace МатКлассы
             /// <summary>
             /// Генератор случайных чисел
             /// </summary>
-            MathNet.Numerics.Random.CryptoRandomSource random=new MathNet.Numerics.Random.CryptoRandomSource();
+            MathNet.Numerics.Random.CryptoRandomSource random = new MathNet.Numerics.Random.CryptoRandomSource();
 
 
             /// <summary>
@@ -270,16 +272,16 @@ namespace МатКлассы
             /// <param name="min">Минимальные возможные значения положения</param>
             /// <param name="max">Максимальные возможные значения положения</param>
             /// <param name="f">Целевая функция</param>
-            public Bee(Vectors min,Vectors max, Func<Vectors, double> f)
+            public Bee(Vectors min, Vectors max, Func<Vectors, double> f)
             {
                 var r = new MathNet.Numerics.Random.CryptoRandomSource();
 
                 x = new Vectors(min);
                 for (int i = 0; i < x.Deg; i++)
                 {
-                  x[i] += r.NextDouble() * (max[i] - min[i]); 
+                    x[i] += r.NextDouble() * (max[i] - min[i]);
                 }
-               // v = null;f = null;bestval = double.MaxValue;p = null;  
+                // v = null;f = null;bestval = double.MaxValue;p = null;  
 
                 WhenX(min, max, f);
             }
@@ -293,7 +295,7 @@ namespace МатКлассы
             /// <param name="f"></param>
             public Bee(Vectors x, Vectors min, Vectors max, Func<Vectors, double> f)
             {
-               this.x = x.dup;
+                this.x = x.dup;
                 WhenX(min, max, f);
             }
             /// <summary>
@@ -322,19 +324,19 @@ namespace МатКлассы
             /// <param name="fp">Весовой коэффициент для p</param>
             /// <param name="fg">Весовой коэффициент для g</param>
             /// <param name="g">Наилучшее положение по рою</param>
-            public void RecalcVOld(double w, double fp,double fg,Vectors g)
+            public void RecalcVOld(double w, double fp, double fg, Vectors g)
             {
                 var r = new MathNet.Numerics.Random.CryptoRandomSource();
                 double fi = fg + fp;
 
-                Vectors rp=new Vectors(v.Deg), rg = new Vectors(v.Deg);
-                for(int i=0;i<v.Deg;i++)
+                Vectors rp = new Vectors(v.Deg), rg = new Vectors(v.Deg);
+                for (int i = 0; i < v.Deg; i++)
                 {
                     rp[i] = r.NextDouble();
                     rg[i] = r.NextDouble();
                 }
 
-                v =2*w/Math.Abs(2-fi-Math.Sqrt(fi*(fi-4))) * (v + fp * Vectors.CompMult(rp, p - x) + fg * Vectors.CompMult(rg, g - x));
+                v = 2 * w / Math.Abs(2 - fi - Math.Sqrt(fi * (fi - 4))) * (v + fp * Vectors.CompMult(rp, p - x) + fg * Vectors.CompMult(rg, g - x));
             }
             /// <summary>
             /// Переопределить скорость
@@ -363,7 +365,7 @@ namespace МатКлассы
             public void ReCount()
             {
                 double t = f(x);
-                if(t<bestval)
+                if (t < bestval)
                 {
                     bestval = t;
                     p.MoveTo(x);
@@ -495,7 +497,7 @@ namespace МатКлассы
                 if (v < val)
                 {
                     val = v;
-                    g=gnew;
+                    g = gnew;
                 }
             }
 
@@ -532,7 +534,7 @@ namespace МатКлассы
                     if (bees[i].bestval < val)
                     {
                         val = bees[i].bestval;
-                        g = bees[i].p.dup;
+                        g = bees[i].p;
                     }
             }
 
@@ -672,7 +674,310 @@ namespace МатКлассы
                 if (t < bestval)
                 {
                     bestval = t;
-                    p =x;
+                    p = x;
+                }
+            }
+        }
+        #endregion
+
+        #region Метод роя частиц 1D
+
+        /// <summary>
+        /// Получить минимум функции, посчитанный роевым методом
+        /// </summary>
+        /// <param name="f">Целевая функция</param>
+        /// <param name="n">Размерность области определения целевой функции</param>
+        /// <param name="min">Минимальное возможное значение каждого аргумента</param>
+        /// <param name="max">Максимальное возможное значение каждого аргумента</param>
+        /// <param name="eps">Допустимая погрешность</param>
+        /// <param name="countpoints">Количество пчёл в рое</param>
+        /// <param name="maxcountstep">Максимальное число неудачных итераций метода</param>
+        /// <param name="center">Центр распредления точек</param>
+        /// <param name="maxiter">Максимальное число итераций метода</param>
+        /// <returns></returns>
+        public static Tuple<double, double> GetGlobalMin(Func<double, double> f, double center = 0, double min = -1e12, double max = 1e12, double eps = 1e-10, int countpoints = 1000, int maxcountstep = 100, int maxiter = 150)
+        {
+            double minimum = min;
+            double maximum = max;
+
+            Hive1D hive;
+            if (center == 0) hive = new Hive1D(minimum, maximum, f, countpoints);
+            else hive = new Hive1D(minimum + center, maximum + center, f, countpoints, center);
+
+            return Gets1D(hive, eps, maxcountstep, maxiter);
+
+        }
+        /// <summary>
+        /// Получить минимум функции, посчитанный роевым методом
+        /// </summary>
+        /// <param name="f">Целевая функция</param>
+        /// <param name="minimum">Вектор минимальных значений</param>
+        /// <param name="maximum">Вектор максимальных значений</param>
+        /// <param name="eps">Допустимая погрешность</param>
+        /// <param name="countpoints">Количество пчёл в рое</param>
+        /// <param name="maxcountstep">Максимальное число неудачных итераций метода</param>
+        /// <param name="maxiter">Максимальное число итераций метода</param>
+        /// <returns></returns>
+        public static Tuple<double, double> GetGlobalMin(Func<double, double> f, double minimum, double maximum, double eps = 1e-10, int countpoints = 1000, int maxcountstep = 100, int maxiter = 150)
+        {
+            return Gets1D(new Hive1D(minimum, maximum, f, countpoints), eps, maxcountstep, maxiter);
+        }
+
+        /// <summary>
+        /// Найти минимум функции уже по готовому рою
+        /// </summary>
+        /// <param name="hive"></param>
+        /// <param name="eps"></param>
+        /// <param name="maxcountstep"></param>
+        /// <param name="maxiter"></param>
+        /// <returns></returns>
+        private static Tuple<double, double> Gets1D(Hive1D hive, double eps = 1e-10, int maxcountstep = 100, int maxiter = 150)
+        {
+            if (maxiter <= 0) maxiter = Int32.MaxValue;
+            double e = hive.val;
+            int c = maxcountstep, k = 0;
+
+            Debug.WriteLine($"Погрешность после инициализации пчёл:  {e}");
+            while (e > eps && maxcountstep > 0 && hive.Radius > eps)
+            {
+                hive.MakeStep(w, fp, fg);
+                k++;
+                if (hive.val < e)
+                {
+                    Debug.WriteLine($"Hive method (iter {k}):  {e} ---> {hive.val}");
+                    e = hive.val;
+                    maxcountstep = c;
+                }
+                else
+                    maxcountstep--;
+                //Debug.WriteLine( $"c = {maxcountstep}  val = {hive.val}");
+                if (k == maxiter) break;
+            }
+            return new Tuple<double, double>(hive.g, hive.val);
+        }
+
+        /// <summary>
+        /// Рой пчёл
+        /// </summary>
+        private sealed class Hive1D
+        {
+            /// <summary>
+            /// Массив пчёл
+            /// </summary>
+            Bee1D[] bees;
+            /// <summary>
+            /// Наилучшее положение в рое
+            /// </summary>
+            public double g { get; private set; }
+            /// <summary>
+            /// Значение целевой функции в наилучшем положении
+            /// </summary>
+            public double val { get; private set; }
+
+            /// <summary>
+            /// Радиус роя как наибольшее расстояние между наилучшим положением в рое и наилучшими положениями отдельных частиц
+            /// </summary>
+            public double Radius
+            {
+                get
+                {
+                    double d = 0, di;
+                    for (int i = 0; i < bees.Length; i++)
+                    {
+                        di = Math.Abs(g - bees[i].p);
+                        if (di > d)
+                            d = di;
+                    }
+                    return d;
+                }
+            }
+            private readonly Func<double, double> func;
+
+            /// <summary>
+            /// Попытаться обновить наилучшее положение
+            /// </summary>
+            /// <param name="gnew"></param>
+            public void UpdateG(double gnew)
+            {
+                double v = func(gnew);
+                if (v < val)
+                {
+                    val = v;
+                    g = gnew;
+                }
+            }
+
+            /// <summary>
+            /// Сгенерировать рой частиц
+            /// </summary>
+            /// <param name="min"></param>
+            /// <param name="max"></param>
+            /// <param name="f"></param>
+            /// <param name="count"></param>
+            /// <param name="v"></param>
+            public Hive1D(double min, double max, Func<double, double> f, int count = 1000, params double[] v)
+            {
+                this.func = new Func<double, double>(f);
+
+                bees = new Bee1D[count + v.Length];
+                //for (int i = 0; i < count; i++)
+                Parallel.For(0, count, (int i) =>
+                {
+                    bees[i] = new Bee1D(min, max, f);
+                });
+
+                for (int i = count; i < count + v.Length; i++)
+                    bees[i] = new Bee1D(v[i - count], min, max, f);
+
+                g = bees[0].p;
+                val = bees[0].bestval;
+                ReCount();
+            }
+
+            private void ReCount()
+            {
+                for (int i = 0; i < bees.Length; i++)
+                    if (bees[i].bestval < val)
+                    {
+                        val = bees[i].bestval;
+                        g = bees[i].p;
+                    }
+            }
+
+            /// <summary>
+            /// Сделать шаг по дискретному времени
+            /// </summary>
+            /// <param name="w"></param>
+            /// <param name="fp"></param>
+            /// <param name="fg"></param>
+            /// <param name="parallel"></param>
+            public void MakeStep(double w = 0.3, double fp = 2, double fg = 5, bool parallel = true)
+            {
+                void Iter(int i)
+                {
+                    bees[i].RecalcV(w, fp, fg, this.g);
+                    bees[i].Move();
+                    bees[i].ReCount();
+                }
+
+                if (parallel)
+                    Parallel.For(0, bees.Length, (int i) => Iter(i));
+                else
+                    for (int i = 0; i < bees.Length; i++)
+                        Iter(i);
+
+                ReCount();
+            }
+        }
+
+        /// <summary>
+        /// Классы пчелы
+        /// </summary>
+        private sealed class Bee1D
+        {
+            /// <summary>
+            /// Текущее положение частицы
+            /// </summary>
+            double x;
+            /// <summary>
+            /// Наилучшее положение частицы
+            /// </summary>
+            public double p { get; private set; }
+            /// <summary>
+            /// Текущая скорость частицы
+            /// </summary>
+            double v;
+            /// <summary>
+            /// Генератор случайных чисел
+            /// </summary>
+            MathNet.Numerics.Random.CryptoRandomSource random = new MathNet.Numerics.Random.CryptoRandomSource();
+
+
+            /// <summary>
+            /// Значение целевой функции в наилучшем положении
+            /// </summary>
+            public double bestval { get; private set; }
+            /// <summary>
+            /// Целевая функция
+            /// </summary>
+            Func<double, double> f;
+
+            /// <summary>
+            /// Создать частицу в окне решений
+            /// </summary>
+            /// <param name="min">Минимальные возможные значения положения</param>
+            /// <param name="max">Максимальные возможные значения положения</param>
+            /// <param name="f">Целевая функция</param>
+            public Bee1D(double min, double max, Func<double, double> f)
+            {
+                var r = new MathNet.Numerics.Random.CryptoRandomSource();
+
+                x = min;
+                x += r.NextDouble() * (max - min);
+
+                WhenX(min, max, f);
+            }
+
+            /// <summary>
+            /// Задать пчелу по известному начальному положению
+            /// </summary>
+            /// <param name="x"></param>
+            /// <param name="min"></param>
+            /// <param name="max"></param>
+            /// <param name="f"></param>
+            public Bee1D(double x, double min, double max, Func<double, double> f)
+            {
+                this.x = x;
+                WhenX(min, max, f);
+            }
+            /// <summary>
+            /// Задать наилучшее положение и случайные скорости, когда x уже известно
+            /// </summary>
+            /// <param name="min"></param>
+            /// <param name="max"></param>
+            /// <param name="f"></param>
+            public void WhenX(double min, double max, Func<double, double> f)
+            {
+                var r = new MathNet.Numerics.Random.CryptoRandomSource();
+                p = x;
+                this.f = new Func<double, double>(f);
+                bestval = f(p);
+
+                double vmax = (max - min), vmin = -vmax;
+                v = vmin;
+                v = r.NextDouble() * (vmax - vmin);
+            }
+
+            /// <summary>
+            /// Переопределить скорость
+            /// </summary>
+            /// <param name="w">Коэффициент инерции</param>
+            /// <param name="fp">Весовой коэффициент для p</param>
+            /// <param name="fg">Весовой коэффициент для g</param>
+            /// <param name="g">Наилучшее положение по рою</param>
+            public void RecalcV(double w, double fp, double fg, double g)
+            {
+                double fi = fg + fp;
+                double coef = 2 * w / Math.Abs(2 - fi - Math.Sqrt(fi * (fi - 4)));
+
+                v = coef * (v + fp * random.NextDouble() * (p - x) + fg * random.NextDouble() * (g - x));
+            }
+
+            /// <summary>
+            /// Сделать шаг по скорости
+            /// </summary>
+            public void Move() => x += v;
+
+            /// <summary>
+            /// Переопределить наилучшее положение частицы, если можно
+            /// </summary>
+            public void ReCount()
+            {
+                double t = f(x);
+                if (t < bestval)
+                {
+                    bestval = t;
+                    p = x;
                 }
             }
         }
@@ -696,12 +1001,12 @@ namespace МатКлассы
         /// <param name="eps">Допустимая погрешность</param>
         /// <param name="maxcount">Максимальное число итераций</param>
         /// <returns></returns>
-        public static Tuple<Vectors, double> GetGlobalMin(Func<Vectors, double> f, Vectors min, Vectors max,int n = 1, int s = 1000,int p=300,int e=100,int sp=50,int se=100,double delta=1.0,  double eps = 1e-10, int maxcount = 10)
+        public static Tuple<Vectors, double> GetGlobalMin(Func<Vectors, double> f, Vectors min, Vectors max, int n = 1, int s = 1000, int p = 300, int e = 100, int sp = 50, int se = 100, double delta = 1.0, double eps = 1e-10, int maxcount = 10)
         {
             SBee[] mas = SBee.Create(f, min, max, s);
             int k = 0;
 
-            while(SBee.GetBest(mas).v>eps && maxcount > 0 && k<3)
+            while (SBee.GetBest(mas).v > eps && maxcount > 0 && k < 3)
             {
                 double old = SBee.GetBest(mas).v;
                 SBee.MakeStep(ref mas, f, min, max, n, p, e, sp, se, delta);
@@ -712,7 +1017,7 @@ namespace МатКлассы
                     k = 0;
                 }
                 else k++;
-                
+
 
                 maxcount--;
             }
@@ -729,7 +1034,7 @@ namespace МатКлассы
             public Vectors x { get; private set; }
             public double v { get; private set; }
 
-            public SBee(Vectors vec,double f)
+            public SBee(Vectors vec, double f)
             {
                 v = f;
                 x = vec.dup;
@@ -754,7 +1059,7 @@ namespace МатКлассы
             {
                 int i = 0;
                 double d = mas[0].v;
-                for(int k=1;k<mas.Length;k++)
+                for (int k = 1; k < mas.Length; k++)
                     if (mas[k].v < d)
                     {
                         d = mas[k].v;
@@ -771,19 +1076,20 @@ namespace МатКлассы
             /// <param name="max"></param>
             /// <param name="count">Число пчёл</param>
             /// <returns></returns>
-            public static SBee[] Create(Func<Vectors, double> f, Vectors min, Vectors max,int count=100,bool withaverage=true)
+            public static SBee[] Create(Func<Vectors, double> f, Vectors min, Vectors max, int count = 100, bool withaverage = true)
             {
 
                 SBee[] res = new SBee[count];
                 Vectors[] tmp = new Vectors[count];
 
-                Parallel.For(0, count, (int i) => {
+                Parallel.For(0, count, (int i) =>
+                {
                     tmp[i] = Vectors.Create(min, max);
                 });
 
                 for (int i = 0; i < count; i++)
                 {
-                res[i] = new SBee(tmp[i], f(tmp[i]));
+                    res[i] = new SBee(tmp[i], f(tmp[i]));
                 }
 
                 if (withaverage)
@@ -812,13 +1118,14 @@ namespace МатКлассы
                 Vectors[] t;
 
                 t = new Vectors[se];
-                for(int i = 0; i < e; i++)
+                for (int i = 0; i < e; i++)
                 {
-                    SBee it = new SBee(mas[i]),tmp;
+                    SBee it = new SBee(mas[i]), tmp;
                     Vectors cent = it.x.dup;
 
-                    
-                    Parallel.For(0, t.Length, (int u) => {
+
+                    Parallel.For(0, t.Length, (int u) =>
+                    {
                         t[u] = Vectors.Create(cent, delta);
                     });
 
@@ -837,8 +1144,9 @@ namespace МатКлассы
                     SBee it = new SBee(mas[i]), tmp;
                     Vectors cent = it.x.dup;
 
-                    
-                    Parallel.For(0, t.Length, (int u) => {
+
+                    Parallel.For(0, t.Length, (int u) =>
+                    {
                         t[u] = Vectors.Create(cent, delta);
                     });
 
@@ -854,12 +1162,13 @@ namespace МатКлассы
 
 
                 t = new Vectors[mas.Length - p];
-                Parallel.For(0, t.Length, (int i) => {
+                Parallel.For(0, t.Length, (int i) =>
+                {
                     t[i] = Vectors.Create(min, max);
                 });
 
                 for (int i = p; i < mas.Length; i++)
-                    mas[i] = new SBee(t[i-p], f);
+                    mas[i] = new SBee(t[i - p], f);
 
             }
         }

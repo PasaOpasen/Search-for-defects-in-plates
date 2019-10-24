@@ -276,7 +276,7 @@ namespace PS5000A
                         }
                         else
                             max = 1.0;
-                        Debug.WriteLine(max);
+                        //Debug.WriteLine(max);
                         using (StreamWriter res = new StreamWriter(Path.Combine(fdiff[i], ArraysNames[args[j]])))
                         {
                             using (StreamReader f0 = new StreamReader(Path.Combine(fwithout[i], ArraysNames[args[j]])))
