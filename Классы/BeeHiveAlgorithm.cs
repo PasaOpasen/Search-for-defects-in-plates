@@ -567,7 +567,7 @@ namespace МатКлассы
         /// <summary>
         /// Классы пчелы
         /// </summary>
-        private sealed class Bee2D
+        private struct Bee2D
         {
             /// <summary>
             /// Текущее положение частицы
@@ -584,7 +584,7 @@ namespace МатКлассы
             /// <summary>
             /// Генератор случайных чисел
             /// </summary>
-            MathNet.Numerics.Random.CryptoRandomSource random = new MathNet.Numerics.Random.CryptoRandomSource();
+            MathNet.Numerics.Random.CryptoRandomSource random;
 
 
             /// <summary>
@@ -602,15 +602,15 @@ namespace МатКлассы
             /// <param name="min">Минимальные возможные значения положения</param>
             /// <param name="max">Максимальные возможные значения положения</param>
             /// <param name="f">Целевая функция</param>
-            public Bee2D(Point min, Point max, Func<Point, double> f)
+            public Bee2D(Point min, Point max, Func<Point, double> f) : this(GetRandom(min, max), min, max, f) { }
+
+            private static Point GetRandom(Point min,Point max)
             {
                 var r = new MathNet.Numerics.Random.CryptoRandomSource();
-
-                x = new Point(min);
-                x.x += r.NextDouble() * (max.x - min.x);
-                x.y += r.NextDouble() * (max.y - min.y);
-
-                WhenX(min, max, f);
+                Point p = new Point(min);
+                p.x += r.NextDouble() * (max.x - min.x);
+                p.y += r.NextDouble() * (max.y - min.y);
+                return p;
             }
 
             /// <summary>
@@ -622,26 +622,17 @@ namespace МатКлассы
             /// <param name="f"></param>
             public Bee2D(Point x, Point min, Point max, Func<Point, double> f)
             {
+                random = new MathNet.Numerics.Random.CryptoRandomSource();
                 this.x = x;
-                WhenX(min, max, f);
-            }
-            /// <summary>
-            /// Задать наилучшее положение и случайные скорости, когда x уже известно
-            /// </summary>
-            /// <param name="min"></param>
-            /// <param name="max"></param>
-            /// <param name="f"></param>
-            public void WhenX(Point min, Point max, Func<Point, double> f)
-            {
-                var r = new MathNet.Numerics.Random.CryptoRandomSource();
+
                 p = x;
                 this.f = new Func<Point, double>(f);
                 bestval = f(p);
 
                 Point vmax = (max - min), vmin = -vmax;
                 v = vmin;
-                v.x = r.NextDouble() * (vmax.x - vmin.x);
-                v.y = r.NextDouble() * (vmax.y - vmin.y);
+                v.x = random.NextDouble() * (vmax.x - vmin.x);
+                v.y = random.NextDouble() * (vmax.y - vmin.y);
             }
 
             /// <summary>
@@ -873,7 +864,7 @@ namespace МатКлассы
         /// <summary>
         /// Классы пчелы
         /// </summary>
-        private sealed class Bee1D
+        private struct Bee1D
         {
             /// <summary>
             /// Текущее положение частицы
@@ -890,7 +881,7 @@ namespace МатКлассы
             /// <summary>
             /// Генератор случайных чисел
             /// </summary>
-            MathNet.Numerics.Random.CryptoRandomSource random = new MathNet.Numerics.Random.CryptoRandomSource();
+            MathNet.Numerics.Random.CryptoRandomSource random;
 
 
             /// <summary>
@@ -908,15 +899,7 @@ namespace МатКлассы
             /// <param name="min">Минимальные возможные значения положения</param>
             /// <param name="max">Максимальные возможные значения положения</param>
             /// <param name="f">Целевая функция</param>
-            public Bee1D(double min, double max, Func<double, double> f)
-            {
-                var r = new MathNet.Numerics.Random.CryptoRandomSource();
-
-                x = min;
-                x += r.NextDouble() * (max - min);
-
-                WhenX(min, max, f);
-            }
+            public Bee1D(double min, double max, Func<double, double> f) : this(min + new MathNet.Numerics.Random.CryptoRandomSource().NextDouble() * (max - min), min, max, f) { }
 
             /// <summary>
             /// Задать пчелу по известному начальному положению
@@ -927,25 +910,16 @@ namespace МатКлассы
             /// <param name="f"></param>
             public Bee1D(double x, double min, double max, Func<double, double> f)
             {
+                random = new MathNet.Numerics.Random.CryptoRandomSource();
                 this.x = x;
-                WhenX(min, max, f);
-            }
-            /// <summary>
-            /// Задать наилучшее положение и случайные скорости, когда x уже известно
-            /// </summary>
-            /// <param name="min"></param>
-            /// <param name="max"></param>
-            /// <param name="f"></param>
-            public void WhenX(double min, double max, Func<double, double> f)
-            {
-                var r = new MathNet.Numerics.Random.CryptoRandomSource();
+
                 p = x;
                 this.f = new Func<double, double>(f);
                 bestval = f(p);
 
                 double vmax = (max - min), vmin = -vmax;
                 v = vmin;
-                v = r.NextDouble() * (vmax - vmin);
+                v = random.NextDouble() * (vmax - vmin);
             }
 
             /// <summary>
