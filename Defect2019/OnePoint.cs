@@ -105,9 +105,10 @@ namespace Работа2019
                     Parallel.For(0, tcount, (int i) =>
                     {
                         double t = tmin + i * th;
-                        double urt = 0, uzt = 0;
+                        
                         if (t != 0)
                         {
+                            double urt = 0, uzt = 0;
                             for (int k = 0; k < Sarray.Length; k++)
                             {
                                 var tp = Functions.UxtOne(x, y, t, Sarray[k]);
@@ -130,9 +131,10 @@ namespace Работа2019
                     Parallel.For(0, tcount, (int i) =>
                     {
                         double t = tmin + i * th;
-                        Complex urt = 0, uzt = 0;
+                        
                         if (t != 0)
                         {
+Complex urt = 0, uzt = 0;
                             for (int k = 0; k < Sarray.Length; k++)
                             {
                                 var tp = Functions.UxtOne(x, y, t, Sarray[k]);
@@ -155,9 +157,10 @@ namespace Работа2019
                     Parallel.For(0, tcount, (int i) =>
                     {
                         double t = tmin + i * th;
-                        double urt = 0, uzt = 0;
+                        
                         if (t != 0)
                         {
+double urt = 0, uzt = 0;
                             for (int k = 0; k < Sarray.Length; k++)
                             {
                                 var tp = Functions.UxtOne(x, y, t, Sarray[k]);
@@ -272,7 +275,7 @@ namespace Работа2019
         /// <summary>
         /// Вызвать форму и нарисовать специальные графики после её закрытия
         /// </summary>
-        public void IlushaMethod()
+        public static void IlushaMethod()
         {
             var form = new PS5000A.PS5000ABlockForm(РабКонсоль.wbeg, РабКонсоль.wend, РабКонсоль.wcount);
             form.ShowDialog();

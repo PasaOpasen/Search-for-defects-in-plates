@@ -1195,8 +1195,9 @@ public static class OtherMethods
             Complex[] res = new Complex[/*9*/6];
             Complex s1 = 0, s2 = 0, s3 = 0;
             Point QQs;
-            for (int k = 0; k < poles[ii].Deg; k++)
-            {
+            const int k = 2;
+           // for (int k = 1; k < poles[ii].Deg; k++)
+           // {
                 for (int i = 0; i < s.Norms.Length; i++)
                 {
                     QQs = QQ[snumber][ii][i];
@@ -1207,7 +1208,7 @@ public static class OtherMethods
                     s2 += res[/*3*/2] * QQs.x + res[/*4*/3] * QQs.y;
                     s3 += res[/*6*/4] * QQs.x + res[/*7*/5] * QQs.y;
                 }
-            }
+           // }
             return new Tuple<Complex, Complex>((s1 * cos + s2 * sin) * I2, s3 * I2);
         }
         Tuple<Complex, Complex> CALCfast(Source s, int ii)
@@ -1223,8 +1224,10 @@ public static class OtherMethods
             ref Complex[][] cc1 = ref c1[ii];
             ref Complex[][] cc2 = ref c2[ii];
 
-            for (int k = 0; k < poles[ii].Deg; k++)
-            {
+            const int k = 2;
+
+           // for (int k = 2; k < poles[ii].Deg; k++)
+           // {
                 polus = pols[k];
                 pr = polus * r;
                 Htmp = Complex.Expi(pr) * (polus * polus);
@@ -1234,7 +1237,7 @@ public static class OtherMethods
 
                 uz += Sn * P;
                 ur += polus * Mn * P;
-            }
+           // }
 
             return new Tuple<Complex, Complex>(ur * hankelconst, uz * hankelconst);
         }

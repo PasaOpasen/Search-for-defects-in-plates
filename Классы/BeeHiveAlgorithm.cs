@@ -153,7 +153,7 @@ namespace МатКлассы
                     return d;
                 }
             }
-            private Func<Vectors, double> func;
+            private readonly Func<Vectors, double> func;
 
             /// <summary>
             /// Попытаться обновить наилучшее положение

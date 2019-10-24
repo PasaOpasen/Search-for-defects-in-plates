@@ -1828,7 +1828,7 @@ namespace МатКлассы
         public static Vectors[] VectorsFromFile(string filename)
         {
             StreamReader fs = new StreamReader(filename);
-            List<Vectors> l = new List<Vectors>();
+            List<Vectors> l = new List<Vectors>(10);
             string s = fs.ReadLine();
             while (s != null)
             {
@@ -1914,12 +1914,12 @@ namespace МатКлассы
         /// </summary>
         /// <param name="m"></param>
         /// <returns></returns>
-        public static Vectors CreateFast(double[] m)
-        {
-            Vectors r = new Vectors();
-            r.vector = m;
-            return r;
-        }
+        public static Vectors CreateFast(double[] m)=> new Vectors
+            {
+                vector = m
+            };
+
+        
 
         /// <summary>
         /// Прочитать вектор из файла

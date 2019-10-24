@@ -39,7 +39,7 @@ namespace Defect2019
         public static void ReadModelData()
         {
             StreamReader fs = new StreamReader("poles.dat");
-            List<Tuple<double, double[]>> list = new List<Tuple<double, double[]>>();
+            List<Tuple<double, double[]>> list = new List<Tuple<double, double[]>>(100);
 
             string s = fs.ReadLine();
             s = fs.ReadLine();

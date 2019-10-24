@@ -9,9 +9,9 @@ namespace МатКлассы
     /// </summary>
     /// <typeparam name="TVal">Класс аргумента</typeparam>
     /// <typeparam name="TResult">Класс результата</typeparam>
-    public class Memoize<TVal, TResult>:IDisposable //where TVal : class, struct//, ICloneable
+    public sealed class Memoize<TVal, TResult>:IDisposable //where TVal : class, struct//, ICloneable
     {
-        private Func<TVal, TResult> M;
+        private readonly Func<TVal, TResult> M;
         /// <summary>
         /// Текущий словарь
         /// </summary>

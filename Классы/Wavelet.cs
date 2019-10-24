@@ -42,11 +42,11 @@ namespace МатКлассы
         /// Материнский вейвлет/анализирующий вейвлет
         /// </summary>
         //tex:$\psi : R \rightarrow C$
-        private Func<double, Complex> Mother;
+        private readonly Func<double, Complex> Mother;
         /// <summary>
         /// Фурье-образ материнского вейвлета
         /// </summary>
-        private Func<Complex, Complex> FMother;
+        private readonly Func<Complex, Complex> FMother;
         /// <summary>
         /// Тип исходного вейвлета
         /// </summary>
