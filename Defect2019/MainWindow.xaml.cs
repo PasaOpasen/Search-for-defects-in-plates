@@ -26,7 +26,7 @@ namespace Defect2019
     /// </summary>
     public partial class MainWindow : Window
     {
-        private System.Media.SoundPlayer SoundPlayer = new System.Media.SoundPlayer(Expendator.GetResource("gamestartup.wav", "Defect2019"));
+        private System.Media.SoundPlayer SoundPlayer = new System.Media.SoundPlayer(Expendator.GetResource("rising-of-the-phoenix.wav", "Defect2019"));
         public MainWindow()
         {
             InitializeComponent();

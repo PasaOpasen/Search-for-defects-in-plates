@@ -13,5 +13,6 @@ namespace Работа2019
         public static void OK() => OtherMethods.PlaySound("roger");
         public static void SetPositions() => OtherMethods.PlaySound("ct_point");
         public static void TukTuk() => OtherMethods.PlaySound("achievement_earned");
+        public static void CS() => OtherMethods.PlaySound("gamestartup");
     }
 }

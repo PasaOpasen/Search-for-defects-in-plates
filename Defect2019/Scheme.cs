@@ -33,6 +33,7 @@ namespace Работа2019
         private float rad;
         private EllipseParam[] ellipses;
         private string[] ellipseArray;
+        private System.Media.SoundPlayer SoundPlayer = new System.Media.SoundPlayer(Expendator.GetResource("gamestartup.wav", "Defect2019"));
 
         public Scheme(string title = "Схема эксперимента")
         {
@@ -48,8 +49,14 @@ namespace Работа2019
             numericUpDown1.DecimalPlaces = 15;
 
 
-            // SoundMethods.SetPositions();
+           // SoundMethods.CS();
             groupBox6.Hide();
+
+            SoundPlayer.Play();
+            this.FormClosing += (o, e) =>
+            {
+                SoundPlayer.Stop();
+            };
         }
 
         public Scheme(Source[] mass, string title = "Схема эксперимента") : this(title)

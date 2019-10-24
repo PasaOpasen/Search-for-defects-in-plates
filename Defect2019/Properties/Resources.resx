@@ -211,4 +211,7 @@
   <data name="_3Duxt_without_pdf_" type="System.Resources.ResXFileRef, System.Windows.Forms">
     <value>..\Resources\3Duxt(without pdf).R;System.Byte[], mscorlib, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
   </data>
+  <data name="rising_of_the_phoenix" type="System.Resources.ResXFileRef, System.Windows.Forms">
+    <value>..\Resources\rising-of-the-phoenix.wav;System.IO.MemoryStream, mscorlib, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
+  </data>
 </root>
