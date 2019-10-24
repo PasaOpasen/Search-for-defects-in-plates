@@ -41,6 +41,7 @@ namespace Defect2019
 
             SetTimers();
             SetToolTip();
+            SetTotalLabel();
             LoadFiles();
             CreateSize();
         }
@@ -787,6 +788,17 @@ namespace Defect2019
         {
             GetFields();
             numericUpDown3.Value = numericUpDown1.Value*(decimal)Math.Abs((ymax-ymin)/(xmax-xmin));
+            SetTotalLabel();
+        }
+
+        private void numericUpDown3_ValueChanged(object sender, EventArgs e)
+        {
+            SetTotalLabel();
+        }
+
+        private void SetTotalLabel()
+        {
+            label10.Text = $"total:{Environment.NewLine}{(int)(numericUpDown1.Value * numericUpDown3.Value)}";
         }
 
         private void высчитатьИИспользоватьНовыеЗначенияToolStripMenuItem_Click(object sender, EventArgs e)
