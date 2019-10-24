@@ -214,6 +214,7 @@ namespace МатКлассы
         public static Point operator *(double s, Point p) => new Point(s * p.x, s * p.y);
 
         public static Point operator +(Point a, Point b) => new Point(a.x + b.x, a.y + b.y);
+        public static Point operator -(Point a, Point b) => new Point(a.x - b.x, a.y - b.y);
 
         public static bool operator <(Point a, Point b)
         {
@@ -502,6 +503,11 @@ namespace МатКлассы
         {
             x = t.x;
             y = t.y;
+        }       
+        public void FastAdd(Point p)
+        {
+            x += p.x;
+            y += p.y;
         }
     }
 }

@@ -117,6 +117,8 @@ namespace PS5000A
             this.textBox6 = new System.Windows.Forms.TextBox();
             this.textBox3 = new System.Windows.Forms.TextBox();
             this.tabGetData = new System.Windows.Forms.TabPage();
+            this.groupBox6 = new System.Windows.Forms.GroupBox();
+            this.textBox23 = new System.Windows.Forms.TextBox();
             this.groupBox5 = new System.Windows.Forms.GroupBox();
             this.textBox12 = new System.Windows.Forms.TextBox();
             this.groupBox3 = new System.Windows.Forms.GroupBox();
@@ -134,8 +136,7 @@ namespace PS5000A
             this.toolStripStatusLabel2 = new System.Windows.Forms.ToolStripStatusLabel();
             this.timer1 = new System.Windows.Forms.Timer(this.components);
             this.folderBrowserDialog1 = new System.Windows.Forms.FolderBrowserDialog();
-            this.groupBox6 = new System.Windows.Forms.GroupBox();
-            this.textBox23 = new System.Windows.Forms.TextBox();
+            this.checkBox1 = new System.Windows.Forms.CheckBox();
             this.tabControl.SuspendLayout();
             this.tabUnit.SuspendLayout();
             this.tabAbout.SuspendLayout();
@@ -143,11 +144,11 @@ namespace PS5000A
             this.tabChannels.SuspendLayout();
             this.groupBox1.SuspendLayout();
             this.tabGetData.SuspendLayout();
+            this.groupBox6.SuspendLayout();
             this.groupBox5.SuspendLayout();
             this.groupBox3.SuspendLayout();
             this.groupBox2.SuspendLayout();
             this.statusStrip1.SuspendLayout();
-            this.groupBox6.SuspendLayout();
             this.SuspendLayout();
             // 
             // buttonOpen
@@ -993,6 +994,7 @@ namespace PS5000A
             // 
             // tabGetData
             // 
+            this.tabGetData.Controls.Add(this.checkBox1);
             this.tabGetData.Controls.Add(this.groupBox6);
             this.tabGetData.Controls.Add(this.groupBox5);
             this.tabGetData.Controls.Add(this.groupBox3);
@@ -1008,6 +1010,26 @@ namespace PS5000A
             this.tabGetData.TabIndex = 3;
             this.tabGetData.Text = "Получение информации";
             this.tabGetData.UseVisualStyleBackColor = true;
+            // 
+            // groupBox6
+            // 
+            this.groupBox6.Controls.Add(this.textBox23);
+            this.groupBox6.Location = new System.Drawing.Point(29, 253);
+            this.groupBox6.Name = "groupBox6";
+            this.groupBox6.Size = new System.Drawing.Size(659, 65);
+            this.groupBox6.TabIndex = 10;
+            this.groupBox6.TabStop = false;
+            this.groupBox6.Text = "Описание замера";
+            // 
+            // textBox23
+            // 
+            this.textBox23.Dock = System.Windows.Forms.DockStyle.Fill;
+            this.textBox23.Font = new System.Drawing.Font("Microsoft Sans Serif", 11.25F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(204)));
+            this.textBox23.Location = new System.Drawing.Point(3, 22);
+            this.textBox23.Multiline = true;
+            this.textBox23.Name = "textBox23";
+            this.textBox23.Size = new System.Drawing.Size(653, 40);
+            this.textBox23.TabIndex = 2;
             // 
             // groupBox5
             // 
@@ -1116,7 +1138,7 @@ namespace PS5000A
             this.button4.BackColor = System.Drawing.Color.FromArgb(((int)(((byte)(192)))), ((int)(((byte)(255)))), ((int)(((byte)(255)))));
             this.button4.FlatStyle = System.Windows.Forms.FlatStyle.Popup;
             this.button4.Font = new System.Drawing.Font("Microsoft Sans Serif", 14.25F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(204)));
-            this.button4.Location = new System.Drawing.Point(541, 65);
+            this.button4.Location = new System.Drawing.Point(541, 30);
             this.button4.Name = "button4";
             this.button4.Size = new System.Drawing.Size(147, 91);
             this.button4.TabIndex = 5;
@@ -1167,25 +1189,17 @@ namespace PS5000A
             this.toolStripStatusLabel2.Size = new System.Drawing.Size(118, 17);
             this.toolStripStatusLabel2.Text = "toolStripStatusLabel2";
             // 
-            // groupBox6
+            // checkBox1
             // 
-            this.groupBox6.Controls.Add(this.textBox23);
-            this.groupBox6.Location = new System.Drawing.Point(29, 253);
-            this.groupBox6.Name = "groupBox6";
-            this.groupBox6.Size = new System.Drawing.Size(659, 65);
-            this.groupBox6.TabIndex = 10;
-            this.groupBox6.TabStop = false;
-            this.groupBox6.Text = "Описание замера";
-            // 
-            // textBox23
-            // 
-            this.textBox23.Dock = System.Windows.Forms.DockStyle.Fill;
-            this.textBox23.Font = new System.Drawing.Font("Microsoft Sans Serif", 11.25F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(204)));
-            this.textBox23.Location = new System.Drawing.Point(3, 22);
-            this.textBox23.Multiline = true;
-            this.textBox23.Name = "textBox23";
-            this.textBox23.Size = new System.Drawing.Size(653, 40);
-            this.textBox23.TabIndex = 2;
+            this.checkBox1.AutoSize = true;
+            this.checkBox1.Checked = true;
+            this.checkBox1.CheckState = System.Windows.Forms.CheckState.Checked;
+            this.checkBox1.Location = new System.Drawing.Point(521, 130);
+            this.checkBox1.Name = "checkBox1";
+            this.checkBox1.Size = new System.Drawing.Size(178, 24);
+            this.checkBox1.TabIndex = 11;
+            this.checkBox1.Text = "делать нормировку";
+            this.checkBox1.UseVisualStyleBackColor = true;
             // 
             // PS5000ABlockForm
             // 
@@ -1211,6 +1225,8 @@ namespace PS5000A
             this.groupBox1.PerformLayout();
             this.tabGetData.ResumeLayout(false);
             this.tabGetData.PerformLayout();
+            this.groupBox6.ResumeLayout(false);
+            this.groupBox6.PerformLayout();
             this.groupBox5.ResumeLayout(false);
             this.groupBox5.PerformLayout();
             this.groupBox3.ResumeLayout(false);
@@ -1218,8 +1234,6 @@ namespace PS5000A
             this.groupBox2.PerformLayout();
             this.statusStrip1.ResumeLayout(false);
             this.statusStrip1.PerformLayout();
-            this.groupBox6.ResumeLayout(false);
-            this.groupBox6.PerformLayout();
             this.ResumeLayout(false);
             this.PerformLayout();
 
@@ -1322,6 +1336,7 @@ namespace PS5000A
         private System.Windows.Forms.GroupBox groupBox5;
         private System.Windows.Forms.GroupBox groupBox6;
         private System.Windows.Forms.TextBox textBox23;
+        private System.Windows.Forms.CheckBox checkBox1;
     }
 }
 

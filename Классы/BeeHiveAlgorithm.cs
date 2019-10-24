@@ -372,6 +372,311 @@ namespace МатКлассы
         }
         #endregion
 
+        #region Метод роя частиц 2D
+
+        /// <summary>
+        /// Получить минимум функции, посчитанный роевым методом
+        /// </summary>
+        /// <param name="f">Целевая функция</param>
+        /// <param name="n">Размерность области определения целевой функции</param>
+        /// <param name="min">Минимальное возможное значение каждого аргумента</param>
+        /// <param name="max">Максимальное возможное значение каждого аргумента</param>
+        /// <param name="eps">Допустимая погрешность</param>
+        /// <param name="countpoints">Количество пчёл в рое</param>
+        /// <param name="maxcountstep">Максимальное число неудачных итераций метода</param>
+        /// <param name="center">Центр распредления точек</param>
+        /// <param name="maxiter">Максимальное число итераций метода</param>
+        /// <returns></returns>
+        public static Tuple<Point, double> GetGlobalMin(Func<Point, double> f, Point center, double min = -1e12, double max = 1e12, double eps = 1e-10, int countpoints = 1000, int maxcountstep = 100, int maxiter = 150)
+        {
+            Point minimum = new Point(min);
+            Point maximum = new Point(max);
+
+            Hive2D hive;
+            if (center == Point.Zero) hive = new Hive2D(minimum, maximum, f, countpoints);
+            else hive = new Hive2D(minimum + center, maximum + center, f, countpoints, center);
+
+            return Gets2D(hive, eps, maxcountstep, maxiter);
+
+        }
+        /// <summary>
+        /// Получить минимум функции, посчитанный роевым методом
+        /// </summary>
+        /// <param name="f">Целевая функция</param>
+        /// <param name="minimum">Вектор минимальных значений</param>
+        /// <param name="maximum">Вектор максимальных значений</param>
+        /// <param name="eps">Допустимая погрешность</param>
+        /// <param name="countpoints">Количество пчёл в рое</param>
+        /// <param name="maxcountstep">Максимальное число неудачных итераций метода</param>
+        /// <param name="maxiter">Максимальное число итераций метода</param>
+        /// <returns></returns>
+        public static Tuple<Point, double> GetGlobalMin(Func<Point, double> f, Point minimum, Point maximum, double eps = 1e-10, int countpoints = 1000, int maxcountstep = 100, int maxiter = 150)
+        {
+            return Gets2D(new Hive2D(minimum, maximum, f, countpoints), eps, maxcountstep, maxiter);
+        }
+
+        /// <summary>
+        /// Найти минимум функции уже по готовому рою
+        /// </summary>
+        /// <param name="hive"></param>
+        /// <param name="eps"></param>
+        /// <param name="maxcountstep"></param>
+        /// <param name="maxiter"></param>
+        /// <returns></returns>
+        private static Tuple<Point, double> Gets2D(Hive2D hive, double eps = 1e-10, int maxcountstep = 100, int maxiter = 150)
+        {
+            if (maxiter <= 0) maxiter = Int32.MaxValue;
+            double e = hive.val;
+            int c = maxcountstep, k = 0;
+
+            Debug.WriteLine($"Погрешность после инициализации пчёл:  {e}");
+            while (e > eps && maxcountstep > 0 && hive.Radius > eps)
+            {
+                hive.MakeStep(w, fp, fg);
+                k++;
+                if (hive.val < e)
+                {
+                    Debug.WriteLine($"Hive method (iter {k}):  {e} ---> {hive.val}");
+                    e = hive.val;
+                    maxcountstep = c;
+                }
+                else
+                    maxcountstep--;
+                //Debug.WriteLine( $"c = {maxcountstep}  val = {hive.val}");
+                if (k == maxiter) break;
+            }
+            return new Tuple<Point, double>(hive.g, hive.val);
+        }
+
+        /// <summary>
+        /// Рой пчёл
+        /// </summary>
+        private sealed class Hive2D
+        {
+            /// <summary>
+            /// Массив пчёл
+            /// </summary>
+            Bee2D[] bees;
+            /// <summary>
+            /// Наилучшее положение в рое
+            /// </summary>
+            public Point g { get; private set; }
+            /// <summary>
+            /// Значение целевой функции в наилучшем положении
+            /// </summary>
+            public double val { get; private set; }
+
+            /// <summary>
+            /// Радиус роя как наибольшее расстояние между наилучшим положением в рое и наилучшими положениями отдельных частиц
+            /// </summary>
+            public double Radius
+            {
+                get
+                {
+                    double d = 0, di;
+                    for (int i = 0; i < bees.Length; i++)
+                    {
+                        di = Point.Eudistance(g, bees[i].p);
+                        if (di > d)
+                            d = di;
+                    }
+                    return d;
+                }
+            }
+            private readonly Func<Point, double> func;
+
+            /// <summary>
+            /// Попытаться обновить наилучшее положение
+            /// </summary>
+            /// <param name="gnew"></param>
+            public void UpdateG(Point gnew)
+            {
+                double v = func(gnew);
+                if (v < val)
+                {
+                    val = v;
+                    g=gnew;
+                }
+            }
+
+            /// <summary>
+            /// Сгенерировать рой частиц
+            /// </summary>
+            /// <param name="min"></param>
+            /// <param name="max"></param>
+            /// <param name="f"></param>
+            /// <param name="count"></param>
+            /// <param name="v"></param>
+            public Hive2D(Point min, Point max, Func<Point, double> f, int count = 1000, params Point[] v)
+            {
+                this.func = new Func<Point, double>(f);
+
+                bees = new Bee2D[count + v.Length];
+                //for (int i = 0; i < count; i++)
+                Parallel.For(0, count, (int i) =>
+                {
+                    bees[i] = new Bee2D(min, max, f);
+                });
+
+                for (int i = count; i < count + v.Length; i++)
+                    bees[i] = new Bee2D(v[i - count], min, max, f);
+
+                g = bees[0].p.dup;
+                val = bees[0].bestval;
+                ReCount();
+            }
+
+            private void ReCount()
+            {
+                for (int i = 0; i < bees.Length; i++)
+                    if (bees[i].bestval < val)
+                    {
+                        val = bees[i].bestval;
+                        g = bees[i].p.dup;
+                    }
+            }
+
+            /// <summary>
+            /// Сделать шаг по дискретному времени
+            /// </summary>
+            /// <param name="w"></param>
+            /// <param name="fp"></param>
+            /// <param name="fg"></param>
+            /// <param name="parallel"></param>
+            public void MakeStep(double w = 0.3, double fp = 2, double fg = 5, bool parallel = true)
+            {
+                void Iter(int i)
+                {
+                    bees[i].RecalcV(w, fp, fg, this.g);
+                    bees[i].Move();
+                    bees[i].ReCount();
+                }
+
+                if (parallel)
+                    Parallel.For(0, bees.Length, (int i) => Iter(i));
+                else
+                    for (int i = 0; i < bees.Length; i++)
+                        Iter(i);
+
+                ReCount();
+            }
+        }
+
+        /// <summary>
+        /// Классы пчелы
+        /// </summary>
+        private sealed class Bee2D
+        {
+            /// <summary>
+            /// Текущее положение частицы
+            /// </summary>
+            Point x;
+            /// <summary>
+            /// Наилучшее положение частицы
+            /// </summary>
+            public Point p { get; private set; }
+            /// <summary>
+            /// Текущая скорость частицы
+            /// </summary>
+            Point v;
+            /// <summary>
+            /// Генератор случайных чисел
+            /// </summary>
+            MathNet.Numerics.Random.CryptoRandomSource random = new MathNet.Numerics.Random.CryptoRandomSource();
+
+
+            /// <summary>
+            /// Значение целевой функции в наилучшем положении
+            /// </summary>
+            public double bestval { get; private set; }
+            /// <summary>
+            /// Целевая функция
+            /// </summary>
+            Func<Point, double> f;
+
+            /// <summary>
+            /// Создать частицу в окне решений
+            /// </summary>
+            /// <param name="min">Минимальные возможные значения положения</param>
+            /// <param name="max">Максимальные возможные значения положения</param>
+            /// <param name="f">Целевая функция</param>
+            public Bee2D(Point min, Point max, Func<Point, double> f)
+            {
+                var r = new MathNet.Numerics.Random.CryptoRandomSource();
+
+                x = new Point(min);
+                x.x += r.NextDouble() * (max.x - min.x);
+                x.y += r.NextDouble() * (max.y - min.y);
+
+                WhenX(min, max, f);
+            }
+
+            /// <summary>
+            /// Задать пчелу по известному начальному положению
+            /// </summary>
+            /// <param name="x"></param>
+            /// <param name="min"></param>
+            /// <param name="max"></param>
+            /// <param name="f"></param>
+            public Bee2D(Point x, Point min, Point max, Func<Point, double> f)
+            {
+                this.x = x;
+                WhenX(min, max, f);
+            }
+            /// <summary>
+            /// Задать наилучшее положение и случайные скорости, когда x уже известно
+            /// </summary>
+            /// <param name="min"></param>
+            /// <param name="max"></param>
+            /// <param name="f"></param>
+            public void WhenX(Point min, Point max, Func<Point, double> f)
+            {
+                var r = new MathNet.Numerics.Random.CryptoRandomSource();
+                p = x;
+                this.f = new Func<Point, double>(f);
+                bestval = f(p);
+
+                Point vmax = (max - min), vmin = -vmax;
+                v = vmin;
+                v.x = r.NextDouble() * (vmax.x - vmin.x);
+                v.y = r.NextDouble() * (vmax.y - vmin.y);
+            }
+
+            /// <summary>
+            /// Переопределить скорость
+            /// </summary>
+            /// <param name="w">Коэффициент инерции</param>
+            /// <param name="fp">Весовой коэффициент для p</param>
+            /// <param name="fg">Весовой коэффициент для g</param>
+            /// <param name="g">Наилучшее положение по рою</param>
+            public void RecalcV(double w, double fp, double fg, Point g)
+            {
+                double fi = fg + fp;
+                double coef = 2 * w / Math.Abs(2 - fi - Math.Sqrt(fi * (fi - 4)));
+
+                v.x = coef * (v.x + fp * random.NextDouble() * (p.x - x.x) + fg * random.NextDouble() * (g.x - x.x));
+                v.y = coef * (v.y + fp * random.NextDouble() * (p.y - x.y) + fg * random.NextDouble() * (g.y - x.y));
+            }
+
+            /// <summary>
+            /// Сделать шаг по скорости
+            /// </summary>
+            public void Move() => x.FastAdd(v);
+
+            /// <summary>
+            /// Переопределить наилучшее положение частицы, если можно
+            /// </summary>
+            public void ReCount()
+            {
+                double t = f(x);
+                if (t < bestval)
+                {
+                    bestval = t;
+                    p =x;
+                }
+            }
+        }
+        #endregion
 
         #region Метод пчелиной колонии
 

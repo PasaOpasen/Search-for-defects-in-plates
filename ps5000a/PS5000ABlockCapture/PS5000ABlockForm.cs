@@ -276,7 +276,7 @@ namespace PS5000A
                         }
                         else
                             max = 1.0;
-
+                        Debug.WriteLine(max);
                         using (StreamWriter res = new StreamWriter(Path.Combine(fdiff[i], ArraysNames[args[j]])))
                         {
                             using (StreamReader f0 = new StreamReader(Path.Combine(fwithout[i], ArraysNames[args[j]])))
@@ -356,7 +356,7 @@ namespace PS5000A
             await MakeTimeAsync();
 
             toolStripStatusLabel1.Text = "Создаётся разность для каждого замера";
-            await MakeDiffAsync(Normalize: true);
+            await MakeDiffAsync(Normalize: checkBox1.Checked);
             new System.Media.SoundPlayer(Properties.Resources.РазницаГотова).Play();
 
             await FurierOrShowFormAsync(i => fdiff[i], i => folderbase[i]);
