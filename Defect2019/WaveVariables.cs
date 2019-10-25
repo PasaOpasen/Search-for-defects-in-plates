@@ -1539,7 +1539,7 @@ public static class OtherMethods
         //  for (int i = 0; i < dir.Length; i++)
         Parallel.For(0, dir.Length, (int i) =>
         {
-            Expendator.CopyFiles(Environment.CurrentDirectory, dir[i], "zlims(real).txt", "zlims.txt", "MetrixSumOrMax.txt", "MakeUxtByEvery.txt", "MakePDFs.txt", "MakeDistanceToDefect.txt", "ClastersCount.txt", "AutoLims.txt", "SurfaceMain.txt", "RMdator.exe", "LastTimeConfig.txt");
+            Expendator.CopyFiles(Environment.CurrentDirectory, dir[i], "zlims(real).txt", "zlims.txt", "MetrixSumOrMax.txt", "MakeUxtByEvery.txt", "MakePDFs.txt", "MakeDistanceToDefect.txt", "ClastersCount.txt", "AutoLims.txt", "SurfaceMain.txt", "LastTimeConfig.txt");
         });
     }
 

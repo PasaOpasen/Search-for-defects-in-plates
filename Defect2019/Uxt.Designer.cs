@@ -48,17 +48,26 @@
             this.сортироватьToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.вставитьГотовыйПримерToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.текущиеИсточникиToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
+            this.текущиеИсточникиполумесяцыToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.groupBox1 = new System.Windows.Forms.GroupBox();
             this.button2 = new System.Windows.Forms.Button();
             this.timer1 = new System.Windows.Forms.Timer(this.components);
             this.groupBox2 = new System.Windows.Forms.GroupBox();
             this.radioButton2 = new System.Windows.Forms.RadioButton();
             this.radioButton1 = new System.Windows.Forms.RadioButton();
-            this.текущиеИсточникиполумесяцыToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
+            this.groupBox4 = new System.Windows.Forms.GroupBox();
+            this.textBox2 = new System.Windows.Forms.TextBox();
+            this.groupBox3 = new System.Windows.Forms.GroupBox();
+            this.textBox1 = new System.Windows.Forms.TextBox();
+            this.contextMenuStrip2 = new System.Windows.Forms.ContextMenuStrip(this.components);
+            this.изменитьToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.menuStrip1.SuspendLayout();
             this.contextMenuStrip1.SuspendLayout();
             this.groupBox1.SuspendLayout();
             this.groupBox2.SuspendLayout();
+            this.groupBox4.SuspendLayout();
+            this.groupBox3.SuspendLayout();
+            this.contextMenuStrip2.SuspendLayout();
             this.SuspendLayout();
             // 
             // menuStrip1
@@ -150,7 +159,7 @@
             this.текущиеИсточникиToolStripMenuItem,
             this.текущиеИсточникиполумесяцыToolStripMenuItem});
             this.contextMenuStrip1.Name = "contextMenuStrip1";
-            this.contextMenuStrip1.Size = new System.Drawing.Size(267, 202);
+            this.contextMenuStrip1.Size = new System.Drawing.Size(267, 180);
             // 
             // добавитьToolStripMenuItem
             // 
@@ -221,6 +230,13 @@
             this.текущиеИсточникиToolStripMenuItem.Text = "Текущие источники (круги)";
             this.текущиеИсточникиToolStripMenuItem.Click += new System.EventHandler(this.текущиеИсточникиToolStripMenuItem_Click);
             // 
+            // текущиеИсточникиполумесяцыToolStripMenuItem
+            // 
+            this.текущиеИсточникиполумесяцыToolStripMenuItem.Name = "текущиеИсточникиполумесяцыToolStripMenuItem";
+            this.текущиеИсточникиполумесяцыToolStripMenuItem.Size = new System.Drawing.Size(266, 22);
+            this.текущиеИсточникиполумесяцыToolStripMenuItem.Text = "Текущие источники (полумесяцы)";
+            this.текущиеИсточникиполумесяцыToolStripMenuItem.Click += new System.EventHandler(this.текущиеИсточникиполумесяцыToolStripMenuItem_Click);
+            // 
             // groupBox1
             // 
             this.groupBox1.Controls.Add(this.checkedListBox1);
@@ -251,7 +267,7 @@
             this.groupBox2.Controls.Add(this.radioButton1);
             this.groupBox2.Controls.Add(this.button2);
             this.groupBox2.Dock = System.Windows.Forms.DockStyle.Bottom;
-            this.groupBox2.Location = new System.Drawing.Point(0, 288);
+            this.groupBox2.Location = new System.Drawing.Point(0, 444);
             this.groupBox2.Name = "groupBox2";
             this.groupBox2.Size = new System.Drawing.Size(703, 67);
             this.groupBox2.TabIndex = 5;
@@ -280,19 +296,73 @@
             this.radioButton1.Text = "Интегральный";
             this.radioButton1.UseVisualStyleBackColor = true;
             // 
-            // текущиеИсточникиполумесяцыToolStripMenuItem
+            // groupBox4
             // 
-            this.текущиеИсточникиполумесяцыToolStripMenuItem.Name = "текущиеИсточникиполумесяцыToolStripMenuItem";
-            this.текущиеИсточникиполумесяцыToolStripMenuItem.Size = new System.Drawing.Size(266, 22);
-            this.текущиеИсточникиполумесяцыToolStripMenuItem.Text = "Текущие источники (полумесяцы)";
-            this.текущиеИсточникиполумесяцыToolStripMenuItem.Click += new System.EventHandler(this.текущиеИсточникиполумесяцыToolStripMenuItem_Click);
+            this.groupBox4.Controls.Add(this.textBox2);
+            this.groupBox4.Location = new System.Drawing.Point(12, 365);
+            this.groupBox4.Name = "groupBox4";
+            this.groupBox4.RightToLeft = System.Windows.Forms.RightToLeft.Yes;
+            this.groupBox4.Size = new System.Drawing.Size(679, 71);
+            this.groupBox4.TabIndex = 9;
+            this.groupBox4.TabStop = false;
+            this.groupBox4.Text = "Описание замера";
+            // 
+            // textBox2
+            // 
+            this.textBox2.Dock = System.Windows.Forms.DockStyle.Fill;
+            this.textBox2.Location = new System.Drawing.Point(3, 22);
+            this.textBox2.Multiline = true;
+            this.textBox2.Name = "textBox2";
+            this.textBox2.ReadOnly = true;
+            this.textBox2.Size = new System.Drawing.Size(673, 46);
+            this.textBox2.TabIndex = 0;
+            this.textBox2.TextAlign = System.Windows.Forms.HorizontalAlignment.Center;
+            // 
+            // groupBox3
+            // 
+            this.groupBox3.ContextMenuStrip = this.contextMenuStrip2;
+            this.groupBox3.Controls.Add(this.textBox1);
+            this.groupBox3.Location = new System.Drawing.Point(12, 288);
+            this.groupBox3.Name = "groupBox3";
+            this.groupBox3.Size = new System.Drawing.Size(678, 71);
+            this.groupBox3.TabIndex = 8;
+            this.groupBox3.TabStop = false;
+            this.groupBox3.Text = "Папка с замером";
+            // 
+            // textBox1
+            // 
+            this.textBox1.ContextMenuStrip = this.contextMenuStrip2;
+            this.textBox1.Dock = System.Windows.Forms.DockStyle.Fill;
+            this.textBox1.ImeMode = System.Windows.Forms.ImeMode.NoControl;
+            this.textBox1.Location = new System.Drawing.Point(3, 22);
+            this.textBox1.Multiline = true;
+            this.textBox1.Name = "textBox1";
+            this.textBox1.ReadOnly = true;
+            this.textBox1.Size = new System.Drawing.Size(672, 46);
+            this.textBox1.TabIndex = 0;
+            this.textBox1.TextAlign = System.Windows.Forms.HorizontalAlignment.Center;
+            // 
+            // contextMenuStrip2
+            // 
+            this.contextMenuStrip2.Items.AddRange(new System.Windows.Forms.ToolStripItem[] {
+            this.изменитьToolStripMenuItem});
+            this.contextMenuStrip2.Name = "contextMenuStrip2";
+            this.contextMenuStrip2.Size = new System.Drawing.Size(129, 26);
+            // 
+            // изменитьToolStripMenuItem
+            // 
+            this.изменитьToolStripMenuItem.Name = "изменитьToolStripMenuItem";
+            this.изменитьToolStripMenuItem.Size = new System.Drawing.Size(128, 22);
+            this.изменитьToolStripMenuItem.Text = "Изменить";
             // 
             // Uxt
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(9F, 19F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
             this.BackColor = System.Drawing.SystemColors.Info;
-            this.ClientSize = new System.Drawing.Size(703, 355);
+            this.ClientSize = new System.Drawing.Size(703, 511);
+            this.Controls.Add(this.groupBox4);
+            this.Controls.Add(this.groupBox3);
             this.Controls.Add(this.groupBox2);
             this.Controls.Add(this.groupBox1);
             this.Controls.Add(this.menuStrip1);
@@ -308,6 +378,11 @@
             this.groupBox1.ResumeLayout(false);
             this.groupBox2.ResumeLayout(false);
             this.groupBox2.PerformLayout();
+            this.groupBox4.ResumeLayout(false);
+            this.groupBox4.PerformLayout();
+            this.groupBox3.ResumeLayout(false);
+            this.groupBox3.PerformLayout();
+            this.contextMenuStrip2.ResumeLayout(false);
             this.ResumeLayout(false);
             this.PerformLayout();
 
@@ -341,5 +416,11 @@
         private System.Windows.Forms.RadioButton radioButton1;
         private System.Windows.Forms.ToolStripMenuItem сортироватьToolStripMenuItem;
         private System.Windows.Forms.ToolStripMenuItem текущиеИсточникиполумесяцыToolStripMenuItem;
+        private System.Windows.Forms.GroupBox groupBox4;
+        private System.Windows.Forms.TextBox textBox2;
+        private System.Windows.Forms.GroupBox groupBox3;
+        private System.Windows.Forms.TextBox textBox1;
+        private System.Windows.Forms.ContextMenuStrip contextMenuStrip2;
+        private System.Windows.Forms.ToolStripMenuItem изменитьToolStripMenuItem;
     }
 }
