@@ -415,6 +415,7 @@
     <EmbeddedResource Include="Properties\Resources.resx">
       <Generator>PublicResXFileCodeGenerator</Generator>
       <LastGenOutput>Resources.Designer.cs</LastGenOutput>
+      <SubType>Designer</SubType>
     </EmbeddedResource>
     <EmbeddedResource Include="R2Area.resx">
       <DependentUpon>R2Area.cs</DependentUpon>
@@ -440,6 +441,7 @@
     <EmbeddedResource Include="WaveletContinious.resx">
       <DependentUpon>WaveletContinious.cs</DependentUpon>
     </EmbeddedResource>
+    <None Include="bin\Debug\formula.pdf" />
     <None Include="packages.config" />
     <None Include="Properties\Settings.settings">
       <Generator>SettingsSingleFileGenerator</Generator>
@@ -476,6 +478,7 @@
     <None Include="Resources\3Duxt%28better%29.R" />
     <None Include="Resources\3Duxt%28without pdf%29.R" />
     <None Include="Resources\3Duxt.R" />
+    <None Include="Resources\formula.pdf" />
     <None Include="Resources\InstallPackages.R" />
     <None Include="Resources\Magic3Dscript.R" />
     <None Include="Resources\OnePoint.R" />
@@ -501,6 +504,7 @@
     <Resource Include="Resources\8934.ico" />
   </ItemGroup>
   <ItemGroup>
+    <None Include="Resources\poles.dat" />
     <None Include="Resources\ReDraw3Duxt2.R" />
     <None Include="Resources\Truezlims.R" />
     <None Include="Resources\WavesSurface.R" />
@@ -563,6 +567,9 @@
   </ItemGroup>
   <ItemGroup>
     <None Include="Resources\rising-of-the-phoenix.wav" />
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="Resources\RMdator.exe" />
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
   <Target Name="EnsureNuGetPackageBuildImports" BeforeTargets="PrepareForBuild">

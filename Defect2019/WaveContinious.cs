@@ -669,7 +669,7 @@ namespace Defect2019
             new Helper(textBox5, textBox6, numericUpDown2).Show();
         }
 
-        private void button6_Click(object sender, EventArgs e) => new Библиотека_графики.PdfOpen("Варианты метрик", "formula.pdf").ShowDialog();
+        private void button6_Click(object sender, EventArgs e) => new Библиотека_графики.PdfOpen("Варианты метрик", Expendator.GetResource( "formula.pdf")).ShowDialog();
 
         /// <summary>
         /// Скрыть основные элементы

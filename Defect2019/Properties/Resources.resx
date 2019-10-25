@@ -214,4 +214,13 @@
   <data name="rising_of_the_phoenix" type="System.Resources.ResXFileRef, System.Windows.Forms">
     <value>..\Resources\rising-of-the-phoenix.wav;System.IO.MemoryStream, mscorlib, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
   </data>
+  <data name="formula" type="System.Resources.ResXFileRef, System.Windows.Forms">
+    <value>..\Resources\formula.pdf;System.Byte[], mscorlib, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
+  </data>
+  <data name="poles" type="System.Resources.ResXFileRef, System.Windows.Forms">
+    <value>..\Resources\poles.dat;System.Byte[], mscorlib, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
+  </data>
+  <data name="RMdator" type="System.Resources.ResXFileRef, System.Windows.Forms">
+    <value>..\Resources\RMdator.exe;System.Byte[], mscorlib, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
+  </data>
 </root>

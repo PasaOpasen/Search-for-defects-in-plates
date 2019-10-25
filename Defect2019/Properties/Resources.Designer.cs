@@ -147,6 +147,16 @@ namespace Работа2019.Properties {
         }
         
         /// <summary>
+        ///   Поиск локализованного ресурса типа System.Byte[].
+        /// </summary>
+        public static byte[] formula {
+            get {
+                object obj = ResourceManager.GetObject("formula", resourceCulture);
+                return ((byte[])(obj));
+            }
+        }
+        
+        /// <summary>
         ///   Поиск локализованного ресурса типа System.IO.UnmanagedMemoryStream, аналогичного System.IO.MemoryStream.
         /// </summary>
         public static System.IO.UnmanagedMemoryStream gamestartup {
@@ -208,6 +218,16 @@ namespace Работа2019.Properties {
         /// <summary>
         ///   Поиск локализованного ресурса типа System.Byte[].
         /// </summary>
+        public static byte[] poles {
+            get {
+                object obj = ResourceManager.GetObject("poles", resourceCulture);
+                return ((byte[])(obj));
+            }
+        }
+        
+        /// <summary>
+        ///   Поиск локализованного ресурса типа System.Byte[].
+        /// </summary>
         public static byte[] ReDraw3Duxt2 {
             get {
                 object obj = ResourceManager.GetObject("ReDraw3Duxt2", resourceCulture);
@@ -221,6 +241,16 @@ namespace Работа2019.Properties {
         public static System.IO.UnmanagedMemoryStream rising_of_the_phoenix {
             get {
                 return ResourceManager.GetStream("rising_of_the_phoenix", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Поиск локализованного ресурса типа System.Byte[].
+        /// </summary>
+        public static byte[] RMdator {
+            get {
+                object obj = ResourceManager.GetObject("RMdator", resourceCulture);
+                return ((byte[])(obj));
             }
         }
         

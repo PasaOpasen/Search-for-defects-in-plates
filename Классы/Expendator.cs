@@ -909,6 +909,11 @@ namespace МатКлассы
             s = s.Substring(0, s.IndexOf(projectname) + projectname.Length);
             return Path.Combine(s, "Resources", name);
         }
+        /// <summary>
+        /// Возвращает полный адрес ресурса по его краткому имени и проекту
+        /// </summary>
+        /// <param name="name">Имя файла с расширением</param>
+        public static string GetResource(string name) => Path.Combine(Path.GetDirectoryName(Path.GetDirectoryName(Environment.CurrentDirectory)), "Resources", name);
 
         /// <summary>
         /// Переводит массив строк в одну строку
