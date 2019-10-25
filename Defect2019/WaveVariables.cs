@@ -1228,7 +1228,7 @@ public static class OtherMethods
             Complex ur = 0, uz = 0;
             Complex Mn, Sn, Htmp;
             double r = centerdist;
-            double pr, polus,P;
+            double polus,P;
 
             Complex vch(Complex p, Complex m) => (p - m) * eps2[ii];
 
@@ -1241,8 +1241,7 @@ public static class OtherMethods
            // for (int k = 2; k < poles[ii].Deg; k++)
            // {
                 polus = pols[k];
-                pr = polus * r;
-                Htmp = Complex.Expi(pr) * (polus * polus);
+                Htmp = Complex.Expi(polus * r) * (polus * polus);
                 Mn = vch(cc1[k][2], cc2[k][2]);
                 Sn = vch(cc1[k][3], cc2[k][3]);
                 P = BesselArray[numberofs][ii]; //МатКлассы.SpecialFunctions.MyBessel(1.0, polus * s.radius) * Htmp;
@@ -1296,7 +1295,19 @@ public static class OtherMethods
                         if (s.MeType == Type.DCircle)
                             Parallel.For(0, wcount, (int k) => ur.OnlyAdd(new Tuple<double, double, double, Source>(x, y, w[k], s), CALC(s, numberofs, k)));
                         else
-                            Parallel.For(0, wcount, (int k) => ur.OnlyAdd(new Tuple<double, double, double, Source>(x, y, w[k], s), CALCfast(s, k)));
+                         Parallel.For(0, wcount,(int k) => ur.OnlyAdd(new Tuple<double, double, double, Source>(x, y, w[k], s), CALCfast(s, k)));
+                        //{
+                        //    int proc = Environment.ProcessorCount;
+                        //    Action[] acts = new Action[proc];
+                        //    for (int k = 0; k < proc; k++)
+                        //        acts[k] = () =>
+                        //        {
+                        //            for (int kk = k; kk < wcount; kk+=proc)
+                        //                ur.OnlyAdd(new Tuple<double, double, double, Source>(x, y, w[kk], s), CALCfast(s, kk));
+                        //        };
+                        //    Parallel.Invoke(acts);
+                        //}
+
                         numberofs++;
                         Saved++;
                     }
