@@ -489,7 +489,7 @@ namespace Defect2019
 
             if (count != count2)
             {
-                docs = new string[] { docs[0],docs[3], docs[4] };
+                docs = new string[] { docs[0], docs[3], docs[4] };
                 titles = new string[] { titles[0], titles[3], titles[4] };
             }
 
@@ -669,7 +669,7 @@ namespace Defect2019
             new Helper(textBox5, textBox6, numericUpDown2).Show();
         }
 
-        private void button6_Click(object sender, EventArgs e) => new Библиотека_графики.PdfOpen("Варианты метрик", Expendator.GetResource( "formula.pdf")).ShowDialog();
+        private void button6_Click(object sender, EventArgs e) => new Библиотека_графики.PdfOpen("Варианты метрик", Expendator.GetResource("formula.pdf")).ShowDialog();
 
         /// <summary>
         /// Скрыть основные элементы
@@ -787,7 +787,7 @@ namespace Defect2019
         private void numericUpDown1_ValueChanged(object sender, EventArgs e)
         {
             GetFields();
-            numericUpDown3.Value = numericUpDown1.Value*(decimal)Math.Abs((ymax-ymin)/(xmax-xmin));
+            numericUpDown3.Value = Math.Max(numericUpDown3.Minimum, numericUpDown1.Value * (decimal)Math.Abs((ymax - ymin) / (xmax - xmin)));
             SetTotalLabel();
         }
 

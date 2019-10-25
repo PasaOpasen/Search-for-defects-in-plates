@@ -12,6 +12,7 @@ using Point = МатКлассы.Point;
 using static Functions;
 using static РабКонсоль;
 using Работа2019;
+using System.IO;
 
 namespace Defect2019
 {
@@ -27,6 +28,7 @@ namespace Defect2019
             Recostract();
 
             FillExamples();
+            FillZam();
         }
         public List<Source> examples = new List<Source>(), examples2 = new List<Source>(), examples3 = new List<Source>();
         public Point[] centers = new Point[]
@@ -74,8 +76,8 @@ namespace Defect2019
             {
                 for (int i = 0; i < Centers.Length; i++)
                 {
-                    Waves.DCircle c = new Waves.DCircle(Centers[i],16,5,arg:(135*Math.PI/180));
-                  //  Waves.Normal2D[] norm = c.GetNormalsOnDCircle();
+                    Waves.DCircle c = new Waves.DCircle(Centers[i], 16, 5, arg: (135 * Math.PI / 180));
+                    //  Waves.Normal2D[] norm = c.GetNormalsOnDCircle();
                     var fw = GetFmas();
                     expls.Add(new Source(c, fw));
                 }
@@ -99,6 +101,17 @@ namespace Defect2019
         }
         public static List<Source> sources = new List<Source>();
         public static bool addnewsource = false;
+
+        private void FillZam()
+        {
+            string where = Expendator.GetWordFromFile("WhereData.txt");
+            where = Path.GetDirectoryName(where);
+            textBox1.Text = where;
+
+            string file = Path.Combine(where, "Описание.txt");
+            textBox2.Text = (File.Exists(file)) ? Expendator.GetWordFromFile(file) : "";
+
+        }
 
         private void Timer1_Tick(object Sender, EventArgs e)
         {
@@ -166,7 +179,7 @@ namespace Defect2019
             {
                 var ind = checkedListBox1.CheckedIndices;
                 List<Source> list = new List<Source>(ind.Count);
-              
+
                 for (int i = 0; i < ind.Count; i++)
                     list.Add(sources[ind[i]]);
                 if (list.Count == 0)
@@ -271,6 +284,23 @@ namespace Defect2019
         private void текущиеИсточникиполумесяцыToolStripMenuItem_Click(object sender, EventArgs e)
         {
             AddExamples(examples3.ToArray());
+        }
+
+        private void изменитьToolStripMenuItem_Click(object sender, EventArgs e)
+        {
+            if (folderBrowserDialog1.ShowDialog() == DialogResult.OK)
+            {
+                string res = folderBrowserDialog1.SelectedPath;
+                res = Path.Combine(res, "WhereData.txt");
+                if (!File.Exists(res) || !OtherMethods.ExistAllDirectoriesFromFile(res))
+                    MessageBox.Show("В рабочем каталоге отсутствует файл \"WhereData.txt\", либо среди указанных в нём директорий есть несуществующие. Требуется выбрать корректный файл", "Нет пути или папки",
+                        MessageBoxButtons.OK, MessageBoxIcon.Error);
+                else
+                {
+                    File.Copy(res, Path.Combine(Environment.CurrentDirectory, "WhereData.txt"), true);
+                    FillZam();
+                }
+            }
         }
 
         private void текущиеИсточникиToolStripMenuItem_Click(object sender, EventArgs e)
