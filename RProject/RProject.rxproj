@@ -11,6 +11,10 @@
   <PropertyGroup>
     <StartupFile>Script.R</StartupFile>
   </PropertyGroup>
+  <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Release|AnyCPU'">
+    <SettingsFile>
+    </SettingsFile>
+  </PropertyGroup>
   <ProjectExtensions>
     <VisualStudio>
       <UserProperties />
