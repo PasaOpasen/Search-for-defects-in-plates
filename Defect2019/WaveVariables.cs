@@ -354,8 +354,8 @@ public static class Functions
     private static readonly Func<double, Vectors> PolesMas = (double w) =>
        {
            ComplexFunc del = (Complex a) => Deltass(a, w);
-           Vectors v1 = w < 0.1 ? 
-           Roots.OtherMethod(del, РабКонсоль.polesBeg, РабКонсоль.polesEnd, РабКонсоль.steproot / 200, 1e-12, Roots.MethodRoot.Bisec, false): 
+           Vectors v1 = w < 0.1 ?
+           Roots.OtherMethod(del, РабКонсоль.polesBeg, РабКонсоль.polesEnd, РабКонсоль.steproot / 200, 1e-12, Roots.MethodRoot.Bisec, false) :
            Roots.OtherMethod(del, РабКонсоль.polesBeg, РабКонсоль.polesEnd, РабКонсоль.steproot / 40, 1e-7, Roots.MethodRoot.Broyden, false);
            Vectors v2 = DeltassNPosRoots(w, РабКонсоль.polesBeg, РабКонсоль.polesEnd);
            v1.UnionWith(v2);
@@ -1097,7 +1097,7 @@ public static class OtherMethods
             info = null;
             CalcD(x0, X, xcount, ycount, y0, Y, smas);
             info = "Происходит сохранение результата, чтобы в другой раз избежать повторных вычислений";
-            WriteData(smas);
+            WriteData(x0, X, xcount, ycount, y0, Y, smas);
             info = "Результат записан";
         }
         else
@@ -1107,7 +1107,7 @@ public static class OtherMethods
                 info = "Создание недостающих файлов";
                 CalcD(x0, X, xcount, ycount, y0, Y, arr);
                 info = "Происходит сохранение результата, чтобы в другой раз избежать повторных вычислений";
-                WriteData(arr);
+                WriteData(x0, X, xcount, ycount, y0, Y, arr);
                 info = "Результат записан";
             }
 
@@ -1115,7 +1115,7 @@ public static class OtherMethods
             ReadData(x0, X, xcount, ycount, y0, Y, smas.Where(p => !arr.Contains(p)).ToArray());
             info = "Данные считаны";
         }
-        info = null;   
+        info = null;
     }
     /// <summary>
     /// Вычислить значения по сетке от массива источников
@@ -1165,7 +1165,7 @@ public static class OtherMethods
             plus = new double[wcount][];
             pminus = new double[wcount][];
             QQ = new Point[smas.Length][][];
-            BesselArray = new double[smas.Length][];              
+            BesselArray = new double[smas.Length][];
 
             Parallel.For(0, wcount, (int i) =>
             {
@@ -1208,25 +1208,25 @@ public static class OtherMethods
             Complex s1 = 0, s2 = 0, s3 = 0;
             Point QQs;
             const int k = 2;
-           // for (int k = 1; k < poles[ii].Deg; k++)
-           // {
-                for (int i = 0; i < s.Norms.Length; i++)
-                {
-                    QQs = QQ[snumber][ii][i];
+            // for (int k = 1; k < poles[ii].Deg; k++)
+            // {
+            for (int i = 0; i < s.Norms.Length; i++)
+            {
+                QQs = QQ[snumber][ii][i];
 
-                    //третий столбец не считается (чтоб было быстрее)
-                    InKtwiceFast(plus[ii][k], pminus[ii][k], c1[ii][k], c2[ii][k], HankelTuple(poles[ii][k] * ros[i]), xp[i], yp[i], ref res);
-                    s1 += res[0] * QQs.x + res[1] * QQs.y;
-                    s2 += res[/*3*/2] * QQs.x + res[/*4*/3] * QQs.y;
-                    s3 += res[/*6*/4] * QQs.x + res[/*7*/5] * QQs.y;
-                }
-           // }
+                //третий столбец не считается (чтоб было быстрее)
+                InKtwiceFast(plus[ii][k], pminus[ii][k], c1[ii][k], c2[ii][k], HankelTuple(poles[ii][k] * ros[i]), xp[i], yp[i], ref res);
+                s1 += res[0] * QQs.x + res[1] * QQs.y;
+                s2 += res[/*3*/2] * QQs.x + res[/*4*/3] * QQs.y;
+                s3 += res[/*6*/4] * QQs.x + res[/*7*/5] * QQs.y;
+            }
+            // }
             return new Tuple<Complex, Complex>((s1 * cos + s2 * sin) * I2, s3 * I2);
         }
         Tuple<Complex, Complex> CALCfast(Source s, int ii)
         {
             Complex ur = 0, uz = 0;
-            Complex Mn, Sn, Htmp,P;
+            Complex Mn, Sn, Htmp, P;
             double r = centerdist;
             double polus;
 
@@ -1238,17 +1238,17 @@ public static class OtherMethods
 
             const int k = 2;
 
-           // for (int k = 2; k < poles[ii].Deg; k++)
-           // {
-                polus = pols[k];
-                Htmp = Complex.Expi(polus * r) * (polus * polus);
-                Mn = vch(cc1[k][2], cc2[k][2]);
-                Sn = vch(cc1[k][3], cc2[k][3]);
-                P = BesselArray[numberofs][ii]* Htmp;; //МатКлассы.SpecialFunctions.MyBessel(1.0, polus * s.radius) 
+            // for (int k = 2; k < poles[ii].Deg; k++)
+            // {
+            polus = pols[k];
+            Htmp = Complex.Expi(polus * r) * (polus * polus);
+            Mn = vch(cc1[k][2], cc2[k][2]);
+            Sn = vch(cc1[k][3], cc2[k][3]);
+            P = BesselArray[numberofs][ii] * Htmp; ; //МатКлассы.SpecialFunctions.MyBessel(1.0, polus * s.radius) 
 
-                uz += Sn * P;
-                ur += polus * Mn * P;
-           // }
+            uz += Sn * P;
+            ur += polus * Mn * P;
+            // }
 
             return new Tuple<Complex, Complex>(ur * hankelconst, uz * hankelconst);
         }
@@ -1295,7 +1295,7 @@ public static class OtherMethods
                         if (s.MeType == Type.DCircle)
                             Parallel.For(0, wcount, (int k) => ur.OnlyAdd(new Tuple<double, double, double, Source>(x, y, w[k], s), CALC(s, numberofs, k)));
                         else
-                         Parallel.For(0, wcount,(int k) => ur.OnlyAdd(new Tuple<double, double, double, Source>(x, y, w[k], s), CALCfast(s, k)));
+                            Parallel.For(0, wcount, (int k) => ur.OnlyAdd(new Tuple<double, double, double, Source>(x, y, w[k], s), CALCfast(s, k)));
                         //{
                         //    int proc = Environment.ProcessorCount;
                         //    Action[] acts = new Action[proc];
@@ -1408,7 +1408,7 @@ public static class OtherMethods
             {
                 s = f.ReadLine().ToDoubleMas();
                 polArray.OnlyAdd(w[i], new Vectors(s));
-            }              
+            }
         }
     }
 
@@ -1461,7 +1461,7 @@ public static class OtherMethods
     /// Записать сохранённые значения u(x,y,w,s) в файлы
     /// </summary>
     /// <param name="mas"></param>
-    private static void WriteData(Source[] mas)
+    private static void WriteData(double x0, double X, int xcount, int ycount, double y0, double Y, Source[] mas)
     {
         PlaySound("СохранениеДанных");
 
@@ -1484,11 +1484,30 @@ public static class OtherMethods
             writers[i].WriteLine("x y w Reur Imur Reuz Imuz");
         }
 
-        foreach (var p in ur.dic)
+        //foreach (var p in ur.dic)
+        //{
+        //    writers[which(p.Key.Item4)].WriteLine($"{p.Key.Item1.ToRString()} {p.Key.Item2.ToRString()} {p.Key.Item3.ToRString()} {p.Value.Item1.Re.ToRString()} {p.Value.Item1.Im.ToRString()} {p.Value.Item2.Re.ToRString()} {p.Value.Item2.Im.ToRString()}");
+        //    Saved++;
+        //}
+        var xmas = Expendator.Seq(x0, X, xcount);
+        var ymas = Expendator.Seq(y0, Y, ycount);
+        var coef = wmas.Length * ymas.Length;
+        Parallel.ForEach(mas, sur =>
         {
-            writers[which(p.Key.Item4)].WriteLine($"{p.Key.Item1.ToRString()} {p.Key.Item2.ToRString()} {p.Key.Item3.ToRString()} {p.Value.Item1.Re.ToRString()} {p.Value.Item1.Im.ToRString()} {p.Value.Item2.Re.ToRString()} {p.Value.Item2.Im.ToRString()}");
-            Saved++;
-        }
+            Tuple<Complex, Complex> tuple;
+            ref StreamWriter writer = ref writers[which(sur)];
+            foreach (var x in xmas)
+            {
+                foreach (var y in ymas)
+                    foreach (var w in wmas)
+                    {
+                        tuple = uxwMemoized(x, y, w, sur);
+                        writer.WriteLine($"{x.ToRString()} {y.ToRString()} {w.ToRString()} {tuple.Item1.Re.ToRString()} {tuple.Item1.Im.ToRString()} {tuple.Item2.Re.ToRString()} {tuple.Item2.Im.ToRString()}");
+                    }
+                Saved += coef;
+            }
+
+        });
 
         for (int i = 0; i < mas.Length; i++)
             writers[i].Close();
@@ -1548,7 +1567,7 @@ public static class OtherMethods
     {
         bool EqCon()
         {
-            using (StreamReader sr=new StreamReader("PolesConfig.txt"))
+            using (StreamReader sr = new StreamReader("PolesConfig.txt"))
             {
                 if (wcount != sr.ReadLine().Split(' ')[0].ToInt32()) return false;
                 if (wbeg != sr.ReadLine().Split(' ')[0].ToDouble()) return false;
@@ -1563,7 +1582,7 @@ public static class OtherMethods
 
         if (!File.Exists("PolesConfig.txt") || !EqCon())
         {
-            using(StreamWriter f=new StreamWriter("PolesConfig.txt"))
+            using (StreamWriter f = new StreamWriter("PolesConfig.txt"))
             {
                 f.WriteLine(wcount);
                 f.WriteLine(wbeg.ToRString());
