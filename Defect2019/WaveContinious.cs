@@ -237,7 +237,7 @@ namespace Defect2019
 
             StreamWriter ts = new StreamWriter(Path.Combine(path, "textnames.txt"));
             StreamWriter pds = new StreamWriter(Path.Combine(path, "pdfnames.txt"));
-            string gl = $"{Source.ToString(sources)}, (xmin, xmax, count, ymin, ymax) = ({xmin}, {xmax}, {count}, {ymin}, {ymax})";
+            string gl = $"{Source.ToString(sources)}, (xmin, xmax, count, ymin, ymax) = ({xmin}, {xmax}, {count}dot{count2}, {ymin}, {ymax})";
 
             Expendator.WriteStringInFile(Path.Combine(path, "SurfaceMain.txt"), gl);
 
@@ -263,7 +263,7 @@ namespace Defect2019
                         continue;
 
                     toolStripStatusLabel1.Text = $"Построение графика при t = {t.ToString(3)}";
-                    string tit = $"{Source.ToString(sources)}, t = {t.ToString(4)}, (xmin, xmax, count, ymin, ymax) = ({xmin}, {xmax}, {count}, {ymin}, {ymax})";
+                    string tit = $"{Source.ToString(sources)}, t = {t.ToString(4)}, (xmin, xmax, count, ymin, ymax) = ({xmin}, {xmax}, {count}dot{count2}, {ymin}, {ymax})";
 
                     ts.WriteLine(tit + ".txt");
                     pds.WriteLine($"3D ur, uz(title , {tit} ).pdf");
@@ -399,7 +399,7 @@ namespace Defect2019
             toolStripStatusLabel1.Text = $"Запущено построение u-surfaces";
             toolStripStatusLabel2.Text = $"";
             BegShow();
-            string gl = $"{Source.ToString(sourcesArray)}, (xmin, xmax, count, ymin, ymax) = ({xmin}, {xmax}, {count}, {ymin}, {ymax})";
+            string gl = $"{Source.ToString(sourcesArray)}, (xmin, xmax, count, ymin, ymax) = ({xmin}, {xmax}, {count}dot{count2}, {ymin}, {ymax})";
 
             await Task.Run(() =>
             {
@@ -414,7 +414,7 @@ namespace Defect2019
                     double t = tmin + i * th;
                     if (t == 0)
                         continue;
-                    string tit = $"{Source.ToString(sourcesArray)}, t = {t.ToString(4)}, (xmin, xmax, count, ymin, ymax) = ({xmin}, {xmax}, {count}, {ymin}, {ymax})";
+                    string tit =  $"{Source.ToString(sourcesArray)}, t = {t.ToString(4)}, (xmin, xmax, count, ymin, ymax) = ({xmin}, {xmax}, {count}dot{count2}, {ymin}, {ymax})";
                     ts.WriteLine(tit + ".txt");
                     pds.WriteLine($"3D ur, uz(title , {tit} ).pdf");
                     filenames[i] = "3D " + tit + " .png";
