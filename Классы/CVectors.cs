@@ -9,7 +9,7 @@ namespace МатКлассы
     /// </summary>
     public class CVectors : IComparer,Idup<CVectors>
     {
-       public CVectors dup => new CVectors(this);
+        public CVectors dup => new CVectors(this);
 
         private Complex[] mas;
         /// <summary>
