@@ -1226,9 +1226,9 @@ public static class OtherMethods
         Tuple<Complex, Complex> CALCfast(Source s, int ii)
         {
             Complex ur = 0, uz = 0;
-            Complex Mn, Sn, Htmp;
+            Complex Mn, Sn, Htmp,P;
             double r = centerdist;
-            double polus,P;
+            double polus;
 
             Complex vch(Complex p, Complex m) => (p - m) * eps2[ii];
 
@@ -1244,7 +1244,7 @@ public static class OtherMethods
                 Htmp = Complex.Expi(polus * r) * (polus * polus);
                 Mn = vch(cc1[k][2], cc2[k][2]);
                 Sn = vch(cc1[k][3], cc2[k][3]);
-                P = BesselArray[numberofs][ii]; //МатКлассы.SpecialFunctions.MyBessel(1.0, polus * s.radius) * Htmp;
+                P = BesselArray[numberofs][ii]* Htmp;; //МатКлассы.SpecialFunctions.MyBessel(1.0, polus * s.radius) 
 
                 uz += Sn * P;
                 ur += polus * Mn * P;
