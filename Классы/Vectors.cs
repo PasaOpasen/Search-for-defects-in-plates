@@ -476,10 +476,14 @@ namespace МатКлассы
         /// <returns></returns>
         public override string ToString()
         {
-            string s = "( ";
-            for (int i = 0; i < this.Deg; i++) s += String.Format("\t{0} ", this[i].ToRString());
-            s += "\t)";
-            return s;
+            //string s = "( ";
+            //for (int i = 0; i < this.Deg; i++) s += String.Format("\t{0} ", this[i].ToRString());
+            //s += "\t)";
+            //return s;
+            System.Text.StringBuilder s = new System.Text.StringBuilder("( ");
+            for (int i = 0; i < this.Deg; i++) s.Append($"\t{vector[i].ToRString()} ");
+            s.Append("\t)");
+            return s.ToString();
         }
 
         /// <summary>

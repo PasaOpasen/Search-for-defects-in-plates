@@ -266,8 +266,8 @@ namespace МатКлассы
 
             for (int i = 0; i < mas.Length; i++)
             {
-                c1 += mas[i].Item1 * vec[i];
-                c2 += mas[i].Item2 * vec[i];
+                c1 += mas[i].Item1 * vec.mas[i];
+                c2 += mas[i].Item2 * vec.mas[i];
             }
             return new Tuple<Complex, Complex>(c1,c2);
         }
