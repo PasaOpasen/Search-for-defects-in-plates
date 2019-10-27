@@ -686,7 +686,7 @@ namespace МатКлассы
         /// <param name="center">Центр распредления точек</param>
         /// <param name="maxiter">Максимальное число итераций метода</param>
         /// <returns></returns>
-        public static Tuple<double, double> GetGlobalMin(Func<double, double> f, double center = 0, double min = -1e12, double max = 1e12, double eps = 1e-10, int countpoints = 1000, int maxcountstep = 100, int maxiter = 150)
+        public static (double ur , double uz) GetGlobalMin(Func<double, double> f, double center = 0, double min = -1e12, double max = 1e12, double eps = 1e-10, int countpoints = 1000, int maxcountstep = 100, int maxiter = 150)
         {
             double minimum = min;
             double maximum = max;
@@ -709,7 +709,7 @@ namespace МатКлассы
         /// <param name="maxcountstep">Максимальное число неудачных итераций метода</param>
         /// <param name="maxiter">Максимальное число итераций метода</param>
         /// <returns></returns>
-        public static Tuple<double, double> GetGlobalMin(Func<double, double> f, double minimum, double maximum, double eps = 1e-10, int countpoints = 1000, int maxcountstep = 100, int maxiter = 150)
+        public static (double ur , double uz) GetGlobalMin(Func<double, double> f, double minimum, double maximum, double eps = 1e-10, int countpoints = 1000, int maxcountstep = 100, int maxiter = 150)
         {
             return Gets1D(new Hive1D(minimum, maximum, f, countpoints), eps, maxcountstep, maxiter);
         }
@@ -722,7 +722,7 @@ namespace МатКлассы
         /// <param name="maxcountstep"></param>
         /// <param name="maxiter"></param>
         /// <returns></returns>
-        private static Tuple<double, double> Gets1D(Hive1D hive, double eps = 1e-10, int maxcountstep = 100, int maxiter = 150)
+        private static (double ur , double uz) Gets1D(Hive1D hive, double eps = 1e-10, int maxcountstep = 100, int maxiter = 150)
         {
             if (maxiter <= 0) maxiter = Int32.MaxValue;
             double e = hive.val;
@@ -744,7 +744,7 @@ namespace МатКлассы
                 //Debug.WriteLine( $"c = {maxcountstep}  val = {hive.val}");
                 if (k == maxiter) break;
             }
-            return new Tuple<double, double>(hive.g, hive.val);
+            return (hive.g, hive.val);
         }
 
         /// <summary>

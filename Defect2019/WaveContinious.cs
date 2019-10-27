@@ -839,7 +839,7 @@ namespace Defect2019
             Expendator.WriteStringInFile("MetrixSumOrMax.txt", s);
         }
 
-        Func<double, double, double, Source[], Tuple<double, double>> Uxt = Functions.Uxt3;
+        Func<double, double, double, Source[], (double ur , double uz)> Uxt = Functions.Uxt3;
 
         private void WriteXY(string filename, string path, double[] xmas, double[] ymas)
         {

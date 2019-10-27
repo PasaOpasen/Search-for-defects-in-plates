@@ -942,7 +942,7 @@ namespace PS5000A
             return tcs.Task;
         }
 
-        private Tuple<string[], string[]> GetSTandNAMES(string from)
+        private (string[], string[]) GetSTandNAMES(string from)
         {
             int counttt = CountOfEdges;
             string[] st = new string[counttt];
@@ -956,14 +956,12 @@ namespace PS5000A
                         names[index] = Path.Combine(from, ArraysNames[j]);
                         index++;
                     }
-            return new Tuple<string[], string[]>(st, names);
+            return (st, names);
         }
 
-        private Tuple<string[], string[]> GetSTandNAMESforGrafic(string from, int number)
+        private (string[], string[]) GetSTandNAMESforGrafic(string from, int number)
         {
-            var stnames = GetSTandNAMES(from);
-            string[] st = stnames.Item1;
-            string[] names = stnames.Item2;
+            (string[] st,string[] names)= GetSTandNAMES(from);
 
             string[] sst = new string[sourcesCount - 1], nnames = new string[sourcesCount - 1];
             for (int i = 0; i < (sourcesCount - 1); i++)
@@ -972,7 +970,7 @@ namespace PS5000A
                 nnames[i] = names[number * (sourcesCount - 1) + i];
             }
 
-            return new Tuple<string[], string[]>(sst, nnames);
+            return (sst, nnames);
         }
     }
 }

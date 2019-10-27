@@ -237,10 +237,10 @@ namespace МатКлассы
         /// <param name="eps">Погрешность поиска</param>
         /// <param name="ogr">Через сколько максимально итераций нужно закончить цикл, если последние ogr итераций подряд точка максимума не изменялась</param>
         /// <returns></returns>
-        public static Tuple<double, double> GetMaxOnRectangle(Func<double, double, double> f, double x0, double X, double y0, double Y, int nodescount = 10, double eps = 1e-7, int ogr = 3, bool useGradient = false, bool parallel = true)
+        public static (double ur , double uz) GetMaxOnRectangle(Func<double, double, double> f, double x0, double X, double y0, double Y, int nodescount = 10, double eps = 1e-7, int ogr = 3, bool useGradient = false, bool parallel = true)
         {
             double max = f(x0, y0);//max.Show();
-            Tuple<double, double> res = new Tuple<double, double>(x0, y0);
+            (double ur , double uz) res = (x0, y0);
             double x = (X - x0).Abs(), y = (Y - y0).Abs();
             int nodescI, nodescJ;
             if (x > y)
@@ -271,18 +271,18 @@ namespace МатКлассы
                             {
                                 k = 0;
                                 max = mas[i, j];//max.Show();
-                                res = new Tuple<double, double>(x0 + xstep * i, y0 + ystep * j);
+                                res = (x0 + xstep * i, y0 + ystep * j);
                             }
                         }
                 else
                 {
                     //параллельная версия
                     double[] maxmas = new double[nodescI];
-                    Tuple<double, double>[] resmas = new Tuple<double, double>[nodescI];
+                    (double ur , double uz)[] resmas = new (double ur , double uz)[nodescI];
                     for (int i = 0; i < nodescI; i++)
                     {
                         maxmas[i] = max;
-                        resmas[i] = new Tuple<double, double>(res.Item1, res.Item2);
+                        resmas[i] = (res.Item1, res.Item2);
                     }
 
                     Parallel.For(0, nodescI, (int i) =>
@@ -294,14 +294,14 @@ namespace МатКлассы
                             {
                                 k = 0;
                                 maxmas[i] = mas[i, j];//max.Show();
-                                resmas[i] = new Tuple<double, double>(x0 + xstep * i, y0 + ystep * j);
+                                resmas[i] = (x0 + xstep * i, y0 + ystep * j);
                             }
                         }
                     });
 
                     max = maxmas.Max();
                     int tmp = Array.IndexOf(maxmas, max);
-                    res = new Tuple<double, double>(resmas[tmp].Item1, resmas[tmp].Item2);
+                    res = (resmas[tmp].Item1, resmas[tmp].Item2);
                 }
 
 
@@ -339,7 +339,7 @@ namespace МатКлассы
                 Complex point = new Complex(res.Item1, res.Item2);
                 ComplexFunc cf = (Complex a) => f(a.Re, a.Im);
                 Gradient(cf, ref point, eps: eps);
-                res = new Tuple<double, double>(point.Re, point.Im);
+                res = (point.Re, point.Im);
             }
 
             return res;

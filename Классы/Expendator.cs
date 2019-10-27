@@ -554,7 +554,7 @@ namespace МатКлассы
         {
             double[] m = Expendator.Union(a, b);
             Array.Sort(m);
-            List<double> l = new List<double>();
+            List<double> l = new List<double>(a.Length);
             l.Add(m[0]);
             int k = 0;
             for (int i = 1; i < m.Length; i++)
@@ -611,7 +611,7 @@ namespace МатКлассы
         /// <param name="mas"></param>
         /// <param name="coef"></param>
         /// <returns></returns>
-        public static Tuple<Complex, Complex> Mult(Tuple<Complex, Complex> mas, Complex coef) => new Tuple<Complex, Complex>(mas.Item1 * coef, mas.Item2 * coef);
+        public static (Complex ur, Complex uz) Mult((Complex ur, Complex uz) mas, Complex coef) => (mas.ur * coef, mas.uz * coef);
 
         /// <summary>
         /// Записать массив векторов в файл

@@ -196,7 +196,7 @@ namespace МатКлассы
             /// <param name="y0">Начало отрезка по у</param>
             /// <param name="Y">Конец отрезка по у</param>
             /// <param name="ycount">Число точек по у</param>
-            public static void FieldToFileParallel(string filename, Func<double, double, Tuple<Complex, Complex>> F, double x0, double X, int xcount, double y0, double Y, int ycount, IProgress<int> progress, System.Threading.CancellationToken token, Func<Point, bool> Filter, string title = "")
+            public static void FieldToFileParallel(string filename, Func<double, double, (Complex ur , Complex uz)> F, double x0, double X, int xcount, double y0, double Y, int ycount, IProgress<int> progress, System.Threading.CancellationToken token, Func<Point, bool> Filter, string title = "")
             {
                 int[] k = new int[xcount * ycount];
                 double[] x = Expendator.Seq(x0, X, xcount);
@@ -206,7 +206,7 @@ namespace МатКлассы
                 //нахождение массивов
                 Parallel.For(0, xcount, (int i) =>
                 {
-                    Tuple<Complex, Complex> tmp;
+                    (Complex ur , Complex uz) tmp;
                     for (int j = 0; j < ycount; j++)
                     {
                         if (token.IsCancellationRequested) return;
@@ -271,7 +271,7 @@ namespace МатКлассы
             /// <param name="Y">Конец отрезка по у</param>
             /// <param name="ycount">Число точек по у</param>
             /// <param name="k">Массив для отслеживания прогресса</param>
-            public static void FieldToFileOLD(string filename, string path, Func<double, double, Tuple<double, double>> F, double x0, double X, int xcount, double y0, double Y, int ycount, IProgress<int> progress, System.Threading.CancellationToken token, Func<Point, bool> Filter, string title = "", bool parallel = true)
+            public static void FieldToFileOLD(string filename, string path, Func<double, double, (double ur , double uz)> F, double x0, double X, int xcount, double y0, double Y, int ycount, IProgress<int> progress, System.Threading.CancellationToken token, Func<Point, bool> Filter, string title = "", bool parallel = true)
             {
                 int[] k = new int[xcount * ycount];
                 double[] x = Expendator.Seq(x0, X, xcount);
@@ -282,7 +282,7 @@ namespace МатКлассы
                 if (parallel)
                     Parallel.For(0, xcount, (int i) =>
                     {
-                        Tuple<double, double> tmp;
+                        (double ur , double uz) tmp;
                         for (int j = 0; j < ycount; j++)
                         {
                             if (token.IsCancellationRequested) return;
@@ -304,7 +304,7 @@ namespace МатКлассы
                 else
                     for (int i = 0; i < xcount; i++)
                     {
-                        Tuple<double, double> tmp;
+                        (double ur , double uz) tmp;
                         for (int j = 0; j < ycount; j++)
                         {
                             if (token.IsCancellationRequested) return;
@@ -399,7 +399,7 @@ namespace МатКлассы
             /// <param name="Filter"></param>
             /// <param name="Y">Конец отрезка по у</param>
             /// <param name="k">Массив для отслеживания прогресса</param>
-            public static void FieldToFile(string filename, string path, Func<double, double, Tuple<double, double>> F, double[] x, double[] y, ref double[,] urt, ref double[,] uzt, System.Threading.CancellationToken token, Func<Point, bool> Filter, string title = "", bool parallel = true)
+            public static void FieldToFile(string filename, string path, Func<double, double, (double ur , double uz)> F, double[] x, double[] y, ref double[,] urt, ref double[,] uzt, System.Threading.CancellationToken token, Func<Point, bool> Filter, string title = "", bool parallel = true)
             {
                 int xcount = x.Length;
                 double[,] ur = urt, uz = uzt;
@@ -407,7 +407,7 @@ namespace МатКлассы
                 if (parallel)
                     Parallel.For(0, xcount, (int i) =>
                     {
-                        Tuple<double, double> tmp;
+                        (double ur , double uz) tmp;
 
                         for (int j = 0; j < xcount; j++)
                         {
@@ -428,7 +428,7 @@ namespace МатКлассы
                 else
                     for (int i = 0; i < xcount; i++)
                     {
-                        Tuple<double, double> tmp;
+                        (double ur , double uz) tmp;
                         for (int j = 0; j < xcount; j++)
                         {
                             if (token.IsCancellationRequested) return;
@@ -490,11 +490,11 @@ namespace МатКлассы
             /// <param name="Y">Конец отрезка по у</param>
             /// <param name="ycount">Число точек по у</param>
             /// <param name="k">Массив для отслеживания прогресса</param>
-            public static void FieldToFile(string path, Func<double, double, Tuple<double, double>> F, double[] x, double[] y, System.Threading.CancellationToken token, Func<Point, bool> Filter, string title = "")
+            public static void FieldToFile(string path, Func<double, double, (double ur , double uz)> F, double[] x, double[] y, System.Threading.CancellationToken token, Func<Point, bool> Filter, string title = "")
             {
                 int xcount = x.Length;
                 int ycount = y.Length;
-                Tuple<double, double> tmp;
+                (double ur , double uz) tmp;
 
                 using (StreamWriter fur = new StreamWriter(Path.Combine(path, title + " (ur).txt")))
                 using (StreamWriter fuz = new StreamWriter(Path.Combine(path, title + " (uz).txt")))               

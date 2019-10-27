@@ -241,7 +241,7 @@ namespace PS5000A
         }
 
 
-        static Memoize<Tuple<int, int>, Complex> Dictionary;
+        static Memoize<(int, int), Complex> Dictionary;
         static readonly Func<int, int, Complex> Fury = (int i, int j) =>
              {
                  double w = (dw * i + w_0);
@@ -264,8 +264,8 @@ namespace PS5000A
         /// </summary>
         public static void CreateNewGen()
         {
-            Dictionary = new Memoize<Tuple<int, int>, Complex>((Tuple<int, int> t) => Fury(t.Item1, t.Item2));
-            FuryMemoized = (int i, int j) => Dictionary.Value(new Tuple<int, int>(i, j));
+            Dictionary = new Memoize<(int, int), Complex>( t => Fury(t.Item1, t.Item2));
+            FuryMemoized = (int i, int j) => Dictionary.Value((i, j));
 
             DictionaryA = new Memoize<int, double>(i => AA(i),count_w);
             AAMemoized = DictionaryA.Value;

@@ -85,7 +85,7 @@ namespace Defect2019
                         {
                             var t = Forms.UG.u(x, y, w, norms);
                             double cor = new Number.Complex(x - fiCirc.center.x, y - fiCirc.center.y).Arg;
-                            return new Tuple<double, double>(t[0] * Math.Cos(cor) + t[1] * Math.Sin(cor), t[2]);
+                            return (t[0] * Math.Cos(cor) + t[1] * Math.Sin(cor), t[2]);
                         },
                         x0, X, xc, y0, Y, yc,
                         progress,

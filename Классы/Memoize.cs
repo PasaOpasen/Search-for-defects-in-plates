@@ -47,6 +47,8 @@ namespace МатКлассы
         /// Конструктор по обычной функции
         /// </summary>
         /// <param name="Memoize">Исходная функция</param>
+        /// <param name="capacity">Начальная ёмкость</param>
+        /// <param name="concurrencyLevel">Уровень параллелизма</param>
         public Memoize(Func<TVal, TResult> Memoize, int capacity=0, int concurrencyLevel=0)
         {
             if (concurrencyLevel == 0)

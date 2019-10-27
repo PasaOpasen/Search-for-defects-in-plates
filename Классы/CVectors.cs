@@ -260,16 +260,16 @@ namespace МатКлассы
                 res.FastAdd(mas[i] * vec[i]);
             return res;
         }
-        public static Tuple<Complex, Complex> operator *(Tuple<Complex,Complex>[] mas, CVectors vec)
+        public static (Complex ur, Complex uz) operator *((Complex ur, Complex uz)[] mas, CVectors vec)
         {
             Complex c1 = 0, c2 = 0;
 
             for (int i = 0; i < mas.Length; i++)
             {
-                c1 += mas[i].Item1 * vec.mas[i];
-                c2 += mas[i].Item2 * vec.mas[i];
+                c1 += mas[i].ur * vec.mas[i];
+                c2 += mas[i].uz * vec.mas[i];
             }
-            return new Tuple<Complex, Complex>(c1,c2);
+            return (c1,c2);
         }
         public static CVectors operator *(Complex[] coefs,CVectors vec)
         {
