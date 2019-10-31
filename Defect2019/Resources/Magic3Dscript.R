@@ -103,8 +103,8 @@ if (pn) {
 
     urt = data.frame(vals = z, x = rep(x, len), y = rep(y, each = len))
 
-    png(filename = paste0(save2, ".png"), 900, 800)
-    options(scipen = 4)
+    #png(filename = paste0(save2, ".png"), 900, 800)
+    #options(scipen = 4)
     ggplot(urt, aes(x, y, fill = vals)) +
     #scale_x_continuous(breaks = seq(min(x), max(x), length.out = 7)) +
     #scale_y_continuous(breaks = seq(max(y), min(y), length.out = 7))+
@@ -116,7 +116,8 @@ if (pn) {
     xlab(xlabs) +
     ylab(ylabs)
 
-    dev.off()
+    # dev.off()
+    ggsave(paste0(save2, ".png"))
 }
 
 if (ht) {

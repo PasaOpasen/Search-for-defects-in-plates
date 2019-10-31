@@ -83,7 +83,6 @@ sink(paste(s, "(uz).txt"))
 cat(uz)
 sink()
 
-if (lenx == leny) {
 
     pdf(file = paste(s, ".pdf"), width = 15, height = 12)
     par(mfrow = c(1, 2), cex = 1.1, cex.sub = 1.2, col.sub = "blue")
@@ -104,8 +103,9 @@ if (lenx == leny) {
     image(x, y, abs(urr), col = heat.colors(20), main = "|ur|")
     image(x, y, abs(uzz), col = topo.colors(20), main = "|uz|")
 
-    dev.off()
+dev.off()
 
+if (lenx == leny) {
     library(ggplot2)
     library(viridis)
     library(gridExtra)
@@ -114,8 +114,8 @@ if (lenx == leny) {
     len = length(x)
     cat("Maps...")
 
-    png(filename = paste(s, "(heatmap).png"), height = 600, width = 750)
-    par(cex = 1.0, cex.sub = 1.3, col.sub = "blue")
+    #png(filename = paste(s, "(heatmap).png"), height = 600, width = 750)
+    #par(cex = 1.0, cex.sub = 1.3, col.sub = "blue")
     urt <- data.frame(ur.abs = c(abs(urr)), x = rep(x, len), y = rep(y, each = len))
 
     ggplot(urt, aes(x, y, fill = ur.abs)) +
@@ -125,10 +125,11 @@ if (lenx == leny) {
     coord_fixed(expand = FALSE) +
     scale_fill_viridis() + theme(axis.title.x = element_text(size = 25), axis.title.y = element_text(size = 25), text = element_text(size = 22)) +
     scale_y_reverse()
-    dev.off()
+    #dev.off()
+    ggsave(paste(s, "(heatmap).png"))
 
-    png(filename = paste(s, "(heatmap_uz).png"), height = 600, width = 750)
-    par(cex = 1.0, cex.sub = 1.3, col.sub = "blue")
+    #png(filename = paste(s, "(heatmap_uz).png"), height = 600, width = 750)
+    #par(cex = 1.0, cex.sub = 1.3, col.sub = "blue")
     urt <- data.frame(uz.abs = c(abs(uzz)), x = rep(x, len), y = rep(y, each = len))
 
     ggplot(urt, aes(x, y, fill = uz.abs)) +
@@ -138,6 +139,7 @@ if (lenx == leny) {
     coord_fixed(expand = FALSE) +
     scale_fill_viridis() + theme(axis.title.x = element_text(size = 25), axis.title.y = element_text(size = 25), text = element_text(size = 22)) +
     scale_y_reverse()
-    dev.off()
+    #dev.off()
+    ggsave(paste(s, "(heatmap_uz).png"))
 
 }

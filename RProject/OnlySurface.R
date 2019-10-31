@@ -86,11 +86,11 @@ height = 500;
 width = height * xy
 
 if (lenx == leny) {
-png(filename = paste(s, "(heatmap).png"), height = height, width = width)
-par(cex = 1.0, cex.sub = 1.3, col.sub = "blue")
+#png(filename = paste(s, "(heatmap).png"), height = height, width = width)
+#par(cex = 1.0, cex.sub = 1.3, col.sub = "blue")
 urt <- data.frame(ur.abs = c(abs(urr)), x = rep(x, lenx), y = rep(y, each = leny))
 
-ggplot(urt, aes(x, y, fill = ur.abs)) +
+    ggplot(urt, aes(x, y, fill = ur.abs)) +
     scale_x_continuous(breaks = seq(min(x), max(x), length.out = 9)) +
     #scale_y_continuous(breaks = seq(max(y), min(y), length.out = 4)) +
     geom_raster(interpolate = TRUE) +
@@ -98,11 +98,12 @@ ggplot(urt, aes(x, y, fill = ur.abs)) +
     scale_fill_viridis(option = "A", name = "|ur|") +
     theme(axis.title.x = element_text(size = 22), axis.title.y = element_text(size = 22), text = element_text(size = 19)) +
     scale_y_reverse()
-dev.off()
+    ggsave(paste(s, "(heatmap).png"))
+#dev.off()
 }
 
 
-ur.Abs = matrix(abs(urr), lenx, leny)
+ur.Abs = abs(urr)
 #print(ur.Abs)
 
 p1 = plot_ly(x = x, y = y, z = ~ur.Abs, type = "surface", contours = list(
@@ -122,8 +123,8 @@ p1 = plot_ly(x = x, y = y, z = ~ur.Abs, type = "surface", contours = list(
       ))
 
 if (lenx == leny) {
-png(filename = paste(s, "(heatmap_uz).png"), height = height, width = width)
-par(cex = 1.0, cex.sub = 1.3, col.sub = "blue")
+#png(filename = paste(s, "(heatmap_uz).png"), height = height, width = width)
+#par(cex = 1.0, cex.sub = 1.3, col.sub = "blue")
 urt <- data.frame(uz.abs = c(abs(uzz)), x = rep(x, lenx), y = rep(y, each = leny))
 
 ggplot(urt, aes(x, y, fill = uz.abs)) +
@@ -134,10 +135,11 @@ ggplot(urt, aes(x, y, fill = uz.abs)) +
     scale_fill_viridis(option = "D", name = "|uz|") +
     theme(axis.title.x = element_text(size = 22), axis.title.y = element_text(size = 22), text = element_text(size = 19)) +
     scale_y_reverse()
-dev.off()
+    #dev.off()
+    ggsave(paste(s, "(heatmap_uz).png"))
 }
 
-uz.Abs = matrix(abs(uzz), lenx, leny)
+uz.Abs = abs(uzz)
 p2 = plot_ly(x = x, y = y, z = ~uz.Abs, type = "surface", contours = list(
     z = list(
       show = TRUE,
