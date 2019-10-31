@@ -262,12 +262,14 @@ namespace МатКлассы
         }
         public static (Complex ur, Complex uz) operator *((Complex ur, Complex uz)[] mas, CVectors vec)
         {
-            Complex c1 = 0, c2 = 0;
+            Complex c1 = 0, c2 = 0,tmp;
 
             for (int i = 0; i < mas.Length; i++)
             {
-                c1 += mas[i].ur * vec.mas[i];
-                c2 += mas[i].uz * vec.mas[i];
+                tmp = vec.mas[i];
+                ref var tt = ref mas[i];
+                c1 += tt.ur * tmp;
+                c2 += tt.uz * tmp;
             }
             return (c1,c2);
         }
