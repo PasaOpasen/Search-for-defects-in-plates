@@ -137,6 +137,8 @@ namespace PS5000A
             this.toolStripStatusLabel2 = new System.Windows.Forms.ToolStripStatusLabel();
             this.timer1 = new System.Windows.Forms.Timer(this.components);
             this.folderBrowserDialog1 = new System.Windows.Forms.FolderBrowserDialog();
+            this.checkBox4 = new System.Windows.Forms.CheckBox();
+            this.checkBox5 = new System.Windows.Forms.CheckBox();
             this.tabControl.SuspendLayout();
             this.tabUnit.SuspendLayout();
             this.tabAbout.SuspendLayout();
@@ -177,7 +179,7 @@ namespace PS5000A
             this.tabControl.Margin = new System.Windows.Forms.Padding(4, 5, 4, 5);
             this.tabControl.Name = "tabControl";
             this.tabControl.SelectedIndex = 0;
-            this.tabControl.Size = new System.Drawing.Size(714, 372);
+            this.tabControl.Size = new System.Drawing.Size(714, 445);
             this.tabControl.TabIndex = 3;
             // 
             // tabUnit
@@ -199,7 +201,7 @@ namespace PS5000A
             this.tabUnit.Margin = new System.Windows.Forms.Padding(4, 5, 4, 5);
             this.tabUnit.Name = "tabUnit";
             this.tabUnit.Padding = new System.Windows.Forms.Padding(4, 5, 4, 5);
-            this.tabUnit.Size = new System.Drawing.Size(706, 339);
+            this.tabUnit.Size = new System.Drawing.Size(706, 412);
             this.tabUnit.TabIndex = 0;
             this.tabUnit.Text = "Модуль";
             this.tabUnit.UseVisualStyleBackColor = true;
@@ -333,7 +335,7 @@ namespace PS5000A
             this.tabAbout.Margin = new System.Windows.Forms.Padding(4, 5, 4, 5);
             this.tabAbout.Name = "tabAbout";
             this.tabAbout.Padding = new System.Windows.Forms.Padding(4, 5, 4, 5);
-            this.tabAbout.Size = new System.Drawing.Size(706, 339);
+            this.tabAbout.Size = new System.Drawing.Size(706, 412);
             this.tabAbout.TabIndex = 2;
             this.tabAbout.Text = "Порты";
             this.tabAbout.UseVisualStyleBackColor = true;
@@ -441,7 +443,7 @@ namespace PS5000A
             this.tabChannels.Margin = new System.Windows.Forms.Padding(4, 5, 4, 5);
             this.tabChannels.Name = "tabChannels";
             this.tabChannels.Padding = new System.Windows.Forms.Padding(4, 5, 4, 5);
-            this.tabChannels.Size = new System.Drawing.Size(706, 339);
+            this.tabChannels.Size = new System.Drawing.Size(706, 412);
             this.tabChannels.TabIndex = 1;
             this.tabChannels.Text = "Источники";
             this.tabChannels.UseVisualStyleBackColor = true;
@@ -499,7 +501,7 @@ namespace PS5000A
             this.groupBox1.Dock = System.Windows.Forms.DockStyle.Fill;
             this.groupBox1.Location = new System.Drawing.Point(4, 5);
             this.groupBox1.Name = "groupBox1";
-            this.groupBox1.Size = new System.Drawing.Size(698, 329);
+            this.groupBox1.Size = new System.Drawing.Size(698, 402);
             this.groupBox1.TabIndex = 24;
             this.groupBox1.TabStop = false;
             this.groupBox1.Text = "Центры источников";
@@ -994,6 +996,8 @@ namespace PS5000A
             // 
             // tabGetData
             // 
+            this.tabGetData.Controls.Add(this.checkBox5);
+            this.tabGetData.Controls.Add(this.checkBox4);
             this.tabGetData.Controls.Add(this.checkBox1);
             this.tabGetData.Controls.Add(this.groupBox6);
             this.tabGetData.Controls.Add(this.groupBox5);
@@ -1006,7 +1010,7 @@ namespace PS5000A
             this.tabGetData.Margin = new System.Windows.Forms.Padding(4, 5, 4, 5);
             this.tabGetData.Name = "tabGetData";
             this.tabGetData.Padding = new System.Windows.Forms.Padding(4, 5, 4, 5);
-            this.tabGetData.Size = new System.Drawing.Size(706, 339);
+            this.tabGetData.Size = new System.Drawing.Size(706, 412);
             this.tabGetData.TabIndex = 3;
             this.tabGetData.Text = "Получение информации";
             this.tabGetData.UseVisualStyleBackColor = true;
@@ -1016,7 +1020,7 @@ namespace PS5000A
             this.checkBox1.AutoSize = true;
             this.checkBox1.Checked = true;
             this.checkBox1.CheckState = System.Windows.Forms.CheckState.Checked;
-            this.checkBox1.Location = new System.Drawing.Point(521, 130);
+            this.checkBox1.Location = new System.Drawing.Point(451, 141);
             this.checkBox1.Name = "checkBox1";
             this.checkBox1.Size = new System.Drawing.Size(178, 24);
             this.checkBox1.TabIndex = 11;
@@ -1026,7 +1030,7 @@ namespace PS5000A
             // groupBox6
             // 
             this.groupBox6.Controls.Add(this.textBox23);
-            this.groupBox6.Location = new System.Drawing.Point(29, 253);
+            this.groupBox6.Location = new System.Drawing.Point(29, 321);
             this.groupBox6.Name = "groupBox6";
             this.groupBox6.Size = new System.Drawing.Size(659, 65);
             this.groupBox6.TabIndex = 10;
@@ -1046,7 +1050,7 @@ namespace PS5000A
             // groupBox5
             // 
             this.groupBox5.Controls.Add(this.textBox12);
-            this.groupBox5.Location = new System.Drawing.Point(29, 186);
+            this.groupBox5.Location = new System.Drawing.Point(29, 254);
             this.groupBox5.Name = "groupBox5";
             this.groupBox5.Size = new System.Drawing.Size(538, 65);
             this.groupBox5.TabIndex = 9;
@@ -1126,7 +1130,7 @@ namespace PS5000A
             // checkBox3
             // 
             this.checkBox3.AutoSize = true;
-            this.checkBox3.Location = new System.Drawing.Point(248, 70);
+            this.checkBox3.Location = new System.Drawing.Point(248, 45);
             this.checkBox3.Name = "checkBox3";
             this.checkBox3.Size = new System.Drawing.Size(163, 24);
             this.checkBox3.TabIndex = 7;
@@ -1138,7 +1142,7 @@ namespace PS5000A
             this.checkBox2.AutoSize = true;
             this.checkBox2.Checked = true;
             this.checkBox2.CheckState = System.Windows.Forms.CheckState.Checked;
-            this.checkBox2.Location = new System.Drawing.Point(248, 100);
+            this.checkBox2.Location = new System.Drawing.Point(248, 75);
             this.checkBox2.Name = "checkBox2";
             this.checkBox2.Size = new System.Drawing.Size(275, 24);
             this.checkBox2.TabIndex = 6;
@@ -1161,7 +1165,7 @@ namespace PS5000A
             // button2
             // 
             this.button2.Font = new System.Drawing.Font("Microsoft Sans Serif", 14.25F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(204)));
-            this.button2.Location = new System.Drawing.Point(573, 193);
+            this.button2.Location = new System.Drawing.Point(573, 261);
             this.button2.Name = "button2";
             this.button2.Size = new System.Drawing.Size(115, 54);
             this.button2.TabIndex = 3;
@@ -1176,7 +1180,7 @@ namespace PS5000A
             this.toolStripStatusLabel1,
             this.toolStripProgressBar1,
             this.toolStripStatusLabel2});
-            this.statusStrip1.Location = new System.Drawing.Point(0, 350);
+            this.statusStrip1.Location = new System.Drawing.Point(0, 423);
             this.statusStrip1.Name = "statusStrip1";
             this.statusStrip1.Size = new System.Drawing.Size(714, 22);
             this.statusStrip1.TabIndex = 4;
@@ -1201,12 +1205,36 @@ namespace PS5000A
             this.toolStripStatusLabel2.Size = new System.Drawing.Size(118, 17);
             this.toolStripStatusLabel2.Text = "toolStripStatusLabel2";
             // 
+            // checkBox4
+            // 
+            this.checkBox4.AutoSize = true;
+            this.checkBox4.Checked = true;
+            this.checkBox4.CheckState = System.Windows.Forms.CheckState.Checked;
+            this.checkBox4.Location = new System.Drawing.Point(415, 171);
+            this.checkBox4.Name = "checkBox4";
+            this.checkBox4.Size = new System.Drawing.Size(250, 24);
+            this.checkBox4.TabIndex = 12;
+            this.checkBox4.Text = "сохранять графики разности";
+            this.checkBox4.UseVisualStyleBackColor = true;
+            // 
+            // checkBox5
+            // 
+            this.checkBox5.AutoSize = true;
+            this.checkBox5.Checked = true;
+            this.checkBox5.CheckState = System.Windows.Forms.CheckState.Checked;
+            this.checkBox5.Location = new System.Drawing.Point(394, 205);
+            this.checkBox5.Name = "checkBox5";
+            this.checkBox5.Size = new System.Drawing.Size(305, 24);
+            this.checkBox5.TabIndex = 13;
+            this.checkBox5.Text = "сохранять графики преобразования";
+            this.checkBox5.UseVisualStyleBackColor = true;
+            // 
             // PS5000ABlockForm
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(9F, 20F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
             this.BackColor = System.Drawing.SystemColors.ActiveCaption;
-            this.ClientSize = new System.Drawing.Size(714, 372);
+            this.ClientSize = new System.Drawing.Size(714, 445);
             this.Controls.Add(this.statusStrip1);
             this.Controls.Add(this.tabControl);
             this.Font = new System.Drawing.Font("Microsoft Sans Serif", 12F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
@@ -1337,6 +1365,8 @@ namespace PS5000A
         private System.Windows.Forms.GroupBox groupBox6;
         private System.Windows.Forms.TextBox textBox23;
         private System.Windows.Forms.CheckBox checkBox1;
+        private System.Windows.Forms.CheckBox checkBox5;
+        private System.Windows.Forms.CheckBox checkBox4;
     }
 }
 

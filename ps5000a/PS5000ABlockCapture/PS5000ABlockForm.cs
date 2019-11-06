@@ -40,6 +40,7 @@ using Библиотека_графики;
 using System.Linq;
 using System.IO.Ports;
 using МатКлассы;
+using System.Collections.Generic;
 
 namespace PS5000A
 {
@@ -113,6 +114,8 @@ namespace PS5000A
         private int all, save = 0;
         private string globalbase;
         private string[] folderbase, fwith, fwithout, fdiff;
+        private readonly string timefile = "time.txt";
+
         /// <summary>
         /// Текущая папка, куда будут сохраняться результаты замера
         /// </summary>
@@ -236,7 +239,7 @@ namespace PS5000A
             await Task.Run(() =>
             Parallel.For(0, sourcesCount, (int k) =>
             {
-                using (StreamWriter res = new StreamWriter(Path.Combine(fdiff[k], "time.txt")))
+                using (StreamWriter res = new StreamWriter(Path.Combine(fdiff[k], timefile)))
                     for (int i = -countBefore; i < countAfter; i++)
                         res.WriteLine(dt * i);
             })
@@ -255,6 +258,8 @@ namespace PS5000A
                 Parallel.For(0, sourcesCount, (int i) =>
                 {
                     var args = ar.Where(n => n != i).ToArray();
+                    var ArNames = new List<string>(args.Length);
+
                     for (int j = 0; j < sourcesCount - 1; j++)
                     {
                         double max;
@@ -278,7 +283,7 @@ namespace PS5000A
                             max = 1.0;
                         //Debug.WriteLine(max);
                         using (StreamWriter res = new StreamWriter(Path.Combine(fdiff[i], ArraysNames[args[j]])))
-                        {
+                        {                            
                             using (StreamReader f0 = new StreamReader(Path.Combine(fwithout[i], ArraysNames[args[j]])))
                             using (StreamReader f1 = new StreamReader(Path.Combine(fwith[i], ArraysNames[args[j]])))
                             {
@@ -292,9 +297,15 @@ namespace PS5000A
                             }
                         }
 
+                        ArNames.Add(ArraysNames[args[j]]);
+
                         tmp[i * (sourcesCount - 1) + j]++;
                         save = tmp.Sum();
                     }
+
+                    ArNames.Insert(0, timefile);
+                    Expendator.WriteInFile(Path.Combine(fdiff[i],"DefNames.txt"), ArNames.Select(s=>s.Replace(".txt","")).ToArray());
+                    InteractFlags(fdiff[i]);
                 });
             });
             save = 0;
@@ -648,6 +659,7 @@ namespace PS5000A
             string[] tosABS = new string[sourcesCount];
             string[] tos = new string[sourcesCount];
             string[] tos2 = new string[sourcesCount];
+            List<string> list = new List<string>(sourcesCount);
 
             IProgress<int> progress = new Progress<int>((p) => { save = p; });
             all = sc;
@@ -663,10 +675,13 @@ namespace PS5000A
                     tosABS[i] = Path.Combine(to, "Abs_" + filenames[args[i]]);
                     tos[i] = Path.Combine(to, filenames[args[i]]);
                     tos2[i]= Path.Combine(to,"Разница", $"{Symbols[args[i]]}.txt");
+                    list.Add($"{Symbols[args[i]]}");
 
                     MakeTransform(froms[i], tos[i], progress,tos2[i]);
                     label2String = $"Выполнено {i + 1} из {sourcesCount - 1} для источника {Symbols[sourcenumber]}";
                 }
+                Expendator.WriteInFile(Path.Combine(to, "Разница","VarietyPaths.txt"), list.ToArray());
+                InteractFlags(Path.Combine(to, "Разница"));
             });
             label2String = null;
             timer1.Stop();
@@ -674,6 +689,13 @@ namespace PS5000A
             toolStripStatusLabel1.Text = $"Преобразование для источника {Symbols[sourcenumber]} завершено. Данные записаны";
             toolStripStatusLabel2.Text = "";
 
+        }
+
+        private void InteractFlags(string path)
+        {
+            string s1 = checkBox4.Checked ? "true" : "false";
+            string s2 = checkBox5.Checked ? "true" : "false";
+            Expendator.WriteInFile(Path.Combine(path, "FlagsForInteractive.txt"), new string[] { s1, s2 });
         }
 
         private bool FromDiff = false;
