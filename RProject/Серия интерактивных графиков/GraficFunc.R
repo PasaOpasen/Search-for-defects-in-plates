@@ -61,6 +61,7 @@ df[[3]]=factor(df[[3]])
 ob=ggplotly(
 ggplot(df,aes(x,y))+geom_line(aes(col=source))+#geom_point(col="red",size=0.5)+
   facet_wrap(~source,nrow=2)+
+  labs(x="frequancy,kGz",y="value",title = "Furier Transform of Signal")+
   theme_bw()
 )
 saveWidget(as.widget(ob), "VAR.html", FALSE)
