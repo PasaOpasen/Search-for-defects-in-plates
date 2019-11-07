@@ -71,11 +71,30 @@ namespace PS5000A.Properties {
         }
         
         /// <summary>
+        ///   Поиск локализованного ресурса типа System.Byte[].
+        /// </summary>
+        internal static byte[] GraficFunc {
+            get {
+                object obj = ResourceManager.GetObject("GraficFunc", resourceCulture);
+                return ((byte[])(obj));
+            }
+        }
+        
+        /// <summary>
         ///   Поиск локализованного ресурса типа System.IO.UnmanagedMemoryStream, аналогичного System.IO.MemoryStream.
         /// </summary>
         internal static System.IO.UnmanagedMemoryStream ВычисленияЗавершены {
             get {
                 return ResourceManager.GetStream("ВычисленияЗавершены", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Поиск локализованного ресурса типа System.IO.UnmanagedMemoryStream, аналогичного System.IO.MemoryStream.
+        /// </summary>
+        internal static System.IO.UnmanagedMemoryStream ГрафикиДоступны {
+            get {
+                return ResourceManager.GetStream("ГрафикиДоступны", resourceCulture);
             }
         }
         
@@ -103,6 +122,15 @@ namespace PS5000A.Properties {
         internal static System.IO.UnmanagedMemoryStream РазницаГотова {
             get {
                 return ResourceManager.GetStream("РазницаГотова", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Поиск локализованного ресурса типа System.IO.UnmanagedMemoryStream, аналогичного System.IO.MemoryStream.
+        /// </summary>
+        internal static System.IO.UnmanagedMemoryStream СоздаютсяГрафики {
+            get {
+                return ResourceManager.GetStream("СоздаютсяГрафики", resourceCulture);
             }
         }
     }

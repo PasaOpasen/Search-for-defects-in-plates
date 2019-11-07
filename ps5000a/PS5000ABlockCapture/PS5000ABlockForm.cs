@@ -187,7 +187,7 @@ namespace PS5000A
                 toolStripStatusLabel1.Text = label1String;
             if (label2String != null)
                 toolStripStatusLabel2.Text = label2String;
-            toolStripProgressBar1.Value = (int)(Expendator.GetProcent(save, all)/100 * toolStripProgressBar1.Maximum);
+            toolStripProgressBar1.Value = (int)(Expendator.GetProcent(save, all) / 100 * toolStripProgressBar1.Maximum);
             this.Refresh();
         }
         private string Symbols = "ABCDEFGHIKLMNOPQRSTVXYZ";
@@ -272,7 +272,7 @@ namespace PS5000A
                                 string s = f0.ReadLine();
                                 while (s != null && s.Length > 0)
                                 {
-                                    double t = Convert.ToDouble(f1.ReadLine().Replace('.',',')) - Convert.ToDouble(s.Replace('.', ','));
+                                    double t = Convert.ToDouble(f1.ReadLine().Replace('.', ',')) - Convert.ToDouble(s.Replace('.', ','));
                                     if (max < t * t) max = t * t;
                                     s = f0.ReadLine();
                                 }
@@ -283,7 +283,7 @@ namespace PS5000A
                             max = 1.0;
                         //Debug.WriteLine(max);
                         using (StreamWriter res = new StreamWriter(Path.Combine(fdiff[i], ArraysNames[args[j]])))
-                        {                            
+                        {
                             using (StreamReader f0 = new StreamReader(Path.Combine(fwithout[i], ArraysNames[args[j]])))
                             using (StreamReader f1 = new StreamReader(Path.Combine(fwith[i], ArraysNames[args[j]])))
                             {
@@ -291,7 +291,7 @@ namespace PS5000A
                                 while (s != null && s.Length > 0)
                                 {
                                     double t = Convert.ToDouble(f1.ReadLine().Replace('.', ',')) - Convert.ToDouble(s.Replace('.', ','));
-                                    res.WriteLine((t / max).ToString().Replace(',','.'));
+                                    res.WriteLine((t / max).ToString().Replace(',', '.'));
                                     s = f0.ReadLine();
                                 }
                             }
@@ -304,8 +304,9 @@ namespace PS5000A
                     }
 
                     ArNames.Insert(0, timefile);
-                    Expendator.WriteInFile(Path.Combine(fdiff[i],"DefNames.txt"), ArNames.Select(s=>s.Replace(".txt","")).ToArray());
+                    Expendator.WriteInFile(Path.Combine(fdiff[i], "DefNames.txt"), ArNames.Select(s => s.Replace(".txt", "")).ToArray());
                     InteractFlags(fdiff[i]);
+                    File.Copy(Expendator.GetResource("GraficFunc.r"), Path.Combine(fdiff[i], "GraficFunc.r"), true);
                 });
             });
             save = 0;
@@ -329,9 +330,9 @@ namespace PS5000A
         /// </summary>
         private void InfoGet()
         {
-                string name = Path.Combine(globalbase, "Описание.txt");
-                if (File.Exists(name))
-                    textBox23.Text = Expendator.GetWordFromFile(name);
+            string name = Path.Combine(globalbase, "Описание.txt");
+            if (File.Exists(name))
+                textBox23.Text = Expendator.GetWordFromFile(name);
         }
 
         private bool SetGlobalBase()
@@ -371,6 +372,9 @@ namespace PS5000A
             new System.Media.SoundPlayer(Properties.Resources.РазницаГотова).Play();
 
             await FurierOrShowFormAsync(i => fdiff[i], i => folderbase[i]);
+
+            await MakeInteractive();
+
             SygnalOfEndCalc();
 
             this.Close();
@@ -459,7 +463,7 @@ namespace PS5000A
         private void buttonOpen_Click(object sender, EventArgs e)
         {
             InitParams();
-           
+
             short handle;
 
 
@@ -474,7 +478,7 @@ namespace PS5000A
                 buttonOpen.Text = "Open";
             }
             else
-            {             
+            {
                 uint status = Imports.OpenUnit(out handle, null, resolution);
 
                 if (handle > 0)
@@ -632,7 +636,7 @@ namespace PS5000A
         {
             FurierTransformer.w_0 = f0 * 1e6;
             FurierTransformer.w_m = f1 * 1e6;
-            double Freq(double w) => w  * (1e6/ 2.0 / Math.PI);
+            double Freq(double w) => w * (1e6 / 2.0 / Math.PI);
 
             f0 = Freq(f0); f1 = Freq(f1);
             int count_approx = sc;
@@ -674,13 +678,13 @@ namespace PS5000A
                     froms[i] = Path.Combine(from, ArraysNames[args[i]]);
                     tosABS[i] = Path.Combine(to, "Abs_" + filenames[args[i]]);
                     tos[i] = Path.Combine(to, filenames[args[i]]);
-                    tos2[i]= Path.Combine(to,"Разница", $"{Symbols[args[i]]}.txt");
+                    tos2[i] = Path.Combine(to, "Разница", $"{Symbols[args[i]]}.txt");
                     list.Add($"{Symbols[args[i]]}");
 
-                    MakeTransform(froms[i], tos[i], progress,tos2[i]);
+                    MakeTransform(froms[i], tos[i], progress, tos2[i]);
                     label2String = $"Выполнено {i + 1} из {sourcesCount - 1} для источника {Symbols[sourcenumber]}";
                 }
-                Expendator.WriteInFile(Path.Combine(to, "Разница","VarietyPaths.txt"), list.ToArray());
+                Expendator.WriteInFile(Path.Combine(to, "Разница", "VarietyPaths.txt"), list.ToArray());
                 InteractFlags(Path.Combine(to, "Разница"));
             });
             label2String = null;
@@ -705,13 +709,13 @@ namespace PS5000A
         /// <param name="from"></param>
         /// <param name="to"></param>
         /// <param name="progress"></param>
-        private void MakeTransform(string from, string to, IProgress<int> progress,string to2)
+        private void MakeTransform(string from, string to, IProgress<int> progress, string to2)
         {
             FurierTransformer.LoadIn(from);
             //FurierTransformer.GetSplainFT_old(progress);
             FurierTransformer.GetSplainFT_new(progress);
             FurierTransformer.SaveOut(to);
-            if(FromDiff)
+            if (FromDiff)
                 FurierTransformer.SaveOut(to2);
         }
 
@@ -836,7 +840,7 @@ namespace PS5000A
 
                 using (StreamWriter fs = new StreamWriter(filename_))
                     for (int i = 0; i < countSum; i++)
-                        fs.WriteLine(Array[i].ToString().Replace(',','.'));
+                        fs.WriteLine(Array[i].ToString().Replace(',', '.'));
 
             });
         }
@@ -974,7 +978,7 @@ namespace PS5000A
                 for (int j = 0; j < sourcesCount; j++)
                     if (i != j)
                     {
-                        st[index] =$"from {Symbols[i]} to {Symbols[j]}";
+                        st[index] = $"from {Symbols[i]} to {Symbols[j]}";
                         names[index] = Path.Combine(from, ArraysNames[j]);
                         index++;
                     }
@@ -983,7 +987,7 @@ namespace PS5000A
 
         private (string[], string[]) GetSTandNAMESforGrafic(string from, int number)
         {
-            (string[] st,string[] names)= GetSTandNAMES(from);
+            (string[] st, string[] names) = GetSTandNAMES(from);
 
             string[] sst = new string[sourcesCount - 1], nnames = new string[sourcesCount - 1];
             for (int i = 0; i < (sourcesCount - 1); i++)
@@ -993,6 +997,21 @@ namespace PS5000A
             }
 
             return (sst, nnames);
+        }
+
+        private async Task MakeInteractive()
+        {
+            if (checkBox4.Checked || checkBox5.Checked)
+            {
+                toolStripStatusLabel1.Text = $"Создаются графики";
+                new System.Media.SoundPlayer(Properties.Resources.СоздаютсяГрафики).Play();
+                await Task.Run(() =>
+                {
+                    Parallel.ForEach(fdiff, path => Expendator.StartProcessOnly("GraficFunc.r", true, path));
+                });
+                new System.Media.SoundPlayer(Properties.Resources.ГрафикиДоступны).Play();
+            }
+
         }
     }
 }

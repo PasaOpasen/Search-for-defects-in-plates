@@ -127,6 +127,7 @@
   </ItemGroup>
   <ItemGroup>
     <None Include="Resources\algolIlusha.pdf" />
+    <None Include="Resources\GraficFunc.R" />
     <None Include="Resources\ВычисленияЗавершены.wav" />
   </ItemGroup>
   <ItemGroup>
@@ -140,6 +141,18 @@
   </ItemGroup>
   <ItemGroup>
     <None Include="Resources\LastDirectory.txt" />
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="Resources\ГрафикиДоступны.mp3" />
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="Resources\СоздаютсяГрафики.mp3" />
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="Resources\ГрафикиДоступны.wav" />
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="Resources\СоздаютсяГрафики.wav" />
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
   <!-- To modify your build process, add your task inside one of the targets below and uncomment it. 
