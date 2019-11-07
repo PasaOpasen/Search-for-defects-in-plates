@@ -121,9 +121,6 @@
   <data name="algolIlusha" type="System.Resources.ResXFileRef, System.Windows.Forms">
     <value>..\Resources\algolIlusha.pdf;System.Byte[], mscorlib, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
   </data>
-  <data name="GraficFunc" type="System.Resources.ResXFileRef, System.Windows.Forms">
-    <value>..\Resources\GraficFunc.R;System.Byte[], mscorlib, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
-  </data>
   <data name="ВычисленияЗавершены" type="System.Resources.ResXFileRef, System.Windows.Forms">
     <value>..\Resources\ВычисленияЗавершены.wav;System.IO.MemoryStream, mscorlib, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
   </data>
@@ -141,5 +138,8 @@
   </data>
   <data name="СоздаютсяГрафики" type="System.Resources.ResXFileRef, System.Windows.Forms">
     <value>..\Resources\СоздаютсяГрафики.wav;System.IO.MemoryStream, mscorlib, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
+  </data>
+  <data name="GraficFunc" type="System.Resources.ResXFileRef, System.Windows.Forms">
+    <value>..\Resources\GraficFunc.R;System.Byte[], mscorlib, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
   </data>
 </root>

@@ -414,7 +414,7 @@ namespace Defect2019
                     double t = tmin + i * th;
                     if (t == 0)
                         continue;
-                    string tit =  $"{Source.ToString(sourcesArray)}, t = {t.ToString(4)}, (xmin, xmax, count, ymin, ymax) = ({xmin}, {xmax}, {count}dot{count2}, {ymin}, {ymax})";
+                    string tit = $"{Source.ToString(sourcesArray)}, t = {t.ToString(4)}, (xmin, xmax, count, ymin, ymax) = ({xmin}, {xmax}, {count}dot{count2}, {ymin}, {ymax})";
                     ts.WriteLine(tit + ".txt");
                     pds.WriteLine($"3D ur, uz(title , {tit} ).pdf");
                     filenames[i] = "3D " + tit + " .png";
@@ -444,6 +444,7 @@ namespace Defect2019
             if (source.IsCancellationRequested) return;
             await Task.Run(() => StartProcess("OnlySurface.r", global: true));
             //new Библиотека_графики.PdfOpen("Полученные u-surfaces", Path.Combine(Environment.CurrentDirectory, $"{gl} .pdf")).Show();
+            CopyImages(gl);
             ShowImages(gl);
 
             OtherMethods.PlaySound("ПоверхностиПостроены");
@@ -495,6 +496,21 @@ namespace Defect2019
 
             new Библиотека_графики.ManyDocumentsShower(main, titles, docs).Show();
         }
+        private void CopyImages(string name) =>
+                Expendator.CopyFiles(Environment.CurrentDirectory,
+                   Path.GetDirectoryName(Expendator.GetWordFromFile("WhereData.txt")),
+                    new string[]
+            {
+                $"{name} .pdf",
+                $"{name} (heatmap).png",
+                $"{name} (heatmap_uz).png",
+                $"{name} (ur).html",
+                $"{name} (uz).html",
+                $"{name} (ur).txt",
+                $"{name} (uz).txt"
+            }.Where(f => File.Exists(f)).ToArray());
+
+
 
         /// <summary>
         /// Просуммировать все замеры
@@ -839,7 +855,7 @@ namespace Defect2019
             Expendator.WriteStringInFile("MetrixSumOrMax.txt", s);
         }
 
-        Func<double, double, double, Source[], (double ur , double uz)> Uxt = Functions.Uxt3;
+        Func<double, double, double, Source[], (double ur, double uz)> Uxt = Functions.Uxt3;
 
         private void WriteXY(string filename, string path, double[] xmas, double[] ymas)
         {
