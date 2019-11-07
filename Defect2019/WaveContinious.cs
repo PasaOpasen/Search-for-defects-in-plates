@@ -812,6 +812,30 @@ namespace Defect2019
             SetTotalLabel();
         }
 
+        private void установитьТочныеГраницыПрямоугольникаToolStripMenuItem_Click(object sender, EventArgs e)
+        {
+            var r = GetSourceRect();
+            textBox1.Text = r.Item1.x.ToString();
+            textBox2.Text = r.Item2.x.ToString();
+            textBox3.Text = r.Item1.y.ToString();
+            textBox4.Text = r.Item2.y.ToString();
+        }
+        private Tuple<Point, Point> GetSourceRect() => Point.GetBigRect(sourcesArray.Select(s => s.Center).ToArray());
+
+        private void установитьГраницыПрямоугольника10ToolStripMenuItem_Click(object sender, EventArgs e)
+        {
+            var r = GetSourceRect();
+            var center = (r.Item1 + r.Item2)*0.5;
+            double lx = (r.Item1.x - r.Item2.x).Abs() / 2*0.9;
+            double ly = (r.Item1.y - r.Item2.y).Abs() / 2*0.9;
+
+
+            textBox1.Text = (center.x-lx).ToString();
+            textBox2.Text = (center.x + lx).ToString();
+            textBox3.Text = (center.y - ly).ToString();
+            textBox4.Text = (center.y + ly).ToString();
+        }
+
         private void SetTotalLabel()
         {
             label10.Text = $"total:{Environment.NewLine}{(int)(numericUpDown1.Value * numericUpDown3.Value)}";

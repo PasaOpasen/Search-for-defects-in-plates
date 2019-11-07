@@ -42,6 +42,7 @@
             this.textBox8 = new System.Windows.Forms.TextBox();
             this.textBox7 = new System.Windows.Forms.TextBox();
             this.groupBox6 = new System.Windows.Forms.GroupBox();
+            this.button2 = new System.Windows.Forms.Button();
             this.label2 = new System.Windows.Forms.Label();
             this.contextMenuStrip2 = new System.Windows.Forms.ContextMenuStrip(this.components);
             this.подробнееToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
@@ -49,13 +50,16 @@
             this.button1 = new System.Windows.Forms.Button();
             this.numericUpDown7 = new System.Windows.Forms.NumericUpDown();
             this.textBox6 = new System.Windows.Forms.TextBox();
-            this.button2 = new System.Windows.Forms.Button();
+            this.contextMenuStrip3 = new System.Windows.Forms.ContextMenuStrip(this.components);
+            this.установитьТочныеГраницыПрямоугольникаToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
+            this.установитьГраницыПрямоугольника10ToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             ((System.ComponentModel.ISupportInitialize)(this.pictureBox1)).BeginInit();
             this.contextMenuStrip1.SuspendLayout();
             this.groupBox6.SuspendLayout();
             this.contextMenuStrip2.SuspendLayout();
             ((System.ComponentModel.ISupportInitialize)(this.numericUpDown1)).BeginInit();
             ((System.ComponentModel.ISupportInitialize)(this.numericUpDown7)).BeginInit();
+            this.contextMenuStrip3.SuspendLayout();
             this.SuspendLayout();
             // 
             // pictureBox1
@@ -160,6 +164,7 @@
             // groupBox6
             // 
             this.groupBox6.BackColor = System.Drawing.Color.Transparent;
+            this.groupBox6.ContextMenuStrip = this.contextMenuStrip3;
             this.groupBox6.Controls.Add(this.button2);
             this.groupBox6.Controls.Add(this.label2);
             this.groupBox6.Controls.Add(this.numericUpDown1);
@@ -181,6 +186,18 @@
             this.groupBox6.TabStop = false;
             this.groupBox6.Text = "Эллипсы и их карта";
             this.groupBox6.Enter += new System.EventHandler(this.groupBox6_Enter);
+            // 
+            // button2
+            // 
+            this.button2.Dock = System.Windows.Forms.DockStyle.Bottom;
+            this.button2.FlatStyle = System.Windows.Forms.FlatStyle.Popup;
+            this.button2.Location = new System.Drawing.Point(3, 243);
+            this.button2.Name = "button2";
+            this.button2.Size = new System.Drawing.Size(243, 34);
+            this.button2.TabIndex = 32;
+            this.button2.Text = "Поискать сдвиг";
+            this.button2.UseVisualStyleBackColor = true;
+            this.button2.Click += new System.EventHandler(this.button2_Click);
             // 
             // label2
             // 
@@ -265,17 +282,27 @@
             this.textBox6.Text = "0,03";
             this.textBox6.TextAlign = System.Windows.Forms.HorizontalAlignment.Center;
             // 
-            // button2
+            // contextMenuStrip3
             // 
-            this.button2.Dock = System.Windows.Forms.DockStyle.Bottom;
-            this.button2.FlatStyle = System.Windows.Forms.FlatStyle.Popup;
-            this.button2.Location = new System.Drawing.Point(3, 243);
-            this.button2.Name = "button2";
-            this.button2.Size = new System.Drawing.Size(243, 34);
-            this.button2.TabIndex = 32;
-            this.button2.Text = "Поискать сдвиг";
-            this.button2.UseVisualStyleBackColor = true;
-            this.button2.Click += new System.EventHandler(this.button2_Click);
+            this.contextMenuStrip3.Items.AddRange(new System.Windows.Forms.ToolStripItem[] {
+            this.установитьТочныеГраницыПрямоугольникаToolStripMenuItem,
+            this.установитьГраницыПрямоугольника10ToolStripMenuItem});
+            this.contextMenuStrip3.Name = "contextMenuStrip3";
+            this.contextMenuStrip3.Size = new System.Drawing.Size(328, 70);
+            // 
+            // установитьТочныеГраницыПрямоугольникаToolStripMenuItem
+            // 
+            this.установитьТочныеГраницыПрямоугольникаToolStripMenuItem.Name = "установитьТочныеГраницыПрямоугольникаToolStripMenuItem";
+            this.установитьТочныеГраницыПрямоугольникаToolStripMenuItem.Size = new System.Drawing.Size(327, 22);
+            this.установитьТочныеГраницыПрямоугольникаToolStripMenuItem.Text = "Установить точные границы прямоугольника";
+            this.установитьТочныеГраницыПрямоугольникаToolStripMenuItem.Click += new System.EventHandler(this.установитьТочныеГраницыПрямоугольникаToolStripMenuItem_Click);
+            // 
+            // установитьГраницыПрямоугольника10ToolStripMenuItem
+            // 
+            this.установитьГраницыПрямоугольника10ToolStripMenuItem.Name = "установитьГраницыПрямоугольника10ToolStripMenuItem";
+            this.установитьГраницыПрямоугольника10ToolStripMenuItem.Size = new System.Drawing.Size(327, 22);
+            this.установитьГраницыПрямоугольника10ToolStripMenuItem.Text = "Установить границы прямоугольника -10%";
+            this.установитьГраницыПрямоугольника10ToolStripMenuItem.Click += new System.EventHandler(this.установитьГраницыПрямоугольника10ToolStripMenuItem_Click);
             // 
             // Scheme
             // 
@@ -296,6 +323,7 @@
             this.contextMenuStrip2.ResumeLayout(false);
             ((System.ComponentModel.ISupportInitialize)(this.numericUpDown1)).EndInit();
             ((System.ComponentModel.ISupportInitialize)(this.numericUpDown7)).EndInit();
+            this.contextMenuStrip3.ResumeLayout(false);
             this.ResumeLayout(false);
 
         }
@@ -323,5 +351,8 @@
         private System.Windows.Forms.ContextMenuStrip contextMenuStrip2;
         private System.Windows.Forms.ToolStripMenuItem подробнееToolStripMenuItem;
         private System.Windows.Forms.Button button2;
+        private System.Windows.Forms.ContextMenuStrip contextMenuStrip3;
+        private System.Windows.Forms.ToolStripMenuItem установитьТочныеГраницыПрямоугольникаToolStripMenuItem;
+        private System.Windows.Forms.ToolStripMenuItem установитьГраницыПрямоугольника10ToolStripMenuItem;
     }
 }

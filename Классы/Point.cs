@@ -212,6 +212,7 @@ namespace МатКлассы
         public static double operator *(Point a, Point b) => a.x * b.x + a.y * b.y;
 
         public static Point operator *(double s, Point p) => new Point(s * p.x, s * p.y);
+        public static Point operator *(Point p,double s ) => new Point(s * p.x, s * p.y);
 
         public static Point operator +(Point a, Point b) => new Point(a.x + b.x, a.y + b.y);
         public static Point operator -(Point a, Point b) => new Point(a.x - b.x, a.y - b.y);

@@ -375,5 +375,29 @@ namespace Работа2019
             button2.Text = "Поискать сдвиг";
             this.Refresh();
         }
+
+        private void установитьТочныеГраницыПрямоугольникаToolStripMenuItem_Click(object sender, EventArgs e)
+        {
+            var r = GetSourceRect();
+            textBox7.Text = r.Item1.x.ToString();
+            textBox8.Text = r.Item2.x.ToString();
+            textBox9.Text = r.Item1.y.ToString();
+            textBox10.Text = r.Item2.y.ToString();
+        }
+        private Tuple<Point, Point> GetSourceRect() => Point.GetBigRect(mas.Select(s => s.Center).ToArray());
+
+        private void установитьГраницыПрямоугольника10ToolStripMenuItem_Click(object sender, EventArgs e)
+        {
+            var r = GetSourceRect();
+            var center = (r.Item1 + r.Item2) * 0.5;
+            double lx = (r.Item1.x - r.Item2.x).Abs() / 2 * 0.9;
+            double ly = (r.Item1.y - r.Item2.y).Abs() / 2 * 0.9;
+
+
+            textBox7.Text = (center.x - lx).ToString();
+            textBox8.Text = (center.x + lx).ToString();
+            textBox9.Text = (center.y - ly).ToString();
+            textBox10.Text = (center.y + ly).ToString();
+        }
     }
 }

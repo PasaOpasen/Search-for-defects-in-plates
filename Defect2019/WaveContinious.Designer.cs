@@ -82,6 +82,9 @@
             this.label9 = new System.Windows.Forms.Label();
             this.checkBox4 = new System.Windows.Forms.CheckBox();
             this.openFileDialog1 = new System.Windows.Forms.OpenFileDialog();
+            this.contextMenuStrip1 = new System.Windows.Forms.ContextMenuStrip(this.components);
+            this.установитьТочныеГраницыПрямоугольникаToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
+            this.установитьГраницыПрямоугольника10ToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.groupBox1.SuspendLayout();
             ((System.ComponentModel.ISupportInitialize)(this.numericUpDown3)).BeginInit();
             ((System.ComponentModel.ISupportInitialize)(this.numericUpDown1)).BeginInit();
@@ -90,10 +93,12 @@
             this.statusStrip1.SuspendLayout();
             this.groupBox6.SuspendLayout();
             this.menuStrip1.SuspendLayout();
+            this.contextMenuStrip1.SuspendLayout();
             this.SuspendLayout();
             // 
             // groupBox1
             // 
+            this.groupBox1.ContextMenuStrip = this.contextMenuStrip1;
             this.groupBox1.Controls.Add(this.label10);
             this.groupBox1.Controls.Add(this.button1);
             this.groupBox1.Controls.Add(this.numericUpDown3);
@@ -655,6 +660,28 @@
             // 
             this.openFileDialog1.FileName = "openFileDialog1";
             // 
+            // contextMenuStrip1
+            // 
+            this.contextMenuStrip1.Items.AddRange(new System.Windows.Forms.ToolStripItem[] {
+            this.установитьТочныеГраницыПрямоугольникаToolStripMenuItem,
+            this.установитьГраницыПрямоугольника10ToolStripMenuItem});
+            this.contextMenuStrip1.Name = "contextMenuStrip1";
+            this.contextMenuStrip1.Size = new System.Drawing.Size(328, 70);
+            // 
+            // установитьТочныеГраницыПрямоугольникаToolStripMenuItem
+            // 
+            this.установитьТочныеГраницыПрямоугольникаToolStripMenuItem.Name = "установитьТочныеГраницыПрямоугольникаToolStripMenuItem";
+            this.установитьТочныеГраницыПрямоугольникаToolStripMenuItem.Size = new System.Drawing.Size(327, 22);
+            this.установитьТочныеГраницыПрямоугольникаToolStripMenuItem.Text = "Установить точные границы прямоугольника";
+            this.установитьТочныеГраницыПрямоугольникаToolStripMenuItem.Click += new System.EventHandler(this.установитьТочныеГраницыПрямоугольникаToolStripMenuItem_Click);
+            // 
+            // установитьГраницыПрямоугольника10ToolStripMenuItem
+            // 
+            this.установитьГраницыПрямоугольника10ToolStripMenuItem.Name = "установитьГраницыПрямоугольника10ToolStripMenuItem";
+            this.установитьГраницыПрямоугольника10ToolStripMenuItem.Size = new System.Drawing.Size(327, 22);
+            this.установитьГраницыПрямоугольника10ToolStripMenuItem.Text = "Установить границы прямоугольника -10%";
+            this.установитьГраницыПрямоугольника10ToolStripMenuItem.Click += new System.EventHandler(this.установитьГраницыПрямоугольника10ToolStripMenuItem_Click);
+            // 
             // WaveContinious
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(9F, 19F);
@@ -694,6 +721,7 @@
             this.groupBox6.PerformLayout();
             this.menuStrip1.ResumeLayout(false);
             this.menuStrip1.PerformLayout();
+            this.contextMenuStrip1.ResumeLayout(false);
             this.ResumeLayout(false);
             this.PerformLayout();
 
@@ -754,5 +782,8 @@
         public System.Windows.Forms.NumericUpDown numericUpDown3;
         private System.Windows.Forms.Button button1;
         private System.Windows.Forms.Label label10;
+        private System.Windows.Forms.ContextMenuStrip contextMenuStrip1;
+        private System.Windows.Forms.ToolStripMenuItem установитьТочныеГраницыПрямоугольникаToolStripMenuItem;
+        private System.Windows.Forms.ToolStripMenuItem установитьГраницыПрямоугольника10ToolStripMenuItem;
     }
 }
