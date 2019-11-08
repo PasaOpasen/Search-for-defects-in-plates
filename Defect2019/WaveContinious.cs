@@ -836,6 +836,12 @@ namespace Defect2019
             textBox4.Text = (center.y + ly).ToString();
         }
 
+        private void ecnfyToolStripMenuItem_Click(object sender, EventArgs e)
+        {
+            GetFields();
+            new R2Area(new NetOnDouble(xmin, xmax, 40), new NetOnDouble(ymin, ymax, 40), textBox1, textBox2, textBox3, textBox4).Show();
+        }
+
         private void SetTotalLabel()
         {
             label10.Text = $"total:{Environment.NewLine}{(int)(numericUpDown1.Value * numericUpDown3.Value)}";

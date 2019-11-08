@@ -30,6 +30,9 @@
         {
             this.components = new System.ComponentModel.Container();
             this.groupBox1 = new System.Windows.Forms.GroupBox();
+            this.contextMenuStrip1 = new System.Windows.Forms.ContextMenuStrip(this.components);
+            this.установитьТочныеГраницыПрямоугольникаToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
+            this.установитьГраницыПрямоугольника10ToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.label10 = new System.Windows.Forms.Label();
             this.button1 = new System.Windows.Forms.Button();
             this.numericUpDown3 = new System.Windows.Forms.NumericUpDown();
@@ -82,10 +85,9 @@
             this.label9 = new System.Windows.Forms.Label();
             this.checkBox4 = new System.Windows.Forms.CheckBox();
             this.openFileDialog1 = new System.Windows.Forms.OpenFileDialog();
-            this.contextMenuStrip1 = new System.Windows.Forms.ContextMenuStrip(this.components);
-            this.установитьТочныеГраницыПрямоугольникаToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
-            this.установитьГраницыПрямоугольника10ToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
+            this.ecnfyToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.groupBox1.SuspendLayout();
+            this.contextMenuStrip1.SuspendLayout();
             ((System.ComponentModel.ISupportInitialize)(this.numericUpDown3)).BeginInit();
             ((System.ComponentModel.ISupportInitialize)(this.numericUpDown1)).BeginInit();
             this.groupBox2.SuspendLayout();
@@ -93,7 +95,6 @@
             this.statusStrip1.SuspendLayout();
             this.groupBox6.SuspendLayout();
             this.menuStrip1.SuspendLayout();
-            this.contextMenuStrip1.SuspendLayout();
             this.SuspendLayout();
             // 
             // groupBox1
@@ -118,6 +119,29 @@
             this.groupBox1.TabIndex = 0;
             this.groupBox1.TabStop = false;
             this.groupBox1.Text = "Параметры прямоугольника (мм)";
+            // 
+            // contextMenuStrip1
+            // 
+            this.contextMenuStrip1.Items.AddRange(new System.Windows.Forms.ToolStripItem[] {
+            this.установитьТочныеГраницыПрямоугольникаToolStripMenuItem,
+            this.установитьГраницыПрямоугольника10ToolStripMenuItem,
+            this.ecnfyToolStripMenuItem});
+            this.contextMenuStrip1.Name = "contextMenuStrip1";
+            this.contextMenuStrip1.Size = new System.Drawing.Size(328, 92);
+            // 
+            // установитьТочныеГраницыПрямоугольникаToolStripMenuItem
+            // 
+            this.установитьТочныеГраницыПрямоугольникаToolStripMenuItem.Name = "установитьТочныеГраницыПрямоугольникаToolStripMenuItem";
+            this.установитьТочныеГраницыПрямоугольникаToolStripMenuItem.Size = new System.Drawing.Size(327, 22);
+            this.установитьТочныеГраницыПрямоугольникаToolStripMenuItem.Text = "Установить точные границы прямоугольника";
+            this.установитьТочныеГраницыПрямоугольникаToolStripMenuItem.Click += new System.EventHandler(this.установитьТочныеГраницыПрямоугольникаToolStripMenuItem_Click);
+            // 
+            // установитьГраницыПрямоугольника10ToolStripMenuItem
+            // 
+            this.установитьГраницыПрямоугольника10ToolStripMenuItem.Name = "установитьГраницыПрямоугольника10ToolStripMenuItem";
+            this.установитьГраницыПрямоугольника10ToolStripMenuItem.Size = new System.Drawing.Size(327, 22);
+            this.установитьГраницыПрямоугольника10ToolStripMenuItem.Text = "Установить границы прямоугольника -10%";
+            this.установитьГраницыПрямоугольника10ToolStripMenuItem.Click += new System.EventHandler(this.установитьГраницыПрямоугольника10ToolStripMenuItem_Click);
             // 
             // label10
             // 
@@ -660,27 +684,12 @@
             // 
             this.openFileDialog1.FileName = "openFileDialog1";
             // 
-            // contextMenuStrip1
+            // ecnfyToolStripMenuItem
             // 
-            this.contextMenuStrip1.Items.AddRange(new System.Windows.Forms.ToolStripItem[] {
-            this.установитьТочныеГраницыПрямоугольникаToolStripMenuItem,
-            this.установитьГраницыПрямоугольника10ToolStripMenuItem});
-            this.contextMenuStrip1.Name = "contextMenuStrip1";
-            this.contextMenuStrip1.Size = new System.Drawing.Size(328, 70);
-            // 
-            // установитьТочныеГраницыПрямоугольникаToolStripMenuItem
-            // 
-            this.установитьТочныеГраницыПрямоугольникаToolStripMenuItem.Name = "установитьТочныеГраницыПрямоугольникаToolStripMenuItem";
-            this.установитьТочныеГраницыПрямоугольникаToolStripMenuItem.Size = new System.Drawing.Size(327, 22);
-            this.установитьТочныеГраницыПрямоугольникаToolStripMenuItem.Text = "Установить точные границы прямоугольника";
-            this.установитьТочныеГраницыПрямоугольникаToolStripMenuItem.Click += new System.EventHandler(this.установитьТочныеГраницыПрямоугольникаToolStripMenuItem_Click);
-            // 
-            // установитьГраницыПрямоугольника10ToolStripMenuItem
-            // 
-            this.установитьГраницыПрямоугольника10ToolStripMenuItem.Name = "установитьГраницыПрямоугольника10ToolStripMenuItem";
-            this.установитьГраницыПрямоугольника10ToolStripMenuItem.Size = new System.Drawing.Size(327, 22);
-            this.установитьГраницыПрямоугольника10ToolStripMenuItem.Text = "Установить границы прямоугольника -10%";
-            this.установитьГраницыПрямоугольника10ToolStripMenuItem.Click += new System.EventHandler(this.установитьГраницыПрямоугольника10ToolStripMenuItem_Click);
+            this.ecnfyToolStripMenuItem.Name = "ecnfyToolStripMenuItem";
+            this.ecnfyToolStripMenuItem.Size = new System.Drawing.Size(327, 22);
+            this.ecnfyToolStripMenuItem.Text = "Установить границы в окрестности точки";
+            this.ecnfyToolStripMenuItem.Click += new System.EventHandler(this.ecnfyToolStripMenuItem_Click);
             // 
             // WaveContinious
             // 
@@ -710,6 +719,7 @@
             this.Text = "Распространение волны в пространстве";
             this.groupBox1.ResumeLayout(false);
             this.groupBox1.PerformLayout();
+            this.contextMenuStrip1.ResumeLayout(false);
             ((System.ComponentModel.ISupportInitialize)(this.numericUpDown3)).EndInit();
             ((System.ComponentModel.ISupportInitialize)(this.numericUpDown1)).EndInit();
             this.groupBox2.ResumeLayout(false);
@@ -721,7 +731,6 @@
             this.groupBox6.PerformLayout();
             this.menuStrip1.ResumeLayout(false);
             this.menuStrip1.PerformLayout();
-            this.contextMenuStrip1.ResumeLayout(false);
             this.ResumeLayout(false);
             this.PerformLayout();
 
@@ -785,5 +794,6 @@
         private System.Windows.Forms.ContextMenuStrip contextMenuStrip1;
         private System.Windows.Forms.ToolStripMenuItem установитьТочныеГраницыПрямоугольникаToolStripMenuItem;
         private System.Windows.Forms.ToolStripMenuItem установитьГраницыПрямоугольника10ToolStripMenuItem;
+        private System.Windows.Forms.ToolStripMenuItem ecnfyToolStripMenuItem;
     }
 }
