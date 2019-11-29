@@ -940,6 +940,15 @@ namespace PS5000A
             await CalcTransformAsync(wcount, from, to, Enumerable.Range(0, sourcesCount).Where(n => n != number).ToArray(), number);
             new System.Media.SoundPlayer(Properties.Resources.Преобразование_готово).Play();
         }
+
+        private void checkBox2_CheckedChanged(object sender, EventArgs e)
+        {
+            if (checkBox2.Checked)
+                checkBox5.Show();
+            else
+                checkBox5.Hide();
+        }
+
         /// <summary>
         /// Запускает форму с графиками и возможным запуском преобразования Фурье при закрытии
         /// </summary>

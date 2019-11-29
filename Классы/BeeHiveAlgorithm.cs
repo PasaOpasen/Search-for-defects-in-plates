@@ -123,7 +123,7 @@ namespace МатКлассы
         /// <summary>
         /// Рой пчёл
         /// </summary>
-        private sealed class Hive
+        public sealed class Hive
         {
             /// <summary>
             /// Массив пчёл
