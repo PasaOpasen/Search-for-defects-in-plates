@@ -71,6 +71,8 @@
     <Compile Include="CVectors.cs" />
     <Compile Include="Expendator.cs" />
     <Compile Include="FuncMethods.cs" />
+    <Compile Include="FuncMethods.NetFunc.cs" />
+    <Compile Include="FuncMethods.ODU.cs" />
     <Compile Include="Graphs.cs" />
     <Compile Include="Interfaces.cs" />
     <Compile Include="Line2D.cs" />
@@ -78,7 +80,9 @@
     <Compile Include="Memoize.cs" />
     <Compile Include="MultipleKnot.cs" />
     <Compile Include="NetOnDouble.cs" />
+    <Compile Include="Number.Complex.cs" />
     <Compile Include="Number.cs" />
+    <Compile Include="Number.Rational.cs" />
     <Compile Include="Parser.cs" />
     <Compile Include="Point.cs" />
     <Compile Include="Polygon.cs" />

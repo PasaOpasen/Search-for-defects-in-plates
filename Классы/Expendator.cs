@@ -871,7 +871,19 @@ namespace МатКлассы
         /// </summary>
         /// <param name="filename"></param>
         /// <returns></returns>
-        public static string GetWordFromFile(string filename) => GetStringArrayFromFile(filename, true)[0];
+        public static string GetWordFromFile(string filename)
+        {
+            string s;
+            try
+            {
+                s = GetStringArrayFromFile(filename, true)[0];
+            }
+            catch
+            {
+                s = "";
+            }
+            return s;
+        }
 
         /// <summary>
         /// Определяет директорию, считанную из файла и возвращает ответ о её существовании
