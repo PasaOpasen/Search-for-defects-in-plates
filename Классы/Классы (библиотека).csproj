@@ -71,6 +71,7 @@
     <Compile Include="CVectors.cs" />
     <Compile Include="Expendator.cs" />
     <Compile Include="FuncMethods.cs" />
+    <Compile Include="FuncMethods.DefInteg.cs" />
     <Compile Include="FuncMethods.NetFunc.cs" />
     <Compile Include="FuncMethods.ODU.cs" />
     <Compile Include="Graphs.cs" />
