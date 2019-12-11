@@ -76,40 +76,40 @@ namespace Библиотека_графики
             this.CreateCheckBoxes();
             this.ReDraw();
 
-            string s = "";
+            //string s = "";
             xmin = 1;
             xmax = arr[0].Length;
-            double x, y, xold = double.NaN, yold = double.NaN;
+            //double x, y, xold = double.NaN, yold = double.NaN;
 
             Stopwatch sp = new Stopwatch();
             sp.Start();
 
-            this.chart1.MouseMove += new MouseEventHandler((object o, MouseEventArgs arg) =>
-            {
-                if (arg.Location.X < chart1.Size.Width * 0.95 && arg.Location.Y < chart1.Size.Height * 0.95)
-                    if (sp.ElapsedMilliseconds > 600)
-                    {
-                        x = chart1.ChartAreas[0].AxisX.PixelPositionToValue(arg.Location.X);
-                        y = chart1.ChartAreas[0].AxisY.PixelPositionToValue(arg.Location.Y);
-                        if (x >= xmin && x <= xmax && y >= ymin && y <= ymax)
-                        {
-                            if (x != xold || y != yold)
-                            {
-                                if (MeMode == Mode.Tick)
-                                    s = $"n = {(int)x}  val = {y.ToString(4)}";//s.Show();
-                                else
-                                    s = $"t = {x.ToString()}  val = {y.ToString(4)}";//s.Show();
-                                toolTip1.SetToolTip(chart1, s);
-                                xold = x;
-                                yold = y;
-                            }
-                        }
-                        else
-                            toolTip1.SetToolTip(chart1, "");
+            //this.chart1.MouseMove += new MouseEventHandler((object o, MouseEventArgs arg) =>
+            //{
+            //    if (arg.Location.X < chart1.Size.Width * 0.95 && arg.Location.Y < chart1.Size.Height * 0.95)
+            //        if (sp.ElapsedMilliseconds > 600)
+            //        {
+            //            x = chart1.ChartAreas[0].AxisX.PixelPositionToValue(arg.Location.X);
+            //            y = chart1.ChartAreas[0].AxisY.PixelPositionToValue(arg.Location.Y);
+            //            if (x >= xmin && x <= xmax && y >= ymin && y <= ymax)
+            //            {
+            //                if (x != xold || y != yold)
+            //                {
+            //                    if (MeMode == Mode.Tick)
+            //                        s = $"n = {(int)x}  val = {y.ToString(4)}";//s.Show();
+            //                    else
+            //                        s = $"t = {x.ToString()}  val = {y.ToString(4)}";//s.Show();
+            //                    toolTip1.SetToolTip(chart1, s);
+            //                    xold = x;
+            //                    yold = y;
+            //                }
+            //            }
+            //            else
+            //                toolTip1.SetToolTip(chart1, "");
 
-                    }
+            //        }
 
-            });
+            //});
         }
 
         private void ReadDataOld()

@@ -187,7 +187,10 @@ namespace PS5000A
                 toolStripStatusLabel1.Text = label1String;
             if (label2String != null)
                 toolStripStatusLabel2.Text = label2String;
-            toolStripProgressBar1.Value = (int)(Expendator.GetProcent(save, all) / 100 * toolStripProgressBar1.Maximum);
+
+            var val = (int)(Expendator.GetProcent(save, all) / 100 * toolStripProgressBar1.Maximum);
+            toolStripProgressBar1.Value = Math.Min(val,toolStripProgressBar1.Maximum);
+
             this.Refresh();
         }
         private string Symbols = "ABCDEFGHIKLMNOPQRSTVXYZ";
