@@ -19,6 +19,7 @@ namespace Библиотека_графики
         public int step;
         public enum Mode : byte { Time, Tick };
         internal Mode MeMode = Mode.Tick;
+        internal bool Normalize;
 
         public JustGrafic(string title = "График")
         {
@@ -38,7 +39,7 @@ namespace Библиотека_графики
             });
         }
 
-        public JustGrafic(string[] names, string[] filenames, string title = "График", double dt = 0, int beforecount = 0) : this(title)
+        public JustGrafic(string[] names, string[] filenames, string title = "График", double dt = 0, int beforecount = 0, bool normalize = false) : this(title)
         {
             fnames = filenames;
 
@@ -110,6 +111,8 @@ namespace Библиотека_графики
             //        }
 
             //});
+
+            Normalize = normalize;
         }
 
         private void ReadDataOld()
@@ -145,7 +148,7 @@ namespace Библиотека_графики
         /// Создаёт форму по массиву названий. Предполагается, что данные хранятся в файлах вида $"{s[i]}.txt"
         /// </summary>
         /// <param name="names"></param>
-        public JustGrafic(string[] names, string title = "График", double dt = 0, int beforecount = 0) : this(names, Expendator.Map(names, (string s) => s + ".txt"), title, dt, beforecount)
+        public JustGrafic(string[] names, string title = "График", double dt = 0, int beforecount = 0,bool normalize=false) : this(names, Expendator.Map(names, (string s) => s + ".txt"), title, dt, beforecount,normalize)
         {
 
         }
@@ -371,6 +374,15 @@ namespace Библиотека_графики
         private void сохранитьНовыеМассивыВИсходныеФайлыToolStripMenuItem_Click(object sender, EventArgs e)
         {
             // for (int i = 0; i < fnames.Length; i++)
+            if(Normalize)
+                Parallel.For(0, fnames.Length, (int i) =>
+                {
+                    double max = arr2[i].Select(d=>Math.Abs(d)).Max();
+                    using (StreamWriter t = new StreamWriter(fnames[i]))
+                        for (int j = 0; j < arr2[i].Length; j++)
+                            t.WriteLine((arr2[i][j]/max).ToString().Replace(',', '.'));
+                });
+            else
             Parallel.For(0, fnames.Length, (int i) =>
             {
                 using (StreamWriter t = new StreamWriter(fnames[i]))

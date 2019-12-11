@@ -248,7 +248,7 @@ namespace PS5000A
             })
             );
         }
-        private async Task MakeDiffAsync(bool Normalize)
+        private async Task MakeDiffAsync()
         {
             var ar = Enumerable.Range(0, sourcesCount).ToArray();
 
@@ -265,25 +265,6 @@ namespace PS5000A
 
                     for (int j = 0; j < sourcesCount - 1; j++)
                     {
-                        double max;
-                        if (Normalize)
-                        {
-                            max = 0;
-                            using (StreamReader f0 = new StreamReader(Path.Combine(fwithout[i], ArraysNames[args[j]])))
-                            using (StreamReader f1 = new StreamReader(Path.Combine(fwith[i], ArraysNames[args[j]])))
-                            {
-                                string s = f0.ReadLine();
-                                while (s != null && s.Length > 0)
-                                {
-                                    double t = Convert.ToDouble(f1.ReadLine().Replace('.', ',')) - Convert.ToDouble(s.Replace('.', ','));
-                                    if (max < t * t) max = t * t;
-                                    s = f0.ReadLine();
-                                }
-                            }
-                            max = Math.Sqrt(max);
-                        }
-                        else
-                            max = 1.0;
                         //Debug.WriteLine(max);
                         using (StreamWriter res = new StreamWriter(Path.Combine(fdiff[i], ArraysNames[args[j]])))
                         {
@@ -294,7 +275,7 @@ namespace PS5000A
                                 while (s != null && s.Length > 0)
                                 {
                                     double t = Convert.ToDouble(f1.ReadLine().Replace('.', ',')) - Convert.ToDouble(s.Replace('.', ','));
-                                    res.WriteLine((t / max).ToString().Replace(',', '.'));
+                                    res.WriteLine(t.ToString().Replace(',', '.'));
                                     s = f0.ReadLine();
                                 }
                             }
@@ -371,7 +352,7 @@ namespace PS5000A
             await MakeTimeAsync();
 
             toolStripStatusLabel1.Text = "Создаётся разность для каждого замера";
-            await MakeDiffAsync(Normalize: checkBox1.Checked);
+            await MakeDiffAsync();
             new System.Media.SoundPlayer(Properties.Resources.РазницаГотова).Play();
 
             await FurierOrShowFormAsync(i => fdiff[i], i => folderbase[i]);
@@ -967,7 +948,7 @@ namespace PS5000A
 
             toolStripStatusLabel1.Text = "Строится график...";
             var tcs = new TaskCompletionSource<bool>();
-            var form = new JustGrafic(arrays.Item1, arrays.Item2, $"График от {Symbols[number]}", dt, countBefore);
+            var form = new JustGrafic(arrays.Item1, arrays.Item2, $"График от {Symbols[number]}", dt, countBefore, normalize: checkBox1.Checked);
 
             form.FormClosed += async (object sender, FormClosedEventArgs e) =>
             {
