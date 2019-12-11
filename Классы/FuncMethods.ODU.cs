@@ -8,8 +8,7 @@ namespace МатКлассы
 {
     public static partial class FuncMethods
     {
-        #endregion
-
+       
         /// <summary>
         /// Класс решения ОДУ
         /// </summary>

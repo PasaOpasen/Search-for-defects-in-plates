@@ -6,9 +6,7 @@ namespace МатКлассы
 {
     public static partial class FuncMethods
     {
-        #endregion
-
-        /// <summary>
+           /// <summary>
         /// Сеточная функция
         /// </summary>
         public class NetFunc
