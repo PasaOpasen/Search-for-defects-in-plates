@@ -1968,6 +1968,14 @@ namespace МатКлассы
             for (int i = 0; i < vector.Length; i++)
                 vector[i] = t.vector[i];
         }
+
+
+        public void Save(string filename)
+        {
+            using (StreamWriter r = new StreamWriter(filename))
+                foreach (var d in this.vector)
+                    r.WriteLine(d);
+        }
     }
 
     /// <summary>

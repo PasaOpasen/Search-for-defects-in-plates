@@ -7,6 +7,8 @@ using System.IO;
 using static МатКлассы.Number;
 using static МатКлассы.FuncMethods;
 using System.Text;
+using MathNet.Numerics;
+using MathNet.Numerics.Random;
 
 namespace МатКлассы
 {
@@ -15,6 +17,9 @@ namespace МатКлассы
     /// </summary>
     public static class Expendator
     {
+        static readonly SystemRandomSource randomgen = new SystemRandomSource();
+
+
         #region Функциональные переводчик
         /// <summary>
         /// Перевести действительную функцию комплексного переменного в функционал
@@ -65,6 +70,13 @@ namespace МатКлассы
         public static double Min(params double[] c)
         {
             double min = Math.Min(c[0], c[1]);
+            for (int i = 2; i < c.Length; i++) min = Math.Min(min, c[i]);
+            return min;
+        }
+
+        public static int Min(params int[] c)
+        {
+            int min = Math.Min(c[0], c[1]);
             for (int i = 2; i < c.Length; i++) min = Math.Min(min, c[i]);
             return min;
         }
@@ -324,6 +336,7 @@ namespace МатКлассы
         /// <param name="elem"></param>
         /// <returns></returns>
         public static T[] Without<T>(this T[] array,T elem) => array.Where(s => !s.Equals(elem)).ToArray();
+       
 
         public class Compar : Comparer<double>
         {
@@ -519,7 +532,11 @@ namespace МатКлассы
         /// <summary>
         /// Вывести пустую строку
         /// </summary>
-        public static void EmptyLine() => "".Show();
+        public static void EmptyLine(int count =1)
+        {
+            for (int i = 0; i < count; i++)
+                Console.WriteLine();
+        }
 
         /// <summary>
         /// Примерный максимум модуля функции на отрезке
@@ -1040,6 +1057,115 @@ namespace МатКлассы
                 proc.Start();
                 proc.WaitForExit();
             });
+        }
+
+        /// <summary>
+        /// Возвращает индексы элементов массива, сумма которых равна указанному значению
+        /// </summary>
+        /// <param name="arr"></param>
+        /// <param name="sum"></param>
+        /// <returns></returns>
+        public static int[] IndexesWhichGetSum(int[] arr,int sum)
+        {
+            var len = arr.Length;
+            string s;
+            int sm;
+            for(int i = 1; i < Math.Pow(2, len); i++)
+            {
+                s = Convert.ToString(i, 2);
+                sm = 0;
+                
+                for (int j = 0; j < s.Length; j++)
+                    if (s[j] == '1')
+                        sm += arr[j];
+
+                if (sm == sum)
+                {
+                  List<int> t=new List<int>(len);
+                    for (int j = 0; j < s.Length; j++)
+                        if (s[j] == '1')
+                            t.Add(j);
+                    return t.ToArray();
+                }
+            }
+
+            return new int[0];
+        }
+
+
+
+        /// <summary>
+        /// Возвращает случайное число из массива vals с вероятностью из массива probs
+        /// </summary>
+        /// <param name="vals"></param>
+        /// <param name="probs"></param>
+        /// <returns></returns>
+        public static int GetRandomNumberFromArrayWithProbabilities(int[] vals,double[] probs)
+        {
+            var vers = new double[probs.Length];
+            double sum = probs.Sum();
+            
+            vers[0] =probs[0]/ sum;
+            for (int i = 1; i < vers.Length-1; i++)
+            {
+                vers[i] = probs[i] / sum + vers[i - 1];
+            }
+            vers[vers.Length - 1] = 1.0;
+
+            double rndval = randomgen.NextDouble();
+            for (int i = 0; i < vers.Length; i++)
+                if (vers[i] >= rndval)
+                    return vals[i];
+            return vals.Last();
+        }
+
+        /// <summary>
+        /// Возвращает случайный элемент из массива vals с вероятностью из массива probs
+        /// </summary>
+        /// <param name="vals"></param>
+        /// <param name="probs"></param>
+        /// <returns></returns>
+        public static T GetRandomElementFromArrayWithProbabilities<T>(T[] vals, double[] probs)
+        {
+            var vers = new double[probs.Length];
+            double sum = probs.Sum();
+
+            vers[0] = probs[0] / sum;
+            for (int i = 1; i < vers.Length - 1; i++)
+            {
+                vers[i] = probs[i] / sum + vers[i - 1];
+            }
+            vers[vers.Length - 1] = 1.0;
+
+            double rndval = randomgen.NextDouble();
+            for (int i = 0; i < vers.Length; i++)
+                if (vers[i] >= rndval)
+                    return vals[i];
+            return vals.Last();
+        }
+        /// <summary>
+        /// Возвращает случайный элемент из массива vals с вероятностью из массива probs
+        /// </summary>
+        /// <param name="vals"></param>
+        /// <param name="probs"></param>
+        /// <returns></returns>
+        public static T GetRandomElementFromArrayWithProbabilities<T>(T[] vals, int[] probs)
+        {
+            var vers = new double[probs.Length];
+            double sum = probs.Sum();
+
+            vers[0] = probs[0] / sum;
+            for (int i = 1; i < vers.Length - 1; i++)
+            {
+                vers[i] = probs[i] / sum + vers[i - 1];
+            }
+            vers[vers.Length - 1] = 1.0;
+
+            double rndval = randomgen.NextDouble();
+            for (int i = 0; i < vers.Length; i++)
+                if (vers[i] >= rndval)
+                    return vals[i];
+            return vals.Last();
         }
     }
 

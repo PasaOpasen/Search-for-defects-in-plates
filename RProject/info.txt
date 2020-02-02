@@ -1,5 +1,0 @@
-Под каким именем сохранить файл.pdf
-Caption
-xlab
-ylab
-zlab

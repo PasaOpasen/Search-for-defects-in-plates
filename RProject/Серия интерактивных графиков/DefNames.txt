@@ -1,8 +1,0 @@
-﻿time
-ArrayA
-ArrayB
-ArrayC
-ArrayE
-ArrayF
-ArrayG
-ArrayH

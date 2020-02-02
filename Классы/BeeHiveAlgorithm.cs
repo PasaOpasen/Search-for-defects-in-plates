@@ -55,7 +55,7 @@ namespace МатКлассы
         /// <param name="max">Максимальное возможное значение каждого аргумента</param>
         /// <param name="eps">Допустимая погрешность</param>
         /// <param name="countpoints">Количество пчёл в рое</param>
-        /// <param name="maxcountstep">Максимальное число неудачных итераций метода</param>
+        /// <param name="maxcountstep">Максимальное число неудачных итераций метода (подряд)</param>
         /// <param name="center">Центр распредления точек</param>
         /// <param name="maxiter">Максимальное число итераций метода</param>
         /// <returns></returns>
@@ -71,6 +71,30 @@ namespace МатКлассы
             return Gets(hive, eps, maxcountstep, maxiter);
 
         }
+
+        /// <summary>
+        /// Получить минимум функции, посчитанный роевым методом
+        /// </summary>
+        /// <param name="f">Целевая функция</param>
+        /// <param name="n">Размерность области определения целевой функции</param>
+        /// <param name="min">Минимальное возможное значение каждого аргумента</param>
+        /// <param name="max">Максимальное возможное значение каждого аргумента</param>
+        /// <param name="eps">Допустимая погрешность</param>
+        /// <param name="countpoints">Количество пчёл в рое</param>
+        /// <param name="maxcountstep">Максимальное число неудачных итераций метода (подряд)</param>
+        /// <param name="center">Центр распредления точек</param>
+        /// <param name="maxiter">Максимальное число итераций метода</param>
+        /// <returns></returns>
+        public static Tuple<Vectors, double> GetGlobalMin(Vectors[] vals,Func<Vectors, double> f, int n = 1, double min = -1e12, double max = 1e12, double eps = 1e-10, int countpoints = 1000, int maxcountstep = 100, int maxiter = 150)
+        {
+            Vectors minimum = new Vectors(n, min);
+            Vectors maximum = new Vectors(n, max);
+
+            Hive hive= new Hive(minimum, maximum, f, countpoints-vals.Length,vals);
+            return Gets(hive, eps, maxcountstep, maxiter);
+
+        }
+
         /// <summary>
         /// Получить минимум функции, посчитанный роевым методом
         /// </summary>
@@ -101,16 +125,17 @@ namespace МатКлассы
             double e = hive.val;
             int c = maxcountstep, k = 0;
 
-            Debug.WriteLine($"Погрешность после инициализации пчёл:  {e}");
+            Console.WriteLine($"Погрешность после инициализации пчёл:  {e}");
             while (e > eps && maxcountstep > 0 && hive.Radius > eps)
             {
                 hive.MakeStep(w, fp, fg);
                 k++;
                 if (hive.val < e)
                 {
-                    Debug.WriteLine($"Hive method (iter {k}):  {e} ---> {hive.val}");
+                    Console.WriteLine($"Hive method (iter {k}):  {e} ---> {hive.val}");
                     e = hive.val;
                     maxcountstep = c;
+                    hive.g.Save($"val = {e}.txt");
                 }
                 else
                     maxcountstep--;
@@ -128,7 +153,7 @@ namespace МатКлассы
             /// <summary>
             /// Массив пчёл
             /// </summary>
-            Bee[] bees;
+           readonly Bee[] bees;
             /// <summary>
             /// Наилучшее положение в рое
             /// </summary>
@@ -242,7 +267,7 @@ namespace МатКлассы
             /// <summary>
             /// Текущее положение частицы
             /// </summary>
-            Vectors x;
+           readonly Vectors x;
             /// <summary>
             /// Наилучшее положение частицы
             /// </summary>
@@ -254,7 +279,7 @@ namespace МатКлассы
             /// <summary>
             /// Генератор случайных чисел
             /// </summary>
-            MathNet.Numerics.Random.CryptoRandomSource random = new MathNet.Numerics.Random.CryptoRandomSource();
+           readonly MathNet.Numerics.Random.CryptoRandomSource random = new MathNet.Numerics.Random.CryptoRandomSource();
 
 
             /// <summary>
@@ -367,6 +392,7 @@ namespace МатКлассы
                 double t = f(x);
                 if (t < bestval)
                 {
+                    Console.WriteLine($"{bestval} --> {t}");
                     bestval = t;
                     p.MoveTo(x);
                 }
@@ -458,7 +484,7 @@ namespace МатКлассы
             /// <summary>
             /// Массив пчёл
             /// </summary>
-            Bee2D[] bees;
+            readonly Bee2D[] bees;
             /// <summary>
             /// Наилучшее положение в рое
             /// </summary>
@@ -584,7 +610,7 @@ namespace МатКлассы
             /// <summary>
             /// Генератор случайных чисел
             /// </summary>
-            MathNet.Numerics.Random.CryptoRandomSource random;
+            readonly MathNet.Numerics.Random.CryptoRandomSource random;
 
 
             /// <summary>
@@ -594,7 +620,7 @@ namespace МатКлассы
             /// <summary>
             /// Целевая функция
             /// </summary>
-            Func<Point, double> f;
+            readonly Func<Point, double> f;
 
             /// <summary>
             /// Создать частицу в окне решений
@@ -755,7 +781,7 @@ namespace МатКлассы
             /// <summary>
             /// Массив пчёл
             /// </summary>
-            Bee1D[] bees;
+            readonly Bee1D[] bees;
             /// <summary>
             /// Наилучшее положение в рое
             /// </summary>
@@ -881,7 +907,7 @@ namespace МатКлассы
             /// <summary>
             /// Генератор случайных чисел
             /// </summary>
-            MathNet.Numerics.Random.CryptoRandomSource random;
+            readonly MathNet.Numerics.Random.CryptoRandomSource random;
 
 
             /// <summary>
@@ -891,7 +917,7 @@ namespace МатКлассы
             /// <summary>
             /// Целевая функция
             /// </summary>
-            Func<double, double> f;
+            readonly Func<double, double> f;
 
             /// <summary>
             /// Создать частицу в окне решений
@@ -1089,9 +1115,8 @@ namespace МатКлассы
             {
                 Array.Sort(mas);
 
-                Vectors[] t;
+                Vectors[] t= new Vectors[se];
 
-                t = new Vectors[se];
                 for (int i = 0; i < e; i++)
                 {
                     SBee it = new SBee(mas[i]), tmp;
