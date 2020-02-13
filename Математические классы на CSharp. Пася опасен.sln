@@ -1,7 +1,7 @@
 ﻿
 Microsoft Visual Studio Solution File, Format Version 12.00
-# Visual Studio 15
-VisualStudioVersion = 15.0.27004.2005
+# Visual Studio Version 16
+VisualStudioVersion = 16.0.29806.167
 MinimumVisualStudioVersion = 10.0.40219.1
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Классы (библиотека)", "Классы\Классы (библиотека).csproj", "{CD3EEFDE-74ED-48DA-8E82-1E6ABAB1A140}"
 EndProject
@@ -48,6 +48,10 @@ EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "PS5000AStreamingConsole", "ps5000a\PS5000AStreamingConsole\PS5000AStreamingConsole.csproj", "{B0E6F544-8904-4503-80B5-134E9C8D45AC}"
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "OptimisationTest", "OptimisationTest\OptimisationTest.csproj", "{E2BBA9E9-9D6A-43DB-BE77-461E97BDAF0A}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Классы (библиотека)", "C:\Users\крендель\Desktop\MathClasses\Классы\Классы (библиотека).csproj", "{0178F934-A4A3-4A26-AE13-369FB421AA3D}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Библиотека графики", "C:\Users\крендель\Desktop\MathClasses\Библиотека графики\Библиотека графики.csproj", "{72477714-ACF0-4659-A0DF-12F481BC85EC}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
@@ -293,6 +297,30 @@ Global
 		{E2BBA9E9-9D6A-43DB-BE77-461E97BDAF0A}.Release|x64.Build.0 = Release|Any CPU
 		{E2BBA9E9-9D6A-43DB-BE77-461E97BDAF0A}.Release|x86.ActiveCfg = Release|Any CPU
 		{E2BBA9E9-9D6A-43DB-BE77-461E97BDAF0A}.Release|x86.Build.0 = Release|Any CPU
+		{0178F934-A4A3-4A26-AE13-369FB421AA3D}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{0178F934-A4A3-4A26-AE13-369FB421AA3D}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{0178F934-A4A3-4A26-AE13-369FB421AA3D}.Debug|x64.ActiveCfg = Debug|Any CPU
+		{0178F934-A4A3-4A26-AE13-369FB421AA3D}.Debug|x64.Build.0 = Debug|Any CPU
+		{0178F934-A4A3-4A26-AE13-369FB421AA3D}.Debug|x86.ActiveCfg = Debug|Any CPU
+		{0178F934-A4A3-4A26-AE13-369FB421AA3D}.Debug|x86.Build.0 = Debug|Any CPU
+		{0178F934-A4A3-4A26-AE13-369FB421AA3D}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{0178F934-A4A3-4A26-AE13-369FB421AA3D}.Release|Any CPU.Build.0 = Release|Any CPU
+		{0178F934-A4A3-4A26-AE13-369FB421AA3D}.Release|x64.ActiveCfg = Release|Any CPU
+		{0178F934-A4A3-4A26-AE13-369FB421AA3D}.Release|x64.Build.0 = Release|Any CPU
+		{0178F934-A4A3-4A26-AE13-369FB421AA3D}.Release|x86.ActiveCfg = Release|Any CPU
+		{0178F934-A4A3-4A26-AE13-369FB421AA3D}.Release|x86.Build.0 = Release|Any CPU
+		{72477714-ACF0-4659-A0DF-12F481BC85EC}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{72477714-ACF0-4659-A0DF-12F481BC85EC}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{72477714-ACF0-4659-A0DF-12F481BC85EC}.Debug|x64.ActiveCfg = Debug|Any CPU
+		{72477714-ACF0-4659-A0DF-12F481BC85EC}.Debug|x64.Build.0 = Debug|Any CPU
+		{72477714-ACF0-4659-A0DF-12F481BC85EC}.Debug|x86.ActiveCfg = Debug|Any CPU
+		{72477714-ACF0-4659-A0DF-12F481BC85EC}.Debug|x86.Build.0 = Debug|Any CPU
+		{72477714-ACF0-4659-A0DF-12F481BC85EC}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{72477714-ACF0-4659-A0DF-12F481BC85EC}.Release|Any CPU.Build.0 = Release|Any CPU
+		{72477714-ACF0-4659-A0DF-12F481BC85EC}.Release|x64.ActiveCfg = Release|Any CPU
+		{72477714-ACF0-4659-A0DF-12F481BC85EC}.Release|x64.Build.0 = Release|Any CPU
+		{72477714-ACF0-4659-A0DF-12F481BC85EC}.Release|x86.ActiveCfg = Release|Any CPU
+		{72477714-ACF0-4659-A0DF-12F481BC85EC}.Release|x86.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
