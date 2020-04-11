@@ -8,7 +8,7 @@
     <OutputType>Exe</OutputType>
     <RootNamespace>OptimisationTest</RootNamespace>
     <AssemblyName>OptimisationTest</AssemblyName>
-    <TargetFrameworkVersion>v4.7.2</TargetFrameworkVersion>
+    <TargetFrameworkVersion>v4.8</TargetFrameworkVersion>
     <FileAlignment>512</FileAlignment>
     <AutoGenerateBindingRedirects>true</AutoGenerateBindingRedirects>
     <Deterministic>true</Deterministic>
@@ -64,6 +64,10 @@
     <ProjectReference Include="..\Классы\Классы %28библиотека%29.csproj">
       <Project>{cd3eefde-74ed-48da-8e82-1e6abab1a140}</Project>
       <Name>Классы %28библиотека%29</Name>
+    </ProjectReference>
+    <ProjectReference Include="..\Консоль\Консоль %28тестирование%29.csproj">
+      <Project>{838570d2-db6a-4d32-8e69-f2fc0e11b316}</Project>
+      <Name>Консоль %28тестирование%29</Name>
     </ProjectReference>
   </ItemGroup>
   <ItemGroup>

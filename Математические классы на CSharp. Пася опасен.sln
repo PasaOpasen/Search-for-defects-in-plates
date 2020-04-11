@@ -49,9 +49,9 @@ Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "PS5000AStreamingConsole", "
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "OptimisationTest", "OptimisationTest\OptimisationTest.csproj", "{E2BBA9E9-9D6A-43DB-BE77-461E97BDAF0A}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Классы (библиотека)", "C:\Users\крендель\Desktop\MathClasses\Классы\Классы (библиотека).csproj", "{0178F934-A4A3-4A26-AE13-369FB421AA3D}"
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Классы (библиотека)", "..\MathClasses\Классы\Классы (библиотека).csproj", "{0178F934-A4A3-4A26-AE13-369FB421AA3D}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Библиотека графики", "C:\Users\крендель\Desktop\MathClasses\Библиотека графики\Библиотека графики.csproj", "{72477714-ACF0-4659-A0DF-12F481BC85EC}"
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Библиотека графики", "..\MathClasses\Библиотека графики\Библиотека графики.csproj", "{72477714-ACF0-4659-A0DF-12F481BC85EC}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
