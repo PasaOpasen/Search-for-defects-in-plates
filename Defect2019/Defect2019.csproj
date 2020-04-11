@@ -444,25 +444,29 @@
     <None Include="App.config" />
   </ItemGroup>
   <ItemGroup>
-    <ProjectReference Include="..\Computator.NET-master\Computator.NET.Core\Computator.NET.Core.csproj">
-      <Project>{b1b07ffd-6af3-4a01-a839-6b652e4b3429}</Project>
+    <ProjectReference Include="..\..\MathClasses\Computator.NET-master\Computator.NET.Core\Computator.NET.Core.csproj">
+      <Project>{e8e13f8f-1c8f-4b5f-aff7-b738121d5b36}</Project>
       <Name>Computator.NET.Core</Name>
+    </ProjectReference>
+    <ProjectReference Include="..\..\MathClasses\Computator.NET-master\Computator.NET\Computator.NET.csproj">
+      <Project>{5731ed79-dfc9-41d5-8a2e-82c578ad1d96}</Project>
+      <Name>Computator.NET</Name>
+    </ProjectReference>
+    <ProjectReference Include="..\..\MathClasses\Библиотека графики\Библиотека графики.csproj">
+      <Project>{72477714-acf0-4659-a0df-12f481bc85ec}</Project>
+      <Name>Библиотека графики</Name>
+    </ProjectReference>
+    <ProjectReference Include="..\..\MathClasses\Классы\Классы %28библиотека%29.csproj">
+      <Project>{0178f934-a4a3-4a26-ae13-369fb421aa3d}</Project>
+      <Name>Классы %28библиотека%29</Name>
     </ProjectReference>
     <ProjectReference Include="..\ps5000a\PS5000ABlockCapture\PS5000ABlockCapture.csproj">
       <Project>{4f428783-f8a0-4553-b2fd-5307ff8fea45}</Project>
       <Name>PS5000ABlockCapture</Name>
     </ProjectReference>
-    <ProjectReference Include="..\Библиотека графики\Библиотека графики.csproj">
-      <Project>{ce3c0ed7-208c-4043-89a9-19e93f1e2e46}</Project>
-      <Name>Библиотека графики</Name>
-    </ProjectReference>
     <ProjectReference Include="..\ДОПОЛНЕНИЯ\Demo_For_FlexibleMessageBox-noexe\Demo_For_FlexibleMessageBox\Demo_For_FlexibleMessageBox.csproj">
       <Project>{f1fd937b-c84e-4f6c-b533-4982bd43914f}</Project>
       <Name>Demo_For_FlexibleMessageBox</Name>
-    </ProjectReference>
-    <ProjectReference Include="..\Классы\Классы %28библиотека%29.csproj">
-      <Project>{cd3eefde-74ed-48da-8e82-1e6abab1a140}</Project>
-      <Name>Классы %28библиотека%29</Name>
     </ProjectReference>
     <ProjectReference Include="..\Консоль\Консоль %28тестирование%29.csproj">
       <Project>{838570d2-db6a-4d32-8e69-f2fc0e11b316}</Project>

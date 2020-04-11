@@ -60,13 +60,13 @@
     <None Include="packages.config" />
   </ItemGroup>
   <ItemGroup>
+    <ProjectReference Include="..\..\MathClasses\Классы\Классы %28библиотека%29.csproj">
+      <Project>{0178f934-a4a3-4a26-ae13-369fb421aa3d}</Project>
+      <Name>Классы %28библиотека%29</Name>
+    </ProjectReference>
     <ProjectReference Include="..\Defect2019\Defect2019.csproj">
       <Project>{e5295df8-8e87-467f-b0e5-b914161c3016}</Project>
       <Name>Defect2019</Name>
-    </ProjectReference>
-    <ProjectReference Include="..\Классы\Классы %28библиотека%29.csproj">
-      <Project>{cd3eefde-74ed-48da-8e82-1e6abab1a140}</Project>
-      <Name>Классы %28библиотека%29</Name>
     </ProjectReference>
   </ItemGroup>
   <Import Project="$(VSToolsPath)\TeamTest\Microsoft.TestTools.targets" Condition="Exists('$(VSToolsPath)\TeamTest\Microsoft.TestTools.targets')" />

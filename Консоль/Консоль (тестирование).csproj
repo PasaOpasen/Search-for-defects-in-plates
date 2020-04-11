@@ -208,21 +208,21 @@
     <None Include="packages.config" />
   </ItemGroup>
   <ItemGroup>
-    <ProjectReference Include="..\FSlib\FSlib.fsproj">
-      <Project>{3295fd14-20dd-4e00-8b21-2a4f409fe2e8}</Project>
-      <Name>FSlib</Name>
-    </ProjectReference>
-    <ProjectReference Include="..\nzy3d-api-master\nzy3d-api-master\nzy3d-winformsDemo\nzy3d-winformsDemo.csproj">
+    <ProjectReference Include="..\..\MathClasses\nzy3d-api-master\nzy3d-api-master\nzy3d-winformsDemo\nzy3d-winformsDemo.csproj">
       <Project>{8c148a22-b1de-44f2-aea8-90853dca6efe}</Project>
       <Name>nzy3d-winformsDemo</Name>
     </ProjectReference>
-    <ProjectReference Include="..\Библиотека графики\Библиотека графики.csproj">
-      <Project>{ce3c0ed7-208c-4043-89a9-19e93f1e2e46}</Project>
+    <ProjectReference Include="..\..\MathClasses\Библиотека графики\Библиотека графики.csproj">
+      <Project>{72477714-acf0-4659-a0df-12f481bc85ec}</Project>
       <Name>Библиотека графики</Name>
     </ProjectReference>
-    <ProjectReference Include="..\Классы\Классы %28библиотека%29.csproj">
-      <Project>{cd3eefde-74ed-48da-8e82-1e6abab1a140}</Project>
+    <ProjectReference Include="..\..\MathClasses\Классы\Классы %28библиотека%29.csproj">
+      <Project>{0178f934-a4a3-4a26-ae13-369fb421aa3d}</Project>
       <Name>Классы %28библиотека%29</Name>
+    </ProjectReference>
+    <ProjectReference Include="..\FSlib\FSlib.fsproj">
+      <Project>{3295fd14-20dd-4e00-8b21-2a4f409fe2e8}</Project>
+      <Name>FSlib</Name>
     </ProjectReference>
   </ItemGroup>
   <ItemGroup>
