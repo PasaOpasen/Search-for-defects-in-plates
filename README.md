@@ -32,11 +32,17 @@ The project has many dependences with [math classes library](https://github.com/
 
 ![1](https://github.com/PasaOpasen/Search-for-defects-in-plates/blob/master/gifs/trans.gif)
 
-## Piezoelements choosing
-
-Furier transform of signal is the important parameter of using fit. Firstly, it creates the tensor of $**u**(**x**, variety)$ function values
-![formula](https://render.githubusercontent.com/render/math?math=**u**(**x**, variety))
 ## Time reversal
+
+Furier transform of signal is the important parameter of using fit. Firstly, it creates a tensor of **u**(**x**, variety) function values, after that it creates a tensor of **u**(**x**, **t**) function values and prepare this tensor according to selected *metric*. After all u can see *the surface* to determine the location of defect.
+
+There are several important hyper-parameters for determining defect's location: sensors' location and variety, time and space nets (the thicker net is better, but takes more time for calculating).
+
+### Example: piezoelements choosing
+
+### Example: start calculations
+
+### Example: see results
 
 
 ## Ellipse method
