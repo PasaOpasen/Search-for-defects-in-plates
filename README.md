@@ -40,12 +40,27 @@ There are several important hyper-parameters for determining defect's location: 
 
 ### Example: piezoelements choosing and start calculations
 
+![1](https://github.com/PasaOpasen/Search-for-defects-in-plates/blob/master/gifs/gen.gif)
 
 ### Example: see results
 
+![1](https://github.com/PasaOpasen/Search-for-defects-in-plates/blob/master/gifs/view.gif)
 
 ## Ellipse method
 
+There is another interesting fit with same parameters. 
 
 ## Features
+
+### Sensors with cut
+
+### Animation
+
+#### 1st metric
+
+#### 2nd metric
+
+#### 3rd metric
+
+
 
