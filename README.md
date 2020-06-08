@@ -60,7 +60,7 @@ There is another interesting fit with same parameters.
 
 Use [RMdator.exe](https://github.com/PasaOpasen/Search-for-defects-in-plates/blob/master/Defect2019/Resources/RMdator.exe) to removing most large data files.
 
-
+![1](https://github.com/PasaOpasen/Search-for-defects-in-plates/blob/master/gifs/rm.gif)
 
 ### Sensors with cut
 
