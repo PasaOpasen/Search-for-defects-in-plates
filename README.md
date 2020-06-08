@@ -38,9 +38,8 @@ Furier transform of signal is the important parameter of using fit. Firstly, it 
 
 There are several important hyper-parameters for determining defect's location: sensors' location and variety, time and space nets (the thicker net is better, but takes more time for calculating).
 
-### Example: piezoelements choosing
+### Example: piezoelements choosing and start calculations
 
-### Example: start calculations
 
 ### Example: see results
 
