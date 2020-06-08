@@ -35,7 +35,7 @@ The project has many dependences with [math classes library](https://github.com/
 ## Piezoelements choosing
 
 Furier transform of signal is the important parameter of using fit. Firstly, it creates the tensor of $**u**(**x**, variety)$ function values
-
+![formula](https://render.githubusercontent.com/render/math?math= **u**(**x**, variety))
 ## Time reversal
 
 
