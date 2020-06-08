@@ -11,3 +11,30 @@ The project has many dependences with [math classes library](https://github.com/
 2. Set **Rscript.exe** as default application to running .r files
 
 3. Run [this file](https://github.com/PasaOpasen/Search-for-defects-in-plates/blob/master/Defect2019/Resources/InstallPackages.R) (as administator) to install necessary packages
+
+## Signal preparation
+
+### Algorithm:
+
+1. Record "clean" signal (just signal from default material)
+
+2. Record signal after creating defect
+
+3. Create the difference between these signals
+
+4. Create Furier transform of this difference
+
+### Example: creating difference
+
+### Example: viewing difference and it's Furier transform
+
+## Piezoelements choosing
+
+
+## Time reversal
+
+
+## Ellipse method
+
+
+
