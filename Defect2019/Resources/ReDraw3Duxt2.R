@@ -12,15 +12,15 @@ w = getwd()
 print(w)
 source(paste0(w, "/Truezlims.r"), echo = FALSE, print.eval = FALSE)
 
-    zl = fread("zlims(real).txt", header = TRUE, dec = ".")
+    zl = fread("zlims(real).txt", header = TRUE, dec = ".", fill = T)
     rlim = c(zl[[1]][1], zl[[1]][2]) * 1.01
     zlim = c(zl[[2]][1], zl[[2]][2]) * 1.01
     levels = 30
 
 
     stt = readLines("textnames.txt")
-    xx = fread("3D ur, uz(x).txt", header = TRUE, dec = ",")
-    yy = fread("3D ur, uz(y).txt", header = TRUE, dec = ",")
+    xx = fread("3D ur, uz(x).txt", header = TRUE, dec = ",", fill = T)
+    yy = fread("3D ur, uz(y).txt", header = TRUE, dec = ",", fill = T)
     
     x = xx$x
     y = yy$y

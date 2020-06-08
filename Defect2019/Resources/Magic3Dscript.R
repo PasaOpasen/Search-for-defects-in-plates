@@ -7,8 +7,8 @@ library(data.table)
 filenames = readLines("3D Grafics Data Adress.txt")
 firstfile = substr(filenames[1], 4, nchar(filenames[1])) #так пришлось сделать из-за фантомных символов
 #print(firstfile)
-arg = fread(firstfile, header = T, dec = ",")
-z = fread(filenames[2], header = T, dec = ",")[[1]]
+arg = fread(firstfile, header = T, dec = ",", fill = T)
+z = fread(filenames[2], header = T, dec = ",", fill = T)[[1]]
 
 x = arg[[1]]
 y = arg[[2]]

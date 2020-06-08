@@ -2,9 +2,9 @@ library(rgl)
 library(plot3D)
 library(data.table)
 
-xx = fread("3D ur, uz(x).txt", header = TRUE, dec = ",")
-yy = fread("3D ur, uz(y).txt", header = TRUE, dec = ",")
-z = fread("3D ur, uz.txt", header = TRUE, dec = ",")
+xx = fread("3D ur, uz(x).txt", header = TRUE, dec = ",", fill = T)
+yy = fread("3D ur, uz(y).txt", header = TRUE, dec = ",", fill = T)
+z = fread("3D ur, uz.txt", header = TRUE, dec = ",", fill = T)
 x = xx$x
 y = yy$y
 lenx = length(x)
@@ -15,7 +15,7 @@ levels = 30
 useLims = as.logical(readLines("AutoLims.txt")[1] == "yes")
 
 if (!useLims) {
-    zl = fread("zlims.txt", header = TRUE, dec = ",")
+    zl = fread("zlims.txt", header = TRUE, dec = ",", fill = T)
     coef = 1.0
     rlim = c(zl[[1]][1], zl[[1]][2]) * 4
     zlim = c(zl[[2]][1], zl[[2]][2]) * 2

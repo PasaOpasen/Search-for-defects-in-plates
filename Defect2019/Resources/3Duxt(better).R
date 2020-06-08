@@ -8,15 +8,15 @@ library(fields)
 
 #Sys.setlocale("LC_ALL", "Russian_Russia")
 
-xx = fread("3D ur, uz(x).txt", header = TRUE, dec = ",")
-yy = fread("3D ur, uz(y).txt", header = TRUE, dec = ",")
-z = fread("3D ur, uz.txt", header = TRUE, dec = ",")
+xx = fread("3D ur, uz(x).txt", header = TRUE, dec = ",", fill = T)
+yy = fread("3D ur, uz(y).txt", header = TRUE, dec = ",", fill = T)
+z = fread("3D ur, uz.txt", header = TRUE, dec = ",", fill = T)
 x = xx$x #;xx
 y = yy$y
 
 len = length(x)
 
-zl = fread("zlims(real).txt", header = TRUE, dec = ".")
+zl = fread("zlims(real).txt", header = TRUE, dec = ".", fill = T)
 rlim = c(zl[[1]][1], zl[[1]][2])*1.01 
 zlim = c(zl[[2]][1], zl[[2]][2])*1.01
 

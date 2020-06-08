@@ -144,6 +144,16 @@
   <ItemGroup>
     <None Include="Resources\СоздаютсяГрафики.wav" />
   </ItemGroup>
+  <ItemGroup>
+    <ProjectReference Include="..\..\..\MathClasses\Библиотека графики\Библиотека графики.csproj">
+      <Project>{72477714-acf0-4659-a0df-12f481bc85ec}</Project>
+      <Name>Библиотека графики</Name>
+    </ProjectReference>
+    <ProjectReference Include="..\..\..\MathClasses\Классы\Классы %28библиотека%29.csproj">
+      <Project>{0178f934-a4a3-4a26-ae13-369fb421aa3d}</Project>
+      <Name>Классы %28библиотека%29</Name>
+    </ProjectReference>
+  </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
   <!-- To modify your build process, add your task inside one of the targets below and uncomment it. 
        Other similar extension points exist, see Microsoft.Common.targets.

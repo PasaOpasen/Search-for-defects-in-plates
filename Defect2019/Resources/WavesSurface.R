@@ -2,8 +2,8 @@ library(rgl)
 library(plot3D)
 library(data.table)
 
-xx = fread("3D ur, uz(x).txt", header = TRUE, dec = ",")
-yy = fread("3D ur, uz(y).txt", header = TRUE, dec = ",")
+xx = fread("3D ur, uz(x).txt", header = TRUE, dec = ",", fill = T)
+yy = fread("3D ur, uz(y).txt", header = TRUE, dec = ",", fill = T)
 x = xx$x
 y = yy$y
 

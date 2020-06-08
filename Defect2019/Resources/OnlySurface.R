@@ -2,8 +2,8 @@ library(rgl)
 library(plot3D)
 library(data.table)
 
-xx = fread("3D ur, uz(x).txt", header = TRUE, dec = ",")
-yy = fread("3D ur, uz(y).txt", header = TRUE, dec = ",")
+xx = fread("3D ur, uz(x).txt", header = TRUE, dec = ",", fill = T)
+yy = fread("3D ur, uz(y).txt", header = TRUE, dec = ",", fill = T)
 x = xx$x
 y = yy$y
 xy =(max(x) - min(x))/(max(y) - min(y))  
@@ -161,6 +161,6 @@ p2 = plot_ly(x = x, y = y, z = ~uz.Abs, type = "surface", contours = list(
 
 library(htmlwidgets)
 
-saveWidget(as.widget(p1),paste(s, "(ur).html"), FALSE)
-saveWidget(as.widget(p2), paste(s, "(uz).html"), FALSE)
+saveWidget(as.widget(p1),paste(s, "(ur).html"), selfcontained = F, libdir = "lib")
+saveWidget(as.widget(p2), paste(s, "(uz).html"), selfcontained = F, libdir = "lib")
 
