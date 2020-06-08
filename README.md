@@ -48,19 +48,29 @@ There are several important hyper-parameters for determining defect's location: 
 
 ## Ellipse method
 
-There is another interesting fit with same parameters. 
+There is another interesting fit with same parameters.
+
+![1](https://github.com/PasaOpasen/Search-for-defects-in-plates/blob/master/gifs/el1.gif)
+
+![1](https://github.com/PasaOpasen/Search-for-defects-in-plates/blob/master/gifs/el2.gif)
 
 ## Features
 
+### Removing data files
+
+Use [RMdator.exe](https://github.com/PasaOpasen/Search-for-defects-in-plates/blob/master/Defect2019/Resources/RMdator.exe) to removing most large data files.
+
+
+
 ### Sensors with cut
+
+![1](https://github.com/PasaOpasen/Search-for-defects-in-plates/blob/master/gifs/dcircle.gif)
 
 ### Animation
 
-#### 1st metric
+![1](https://github.com/PasaOpasen/Search-for-defects-in-plates/blob/master/gifs/animation1.gif)
 
-#### 2nd metric
-
-#### 3rd metric
+![1](https://github.com/PasaOpasen/Search-for-defects-in-plates/blob/master/gifs/1_.gif)
 
 
 
