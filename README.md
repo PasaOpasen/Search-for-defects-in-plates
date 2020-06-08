@@ -26,7 +26,11 @@ The project has many dependences with [math classes library](https://github.com/
 
 ### Example: creating difference
 
+![1](https://github.com/PasaOpasen/Search-for-defects-in-plates/blob/master/gifs/create_diff.gif)
+
 ### Example: viewing difference and it's Furier transform
+
+![1](https://github.com/PasaOpasen/Search-for-defects-in-plates/blob/master/gifs/trans.gif)
 
 ## Piezoelements choosing
 
@@ -37,4 +41,5 @@ The project has many dependences with [math classes library](https://github.com/
 ## Ellipse method
 
 
+## Features
 
